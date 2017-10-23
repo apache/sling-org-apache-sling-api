@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.sling.api.resource;
+package org.apache.sling.api.resource.external;
 
 import java.net.URI;
 
@@ -28,22 +28,15 @@ import java.net.URI;
  * imposed on it requiring it to be used immediately. Do not store the URI for later usage as it will, in most cases,
  * have expired.
  *
- * @since 2.11.0
  */
 public interface ExternalizableInputStream {
 
     /**
-     * Get a URI that is specific to the current session, and may be used anywhere. May return null if this
-     * type of URI is not available.
+     * Get a URI that is specific to the current session, and may be used in any context internal or external. The URI must not
+     * be stored and must not be shared between clients. For a wider range of URIs the caller should use the URIProvider class
+     * directly and not this interface.
      * @return a URI intended for any network context.
      */
     URI getURI();
 
-    /**
-     * Get a URI that is specific to the current session and may only be used in a private context. A private network context means
-     * that the URI may only be resolvable inside a private network. Usign this URL in any context will not always work, and
-     * may leak information about the private network.
-     * @return a URI intended for a private network context.
-     */
-    URI getPrivateURI();
 }
