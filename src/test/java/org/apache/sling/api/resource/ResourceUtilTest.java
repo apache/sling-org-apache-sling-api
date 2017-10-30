@@ -114,6 +114,12 @@ public class ResourceUtilTest {
         assertEquals("/az/...", ResourceUtil.normalize("/az/..."));
         assertEquals("/az/bz/...", ResourceUtil.normalize("/az/bz/..."));
 
+        assertEquals("/content/dam/jpg_folder/.jpg/jcr:content/metadata/dc:title",
+                ResourceUtil.normalize("/content/dam/./jpg_folder/.jpg/jcr:content/metadata/dc:title"));
+
+        assertEquals("/content/dam/jpg_folder/....jpg/jcr:content/metadata/dc:title",
+                ResourceUtil.normalize("/content/dam/./jpg_folder/....jpg/jcr:content/metadata/dc:title"));
+
         try {
             ResourceUtil.normalize(null);
             fail("Resolving null expects NullPointerException");

@@ -82,7 +82,7 @@ public class ResourceUtil {
 
                 lastSlash = bufIdx;
                 numDots = 0;
-            } else if (c == '.' && numDots < 2) {
+            } else if (c == '.' && useDot(buf, bufIdx) && numDots < 2) {
                 numDots++;
             } else {
                 // find the next slash
@@ -118,6 +118,21 @@ public class ResourceUtil {
         return resolved;
     }
 
+    // use this dot only if followed by /
+    // don't use if followed by neither . nor /
+    // keep checking till a non-dot is found
+    private static boolean useDot(char[] buf, int bufIdx) {
+        while(bufIdx < buf.length -1) {
+            if(buf[bufIdx] == '/') {
+                return true;
+            }
+            else if(buf[bufIdx] != '.') {
+                return false;
+            }
+            bufIdx++;
+        }
+        return true;
+    }
     /**
      * Utility method returns the parent path of the given <code>path</code>,
      * which is normalized by {@link #normalize(String)} before resolving the
