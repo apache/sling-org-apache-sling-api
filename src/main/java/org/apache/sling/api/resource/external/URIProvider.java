@@ -42,7 +42,7 @@ public interface URIProvider {
      * @param scope the required scope.
      * @param operation the required operation.
      * @param resource the resource to convert from.
-     * @return a URI if the resoruce has a URI suitable for the requested scope and operation, otherwise the implemenation should throw an IlleagalArgumentException.
+     * @return a URI if the resource has a URI suitable for the requested scope and operation, otherwise the implementation should throw an IlleagalArgumentException.
      * @throws IllegalArgumentException if a URI for the requested scope and operation cannot be provided to the caller.
      */
     URI toURI(Resource resource, URIProvider.Scope scope, URIProvider.Operation operation);
