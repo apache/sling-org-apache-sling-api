@@ -31,12 +31,19 @@ import org.osgi.annotation.versioning.ConsumerType;
  * used by the {@link AdapterManager} to adapt objects on demand. The
  * <code>AdapterFactory</code> services are not really intended to be used by
  * clients directly.
+ * </p>
  * <p>
  * The {@link AdapterManager} implementations ensures that the
  * {@link #getAdapter(Object, Class)} method is only called for the combination
  * of adaptable and adapter type which is allowed as per the service
  * registration properties {@link #ADAPTABLE_CLASSES} and
  * {@link #ADAPTER_CLASSES}.
+ * </p>
+ * <p>
+ * If multiple implementations for the same combination of adapter and adaptable
+ * are registered, the implementation with the lowest service ranking wins
+ * (or with the highest service id, if the ranking is the same).
+ * </p>
  */
 @ConsumerType
 public interface AdapterFactory {
