@@ -20,7 +20,6 @@
 package org.apache.sling.api.resource.external;
 
 import org.apache.sling.api.resource.Resource;
-import org.omg.CORBA.INTERNAL;
 import org.osgi.annotation.versioning.ProviderType;
 
 import java.net.URI;
