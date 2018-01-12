@@ -19,6 +19,7 @@
 package org.apache.sling.api.resource;
 
 import java.io.Closeable;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -674,6 +675,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * @throws IllegalStateException if this resource resolver has already been
      *             {@link #close() closed}.
      * @since 2.3 (Sling API Bundle 2.4.0)
+     * @see ResourceResolver#getParentResourceType(String)
+     * @see ResourceResolver#getDerivedResourceTypes(String)
      */
     @CheckForNull String getParentResourceType(final Resource resource);
 
@@ -692,8 +695,21 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * @throws IllegalStateException if this resource resolver has already been
      *             {@link #close() closed}.
      * @since 2.3 (Sling API Bundle 2.4.0)
+     * @see ResourceResolver#getParentResourceType(Resource)
+     * @see ResourceResolver#getDerivedResourceTypes(String)
      */
     public @CheckForNull String getParentResourceType(final String resourceType);
+
+    /**
+     * Returns the derived resource types for the given type.
+     * The derived resource types either directly or transitively inherit from the given type via property {@code sling:resourceSuperType}.
+     * This is the inversion method of {@link #getParentResourceType(String)}.
+     *
+     * @param resourceType The resource type for which to retrieve the derived types
+     * @return The collection of resource types which inherit (directly or transitively) from the given resource type via property {@code sling:resourceSuperType}
+     * @since 2.11 (Sling API Bundle 2.16.6)
+     */
+    @Nonnull Collection<String> getDerivedResourceTypes(@Nonnull String resourceType);
 
     /**
      * Returns <code>true</code> if the resource type or any of the resource's
