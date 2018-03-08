@@ -24,7 +24,7 @@ import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * An instance of {@code ResourceChangeList} is passed to {@link ResourceChangeListener#onChange(List)}
- * to pass in addtional information like the search path.
+ * to pass in additional information like the search path.
  *
  * @since 1.2.0 (Sling API Bundle 2.15.0)
  */
