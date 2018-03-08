@@ -27,22 +27,23 @@ import javax.annotation.Nonnull;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.sling.api.adapter.Adaptable;
-
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
- * The <code>ResourceResolver</code> defines the service API which may be used
- * to resolve {@link org.apache.sling.api.resource.Resource} objects. The resource resolver is available to
- * the request processing servlet through the
+ * The {@code ResourceResolver} defines the API which may be used
+ * to resolve {@link org.apache.sling.api.resource.Resource} objects and
+ * work with such resources like creating, editing or updating them.
+ * The resource resolver is available to the request processing servlet
+ * through the
  * {@link org.apache.sling.api.SlingHttpServletRequest#getResourceResolver()}
- * method.
- * A resource resolver can also be created through the {@link ResourceResolverFactory}.
+ * method. A resource resolver can also be created through the
+ * {@link ResourceResolverFactory} service.
  * <p>
- * The <code>ResourceResolver</code> is also an {@link Adaptable} to get
+ * The {@code ResourceResolver} is also an {@link Adaptable} to get
  * adapters to other types. A JCR based resource resolver might support adapting
  * to the JCR Session used by the resolver to access the JCR Repository.
  * <p>
- * A <code>ResourceResolver</code> is generally not thread safe! As a
+ * A {@code ResourceResolver} is generally not thread safe! As a
  * consequence, an application which uses the resolver, its returned resources
  * and/or objects resulting from adapting either the resolver or a resource,
  * must provide proper synchronization to ensure no more than one thread
@@ -77,6 +78,28 @@ import org.osgi.annotation.versioning.ProviderType;
  * <td>Returns <code>null</code></td>
  * </tr>
  * </table>
+ * <p>
+ * <b>Resource Handling</b>
+ * <p>
+ * A resource resolver provides various methods to manage resources. All changes
+ * are transient and require to commit them at the end.
+ * <ul>
+ * <li>{@link #create(Resource, String, Map)} for creating a new resource.
+ * <li>{@link #delete(Resource)} to delete a resource.
+ * <li>{@link #adaptTo(Class)} allows to adapt a resource to a {@link ModifiableValueMap}
+ * to update a resource.
+ * <li>{@link #move(String, String)} to move resources.
+ * <li>{@link #copy(String, String)} to copy resources.
+ * <li>{@link #commit()} commits all staged changes.
+ * <li>{@link #revert()} reverts all staged changes.
+ * </ul>
+ * <p>
+ * The resource tree accessible through the resource resolver is backed by one or
+ * more {@link org.apache.sling.spi.resource.provider.ResourceProvider}s. In
+ * general it is advisable to limit transient changes to a single resource provider.
+ * The {@link #commit()} is not using a two phase commit, therefore if there
+ * is more than one resource provider involved and one of them fails in persisting,
+ * changes already committed to other providers are not reverted.
  * <p>
  * <b>Lifecycle</b>
  * <p>
@@ -601,6 +624,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      *
      * Deleting a non existing resource leads to no operation nor exception.
      *
+     * The changes are transient and require a call to {@link #commit()} for persisting.
+     *
      * @param resource The resource to delete
      *
      * @throws NullPointerException if the resource parameter is null
@@ -616,6 +641,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
 
     /**
      * Add a child resource to the given parent resource
+     * The changes are transient and require a call to {@link #commit()} for persisting.
+     *
      * @param parent The parent resource
      * @param name   The name of the child resource - this is a plain name, not a path!
      * @param properties Optional properties for the resource
@@ -698,9 +725,9 @@ public interface ResourceResolver extends Adaptable, Closeable {
     /**
      * Returns <code>true</code> if the resource type or any of the resource's
      * super type(s) equals the given resource type.
-     * 
+     *
      * In case the type of the given resource or the given resource type starts with one of the resource resolver's search paths
-     * it is converted to a relative resource type by stripping off the resource resolver's search path 
+     * it is converted to a relative resource type by stripping off the resource resolver's search path
      * before doing the comparison.
      *
      * @param resource The resource to check
@@ -738,6 +765,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * a {@code PersistenceException} is thrown. If the resource at {@code srcAbsPath} does not exist,
      * a {@code PersistenceException} is thrown.
      *
+     * The changes are transient and require a call to {@link #commit()} for persisting.
+     *
      * @param srcAbsPath  the path of the resource to be copied.
      * @param destAbsPath the location to which the resource at
      *                    <code>srcAbsPath</code> is to be copied.
@@ -765,6 +794,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * is thrown. If a child resource with the same name already exists at <code>destAbsPath</code>
      * a {@code PersistenceException} is thrown. If the resource at {@code srcAbsPath} does not exist,
      * a {@code PersistenceException} is thrown.
+     *
+     * The changes are transient and require a call to {@link #commit()} for persisting.
      *
      * @param srcAbsPath  the path of the resource to be copied.
      * @param destAbsPath the location to which the resource at
