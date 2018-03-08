@@ -18,6 +18,7 @@
  */
 package org.apache.sling.api.resource;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.CheckForNull;
@@ -204,4 +205,19 @@ public interface ResourceResolverFactory {
      * @since 2.6 (Sling API Bundle 2.8.0)
      */
     @CheckForNull ResourceResolver getThreadResourceResolver();
+
+    /**
+     * Returns the search path used by the resource resolvers to search for
+     * resources by relative path. If no search path is set an empty list
+     * is returned.
+     * <p>
+     * Each entry in the list is an absolute path terminated with a slash
+     * character. Thus to create an absolute path from a search path entry and a
+     * relative path, the search path entry and relative path may just be
+     * concatenated.
+     *
+     * @return An immutable list containing the search path
+     * @since 2.11 (Sling API Bundle 2.17.0)
+     */
+    @Nonnull List<String> getSearchPath();
 }
