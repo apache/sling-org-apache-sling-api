@@ -119,7 +119,6 @@
                            jackrabbit-jcr-commons;inline="org/apache/jackrabbit/util/ISO8601.*"
                         </Embed-Dependency>
                     </instructions>
-                    <skip>true</skip>
                 </configuration>
             </plugin>
             <plugin>
