@@ -217,7 +217,7 @@ public interface ResourceResolverFactory {
      * concatenated.
      *
      * @return An immutable list containing the search path
-     * @since 2.11 (Sling API Bundle 2.17.0)
+     * @since 2.11 (Sling API Bundle 2.18.0)
      */
     @Nonnull List<String> getSearchPath();
 }
