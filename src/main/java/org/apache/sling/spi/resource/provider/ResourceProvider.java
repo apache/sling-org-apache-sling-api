@@ -210,6 +210,13 @@ public abstract class ResourceProvider<T> {
     public static final String AUTH_ADMIN = "provider.auth.admin";
 
     /**
+     * The authentication information property indicating that an existing ResourceResolver is being cloned.
+     * Providers that receive stateful objects as authentication information must deep-clone those objects
+     * when this property is present, to avoid inadvertent state sharing with the existing resolver.
+     */
+    public static final String AUTH_CLONE = "provider.auth.clone";
+
+    /**
      * The resource type be set on resources returned by the
      * {@link #listChildren(ResolveContext, Resource)} method to enable traversing the
      * resource
