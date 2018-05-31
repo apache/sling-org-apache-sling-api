@@ -104,7 +104,6 @@
         	<groupId>org.apache.sling</groupId>
         	<artifactId>org.apache.sling.testing.sling-mock</artifactId>
         	<version>2.2.12</version>
-        	<type>bundle</type>
         	<scope>test</scope>
         </dependency>
     </dependencies>

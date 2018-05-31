@@ -43,15 +43,14 @@ public class ResourceStreamTest {
     @Test
     public void testResourceStream() {
         Resource resource = context.resourceResolver().getResource(PATH);
-        Object[] found = ResourceStream.from(resource).stream().toArray();
+        Object[] found = resource.stream().toArray();
         assertEquals(10, found.length);
     }
 
     @Test
     public void testResourceStreamBranchSelector() {
         Resource resource = context.resourceResolver().getResource(PATH);
-        Object[] found = ResourceStream.from(resource)
-                .setBranchSelector(r -> r.getValueMap().get("jcr:primaryType", "").equals("app:Page")).stream()
+        Object[] found = resource.stream(r -> r.getValueMap().get("jcr:primaryType", "").equals("app:Page"))
                 .toArray();
         assertEquals(3, found.length);
     }
@@ -59,8 +58,7 @@ public class ResourceStreamTest {
     @Test
     public void testResourceStreamResourceSelector() {
         Resource resource = context.resourceResolver().getResource(PATH);
-        Object[] found = ResourceStream.from(resource)
-                .setResourceSelector(r -> r.getValueMap().get("jcr:primaryType").equals("app:PageContent")).stream()
+        Object[] found = resource.stream().filter(r -> r.getValueMap().get("jcr:primaryType").equals("app:PageContent"))
                 .toArray();
         assertEquals(4, found.length);
     }
@@ -68,27 +66,24 @@ public class ResourceStreamTest {
     @Test
     public void testResourceStreamLowLimit() {
         Resource resource = context.resourceResolver().getResource(PATH);
-        Object[] found = ResourceStream.from(resource)
-                .setResourceSelector(r -> r.getValueMap().get("jcr:primaryType").equals("app:PageContent")).limit(3)
-                .stream().toArray();
+        Object[] found = resource.stream().filter(r -> r.getValueMap().get("jcr:primaryType").equals("app:PageContent"))
+                .limit(3).toArray();
         assertEquals(3, found.length);
     }
 
     @Test
     public void testResourceStreamHighLimit() {
         Resource resource = context.resourceResolver().getResource(PATH);
-        Object[] found = ResourceStream.from(resource)
-                .setResourceSelector(r -> r.getValueMap().get("jcr:primaryType").equals("app:PageContent")).limit(7)
-                .stream().toArray();
+        Object[] found = resource.stream().filter(r -> r.getValueMap().get("jcr:primaryType").equals("app:PageContent"))
+                .limit(7).toArray();
         assertEquals(4, found.length);
     }
 
     @Test
     public void testResourceStreamRange() {
         Resource resource = context.resourceResolver().getResource(PATH);
-        Object[] found = ResourceStream.from(resource)
-                .setResourceSelector(r -> r.getValueMap().get("jcr:primaryType").equals("app:PageContent")).range(2, 4)
-                .stream().toArray();
+        Object[] found = resource.stream().filter(r -> r.getValueMap().get("jcr:primaryType").equals("app:PageContent"))
+                .skip(1).limit(3).toArray();
         assertEquals(3, found.length);
     }
 
