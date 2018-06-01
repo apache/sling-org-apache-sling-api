@@ -22,7 +22,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class ResourceStreamTest {
+public class ResourceTest {
 
     @Rule
     public final SlingContext context = new SlingContext();
@@ -55,36 +55,5 @@ public class ResourceStreamTest {
         assertEquals(3, found.length);
     }
 
-    @Test
-    public void testResourceStreamResourceSelector() {
-        Resource resource = context.resourceResolver().getResource(PATH);
-        Object[] found = resource.stream().filter(r -> r.getValueMap().get("jcr:primaryType").equals("app:PageContent"))
-                .toArray();
-        assertEquals(4, found.length);
-    }
-
-    @Test
-    public void testResourceStreamLowLimit() {
-        Resource resource = context.resourceResolver().getResource(PATH);
-        Object[] found = resource.stream().filter(r -> r.getValueMap().get("jcr:primaryType").equals("app:PageContent"))
-                .limit(3).toArray();
-        assertEquals(3, found.length);
-    }
-
-    @Test
-    public void testResourceStreamHighLimit() {
-        Resource resource = context.resourceResolver().getResource(PATH);
-        Object[] found = resource.stream().filter(r -> r.getValueMap().get("jcr:primaryType").equals("app:PageContent"))
-                .limit(7).toArray();
-        assertEquals(4, found.length);
-    }
-
-    @Test
-    public void testResourceStreamRange() {
-        Resource resource = context.resourceResolver().getResource(PATH);
-        Object[] found = resource.stream().filter(r -> r.getValueMap().get("jcr:primaryType").equals("app:PageContent"))
-                .skip(1).limit(3).toArray();
-        assertEquals(3, found.length);
-    }
 
 }
