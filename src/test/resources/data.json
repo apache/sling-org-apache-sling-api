@@ -1,0 +1,30 @@
+{
+	"jcr:primaryType": "app:Page",
+	"jcr:content": {
+		"jcr:primaryType": "app:PageContent"
+	},
+	"testpage1": {
+		"jcr:primaryType": "app:Page",
+		"jcr:content": {
+			"jcr:primaryType": "app:PageContent"
+		}
+	},
+	"testpage2": {
+		"jcr:primaryType": "app:Page",
+		"jcr:content": {
+			"jcr:primaryType": "app:PageContent"
+		}
+	},
+	"testpage3": {
+		"jcr:primaryType": "app:PageType",
+		"jcr:content": {
+			"jcr:primaryType": "app:Foo"
+		}
+	},
+	"testpage4": {
+		"jcr:primaryType": "app:PageType",
+		"jcr:content": {
+			"jcr:primaryType": "app:PageContent"
+		}
+	}
+}

@@ -17,12 +17,17 @@
 package org.apache.sling.api.resource;
 
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 import org.apache.sling.api.adapter.Adaptable;
-
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -216,4 +221,58 @@ public interface Resource extends Adaptable {
      * @since 2.5 (Sling API Bundle 2.7.0)
      */
     @Nonnull ValueMap getValueMap();
+
+    /**
+     * Provides a stream of resources starting from the current resource and
+     * traversing through its subtree, the path of descent is controlled by the 
+     * branch selector
+     * 
+     * @return self closing {@code Stream<Resource>} of unknown size.
+     */
+    default Stream<Resource> stream(Predicate<Resource> branchSelector) {
+        final Resource resource = this;
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(new Iterator<Resource>() {
+
+            private final LinkedList<Resource> resourcesToCheck = new LinkedList<>();
+
+            {
+                resourcesToCheck.addFirst(resource);
+            }
+
+            Resource current;
+
+            @Override
+            public boolean hasNext() {
+                if (resourcesToCheck.isEmpty()) {
+                    return false;
+                }
+
+                current = resourcesToCheck.removeFirst();
+                int index = 0;
+                for (Resource child : current.getChildren()) {
+                    if (branchSelector.test(child)) {
+                        resourcesToCheck.add(index++, child);
+                    }
+                }
+
+                return true;
+            }
+
+            @Override
+            public Resource next() {
+                return current;
+            }
+        }, Spliterator.ORDERED | Spliterator.IMMUTABLE), false);
+    }
+    
+    /**
+     * Provides a stream of resources starting from the current resource and
+     * traversing through its subtree
+     * 
+     * @return self closing {@code Stream<Resource>} of unknown size.
+     */
+    default Stream<Resource> stream(){
+        return stream(resource -> true);
+    }
+
 }
