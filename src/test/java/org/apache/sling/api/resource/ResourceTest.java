@@ -50,9 +50,9 @@ public class ResourceTest {
     @Test
     public void testResourceStreamBranchSelector() {
         Resource resource = context.resourceResolver().getResource(PATH);
-        Object[] found = resource.stream(r -> r.getValueMap().get("jcr:primaryType", "").equals("app:Page"))
+        Object[] found = resource.stream(r -> r.getValueMap().get("jcr:primaryType", "").equals("app:PageType"))
                 .toArray();
-        assertEquals(3, found.length);
+        assertEquals(8, found.length);
     }
 
 

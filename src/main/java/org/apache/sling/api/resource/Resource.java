@@ -17,9 +17,9 @@
 package org.apache.sling.api.resource;
 
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Spliterator;
 import java.util.Spliterators;
+import java.util.Stack;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -223,44 +223,55 @@ public interface Resource extends Adaptable {
     @Nonnull ValueMap getValueMap();
 
     /**
-     * Provides a stream of resources starting from the current resource and
-     * traversing through its subtree, the path of descent is controlled by the 
-     * branch selector
+     * Provides a depth first {@code Stream<Resource>} traversal of the resource
+     * tree starting with the current resource.
      * 
-     * @return self closing {@code Stream<Resource>} of unknown size.
+     * @param branchSelector
+     *            used to determine whether a given child resource is traversed
+     * @return {@code Stream<Resource>} of unknown size.
      */
     default Stream<Resource> stream(Predicate<Resource> branchSelector) {
         final Resource resource = this;
         return StreamSupport.stream(Spliterators.spliteratorUnknownSize(new Iterator<Resource>() {
 
-            private final LinkedList<Resource> resourcesToCheck = new LinkedList<>();
+            private final Stack<Iterator<Resource>> resources = new Stack<Iterator<Resource>>();
+
+            private Resource current;
+
+            private Iterator<Resource> iterator;
 
             {
-                resourcesToCheck.addFirst(resource);
+                resources.push(resource.getChildren().iterator());
+                current = resource;
             }
-
-            Resource current;
 
             @Override
             public boolean hasNext() {
-                if (resourcesToCheck.isEmpty()) {
-                    return false;
-                }
+                if (current == null) {
+                    do {
+                        if (resources.isEmpty()) {
+                            return false;
+                        }
+                        iterator = resources.peek();
+                        if (!iterator.hasNext()) {
+                            resources.pop();
+                        }
+                    } while (!iterator.hasNext());
 
-                current = resourcesToCheck.removeFirst();
-                int index = 0;
-                for (Resource child : current.getChildren()) {
-                    if (branchSelector.test(child)) {
-                        resourcesToCheck.add(index++, child);
+                    current = iterator.next();
+
+                    if (branchSelector.test(current)) {
+                        resources.push(current.getChildren().iterator());
                     }
                 }
-
                 return true;
             }
 
             @Override
             public Resource next() {
-                return current;
+                Resource next = current;
+                current = null;
+                return next;
             }
         }, Spliterator.ORDERED | Spliterator.IMMUTABLE), false);
     }
