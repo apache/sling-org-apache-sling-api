@@ -224,7 +224,7 @@ public interface Resource extends Adaptable {
 
     /**
      * Provides a depth first {@code Stream<Resource>} traversal of the resource
-     * tree starting with the current resource.
+     * tree starting with the current resource. 
      * 
      * @param branchSelector
      *            used to determine whether a given child resource is traversed
@@ -235,9 +235,7 @@ public interface Resource extends Adaptable {
         return StreamSupport.stream(Spliterators.spliteratorUnknownSize(new Iterator<Resource>() {
 
             private final Stack<Iterator<Resource>> resources = new Stack<Iterator<Resource>>();
-
             private Resource current;
-
             private Iterator<Resource> iterator;
 
             {
@@ -248,21 +246,7 @@ public interface Resource extends Adaptable {
             @Override
             public boolean hasNext() {
                 if (current == null) {
-                    do {
-                        if (resources.isEmpty()) {
-                            return false;
-                        }
-                        iterator = resources.peek();
-                        if (!iterator.hasNext()) {
-                            resources.pop();
-                        }
-                    } while (!iterator.hasNext());
-
-                    current = iterator.next();
-
-                    if (branchSelector.test(current)) {
-                        resources.push(current.getChildren().iterator());
-                    }
+                    return seek();
                 }
                 return true;
             }
@@ -273,6 +257,26 @@ public interface Resource extends Adaptable {
                 current = null;
                 return next;
             }
+            
+            private boolean seek() {
+                while (true) {
+                    if (resources.isEmpty()) {
+                        return false;
+                    }
+                    iterator = resources.peek();
+                    if (!iterator.hasNext()) {
+                        resources.pop();
+                    } else {
+                        current = iterator.next();
+                        if (branchSelector.test(current)) {
+                            resources.push(current.getChildren().iterator());
+                            break;
+                        }
+                    }
+                } 
+                return true;
+            }
+
         }, Spliterator.ORDERED | Spliterator.IMMUTABLE), false);
     }
     
