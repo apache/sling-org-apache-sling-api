@@ -17,12 +17,17 @@
 package org.apache.sling.api.resource;
 
 import java.util.Iterator;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.Stack;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 import org.apache.sling.api.adapter.Adaptable;
-
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -216,4 +221,65 @@ public interface Resource extends Adaptable {
      * @since 2.5 (Sling API Bundle 2.7.0)
      */
     @Nonnull ValueMap getValueMap();
+
+    /**
+     * Provides a depth first {@code Stream<Resource>} traversal of the resource
+     * tree starting with the current resource. The traversal is controlled by the
+     * provided predicate which determines if a given child is traversed. If no
+     * children matches the predicate, the traversal for that branch ends
+     * 
+     * @param branchSelector
+     *            used to determine whether a given child resource is traversed
+     * @return {@code Stream<Resource>} of unknown size.
+     */
+    default Stream<Resource> stream(Predicate<Resource> branchSelector) {
+        final Resource resource = this;
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(new Iterator<Resource>() {
+
+            private final Stack<Iterator<Resource>> resources = new Stack<Iterator<Resource>>();
+            private Resource current;
+            private Iterator<Resource> iterator;
+
+            {
+                resources.push(resource.getChildren().iterator());
+                current = resource;
+            }
+
+            @Override
+            public boolean hasNext() {
+                if (current == null) {
+                    return seek();
+                }
+                return true;
+            }
+
+            @Override
+            public Resource next() {
+                Resource next = current;
+                current = null;
+                return next;
+            }
+            
+            private boolean seek() {
+                while (true) {
+                    if (resources.isEmpty()) {
+                        return false;
+                    }
+                    iterator = resources.peek();
+                    if (!iterator.hasNext()) {
+                        resources.pop();
+                    } else {
+                        current = iterator.next();
+                        if (branchSelector.test(current)) {
+                            resources.push(current.getChildren().iterator());
+                            break;
+                        }
+                    }
+                } 
+                return true;
+            }
+
+        }, Spliterator.ORDERED | Spliterator.IMMUTABLE), false);
+    }
+
 }
