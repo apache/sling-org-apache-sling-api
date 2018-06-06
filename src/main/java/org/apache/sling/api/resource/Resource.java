@@ -224,7 +224,9 @@ public interface Resource extends Adaptable {
 
     /**
      * Provides a depth first {@code Stream<Resource>} traversal of the resource
-     * tree starting with the current resource. 
+     * tree starting with the current resource. The traversal is controlled by the
+     * provided predicate which determines if a given child is traversed. If no
+     * children matches the predicate, the traversal for that branch ends
      * 
      * @param branchSelector
      *            used to determine whether a given child resource is traversed
@@ -278,16 +280,6 @@ public interface Resource extends Adaptable {
             }
 
         }, Spliterator.ORDERED | Spliterator.IMMUTABLE), false);
-    }
-    
-    /**
-     * Provides a stream of resources starting from the current resource and
-     * traversing through its subtree
-     * 
-     * @return self closing {@code Stream<Resource>} of unknown size.
-     */
-    default Stream<Resource> stream(){
-        return stream(resource -> true);
     }
 
 }

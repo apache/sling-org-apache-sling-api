@@ -40,12 +40,6 @@ public class ResourceTest {
         assertEquals("en", resource.getName());
     }
 
-    @Test
-    public void testResourceStream() {
-        Resource resource = context.resourceResolver().getResource(PATH);
-        Object[] found = resource.stream().toArray();
-        assertEquals(10, found.length);
-    }
 
     @Test
     public void testResourceStreamBranchSelector() {
