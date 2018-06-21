@@ -94,11 +94,12 @@ public final class ServletResolverConstants {
      * (value is "sling.servlet.selectors"). The selectors must be configured as
      * they would be specified in the URL that is as a list of dot-separated
      * strings such as <em>print.a4</em>.
+     * In case this is not empty the first selector(s) (i.e. the one(s) on the left) in the request URL must match, 
+     * otherwise the servlet is not executed. After that may follow arbitrarily many non-registered selectors.
      * <p>
-     * The type of this property is a String or String[] (array of strings)
-     * denoting the resource types. This property is ignored if the
-     * {@link #SLING_SERVLET_RESOURCE_TYPES} property is not set. Otherwise this property is
-     * optional and ignored if not set.
+     * The type of this property is a String or String[] (array of strings).
+     * This property is ignored if the {@link #SLING_SERVLET_RESOURCE_TYPES} property is not set. 
+     * Otherwise this property is optional and ignored if not set.
      */
     public static final String SLING_SERVLET_SELECTORS = "sling.servlet.selectors";
 
