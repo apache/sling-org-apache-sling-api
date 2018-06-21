@@ -16,6 +16,7 @@
  ******************************************************************************/
 package org.apache.sling.api.wrappers;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import javax.annotation.Nonnull;
@@ -303,6 +304,11 @@ public class ResourceResolverWrapper implements ResourceResolver {
     @Override
     public String getParentResourceType(String resourceType) {
         return wrapped.getParentResourceType(resourceType);
+    }
+
+    @Override
+    public Collection<String> getDerivedResourceTypes(String resourceType) {
+        return wrapped.getDerivedResourceTypes(resourceType);
     }
 
     @Override
