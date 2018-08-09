@@ -16,8 +16,8 @@
  */
 package org.apache.sling.api.request;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import org.apache.sling.api.resource.Resource;
 
@@ -162,7 +162,7 @@ public interface RequestPathInfo {
      * of the resource.
      * @return The resource path
      */
-    @Nonnull String getResourcePath();
+    @NotNull String getResourcePath();
 
     /**
      * Returns the extension from the URL or <code>null</code> if the request
@@ -173,7 +173,7 @@ public interface RequestPathInfo {
      *
      * @return The extension from the request URL.
      */
-    @CheckForNull String getExtension();
+    @Nullable String getExtension();
 
     /**
      * Returns the selectors decoded from the request URL as string. Returns
@@ -185,7 +185,7 @@ public interface RequestPathInfo {
      * @return The selector string or {@code null}
      * @see #getSelectors()
      */
-    @CheckForNull String getSelectorString();
+    @Nullable String getSelectorString();
 
     /**
      * Returns the selectors decoded from the request URL as an array of
@@ -199,7 +199,7 @@ public interface RequestPathInfo {
      * @return An array of selectors
      * @see #getSelectorString()
      */
-    @Nonnull String[] getSelectors();
+    @NotNull String[] getSelectors();
 
     /**
      * Returns the suffix part of the URL or <code>null</code> if the request
@@ -210,7 +210,7 @@ public interface RequestPathInfo {
      *
      * @return The suffix part of the request URL.
      */
-    @CheckForNull String getSuffix();
+    @Nullable String getSuffix();
 
     /**
      * Returns the resource addressed by the suffix or null if the request does
@@ -224,5 +224,5 @@ public interface RequestPathInfo {
      *
      * @since 2.3 (Sling API Bundle 2.3.2)
      */
-    @CheckForNull Resource getSuffixResource();
+    @Nullable Resource getSuffixResource();
 }

@@ -18,8 +18,8 @@
  */
 package org.apache.sling.api.security;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -87,7 +87,7 @@ public interface ResourceAccessSecurity {
      * @param resource The resource to test.
      * @return null if {@link Resource} cannot be read
      */
-    @CheckForNull Resource getReadableResource(Resource resource);
+    @Nullable Resource getReadableResource(Resource resource);
 
     /**
      * Check whether a resource can be created at the path.
@@ -96,28 +96,28 @@ public interface ResourceAccessSecurity {
      * @return true if a {@link Resource} can be created at the supplied
      *  absolute path.
      */
-    boolean canCreate(@Nonnull String absPathName, @Nonnull ResourceResolver resourceResolver);
+    boolean canCreate(@NotNull String absPathName, @NotNull ResourceResolver resourceResolver);
 
     /**
      * Check whether a resource can be updated at the path.
      * @param resource The resource to test.
      * @return true if supplied {@link Resource} can be updated
      */
-    boolean canUpdate(@Nonnull Resource resource);
+    boolean canUpdate(@NotNull Resource resource);
 
     /**
      * Check whether a resource can be deleted at the path.
      * @param resource The resource to test.
      * @return true if supplied {@link Resource} can be deleted
      */
-    boolean canDelete(@Nonnull Resource resource);
+    boolean canDelete(@NotNull Resource resource);
 
     /**
      * Check whether a resource can be executed at the path.
      * @param resource The resource to test.
      * @return true if supplied {@link Resource} can be executed as a script
      */
-    boolean canExecute(@Nonnull Resource resource);
+    boolean canExecute(@NotNull Resource resource);
 
     /**
      * Check whether a value can be read
@@ -125,7 +125,7 @@ public interface ResourceAccessSecurity {
      * @param valueName The name of the value
      * @return true if the "valueName" value of supplied {@link Resource} can be read
      */
-    boolean canReadValue(@Nonnull Resource resource, @Nonnull String valueName);
+    boolean canReadValue(@NotNull Resource resource, @NotNull String valueName);
 
     /**
      * Check whether a value can be set
@@ -133,7 +133,7 @@ public interface ResourceAccessSecurity {
      * @param valueName The name of the value
      * @return true if the "valueName" value of supplied {@link Resource} can be set
      */
-    boolean canSetValue(@Nonnull Resource resource, @Nonnull String valueName);
+    boolean canSetValue(@NotNull Resource resource, @NotNull String valueName);
 
     /**
      * Check whether a value can be deleted
@@ -141,7 +141,7 @@ public interface ResourceAccessSecurity {
      * @param valueName The name of the value
      * @return true if the "valueName" value of supplied {@link Resource} can be deleted
      */
-    boolean canDeleteValue(@Nonnull Resource resource, @Nonnull String valueName);
+    boolean canDeleteValue(@NotNull Resource resource, @NotNull String valueName);
 
     /**
      * Optionally transform a query based on the current
@@ -158,7 +158,7 @@ public interface ResourceAccessSecurity {
      * @return the transformed query
      * @throws AccessSecurityException If access is denied
      */
-    @Nonnull String transformQuery(@Nonnull String query, @Nonnull String language, @Nonnull ResourceResolver resourceResolver)
+    @NotNull String transformQuery(@NotNull String query, @NotNull String language, @NotNull ResourceResolver resourceResolver)
     throws AccessSecurityException;
 
 }

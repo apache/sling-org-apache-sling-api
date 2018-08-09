@@ -20,7 +20,7 @@ package org.apache.sling.spi.resource.provider;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 import org.apache.sling.api.resource.observation.ResourceChange;
 import org.osgi.annotation.versioning.ProviderType;
@@ -40,7 +40,7 @@ public interface ObservationReporter {
      * reporter is bound to.
      * @return A list of observer configurations, the list might be empty.
      */
-    @Nonnull List<ObserverConfiguration> getObserverConfigurations();
+    @NotNull List<ObserverConfiguration> getObserverConfigurations();
 
     /**
      * A resource provider can inform about a list of changes.
@@ -60,7 +60,7 @@ public interface ObservationReporter {
      * @param changes The list of changes.
      * @param distribute Whether the changes should be distributed to other instances.
      */
-    void reportChanges(@Nonnull Iterable<ResourceChange> changes, boolean distribute);
+    void reportChanges(@NotNull Iterable<ResourceChange> changes, boolean distribute);
 
     /**
      * A resource provider can inform about a list of changes.
@@ -81,7 +81,7 @@ public interface ObservationReporter {
      * @param distribute Whether the changes should be distributed to other instances.
      * @since 1.1.0 (Sling API Bundle 2.15.0)
      */
-    void reportChanges(@Nonnull ObserverConfiguration config,
-            @Nonnull Iterable<ResourceChange> changes,
+    void reportChanges(@NotNull ObserverConfiguration config,
+            @NotNull Iterable<ResourceChange> changes,
             boolean distribute);
 }

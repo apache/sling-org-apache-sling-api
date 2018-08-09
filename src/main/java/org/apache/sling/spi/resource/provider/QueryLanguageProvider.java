@@ -20,7 +20,7 @@ package org.apache.sling.spi.resource.provider;
 
 import java.util.Iterator;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
@@ -43,7 +43,7 @@ public interface QueryLanguageProvider<T> {
      * @param ctx The resolve context
      * @return The array of supported languages
      */
-    String[] getSupportedLanguages(@Nonnull ResolveContext<T> ctx);
+    String[] getSupportedLanguages(@NotNull ResolveContext<T> ctx);
 
     /**
      * Searches for resources using the given query formulated in the given
@@ -70,7 +70,7 @@ public interface QueryLanguageProvider<T> {
      * @throws IllegalStateException if this resource provider has already been
      *             closed.
      */
-    Iterator<Resource> findResources(@Nonnull ResolveContext<T> ctx, String query, String language);
+    Iterator<Resource> findResources(@NotNull ResolveContext<T> ctx, String query, String language);
 
     /**
      * Queries the storage using the given query formulated in the given
@@ -100,5 +100,5 @@ public interface QueryLanguageProvider<T> {
      * @throws IllegalStateException if this resource provider has already been
      *             closed.
      */
-    Iterator<ValueMap> queryResources(@Nonnull ResolveContext<T> ctx, String query, String language);
+    Iterator<ValueMap> queryResources(@NotNull ResolveContext<T> ctx, String query, String language);
 }

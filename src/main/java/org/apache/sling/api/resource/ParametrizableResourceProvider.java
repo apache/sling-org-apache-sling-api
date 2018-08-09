@@ -20,8 +20,8 @@ package org.apache.sling.api.resource;
 
 import java.util.Map;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import org.osgi.annotation.versioning.ConsumerType;
 
@@ -62,7 +62,7 @@ public interface ParametrizableResourceProvider {
      *             may be thrown in case of any problem creating the <code>Resource</code> instance.
      * @see ResourceProvider#getResource(ResourceResolver, String)
      */
-    @CheckForNull Resource getResource(@Nonnull ResourceResolver resourceResolver,
-            @Nonnull String path,
-            @Nonnull Map<String, String> parameters);
+    @Nullable Resource getResource(@NotNull ResourceResolver resourceResolver,
+            @NotNull String path,
+            @NotNull Map<String, String> parameters);
 }

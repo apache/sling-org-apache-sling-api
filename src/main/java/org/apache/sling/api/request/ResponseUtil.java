@@ -21,7 +21,7 @@ package org.apache.sling.api.request;
 import java.io.IOException;
 import java.io.Writer;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Response related utility methods
@@ -125,7 +125,7 @@ public class ResponseUtil {
      * @param target writer
      * @return Wrapped writer escaping XML
      */
-    public static @Nonnull Writer getXmlEscapingWriter(@Nonnull Writer target) {
+    public static @NotNull Writer getXmlEscapingWriter(@NotNull Writer target) {
         return new XmlEscapingWriter(target);
     }
 }

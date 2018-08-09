@@ -20,7 +20,7 @@ package org.apache.sling.api.resource;
 
 import java.util.Map;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 import org.osgi.annotation.versioning.ConsumerType;
 
@@ -102,7 +102,7 @@ public interface ResourceProviderFactory {
      *      href="http://sling.apache.org/documentation/the-sling-engine/service-authentication.html">Service
      *      Authentication</a>
      */
-    @Nonnull ResourceProvider getResourceProvider(Map<String, Object> authenticationInfo) throws LoginException;
+    @NotNull ResourceProvider getResourceProvider(Map<String, Object> authenticationInfo) throws LoginException;
 
     /**
      * Returns a new {@link ResourceProvider} instance with administrative
@@ -135,5 +135,5 @@ public interface ResourceProviderFactory {
      *             {@link ResourceResolverFactory#SUBSERVICE} properties.
      */
     @Deprecated
-    @Nonnull ResourceProvider getAdministrativeResourceProvider(Map<String, Object> authenticationInfo) throws LoginException;
+    @NotNull ResourceProvider getAdministrativeResourceProvider(Map<String, Object> authenticationInfo) throws LoginException;
 }

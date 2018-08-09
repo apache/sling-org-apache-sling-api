@@ -20,7 +20,7 @@ package org.apache.sling.api.resource;
 
 import java.util.Iterator;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The <code>ResourceWrapper</code> is a wrapper for any <code>Resource</code>
@@ -38,7 +38,7 @@ public class ResourceWrapper implements Resource {
      * <code>resource</code>.
      * @param resource The resource to wrap
      */
-    public ResourceWrapper(@Nonnull final Resource resource) {
+    public ResourceWrapper(@NotNull final Resource resource) {
         this.resource = resource;
     }
 

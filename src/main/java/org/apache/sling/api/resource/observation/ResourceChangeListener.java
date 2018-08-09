@@ -20,7 +20,7 @@ package org.apache.sling.api.resource.observation;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 import org.osgi.annotation.versioning.ConsumerType;
 
@@ -119,5 +119,5 @@ public interface ResourceChangeListener {
      *
      * @param changes The changes list. This list is immutable.
      */
-    void onChange(@Nonnull List<ResourceChange> changes);
+    void onChange(@NotNull List<ResourceChange> changes);
 }

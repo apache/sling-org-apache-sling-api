@@ -25,8 +25,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The <code>ResourceMetadata</code> interface defines the API for the
@@ -158,7 +158,7 @@ public class ResourceMetadata extends HashMap<String, Object> {
      * returned.
      * @return The character encoding
      */
-    public @CheckForNull String getCharacterEncoding() {
+    public @Nullable String getCharacterEncoding() {
         Object value = get(CHARACTER_ENCODING);
         if (value instanceof String) {
             return (String) value;
@@ -184,7 +184,7 @@ public class ResourceMetadata extends HashMap<String, Object> {
      * returned.
      * @return The content type
      */
-    public @CheckForNull String getContentType() {
+    public @Nullable String getContentType() {
         Object value = get(CONTENT_TYPE);
         if (value instanceof String) {
             return (String) value;
@@ -285,7 +285,7 @@ public class ResourceMetadata extends HashMap<String, Object> {
      * returned.
      * @return The resolution path
      */
-    public @CheckForNull String getResolutionPath() {
+    public @Nullable String getResolutionPath() {
         Object value = get(RESOLUTION_PATH);
         if (value instanceof String) {
             return (String) value;
@@ -311,7 +311,7 @@ public class ResourceMetadata extends HashMap<String, Object> {
      * <code>null</code> is returned.
      * @return The resolution path info
      */
-    public @CheckForNull String getResolutionPathInfo() {
+    public @Nullable String getResolutionPathInfo() {
         Object value = get(RESOLUTION_PATH_INFO);
         if (value instanceof String) {
             return (String) value;
@@ -342,7 +342,7 @@ public class ResourceMetadata extends HashMap<String, Object> {
      * @return The parameter map
      */
     @SuppressWarnings("unchecked")
-    public @CheckForNull Map<String, String> getParameterMap() {
+    public @Nullable Map<String, String> getParameterMap() {
         Object value = get(PARAMETER_MAP);
         if (value instanceof Map) {
             return (Map<String, String>) value;
@@ -377,24 +377,24 @@ public class ResourceMetadata extends HashMap<String, Object> {
     }
 
     @Override
-    public Object put(@Nonnull final String key, final Object value) {
+    public Object put(@NotNull final String key, final Object value) {
         this.checkReadOnly();
         return super.put(key, value);
     }
 
     @Override
-    public void putAll(@Nonnull final Map<? extends String, ? extends Object> m) {
+    public void putAll(@NotNull final Map<? extends String, ? extends Object> m) {
         this.checkReadOnly();
         super.putAll(m);
     }
 
     @Override
-    public Object remove(@Nonnull final Object key) {
+    public Object remove(@NotNull final Object key) {
         this.checkReadOnly();
         return super.remove(key);
     }
 
-    protected void internalPut(@Nonnull String key, Object value) {
+    protected void internalPut(@NotNull String key, Object value) {
         super.put(key, value);
     }
 
@@ -425,19 +425,19 @@ public class ResourceMetadata extends HashMap<String, Object> {
     }
 
     @Override
-    public @Nonnull Set<Map.Entry<String, Object>> entrySet() {
+    public @NotNull Set<Map.Entry<String, Object>> entrySet() {
         getLockedData();
         return lockedEntrySet != null ? lockedEntrySet : super.entrySet();
     }
 
     @Override
-    public @Nonnull Set<String> keySet() {
+    public @NotNull Set<String> keySet() {
         getLockedData();
         return lockedKeySet != null ? lockedKeySet : super.keySet();
     }
 
     @Override
-    public @Nonnull Collection<Object> values() {
+    public @NotNull Collection<Object> values() {
         getLockedData();
         return lockedValues != null ? lockedValues : super.values();
     }

@@ -18,8 +18,8 @@
  */
 package org.apache.sling.api.scripting;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
@@ -41,20 +41,20 @@ public interface SlingScriptHelper {
      * request.
      * @return The request
      */
-    @Nonnull SlingHttpServletRequest getRequest();
+    @NotNull SlingHttpServletRequest getRequest();
 
     /**
      * Returns the {@link SlingHttpServletResponse} representing the output of
      * the request.
      * @return The response
      */
-    @Nonnull SlingHttpServletResponse getResponse();
+    @NotNull SlingHttpServletResponse getResponse();
 
     /**
      * Returns the {@link SlingScript} being called to handle the request.
      * @return The script
      */
-    @Nonnull SlingScript getScript();
+    @NotNull SlingScript getScript();
 
     /**
      * Same as {@link #include(String,RequestDispatcherOptions)}, but using
@@ -66,7 +66,7 @@ public interface SlingScriptHelper {
      * @throws org.apache.sling.api.SlingServletException Wrapping a <code>ServletException</code>
      *             thrown while handling the include.
      */
-    void include(@Nonnull String path);
+    void include(@NotNull String path);
 
     /**
      * Helper method to include the result of processing the request for the
@@ -97,7 +97,7 @@ public interface SlingScriptHelper {
      * @see RequestDispatcherOptions#RequestDispatcherOptions(String)
      * @see #include(String, RequestDispatcherOptions)
      */
-    void include(@Nonnull String path, String requestDispatcherOptions);
+    void include(@NotNull String path, String requestDispatcherOptions);
 
     /**
      * Helper method to include the result of processing the request for the
@@ -122,7 +122,7 @@ public interface SlingScriptHelper {
      * @see RequestDispatcherOptions
      * @see #include(String, String)
      */
-    void include(@Nonnull String path, RequestDispatcherOptions options);
+    void include(@NotNull String path, RequestDispatcherOptions options);
 
     /**
      * Same as {@link #include(Resource,RequestDispatcherOptions)}, but using
@@ -134,7 +134,7 @@ public interface SlingScriptHelper {
      * @throws org.apache.sling.api.SlingServletException Wrapping a <code>ServletException</code>
      *             thrown while handling the include.
      */
-    void include(@Nonnull Resource resource);
+    void include(@NotNull Resource resource);
 
     /**
      * Helper method to include the result of processing the request for the
@@ -165,7 +165,7 @@ public interface SlingScriptHelper {
      * @see RequestDispatcherOptions#RequestDispatcherOptions(String)
      * @see #include(String, RequestDispatcherOptions)
      */
-    void include(@Nonnull Resource resource, String requestDispatcherOptions);
+    void include(@NotNull Resource resource, String requestDispatcherOptions);
 
     /**
      * Helper method to include the result of processing the request for the
@@ -190,7 +190,7 @@ public interface SlingScriptHelper {
      * @see RequestDispatcherOptions
      * @see #include(String, String)
      */
-    void include(@Nonnull Resource resource, RequestDispatcherOptions options);
+    void include(@NotNull Resource resource, RequestDispatcherOptions options);
 
     /**
      * Same as {@link #forward(String,RequestDispatcherOptions)}, but using
@@ -202,7 +202,7 @@ public interface SlingScriptHelper {
      * @throws org.apache.sling.api.SlingServletException Wrapping a <code>ServletException</code>
      *             thrown while handling the forward.
      */
-    void forward(@Nonnull String path);
+    void forward(@NotNull String path);
 
     /**
      * Helper method to forward the request to a Servlet or script for the given
@@ -233,7 +233,7 @@ public interface SlingScriptHelper {
      * @see RequestDispatcherOptions#RequestDispatcherOptions(String)
      * @see #forward(String, RequestDispatcherOptions)
      */
-    void forward(@Nonnull String path, String requestDispatcherOptions);
+    void forward(@NotNull String path, String requestDispatcherOptions);
 
     /**
      * Helper method to forward the request to a Servlet or script for the given
@@ -258,7 +258,7 @@ public interface SlingScriptHelper {
      * @throws IllegalStateException If the respoonse has already been committed
      * @see RequestDispatcherOptions
      */
-    void forward(@Nonnull String path, RequestDispatcherOptions options);
+    void forward(@NotNull String path, RequestDispatcherOptions options);
 
     /**
      * Same as {@link #forward(Resource,RequestDispatcherOptions)}, but using
@@ -270,7 +270,7 @@ public interface SlingScriptHelper {
      * @throws org.apache.sling.api.SlingServletException Wrapping a <code>ServletException</code>
      *             thrown while handling the forward.
      */
-    void forward(@Nonnull Resource resource);
+    void forward(@NotNull Resource resource);
 
     /**
      * Helper method to forward the request to a Servlet or script for the given
@@ -301,7 +301,7 @@ public interface SlingScriptHelper {
      * @see RequestDispatcherOptions#RequestDispatcherOptions(String)
      * @see #forward(String, RequestDispatcherOptions)
      */
-    void forward(@Nonnull Resource resource, String requestDispatcherOptions);
+    void forward(@NotNull Resource resource, String requestDispatcherOptions);
 
     /**
      * Helper method to forward the request to a Servlet or script for the given
@@ -326,7 +326,7 @@ public interface SlingScriptHelper {
      * @throws IllegalStateException If the respoonse has already been committed
      * @see RequestDispatcherOptions
      */
-    void forward(@Nonnull Resource resource, RequestDispatcherOptions options);
+    void forward(@NotNull Resource resource, RequestDispatcherOptions options);
 
     /**
      * Lookup a single service.
@@ -341,7 +341,7 @@ public interface SlingScriptHelper {
      * @param <ServiceType> The type (interface) of the service.
      * @return The service instance, or {@code null} if no services are registered which implement the specified class.
      */
-    @CheckForNull <ServiceType> ServiceType getService(@Nonnull Class<ServiceType> serviceType);
+    @Nullable <ServiceType> ServiceType getService(@NotNull Class<ServiceType> serviceType);
 
     /**
      * Lookup one or several services.
@@ -361,7 +361,7 @@ public interface SlingScriptHelper {
      *
      * @see <a href="https://osgi.org/javadoc/r5/core/org/osgi/framework/Filter.html">Filter class in OSGi</a>
      */
-    @CheckForNull <ServiceType> ServiceType[] getServices(@Nonnull Class<ServiceType> serviceType,
+    @Nullable <ServiceType> ServiceType[] getServices(@NotNull Class<ServiceType> serviceType,
             String filter);
 
     /**

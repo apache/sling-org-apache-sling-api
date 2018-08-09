@@ -22,7 +22,7 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.util.HashMap;
 
-import javax.annotation.CheckForNull;
+import org.jetbrains.annotations.Nullable;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
@@ -225,7 +225,7 @@ public class SlingBindings extends HashMap<String, Object> {
      * is returned.
      * @return The logger or {@code null}
      */
-    public @CheckForNull Logger getLog() {
+    public @Nullable Logger getLog() {
         return this.get(LOG, Logger.class);
     }
 
@@ -244,7 +244,7 @@ public class SlingBindings extends HashMap<String, Object> {
      * returned.
      * @return The print writer or {@code null}
      */
-    public @CheckForNull PrintWriter getOut() {
+    public @Nullable PrintWriter getOut() {
         return this.get(OUT, PrintWriter.class);
     }
 
@@ -263,7 +263,7 @@ public class SlingBindings extends HashMap<String, Object> {
      * <code>null</code> is returned.
      * @return The request object or {@code null}
      */
-    public @CheckForNull SlingHttpServletRequest getRequest() {
+    public @Nullable SlingHttpServletRequest getRequest() {
         return this.get(REQUEST, SlingHttpServletRequest.class);
     }
 
@@ -282,7 +282,7 @@ public class SlingBindings extends HashMap<String, Object> {
      * returned.
      * @return The reader or {@code null}.
      */
-    public @CheckForNull Reader getReader() {
+    public @Nullable Reader getReader() {
         return this.get(READER, Reader.class);
     }
 
@@ -301,7 +301,7 @@ public class SlingBindings extends HashMap<String, Object> {
      * returned.
      * @return The resource or {@code null}.
      */
-    public @CheckForNull Resource getResource() {
+    public @Nullable Resource getResource() {
         return this.get(RESOURCE, Resource.class);
     }
 
@@ -319,7 +319,7 @@ public class SlingBindings extends HashMap<String, Object> {
      * returned.
      * @return the bound {@link ResourceResolver} if one exists, <code>null</code> otherwise
      */
-    public @CheckForNull ResourceResolver getResourceResolver() {
+    public @Nullable ResourceResolver getResourceResolver() {
         return this.get(RESOLVER, ResourceResolver.class);
     }
 
@@ -338,7 +338,7 @@ public class SlingBindings extends HashMap<String, Object> {
      * <code>null</code> is returned.
      * @return The response or {@code null}.
      */
-    public @CheckForNull SlingHttpServletResponse getResponse() {
+    public @Nullable SlingHttpServletResponse getResponse() {
         return this.get(RESPONSE, SlingHttpServletResponse.class);
     }
 
@@ -357,7 +357,7 @@ public class SlingBindings extends HashMap<String, Object> {
      * is returned.
      * @return The script helper or {@code null}.
      */
-    public @CheckForNull SlingScriptHelper getSling() {
+    public @Nullable SlingScriptHelper getSling() {
         return this.get(SLING, SlingScriptHelper.class);
     }
 }

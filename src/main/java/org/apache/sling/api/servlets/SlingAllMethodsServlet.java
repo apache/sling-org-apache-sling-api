@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import javax.servlet.ServletException;
 
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -60,8 +60,8 @@ public class SlingAllMethodsServlet extends SlingSafeMethodsServlet {
      * @throws IOException If the error status cannot be reported back to the
      *             client.
      */
-    protected void doPost(@Nonnull SlingHttpServletRequest request,
-            @Nonnull SlingHttpServletResponse response) throws ServletException,
+    protected void doPost(@NotNull SlingHttpServletRequest request,
+            @NotNull SlingHttpServletResponse response) throws ServletException,
             IOException {
         handleMethodNotImplemented(request, response);
     }
@@ -83,8 +83,8 @@ public class SlingAllMethodsServlet extends SlingSafeMethodsServlet {
      * @throws IOException If the error status cannot be reported back to the
      *             client.
      */
-    protected void doPut(@Nonnull SlingHttpServletRequest request,
-            @Nonnull SlingHttpServletResponse response) throws ServletException,
+    protected void doPut(@NotNull SlingHttpServletRequest request,
+            @NotNull SlingHttpServletResponse response) throws ServletException,
             IOException {
         handleMethodNotImplemented(request, response);
     }
@@ -106,8 +106,8 @@ public class SlingAllMethodsServlet extends SlingSafeMethodsServlet {
      * @throws IOException If the error status cannot be reported back to the
      *             client.
      */
-    protected void doDelete(@Nonnull SlingHttpServletRequest request,
-            @Nonnull SlingHttpServletResponse response) throws ServletException,
+    protected void doDelete(@NotNull SlingHttpServletRequest request,
+            @NotNull SlingHttpServletResponse response) throws ServletException,
             IOException {
         handleMethodNotImplemented(request, response);
     }
@@ -129,8 +129,8 @@ public class SlingAllMethodsServlet extends SlingSafeMethodsServlet {
      * @throws ServletException Forwarded from any of the dispatched methods
      * @throws IOException Forwarded from any of the dispatched methods
      */
-    protected boolean mayService(@Nonnull SlingHttpServletRequest request,
-            @Nonnull SlingHttpServletResponse response) throws ServletException,
+    protected boolean mayService(@NotNull SlingHttpServletRequest request,
+            @NotNull SlingHttpServletResponse response) throws ServletException,
             IOException {
 
         // assume the method is known for now
@@ -173,8 +173,8 @@ public class SlingAllMethodsServlet extends SlingSafeMethodsServlet {
      * @return A <code>StringBuffer</code> containing the list of HTTP methods
      *         supported.
      */
-    protected @Nonnull StringBuffer getAllowedRequestMethods(
-            @Nonnull Map<String, Method> declaredMethods) {
+    protected @NotNull StringBuffer getAllowedRequestMethods(
+            @NotNull Map<String, Method> declaredMethods) {
         StringBuffer allowBuf = super.getAllowedRequestMethods(declaredMethods);
 
         // add more method names depending on the methods found

@@ -18,7 +18,7 @@ package org.apache.sling.api.wrappers;
 
 import java.util.Iterator;
 import java.util.Map;
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.sling.api.resource.LoginException;
@@ -60,9 +60,9 @@ public class ResourceResolverWrapper implements ResourceResolver {
      *                the path before resolving it.
      * @return a wrapped resource obtained through the wrapped resource resolver
      */
-    @Nonnull
+    @NotNull
     @Override
-    public Resource resolve(@Nonnull HttpServletRequest request, @Nonnull String absPath) {
+    public Resource resolve(@NotNull HttpServletRequest request, @NotNull String absPath) {
         return ResourceResolverResourceWrapper.wrap(this, wrapped.resolve(request, absPath));
     }
 
@@ -76,9 +76,9 @@ public class ResourceResolverWrapper implements ResourceResolver {
      *                the path before resolving it.
      * @return a wrapped resource obtained through the wrapped resource resolver
      */
-    @Nonnull
+    @NotNull
     @Override
-    public Resource resolve(@Nonnull String absPath) {
+    public Resource resolve(@NotNull String absPath) {
         return ResourceResolverResourceWrapper.wrap(this, wrapped.resolve(absPath));
     }
 
@@ -90,20 +90,20 @@ public class ResourceResolverWrapper implements ResourceResolver {
      * @return a wrapped resource obtained through the wrapped resource resolver
      */
     @SuppressWarnings("deprecation")
-    @Nonnull
+    @NotNull
     @Override
-    public Resource resolve(@Nonnull HttpServletRequest request) {
+    public Resource resolve(@NotNull HttpServletRequest request) {
         return ResourceResolverResourceWrapper.wrap(this, wrapped.resolve(request));
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public String map(@Nonnull String resourcePath) {
+    public String map(@NotNull String resourcePath) {
         return wrapped.map(resourcePath);
     }
 
     @Override
-    public String map(@Nonnull HttpServletRequest request, @Nonnull String resourcePath) {
+    public String map(@NotNull HttpServletRequest request, @NotNull String resourcePath) {
         return wrapped.map(request, resourcePath);
     }
 
@@ -120,7 +120,7 @@ public class ResourceResolverWrapper implements ResourceResolver {
      * @return a wrapped resource obtained through the wrapped resource resolver
      */
     @Override
-    public Resource getResource(@Nonnull String path) {
+    public Resource getResource(@NotNull String path) {
         return ResourceResolverResourceWrapper.wrap(this, wrapped.getResource(path));
     }
 
@@ -140,11 +140,11 @@ public class ResourceResolverWrapper implements ResourceResolver {
      * @return a wrapped resource obtained through the wrapped resource resolver
      */
     @Override
-    public Resource getResource(Resource base, @Nonnull String path) {
+    public Resource getResource(Resource base, @NotNull String path) {
         return ResourceResolverResourceWrapper.wrap(this, wrapped.getResource(base, path));
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String[] getSearchPath() {
         return wrapped.getSearchPath();
@@ -156,9 +156,9 @@ public class ResourceResolverWrapper implements ResourceResolver {
      * @param parent The {@link Resource Resource} whose children are requested.
      * @return a wrapped iterator obtained through the wrapped resource resolver
      */
-    @Nonnull
+    @NotNull
     @Override
-    public Iterator<Resource> listChildren(@Nonnull Resource parent) {
+    public Iterator<Resource> listChildren(@NotNull Resource parent) {
         return new ResourceIteratorWrapper(this, wrapped.listChildren(parent));
     }
 
@@ -169,7 +169,7 @@ public class ResourceResolverWrapper implements ResourceResolver {
      * @return a wrapped resource obtained through the wrapped resource resolver
      */
     @Override
-    public Resource getParent(@Nonnull Resource child) {
+    public Resource getParent(@NotNull Resource child) {
         return ResourceResolverResourceWrapper.wrap(this, wrapped.getParent(child));
     }
 
@@ -179,9 +179,9 @@ public class ResourceResolverWrapper implements ResourceResolver {
      * @param parent The {@link Resource Resource} whose children are requested.
      * @return a wrapped iterable obtained through the wrapped resource resolver
      */
-    @Nonnull
+    @NotNull
     @Override
-    public Iterable<Resource> getChildren(@Nonnull final Resource parent) {
+    public Iterable<Resource> getChildren(@NotNull final Resource parent) {
         final ResourceResolverWrapper resourceResolverWrapper = this;
         return new Iterable<Resource>() {
             @Override
@@ -201,20 +201,20 @@ public class ResourceResolverWrapper implements ResourceResolver {
      *                 is specified, "xpath" is used.
      * @return a wrapped iterator obtained through the wrapped resource resolver
      */
-    @Nonnull
+    @NotNull
     @Override
-    public Iterator<Resource> findResources(@Nonnull String query, String language) {
+    public Iterator<Resource> findResources(@NotNull String query, String language) {
         return new ResourceIteratorWrapper(this, wrapped.findResources(query, language));
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public Iterator<Map<String, Object>> queryResources(@Nonnull String query, String language) {
+    public Iterator<Map<String, Object>> queryResources(@NotNull String query, String language) {
         return wrapped.queryResources(query, language);
     }
 
     @Override
-    public boolean hasChildren(@Nonnull Resource resource) {
+    public boolean hasChildren(@NotNull Resource resource) {
         return wrapped.hasChildren(resource);
     }
 
@@ -228,7 +228,7 @@ public class ResourceResolverWrapper implements ResourceResolver {
      *                           instance.
      * @return a wrapped resource resolver
      */
-    @Nonnull
+    @NotNull
     @Override
     public ResourceResolver clone(Map<String, Object> authenticationInfo) throws LoginException {
         ResourceResolver toWrap = wrapped.clone(authenticationInfo);
@@ -250,19 +250,19 @@ public class ResourceResolverWrapper implements ResourceResolver {
         return wrapped.getUserID();
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public Iterator<String> getAttributeNames() {
         return wrapped.getAttributeNames();
     }
 
     @Override
-    public Object getAttribute(@Nonnull String name) {
+    public Object getAttribute(@NotNull String name) {
         return wrapped.getAttribute(name);
     }
 
     @Override
-    public void delete(@Nonnull Resource resource) throws PersistenceException {
+    public void delete(@NotNull Resource resource) throws PersistenceException {
         wrapped.delete(resource);
     }
 
@@ -274,9 +274,9 @@ public class ResourceResolverWrapper implements ResourceResolver {
      * @param properties Optional properties for the resource
      * @return a wrapped resource obtained through the wrapped resource resolver
      */
-    @Nonnull
+    @NotNull
     @Override
-    public Resource create(@Nonnull Resource parent, @Nonnull String name, Map<String, Object> properties) throws PersistenceException {
+    public Resource create(@NotNull Resource parent, @NotNull String name, Map<String, Object> properties) throws PersistenceException {
         return ResourceResolverResourceWrapper.wrap(this, wrapped.create(parent, name, properties));
     }
 
@@ -342,7 +342,7 @@ public class ResourceResolverWrapper implements ResourceResolver {
     }
 
     @Override
-    public <AdapterType> AdapterType adaptTo(@Nonnull Class<AdapterType> type) {
+    public <AdapterType> AdapterType adaptTo(@NotNull Class<AdapterType> type) {
         return wrapped.adaptTo(type);
     }
 

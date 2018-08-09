@@ -18,8 +18,8 @@
  */
 package org.apache.sling.api.adapter;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import org.osgi.annotation.versioning.ConsumerType;
 
@@ -52,6 +52,6 @@ public interface Adaptable {
      * @return The adapter target or <code>null</code> if the object cannot
      *         adapt to the requested type
      */
-    @CheckForNull <AdapterType> AdapterType adaptTo(@Nonnull Class<AdapterType> type);
+    @Nullable <AdapterType> AdapterType adaptTo(@NotNull Class<AdapterType> type);
 
 }

@@ -21,8 +21,8 @@ package org.apache.sling.api.request;
 import java.io.PrintWriter;
 import java.util.Iterator;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import org.osgi.annotation.versioning.ProviderType;
 
@@ -89,7 +89,7 @@ public interface RequestProgressTracker {
      * Creates an entry with the given message
      * @param message The message
      */
-    void log(@Nonnull String message);
+    void log(@NotNull String message);
 
     /**
      * Creates an entry with a message constructed from the given
@@ -98,21 +98,21 @@ public interface RequestProgressTracker {
      * @param format The message
      * @param args Arguments for the message
      */
-    void log(@Nonnull String format, Object... args);
+    void log(@NotNull String format, Object... args);
 
     /**
      * Starts a named timer. If a timer of the same name already exists, it is
      * reset to the current time.
      * @param timerName the name of the timer
      */
-    void startTimer(@Nonnull String timerName);
+    void startTimer(@NotNull String timerName);
 
     /**
      * Logs an entry with the message set to the name of the timer and the
      * number of milliseconds elapsed since the timer start.
      * @param timerName the name of the timer
      */
-    void logTimer(@Nonnull String timerName);
+    void logTimer(@NotNull String timerName);
 
     /**
      * Logs an entry with the message constructed from the given
@@ -122,20 +122,20 @@ public interface RequestProgressTracker {
      * @param format The message
      * @param args Arguments for the message
      */
-    void logTimer(@Nonnull String timerName, @Nonnull String format, Object... args);
+    void logTimer(@NotNull String timerName, @NotNull String format, Object... args);
 
     /**
      * Returns an <code>Iterator</code> of tracking entries.
      * If there are no messages <code>null</code> is returned.
      * @return An iterator with the messages or {@code null}
      */
-    @CheckForNull Iterator<String> getMessages();
+    @Nullable Iterator<String> getMessages();
 
     /**
      * Dumps the process timer entries to the given writer, one entry per line.
      * @param writer Writer to dump to
      */
-    void dump(@Nonnull PrintWriter writer);
+    void dump(@NotNull PrintWriter writer);
 
     /**
      *  Call this when done processing the request - only the first call of this

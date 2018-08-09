@@ -18,8 +18,8 @@
  */
 package org.apache.sling.spi.resource.provider;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import org.apache.sling.api.resource.ResourceResolver;
 import org.osgi.annotation.versioning.ProviderType;
@@ -40,20 +40,20 @@ public interface ResolveContext<T> {
      * Get the current resource resolver.
      * @return The resource resolver.
      */
-    @Nonnull ResourceResolver getResourceResolver();
+    @NotNull ResourceResolver getResourceResolver();
 
     /**
      * This is the object returned by {@link ResourceProvider#authenticate(Map)}
      * @return The data object or {@code null}
      */
-    @CheckForNull T getProviderState();
+    @Nullable T getProviderState();
 
     /**
      * Return a resolve context for the parent resource provider.
      * @return A resolve context or {@code null} if there is no parent.
      * @see #getParentResourceProvider()
      */
-    @CheckForNull ResolveContext<?> getParentResolveContext();
+    @Nullable ResolveContext<?> getParentResolveContext();
 
     /**
      * Return the parent resource provider.
@@ -62,5 +62,5 @@ public interface ResolveContext<T> {
      * instance.
      * @return The parent provider or {@code null} if there is no parent.
      */
-    @CheckForNull ResourceProvider<?> getParentResourceProvider();
+    @Nullable ResourceProvider<?> getParentResourceProvider();
 }

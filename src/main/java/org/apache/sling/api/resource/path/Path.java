@@ -20,7 +20,7 @@ package org.apache.sling.api.resource.path;
 
 import java.util.regex.Pattern;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Simple helper class for path matching.
@@ -54,7 +54,7 @@ public class Path implements Comparable<Path> {
      * @throws NullPointerException If {@code otherPath} is {@code null}
      * @throws IllegalArgumentException If the provided path is not absolute, or if the glob pattern does not start with a slash.
      */
-    public Path(@Nonnull final String path) {
+    public Path(@NotNull final String path) {
         if ( path.equals("/") ) {
             this.path = "/";
         } else if ( path.endsWith("/") ) {
@@ -179,7 +179,7 @@ public class Path implements Comparable<Path> {
     }
 
     @Override
-    public int compareTo(@Nonnull final Path o) {
+    public int compareTo(@NotNull final Path o) {
         return this.getPath().compareTo(o.getPath());
     }
 

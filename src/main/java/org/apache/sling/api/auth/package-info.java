@@ -17,7 +17,7 @@
  * under the License.
  */
 
-@Version("1.0.2")
+@Version("1.0.3")
 package org.apache.sling.api.auth;
 
 import org.osgi.annotation.versioning.Version;

@@ -18,7 +18,7 @@
  */
 package org.apache.sling.spi.resource.provider;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 import org.apache.sling.api.resource.path.PathSet;
 import org.osgi.annotation.versioning.ProviderType;
@@ -47,7 +47,7 @@ public interface ProviderContext {
      *
      * @return The observation reporter.
      */
-    @Nonnull ObservationReporter getObservationReporter();
+    @NotNull ObservationReporter getObservationReporter();
 
     /**
      * Set of paths which are "hidden" by other resource providers.

@@ -22,8 +22,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 import javax.servlet.Servlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -56,7 +56,7 @@ public class RequestUtil {
      * @return A Map indexed by the Token names where the values are Map
      *         instances indexed by parameter name
      */
-    public static @Nonnull Map<String, Map<String, String>> parserHeader(@Nonnull String value) {
+    public static @NotNull Map<String, Map<String, String>> parserHeader(@NotNull String value) {
         Map<String, Map<String, String>> result = new HashMap<String, Map<String, String>>();
         String[] tokens = value.split(",");
         for (int i = 0; i < tokens.length; i++) {
@@ -97,7 +97,7 @@ public class RequestUtil {
      *         <code>Double</code> instances providing the value of the
      *         <code>q</code> parameter.
      */
-    public static @Nonnull Map<String, Double> parserAcceptHeader(@Nonnull String value) {
+    public static @NotNull Map<String, Double> parserAcceptHeader(@NotNull String value) {
         Map<String, Double> result = new HashMap<String, Double>();
         String[] tokens = value.split(",");
         for (int i = 0; i < tokens.length; i++) {
@@ -137,7 +137,7 @@ public class RequestUtil {
      * @param servlet The servlet
      * @return The name of the servlet.
      */
-    public static @Nonnull String getServletName(@Nonnull Servlet servlet) {
+    public static @NotNull String getServletName(@NotNull Servlet servlet) {
         String name = null;
 
         if (servlet.getServletConfig() != null) {
@@ -164,8 +164,8 @@ public class RequestUtil {
      * @return The previous value of the named request attribute or
      *         <code>null</code> if it was not set.
      */
-    public static @CheckForNull Object setRequestAttribute(@Nonnull HttpServletRequest request,
-            @Nonnull String name, Object value) {
+    public static @Nullable Object setRequestAttribute(@NotNull HttpServletRequest request,
+            @NotNull String name, Object value) {
         Object oldValue = request.getAttribute(name);
         if (value == null) {
             request.removeAttribute(name);
@@ -183,7 +183,7 @@ public class RequestUtil {
      * @param resp the response
      * @return <code>true</code> if the response was set
      */
-    public static boolean handleIfModifiedSince(@Nonnull SlingHttpServletRequest req, @Nonnull HttpServletResponse resp){
+    public static boolean handleIfModifiedSince(@NotNull SlingHttpServletRequest req, @NotNull HttpServletResponse resp){
         boolean responseSet=false;
         long lastModified=req.getResource().getResourceMetadata().getModificationTime();
         if (lastModified!=-1){

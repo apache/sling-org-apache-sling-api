@@ -18,7 +18,7 @@
  */
 package org.apache.sling.api.servlets;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import javax.servlet.Servlet;
 
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -49,6 +49,6 @@ public interface OptingServlet extends Servlet {
      * @return <code>true</code> if this servlet will handle the request,
      *         <code>false</code> otherwise
      */
-    boolean accepts(@Nonnull SlingHttpServletRequest request);
+    boolean accepts(@NotNull SlingHttpServletRequest request);
 
 }

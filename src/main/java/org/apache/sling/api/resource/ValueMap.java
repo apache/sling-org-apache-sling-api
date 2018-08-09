@@ -21,8 +21,8 @@ package org.apache.sling.api.resource;
 import java.util.Collections;
 import java.util.Map;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import org.apache.sling.api.wrappers.ValueMapDecorator;
 
@@ -65,7 +65,7 @@ public interface ValueMap extends Map<String, Object> {
      * @return Return named value converted to type T or <code>null</code> if
      *         non existing or can't be converted.
      */
-    @CheckForNull <T> T get(@Nonnull String name, @Nonnull Class<T> type);
+    @Nullable <T> T get(@NotNull String name, @NotNull Class<T> type);
 
     /**
      * Get a named property and convert it into the given type.
@@ -87,5 +87,5 @@ public interface ValueMap extends Map<String, Object> {
      * @return Return named value converted to type T or the default value if
      *         non existing or can't be converted.
      */
-    @Nonnull <T> T get(@Nonnull String name, @Nonnull T defaultValue);
+    @NotNull <T> T get(@NotNull String name, @NotNull T defaultValue);
 }

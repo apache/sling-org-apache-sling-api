@@ -20,8 +20,8 @@ package org.apache.sling.api.resource.observation;
 
 import java.util.Set;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import org.osgi.annotation.versioning.ConsumerType;
 
@@ -86,8 +86,8 @@ public class ResourceChange {
      * @param isExternal {code true} if the change happened on another node
      * @since 1.2.0 (Sling API Bundle 2.15.0)
      */
-    public ResourceChange(final @Nonnull ChangeType changeType,
-            final @Nonnull String path,
+    public ResourceChange(final @NotNull ChangeType changeType,
+            final @NotNull String path,
             final boolean isExternal) {
         this.path = path;
         this.changeType = changeType;
@@ -109,8 +109,8 @@ public class ResourceChange {
      * @deprecated The sets of property names are not supported anymore.
      */
     @Deprecated
-    public ResourceChange(final @Nonnull ChangeType changeType,
-            final @Nonnull String path,
+    public ResourceChange(final @NotNull ChangeType changeType,
+            final @NotNull String path,
             final boolean isExternal,
             final Set<String> addedPropertyNames,
             final Set<String> changedPropertyNames,
@@ -127,7 +127,7 @@ public class ResourceChange {
      * Get the resource path.
      * @return The path to the resource.
      */
-    public @Nonnull String getPath() {
+    public @NotNull String getPath() {
         return this.path;
     }
 
@@ -135,7 +135,7 @@ public class ResourceChange {
      * Get the user id of the user initiating the change
      * @return The user id or {@code null} if it's not available.
      */
-    public @CheckForNull String getUserId() {
+    public @Nullable String getUserId() {
         return null;
     }
 
@@ -151,7 +151,7 @@ public class ResourceChange {
      * Get the type of change
      * @return The type of change
      */
-    public @Nonnull ChangeType getType() {
+    public @NotNull ChangeType getType() {
         return this.changeType;
     }
 
@@ -169,7 +169,7 @@ public class ResourceChange {
      *             event, this should not be used anymore.
      */
     @Deprecated
-    public @CheckForNull Set<String> getChangedPropertyNames() {
+    public @Nullable Set<String> getChangedPropertyNames() {
         return this.changedPropertyNames;
     }
 
@@ -187,7 +187,7 @@ public class ResourceChange {
      *             event, this should not be used anymore.
      */
     @Deprecated
-    public @CheckForNull Set<String> getAddedPropertyNames() {
+    public @Nullable Set<String> getAddedPropertyNames() {
         return this.addedPropertyNames;
     }
 
@@ -205,7 +205,7 @@ public class ResourceChange {
      *             event, this should not be used anymore.
      */
     @Deprecated
-    public @CheckForNull Set<String> getRemovedPropertyNames() {
+    public @Nullable Set<String> getRemovedPropertyNames() {
         return this.removedPropertyNames;
     }
 

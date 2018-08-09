@@ -18,7 +18,7 @@
  */
 package org.apache.sling.api.resource;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The <code>SyntheticResource</code> class is a simple implementation of the
@@ -74,7 +74,7 @@ public class SyntheticResource extends AbstractResource {
      * @see org.apache.sling.api.resource.Resource#getPath()
      */
     @Override
-    public @Nonnull String getPath() {
+    public @NotNull String getPath() {
         return path;
     }
 
@@ -82,7 +82,7 @@ public class SyntheticResource extends AbstractResource {
      * @see org.apache.sling.api.resource.Resource#getResourceType()
      */
     @Override
-    public @Nonnull String getResourceType() {
+    public @NotNull String getResourceType() {
         return resourceType;
     }
 
@@ -99,7 +99,7 @@ public class SyntheticResource extends AbstractResource {
      * resource as the {@link ResourceMetadata#RESOLUTION_PATH} property.
      */
     @Override
-    public @Nonnull ResourceMetadata getResourceMetadata() {
+    public @NotNull ResourceMetadata getResourceMetadata() {
         return resourceMetadata;
     }
 
@@ -108,7 +108,7 @@ public class SyntheticResource extends AbstractResource {
      * is related or <code>null</code> if none.
      */
     @Override
-    public @Nonnull ResourceResolver getResourceResolver() {
+    public @NotNull ResourceResolver getResourceResolver() {
         return resourceResolver;
     }
 

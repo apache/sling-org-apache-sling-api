@@ -20,8 +20,8 @@ package org.apache.sling.api.resource;
 
 import java.util.Iterator;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 import javax.servlet.http.HttpServletRequest;
 
 import org.osgi.annotation.versioning.ConsumerType;
@@ -116,7 +116,7 @@ public interface ResourceProvider {
      * @deprecated since 2.2.0 (and JCR Resource 2.1.0), this method will not be invoked.
      */
     @Deprecated
-    @CheckForNull Resource getResource(@Nonnull ResourceResolver resourceResolver, @Nonnull HttpServletRequest request, @Nonnull String path);
+    @Nullable Resource getResource(@NotNull ResourceResolver resourceResolver, @NotNull HttpServletRequest request, @NotNull String path);
 
     /**
      * Returns a resource from this resource provider or {@code null} if
@@ -137,7 +137,7 @@ public interface ResourceProvider {
      * @throws org.apache.sling.api.SlingException
      *             may be thrown in case of any problem creating the {@code Resource} instance.
      */
-    @CheckForNull Resource getResource(@Nonnull ResourceResolver resourceResolver, @Nonnull String path);
+    @Nullable Resource getResource(@NotNull ResourceResolver resourceResolver, @NotNull String path);
 
     /**
      * Returns an {@code Iterator} of {@link Resource} objects loaded from
@@ -168,5 +168,5 @@ public interface ResourceProvider {
      * @throws org.apache.sling.api.SlingException
      *             If any error occurs acquiring the child resource iterator.
      */
-    @CheckForNull Iterator<Resource> listChildren(@Nonnull Resource parent);
+    @Nullable Iterator<Resource> listChildren(@NotNull Resource parent);
 }

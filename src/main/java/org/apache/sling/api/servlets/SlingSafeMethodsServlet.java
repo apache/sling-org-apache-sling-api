@@ -26,7 +26,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import javax.servlet.GenericServlet;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -91,8 +91,8 @@ public class SlingSafeMethodsServlet extends GenericServlet {
      *             {@link #doGet(SlingHttpServletRequest, SlingHttpServletResponse)}
      *             method called by this implementation.
      */
-    protected void doHead(@Nonnull SlingHttpServletRequest request,
-            @Nonnull SlingHttpServletResponse response) throws ServletException,
+    protected void doHead(@NotNull SlingHttpServletRequest request,
+            @NotNull SlingHttpServletResponse response) throws ServletException,
             IOException {
 
         // the null-output wrapper
@@ -122,8 +122,8 @@ public class SlingSafeMethodsServlet extends GenericServlet {
      * @throws IOException If the error status cannot be reported back to the
      *             client.
      */
-    protected void doGet(@Nonnull SlingHttpServletRequest request,
-            @Nonnull SlingHttpServletResponse response) throws ServletException,
+    protected void doGet(@NotNull SlingHttpServletRequest request,
+            @NotNull SlingHttpServletResponse response) throws ServletException,
             IOException {
         handleMethodNotImplemented(request, response);
     }
@@ -146,8 +146,8 @@ public class SlingSafeMethodsServlet extends GenericServlet {
      * @throws ServletException Not thrown by this implementation.
      * @throws IOException Not thrown by this implementation.
      */
-    protected void doOptions(@Nonnull SlingHttpServletRequest request,
-            @Nonnull SlingHttpServletResponse response) throws ServletException,
+    protected void doOptions(@NotNull SlingHttpServletRequest request,
+            @NotNull SlingHttpServletResponse response) throws ServletException,
             IOException {
         Map<String, Method> methods = getAllDeclaredMethods(getClass());
         StringBuffer allowBuf = getAllowedRequestMethods(methods);
@@ -168,8 +168,8 @@ public class SlingSafeMethodsServlet extends GenericServlet {
      * @throws IOException May be thrown if there is an problem sending back the
      *             request headers in the response stream.
      */
-    protected void doTrace(@Nonnull SlingHttpServletRequest request,
-            @Nonnull SlingHttpServletResponse response) throws ServletException,
+    protected void doTrace(@NotNull SlingHttpServletRequest request,
+            @NotNull SlingHttpServletResponse response) throws ServletException,
             IOException {
 
         String CRLF = "\r\n";
@@ -224,8 +224,8 @@ public class SlingSafeMethodsServlet extends GenericServlet {
      * @throws IOException If the error status cannot be reported back to the
      *             client.
      */
-    protected void doGeneric(@Nonnull SlingHttpServletRequest request,
-            @Nonnull SlingHttpServletResponse response) throws ServletException,
+    protected void doGeneric(@NotNull SlingHttpServletRequest request,
+            @NotNull SlingHttpServletResponse response) throws ServletException,
             IOException {
         handleMethodNotImplemented(request, response);
     }
@@ -252,8 +252,8 @@ public class SlingSafeMethodsServlet extends GenericServlet {
      * @throws ServletException Forwarded from any of the dispatched methods
      * @throws IOException Forwarded from any of the dispatched methods
      */
-    protected boolean mayService(@Nonnull SlingHttpServletRequest request,
-            @Nonnull SlingHttpServletResponse response) throws ServletException,
+    protected boolean mayService(@NotNull SlingHttpServletRequest request,
+            @NotNull SlingHttpServletResponse response) throws ServletException,
             IOException {
 
         // assume the method is known for now
@@ -288,8 +288,8 @@ public class SlingSafeMethodsServlet extends GenericServlet {
      * @param response The HTTP response to which the error status is sent.
      * @throws IOException Thrown if the status cannot be sent to the client.
      */
-    protected void handleMethodNotImplemented(@Nonnull SlingHttpServletRequest request,
-            @Nonnull SlingHttpServletResponse response) throws IOException {
+    protected void handleMethodNotImplemented(@NotNull SlingHttpServletRequest request,
+            @NotNull SlingHttpServletResponse response) throws IOException {
         String protocol = request.getProtocol();
         String msg = "Method " + request.getMethod() + " not supported";
 
@@ -334,8 +334,8 @@ public class SlingSafeMethodsServlet extends GenericServlet {
      *             {@link #doGeneric(SlingHttpServletRequest, SlingHttpServletResponse)}
      *             methods.
      */
-    protected void service(@Nonnull SlingHttpServletRequest request,
-            @Nonnull SlingHttpServletResponse response) throws ServletException,
+    protected void service(@NotNull SlingHttpServletRequest request,
+            @NotNull SlingHttpServletResponse response) throws ServletException,
             IOException {
 
         // first try to handle the request by the known methods
@@ -365,7 +365,7 @@ public class SlingSafeMethodsServlet extends GenericServlet {
      *             called.
      */
     @Override
-    public void service(@Nonnull ServletRequest req, @Nonnull ServletResponse res)
+    public void service(@NotNull ServletRequest req, @NotNull ServletResponse res)
             throws ServletException, IOException {
 
         if ((req instanceof SlingHttpServletRequest)
@@ -386,7 +386,7 @@ public class SlingSafeMethodsServlet extends GenericServlet {
      * class may overwrite to return more specific information.
      */
     @Override
-    public @Nonnull String getServletInfo() {
+    public @NotNull String getServletInfo() {
         return getClass().getSimpleName();
     }
 
