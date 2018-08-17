@@ -258,14 +258,56 @@ public interface ResourceResolver extends Adaptable, Closeable {
     @NotNull Resource resolve(@NotNull HttpServletRequest request);
 
     /**
-     * Returns a path mapped from the (resource) path
+     * Returns a path mapped from the (resource) path applying the reverse
+     * mapping used by the {@link #resolve(String)} such that when the path is
+     * given to the {@link #resolve(String)} method the same resource is
+     * returned.
+     * <p>
+     * Note, that technically the <code>resourcePath</code> need not refer to an
+     * existing resource. This method just applies the mappings and returns the
+     * resulting string. If the <code>resourcePath</code> does not address an
+     * existing resource roundtripping may of course not work and calling
+     * {@link #resolve(String)} with the path returned may return
+     * <code>null</code>.
+     * <p>
+     * This method is intended as the reverse operation of the
+     * {@link #resolve(String)} method.
+     *
+     * @param resourcePath The path for which to return a mapped path.
+     * @return The mapped path.
+     * @throws IllegalStateException if this resource resolver has already been
+     *             {@link #close() closed}.
      * 
      * @see {@link ResourceMapper#getMapping(String, HttpServletRequest)}
      */
     @NotNull String map(@NotNull String resourcePath);
 
     /**
-     * Returns an URL mapped from the (resource) path
+     * Returns an URL mapped from the (resource) path applying the reverse
+     * mapping used by the {@link #resolve(HttpServletRequest, String)} such
+     * that when the path is given to the
+     * {@link #resolve(HttpServletRequest, String)} method the same resource is
+     * returned.
+     * <p>
+     * Note, that technically the <code>resourcePath</code> need not refer to an
+     * existing resource. This method just applies the mappings and returns the
+     * resulting string. If the <code>resourcePath</code> does not address an
+     * existing resource roundtripping may of course not work and calling
+     * {@link #resolve(HttpServletRequest, String)} with the path returned may
+     * return <code>null</code>.
+     * <p>
+     * This method is intended as the reverse operation of the
+     * {@link #resolve(HttpServletRequest, String)} method. As such the URL
+     * returned is expected to be an absolute URL including scheme, host, any
+     * servlet context path and the actual path used to resolve the resource.
+     *
+     * @param request The http servlet request object which may be used to apply
+     *            more mapping functionality.
+     * @param resourcePath The path for which to return a mapped path.
+     * @return The mapped URL.
+     * @throws IllegalStateException if this resource resolver has already been
+     *             {@link #close() closed}.
+     * @since 2.0.4 (Sling API Bundle 2.0.4)
      * 
      * @see {@link ResourceMapper#getMapping(String, HttpServletRequest)}
      */
