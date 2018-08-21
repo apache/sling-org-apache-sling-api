@@ -25,10 +25,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
-
 import org.apache.sling.api.wrappers.ValueMapDecorator;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The <code>ResourceUtil</code> class provides helper methods dealing with
@@ -373,11 +372,7 @@ public class ResourceUtil {
      */
     @Deprecated
     public static @NotNull Iterator<Resource> listChildren(@NotNull Resource parent) {
-        /*
-         * Same as AbstractResource.listChildren() implementation to prevent
-         * problems if there are implementations of the pre-2.1.0 Resource
-         * interface in the framework.
-         */
+        // directly call the resource resolver to ensure the correct result
         return parent.getResourceResolver().listChildren(parent);
     }
 
@@ -471,9 +466,9 @@ public class ResourceUtil {
      * to go up the resource super type hierarchy.
      *
      * In case the type of the given resource or the given resource type starts with one of the resource resolver's search paths
-     * it is converted to a relative resource type by stripping off the resource resolver's search path 
+     * it is converted to a relative resource type by stripping off the resource resolver's search path
      * before doing the comparison.
-     * 
+     *
      * @param resource the resource to check
      * @param resourceType the resource type to check the resource against
      * @return <code>false</code> if <code>resource</code> is <code>null</code>.
