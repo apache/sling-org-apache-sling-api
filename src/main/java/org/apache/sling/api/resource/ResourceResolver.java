@@ -198,6 +198,7 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * @throws IllegalStateException if this resource resolver has already been
      *             {@link #close() closed}.
      * @since 2.0.4 (Sling API Bundle 2.0.4)
+     * @see <a href="https://sling.apache.org/documentation/the-sling-engine/mappings-for-resource-resolution.html">Mappings for Resource Resolution</a>
      */
     @NotNull Resource resolve(@NotNull HttpServletRequest request, @NotNull String absPath);
 
@@ -226,6 +227,7 @@ public interface ResourceResolver extends Adaptable, Closeable {
      *             thrown if an error occurs trying to resolve the resource.
      * @throws IllegalStateException if this resource resolver has already been
      *             {@link #close() closed}.
+     * @see <a href="https://sling.apache.org/documentation/the-sling-engine/mappings-for-resource-resolution.html">Mappings for Resource Resolution</a>
      */
     @NotNull Resource resolve(@NotNull String absPath);
 
@@ -253,12 +255,13 @@ public interface ResourceResolver extends Adaptable, Closeable {
      *             {@link #close() closed}.
      * @deprecated as of 2.0.4, use {@link #resolve(HttpServletRequest, String)}
      *             instead.
+     * @see <a href="https://sling.apache.org/documentation/the-sling-engine/mappings-for-resource-resolution.html">Mappings for Resource Resolution</a>
      */
     @Deprecated
     @NotNull Resource resolve(@NotNull HttpServletRequest request);
 
     /**
-     * Returns a path mapped from the (resource) path applying the reverse
+     * Returns a (request) path mapped from the (resource) path applying the reverse
      * mapping used by the {@link #resolve(String)} such that when the path is
      * given to the {@link #resolve(String)} method the same resource is
      * returned.
@@ -272,6 +275,11 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * <p>
      * This method is intended as the reverse operation of the
      * {@link #resolve(String)} method.
+     * <p>
+     * This method also does percent-encoding before returning the (request) path
+     * (with charset UTF-8). Due to this calling this method multiple times in a nested 
+     * fashion might lead to an invalid (request) path which can subsequently not
+     * be resolved via {@link #resolve(String)}. 
      *
      * @param resourcePath The path for which to return a mapped path.
      * @return The mapped path.
@@ -279,6 +287,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      *             {@link #close() closed}.
      * 
      * @see {@link ResourceMapper#getMapping(String, HttpServletRequest)}
+     * @see <a href="https://tools.ietf.org/html/rfc3986#section-2.1">Percent-Encoding</a>
+     * @see <a href="https://sling.apache.org/documentation/the-sling-engine/mappings-for-resource-resolution.html">Mappings for Resource Resolution</a>
      */
     @NotNull String map(@NotNull String resourcePath);
 
@@ -300,6 +310,11 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * {@link #resolve(HttpServletRequest, String)} method. As such the URL
      * returned is expected to be an absolute URL including scheme, host, any
      * servlet context path and the actual path used to resolve the resource.
+     * <p>
+     * This method also does percent-encoding before returning the URL
+     * (with charset UTF-8). Due to this calling this method multiple times in a nested 
+     * fashion might lead to an invalid URL which can subsequently not
+     * be resolved via {@link #resolve(String)}. 
      *
      * @param request The http servlet request object which may be used to apply
      *            more mapping functionality.
@@ -310,6 +325,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * @since 2.0.4 (Sling API Bundle 2.0.4)
      * 
      * @see {@link ResourceMapper#getMapping(String, HttpServletRequest)}
+     * @see <a href="https://tools.ietf.org/html/rfc3986#section-2.1">Percent-Encoding</a>
+     * @see <a href="https://sling.apache.org/documentation/the-sling-engine/mappings-for-resource-resolution.html">Mappings for Resource Resolution</a>
      */
     @Nullable String map(@NotNull HttpServletRequest request, @NotNull String resourcePath);
 
