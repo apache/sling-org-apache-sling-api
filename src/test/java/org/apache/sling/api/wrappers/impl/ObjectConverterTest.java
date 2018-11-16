@@ -18,9 +18,6 @@
  */
 package org.apache.sling.api.wrappers.impl;
 
-import static org.apache.sling.api.wrappers.impl.DateUtils.calendarToString;
-import static org.apache.sling.api.wrappers.impl.DateUtils.toCalendar;
-import static org.apache.sling.api.wrappers.impl.DateUtils.toDate;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertNull;
 
@@ -58,8 +55,8 @@ public class ObjectConverterTest {
         CALENDAR_1.set(2016, 10, 15, 8, 20, 30);
         CALENDAR_2.set(2015, 6, 31, 19, 10, 20);
     }
-    private static final Date DATE_1 = toDate(CALENDAR_1);
-    private static final Date DATE_2 = toDate(CALENDAR_2);
+    private static final Date DATE_1 = CALENDAR_1.getTime();
+    private static final Date DATE_2 = CALENDAR_2.getTime();
 
     @Test
     public void testDateToString() {
@@ -83,15 +80,24 @@ public class ObjectConverterTest {
         Convert.from(DATE_1, DATE_2).to(calendarToString(toCalendar(DATE_1)), calendarToString(toCalendar(DATE_2))).test();
     }
     
+    private String calendarToString(Calendar calendar) {
+        return calendar.getTime().toInstant().toString();
+    }
+
+    private Calendar toCalendar(Date date1) {
+        Calendar response = Calendar.getInstance();
+        response.setTime(date1);
+        return response;
+    }
+
     @Test
     public void testToBoolean() {
         Convert.fromPrimitive(BOOLEAN_1, BOOLEAN_2).to(BOOLEAN_1, BOOLEAN_2).test();
         Convert.from(BOOLEAN_1, BOOLEAN_2).to(BOOLEAN_1, BOOLEAN_2).test();
         Convert.from(Boolean.toString(BOOLEAN_1), Boolean.toString(BOOLEAN_2)).to(BOOLEAN_1, BOOLEAN_2).test();
-        
-        // test other types that should not be converted
-        Convert.<Integer,Boolean>from(INT_1, INT_2).toNull(Boolean.class).test();
-        Convert.<Date,Boolean>from(DATE_1, DATE_2).toNull(Boolean.class).test();
+        Convert.<Integer,Boolean>from(INT_1, INT_2).to(true,true).test();
+        Convert.<Integer,Boolean>from(1, 0).to(true,false).test();
+        Convert.<Date,Boolean>from(DATE_1, DATE_2).to(false,false).test();
     }
     
     @Test
@@ -146,8 +152,8 @@ public class ObjectConverterTest {
         Convert.from(SHORT_1, SHORT_2).to((long)SHORT_1, (long)SHORT_2).test();
         Convert.fromPrimitive(SHORT_1, SHORT_2).to((long)SHORT_1, (long)SHORT_2).test();
 
-        // test other types that should not be converted
-        Convert.<Date,Long>from(DATE_1, DATE_2).toNull(Long.class).test();
+        // test conversion from DATE to LONG
+        Convert.<Date,Long>from(DATE_1, DATE_2).to(DATE_1.getTime(), DATE_2.getTime()).test();
     }
     
     @Test
@@ -196,7 +202,7 @@ public class ObjectConverterTest {
     @Test
     public void testToCalendar() {
         Convert.from(CALENDAR_1, CALENDAR_2).to(CALENDAR_1, CALENDAR_2).test();
-        Convert.from(DateUtils.calendarToString(CALENDAR_1), DateUtils.calendarToString(CALENDAR_2)).to(CALENDAR_1, CALENDAR_2).test();
+        Convert.from(calendarToString(CALENDAR_1), calendarToString(CALENDAR_2)).to(CALENDAR_1, CALENDAR_2).test();
         
         // test conversion from other date types
         Convert.from(DATE_1, DATE_2).to(toCalendar(DATE_1), toCalendar(DATE_2)).test();
@@ -209,7 +215,7 @@ public class ObjectConverterTest {
     @Test
     public void testToDate() {
         Convert.from(DATE_1, DATE_2).to(DATE_1, DATE_2).test();
-        Convert.from(DateUtils.dateToString(DATE_1), DateUtils.dateToString(DATE_2)).to(DATE_1, DATE_2).test();
+        Convert.from(dateToString(DATE_1), dateToString(DATE_2)).to(DATE_1, DATE_2).test();
         
         // test conversion from other date types
         Convert.from(CALENDAR_1, CALENDAR_2).to(toDate(CALENDAR_1), toDate(CALENDAR_2)).test();
@@ -219,6 +225,14 @@ public class ObjectConverterTest {
         Convert.<Boolean,Date>from(BOOLEAN_1, BOOLEAN_2).toNull(Date.class).test();
     }
     
+    private Object toDate(Calendar calendar1) {
+        return calendar1.getTime();
+    }
+
+    private Object dateToString(Date date1) {
+        return date1.toInstant().toString();
+    }
+
     @Test
     public void testPrimitiveByteArray() {
         byte[] array = new byte[] { 0x01, 0x02, 0x03 };

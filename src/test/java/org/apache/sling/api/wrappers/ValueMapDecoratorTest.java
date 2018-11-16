@@ -47,8 +47,8 @@ public class ValueMapDecoratorTest {
     public void testIncompatibleTypeInArray() {
         map.put("prop1", new String[] { "test", "test2" });
         map.put("prop2", "test");
-        Assert.assertArrayEquals("Not convertible type should return empty array", new Integer[0], valueMap.get("prop1", Integer[].class));
-        Assert.assertArrayEquals("Not convertible type should return empt array", new Integer[0], valueMap.get("prop2", Integer[].class));
+        Assert.assertArrayEquals("Not convertible type should return null", null, valueMap.get("prop1", Integer[].class));
+        Assert.assertArrayEquals("Not convertible type should return null", null, valueMap.get("prop2", Integer[].class));
     }
 
     // SLING-662
@@ -93,13 +93,13 @@ public class ValueMapDecoratorTest {
     @Test
     public void testPrimitiveTypes() {
         map.put("prop1", new String[] { "1", "2" });
-        Assert.assertNull("ValueMap should not support conversion to primitive type", valueMap.get("prop1", int.class));
+        Assert.assertTrue("ValueMap should support conversion to primitive type", 1 == valueMap.get("prop1", int.class));
     }
-    @Test(expected=ClassCastException.class)
+    @Test()
     public void testPrimitiveTypesArray() {
         map.put("prop1", new String[] { "1", "2" });
-        Assert.assertArrayEquals("ValueMap should not support conversion to array of primitive type",
-                new int[0], valueMap.get("prop1", int[].class));
+        Assert.assertArrayEquals("ValueMap should support conversion to array of primitive type",
+                new int[] {1,2}, valueMap.get("prop1", int[].class));
     }
 
     @Test

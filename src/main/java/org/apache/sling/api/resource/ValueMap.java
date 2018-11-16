@@ -25,8 +25,9 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
 
 import org.apache.sling.api.wrappers.ValueMapDecorator;
-
+import org.apache.sling.api.wrappers.impl.ObjectConverter;
 import org.osgi.annotation.versioning.ConsumerType;
+import org.osgi.util.converter.Converters;
 
 /**
  * The <code>ValueMap</code> is an easy way to access properties of a resource.
@@ -65,7 +66,18 @@ public interface ValueMap extends Map<String, Object> {
      * @return Return named value converted to type T or <code>null</code> if
      *         non existing or can't be converted.
      */
-    @Nullable <T> T get(@NotNull String name, @NotNull Class<T> type);
+    @SuppressWarnings("unchecked")
+    @Nullable
+    default <T> T get(@NotNull String name, @NotNull Class<T> type) {
+        Object value = get(name);
+        if (value == null) {
+            return (T)null;
+        }
+        if (type.isAssignableFrom(value.getClass())) {
+            return (T)value;
+        }
+        return ObjectConverter.convert(value,type);
+    }
 
     /**
      * Get a named property and convert it into the given type.
@@ -87,5 +99,13 @@ public interface ValueMap extends Map<String, Object> {
      * @return Return named value converted to type T or the default value if
      *         non existing or can't be converted.
      */
-    @NotNull <T> T get(@NotNull String name, @NotNull T defaultValue);
-}
+    @SuppressWarnings("unchecked")
+    @NotNull
+    default <T> T get(@NotNull String name, @NotNull T defaultValue) {
+        T value = (T)get(name, defaultValue.getClass());
+        if (value == null) {
+            return (T)defaultValue;
+        }
+        return value;
+    }
+ }

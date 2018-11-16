@@ -82,42 +82,6 @@ public class CompositeValueMap implements ValueMap {
         this.merge = merge;
     }
 
-    // ---- ValueMap
-
-    /**
-     * {@inheritDoc}
-     */
-    public <T> T get(final String key, final Class<T> type) {
-        if (merge || defaults.containsKey(key)) {
-            // Check if property has been provided, if not use defaults
-            if (properties.containsKey(key)) {
-                return properties.get(key, type);
-            } else {
-                return defaults.get(key, type);
-            }
-        }
-
-        // Override mode and no default value provided for this key
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unchecked")
-    public <T> T get(final String key, final T defaultValue) {
-        if (defaultValue == null) {
-            return (T) get(key);
-        }
-
-        T value = get(key, (Class<T>) defaultValue.getClass());
-        if (value != null) {
-            return value;
-        }
-
-        return defaultValue;
-    }
-
 
     // ---- Map
 
