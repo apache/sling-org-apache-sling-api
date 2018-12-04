@@ -38,21 +38,26 @@ public final class ObjectConverter {
 
     private static Converter converter;
 
-    private static synchronized Converter getConverter() {
+    private static Converter getConverter() {
         // TODO at some point it may be practical to have TypeRules as OSGI services to
         // add more complex conversions much in the way that adaptTo has evolved
         if (converter == null) {
-            converter = Converters.newConverterBuilder()
-                    .rule(new TypeRule<String, GregorianCalendar>(String.class, GregorianCalendar.class,
-                            ObjectConverter::toCalendar))
-                    .rule(new TypeRule<Date, GregorianCalendar>(Date.class, GregorianCalendar.class,
-                            ObjectConverter::toCalendar))
-                    .rule(new TypeRule<String, Date>(String.class, Date.class, ObjectConverter::toDate))
-                    .rule(new TypeRule<Calendar, String>(Calendar.class, String.class, ObjectConverter::toString))
-                    .rule(new TypeRule<Date, String>(Date.class, String.class, ObjectConverter::toString))
-                    .rule(new TypeRule<GregorianCalendar, Date>(GregorianCalendar.class, Date.class,
-                            ObjectConverter::toDate))
-                    .build();
+            synchronized (ObjectConverter.class) {
+                if (converter == null) {
+                    converter = Converters.newConverterBuilder()
+                            .rule(new TypeRule<String, GregorianCalendar>(String.class, GregorianCalendar.class,
+                                    ObjectConverter::toCalendar))
+                            .rule(new TypeRule<Date, GregorianCalendar>(Date.class, GregorianCalendar.class,
+                                    ObjectConverter::toCalendar))
+                            .rule(new TypeRule<String, Date>(String.class, Date.class, ObjectConverter::toDate))
+                            .rule(new TypeRule<Calendar, String>(Calendar.class, String.class,
+                                    ObjectConverter::toString))
+                            .rule(new TypeRule<Date, String>(Date.class, String.class, ObjectConverter::toString))
+                            .rule(new TypeRule<GregorianCalendar, Date>(GregorianCalendar.class, Date.class,
+                                    ObjectConverter::toDate))
+                            .build();
+                }
+            }
         }
         return converter;
     }
@@ -81,7 +86,7 @@ public final class ObjectConverter {
         return Date.from(Instant.parse(date));
     }
 
-    public static Date toDate(Calendar cal) {
+    private static Date toDate(Calendar cal) {
         return cal.getTime();
     }
 
