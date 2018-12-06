@@ -21,13 +21,11 @@ package org.apache.sling.api.resource;
 import java.util.Collections;
 import java.util.Map;
 
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
-
 import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.apache.sling.api.wrappers.impl.ObjectConverter;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
-import org.osgi.util.converter.Converters;
 
 /**
  * The <code>ValueMap</code> is an easy way to access properties of a resource.

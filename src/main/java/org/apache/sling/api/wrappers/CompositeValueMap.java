@@ -106,7 +106,7 @@ public class CompositeValueMap implements ValueMap {
      */
     @SuppressWarnings("unchecked")
     @NotNull
-    public <T> T get(@NotNull String name, @NotNull T defaultValue) {
+    public <T> T get(@NotNull String name, T defaultValue) {
         T value = (T)get(name, defaultValue.getClass());
         if (value == null) {
             return (T)defaultValue;
