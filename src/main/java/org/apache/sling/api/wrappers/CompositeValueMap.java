@@ -24,6 +24,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.api.wrappers.impl.ObjectConverter;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * An implementation of the {@link ValueMap} based on two {@link ValueMap}s:
@@ -82,7 +85,34 @@ public class CompositeValueMap implements ValueMap {
         this.merge = merge;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    @Nullable
+    public <T> T get(@NotNull String name, @NotNull Class<T> type) {
+        Object value = get(name);
+        if (value == null) {
+            return (T)null;
+        }
+        if (type.isAssignableFrom(value.getClass())) {
+            return (T)value;
+        }
+        return ObjectConverter.convert(value,type);
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    @NotNull
+    public <T> T get(@NotNull String name, @NotNull T defaultValue) {
+        T value = (T)get(name, defaultValue.getClass());
+        if (value == null) {
+            return (T)defaultValue;
+        }
+        return value;
+    }
     // ---- Map
 
     /**
