@@ -64,6 +64,17 @@ public final class ServletResolverConstants {
     public static final String SLING_SERVLET_RESOURCE_TYPES = "sling.servlet.resourceTypes";
 
     /**
+     * The name of the service registration property of a servlet registered as
+     * a service containing the resource super type supported by the servlet (value
+     * is "sling.servlet.resourceSuperType").
+     * <p>
+     * The type of this property is a String denoting the resource super type. This
+     * property is ignored if the {@link #SLING_SERVLET_RESOURCE_TYPES} property is
+     * not set. Otherwise this property is optional and ignored if not set.
+     */
+    public static final String SLING_SERVLET_RESOURCE_SUPER_TYPE = "sling.servlet.resourceSuperType";
+
+    /**
      * <p>
      * The name of the service registration property of a servlet registered as
      * a service providing the prefix/index to be used to register this servlet.
