@@ -19,7 +19,7 @@
 package org.apache.sling.api.resource.path;
 
 /**
- * The <tt>PathBuilder</tt> offers a convenient way of creating a valid path from multiple fragments
+ * The {@code PathBuilder} offers a convenient way of creating a valid path from multiple fragments
  *
  * @since 1.0.0 (Sling API Bundle 2.11.0)
  */
@@ -28,7 +28,7 @@ public final class PathBuilder {
     private final StringBuilder sb = new StringBuilder();
 
     /**
-     * Creates a new <tt>PathBuilder</tt> instance
+     * Creates a new {@code PathBuilder} instance
      *
      * @param path the initial path
      */

@@ -57,7 +57,8 @@ import org.osgi.annotation.versioning.ProviderType;
  * <code>resolve</code> methods and the <code>getResource</code> methods. The
  * difference lies in the algorithm applied to find the requested resource and
  * in the behavior in case a resource cannot be found:
- * <table summary="">
+ * <table>
+ *     <caption>Accessing Resources</caption>
  * <tr>
  * <th>Method Kind</th>
  * <th>Access Algorithm</th>
@@ -286,7 +287,7 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * @throws IllegalStateException if this resource resolver has already been
      *             {@link #close() closed}.
      * 
-     * @see {@link ResourceMapper#getMapping(String, HttpServletRequest)}
+     * @see ResourceMapper#getMapping(String, HttpServletRequest)
      * @see <a href="https://tools.ietf.org/html/rfc3986#section-2.1">Percent-Encoding</a>
      * @see <a href="https://sling.apache.org/documentation/the-sling-engine/mappings-for-resource-resolution.html">Mappings for Resource Resolution</a>
      */
@@ -324,7 +325,7 @@ public interface ResourceResolver extends Adaptable, Closeable {
      *             {@link #close() closed}.
      * @since 2.0.4 (Sling API Bundle 2.0.4)
      * 
-     * @see {@link ResourceMapper#getMapping(String, HttpServletRequest)}
+     * @see ResourceMapper#getMapping(String, HttpServletRequest)
      * @see <a href="https://tools.ietf.org/html/rfc3986#section-2.1">Percent-Encoding</a>
      * @see <a href="https://sling.apache.org/documentation/the-sling-engine/mappings-for-resource-resolution.html">Mappings for Resource Resolution</a>
      */

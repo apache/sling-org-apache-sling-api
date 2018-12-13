@@ -52,11 +52,12 @@ import org.osgi.annotation.versioning.ProviderType;
  * request URI, the extension is empty.
  * <li>{@link #getSuffix() suffix path} - If the request URI contains a slash
  * character after the content path and optional selectors and extension, the
- * path starting with the slash upto the end of the request URI is the suffix
+ * path starting with the slash up to the end of the request URI is the suffix
  * path.
  * </ol>
  * <p>
- * Examples: <table summary="">
+ * Examples: <table>
+ * <caption>URI decomposition</caption>
  * <tr>
  * <th>URI</th>
  * <th>Content Path</th>

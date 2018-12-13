@@ -96,7 +96,7 @@ public interface ResourceMapper {
     @NotNull String getMapping(@NotNull String resourcePath, @NotNull HttpServletRequest request);
     
     /**
-     * Retuns all possible mappings for a given <tt>resourcePath</tt> as paths.
+     * Returns all possible mappings for a given {@code resourcePath} as paths.
      * 
      * <p>
      * This method differs from the {@link #getMapping(String)} variant
@@ -114,7 +114,7 @@ public interface ResourceMapper {
     Collection<String> getAllMappings(@NotNull String resourcePath);
 
     /**
-     * Retuns all possible mappings for a given <tt>resourcePath</tt> as URLs.
+     * Returns all possible mappings for a given {@code resourcePath} as URLs.
      * 
      * <p>
      * This method differs from the {@link #getMapping(String, HttpServletRequest)} variant
