@@ -24,6 +24,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.api.wrappers.impl.ObjectConverter;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * An implementation of the {@link ValueMap} based on two {@link ValueMap}s:
@@ -82,43 +85,34 @@ public class CompositeValueMap implements ValueMap {
         this.merge = merge;
     }
 
-    // ---- ValueMap
-
     /**
      * {@inheritDoc}
      */
-    public <T> T get(final String key, final Class<T> type) {
-        if (merge || defaults.containsKey(key)) {
-            // Check if property has been provided, if not use defaults
-            if (properties.containsKey(key)) {
-                return properties.get(key, type);
-            } else {
-                return defaults.get(key, type);
-            }
+    @SuppressWarnings("unchecked")
+    @Nullable
+    public <T> T get(@NotNull String name, @NotNull Class<T> type) {
+        Object value = get(name);
+        if (value == null) {
+            return (T)null;
         }
-
-        // Override mode and no default value provided for this key
-        return null;
+        if (type.isAssignableFrom(value.getClass())) {
+            return (T)value;
+        }
+        return ObjectConverter.convert(value,type);
     }
 
     /**
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
-    public <T> T get(final String key, final T defaultValue) {
-        if (defaultValue == null) {
-            return (T) get(key);
+    @NotNull
+    public <T> T get(@NotNull String name, T defaultValue) {
+        T value = (T)get(name, defaultValue.getClass());
+        if (value == null) {
+            return (T)defaultValue;
         }
-
-        T value = get(key, (Class<T>) defaultValue.getClass());
-        if (value != null) {
-            return value;
-        }
-
-        return defaultValue;
+        return value;
     }
-
-
     // ---- Map
 
     /**

@@ -65,11 +65,11 @@ public class ValueMapDecorator implements ValueMap {
             // shortcut if decorated map is ValueMap
             return ((ValueMap)base).get(name, defaultValue);
         }
-        if (defaultValue == null) {
-            return (T)get(name);
+        T value = (T)get(name, defaultValue.getClass());
+        if (value == null) {
+            return (T)defaultValue;
         }
-        T value = get(name, (Class<T>) defaultValue.getClass());
-        return value == null ? defaultValue : value;
+        return value;
     }
 
     /**

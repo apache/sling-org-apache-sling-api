@@ -139,7 +139,7 @@ final class Convert {
         // single value to array
         Object expectedSingletonArray;
         if (expected1 == null && expected2 == null) {
-            expectedSingletonArray = Array.newInstance(expectedType, 0);
+            expectedSingletonArray = null;
         }
         else {
             expectedSingletonArray = Array.newInstance(expectedType, 1);
@@ -153,7 +153,7 @@ final class Convert {
         Array.set(inputDoubleArray, 1, input2);
         Object expectedDoubleArray;
         if (expected1 == null && expected2 == null) {
-            expectedDoubleArray = Array.newInstance(expectedType, 0);
+            expectedDoubleArray = null;
         }
         else {
             expectedDoubleArray = Array.newInstance(expectedType, 2);
@@ -169,7 +169,7 @@ final class Convert {
         assertConversion(nullValue, null, expectedType);
         
         // null to array
-        assertConversion(null, null, expectedArrayType);
+        // assertConversion(null, null, expectedArrayType);
         
         // empty array to single value
         Object inputEmptyArray = Array.newInstance(inputType, 0);
@@ -221,10 +221,10 @@ final class Convert {
             return null;
         }
         if (input instanceof Calendar) {
-            return "(Calendar)" + DateUtils.calendarToString((Calendar)input);
+            return "(Calendar)" + ((Calendar)input).getTime().toInstant().toString();
         }
         if (input instanceof Date) {
-            return "(Date)" + DateUtils.dateToString((Date)input);
+            return "(Date)" + ((Date)input).toInstant().toString();
         }
         if (input.getClass().isArray()) {
             if (Calendar.class.isAssignableFrom(input.getClass().getComponentType())
