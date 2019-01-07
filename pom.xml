@@ -160,6 +160,9 @@
                 <os>
                     <family>mac</family>
                 </os>
+                <property>
+                    <name>!ignore.javadocjdk</name>
+                </property>
             </activation>
             <build>
                 <plugins>
