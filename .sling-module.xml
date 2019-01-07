@@ -1,0 +1,7 @@
+<!-- adjust Jenkins config according to https://cwiki.apache.org/confluence/x/tKBzB -->
+<sling-module>
+    <jenkins> <!-- settings inspected by Jenkins -->
+        <!-- prevent enforcing JDK9 or newer as javadoc is never executed by Jenkins -->
+        <additionalMavenParams>-Dignore.javadocjdk</additionalMavenParams>
+    </jenkins>
+</sling-module>
