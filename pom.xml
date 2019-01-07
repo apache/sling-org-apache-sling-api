@@ -153,4 +153,39 @@
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <!-- enforce usage of JDK9 or above due to https://bugs.java.com/bugdatabase/view_bug.do?bug_id=8206092 -->
+            <activation>
+                <os>
+                    <family>mac</family>
+                </os>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>enforce-jdk9-for-javadoc-on-mac</id>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <configuration>
+                                    <rules>
+                                        <requireJavaVersion>
+                                            <message>
+                                                You must use JDK 9 or newer due to issues with javadoc in older JDKs, for details check https://bugs.java.com/bugdatabase/view_bug.do?bug_id=8206092
+                                            </message>
+                                            <version>9</version>
+                                        </requireJavaVersion>
+                                    </rules>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
