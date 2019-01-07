@@ -157,9 +157,6 @@
         <profile>
             <!-- enforce usage of JDK9 or above due to https://bugs.java.com/bugdatabase/view_bug.do?bug_id=8206092 -->
             <activation>
-                <os>
-                    <family>mac</family>
-                </os>
                 <property>
                     <name>!ignore.javadocjdk</name>
                 </property>
@@ -178,8 +175,7 @@
                                     <rules>
                                         <requireJavaVersion>
                                             <message>
-                                                You must use JDK 9 or newer due to issues with javadoc in older JDKs, for details check https://bugs.java.com/bugdatabase/view_bug.do?bug_id=8206092
-                                                Use -Dignore.javadocjdk to ignore this requirement, if not building javadoc
+                                                You must use JDK 9 or newer due to issues with javadoc in older JDKs, for details check https://bugs.java.com/bugdatabase/view_bug.do?bug_id=8206092. Use -Dignore.javadocjdk to ignore this requirement (if not building javadoc)!
                                             </message>
                                             <version>9</version>
                                         </requireJavaVersion>
