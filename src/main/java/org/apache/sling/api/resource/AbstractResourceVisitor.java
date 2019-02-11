@@ -23,24 +23,23 @@ import java.util.Iterator;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * This visitor will traverse the given resource and all its children in a breadth-first approach
- * and call the {@link AbstractResourceVisitor#visit(Resource)} method for each visited resource.
+ * This visitor will traverse the given resource and all its children in a depth-first approach
+ * and call the {@link AbstractResourceVisitor#visitAndContinueWithChildren(Resource)} method for each visited resource.
  * It decouples the actual traversal code from application code. 
  * 
  * Concrete subclasses must implement the {@link AbstractResourceVisitor#visit(Resource)} method.
  *
- * @see <a href="https://en.wikipedia.org/wiki/Breadth-first_search">Breadth-First-Search</a>
+ * @see <a href="https://en.wikipedia.org/wiki/Depth-first_search">Depth-First-Search</a>
  * @since 2.2 (Sling API Bundle 2.2.0)
  */
 public abstract class AbstractResourceVisitor {
 
     /**
-     * Visit the given resource and all its descendants.
+     * Visit the given resource and all its descendants in a depth-first approach.
      * @param res The resource
      */
     public void accept(final Resource res) {
-        if (res != null) {
-            this.visit(res);
+        if (res != null && visitAndContinueWithChildren(res)) {
             this.traverseChildren(res.listChildren());
         }
     }
@@ -59,7 +58,20 @@ public abstract class AbstractResourceVisitor {
 
     /**
      * Implement this method to do actual work on the resources.
+     * In most of the cases one should rather override {@link #visitAndContinueWithChildren(Resource)} which allows to limit the traversal.
      * @param res The resource
      */
     protected abstract void visit(final @NotNull Resource res);
+
+    /**
+     * Implement this method to do actual work on the resources and to indicate whether to traverse also the given resource's children.
+     * The default implementation just calls {@link AbstractResourceVisitor#visit(Resource)} and returns {@code true}
+     * @param res The resource
+     * @return {@code true} in case the traversal should also cover the children of {@link #res}.
+     * @since 2.12.0
+     */
+    protected boolean visitAndContinueWithChildren(final @NotNull Resource res) {
+        visit(res);
+        return true;
+    }
 }
