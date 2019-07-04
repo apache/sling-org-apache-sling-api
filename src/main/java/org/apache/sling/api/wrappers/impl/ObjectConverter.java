@@ -19,10 +19,13 @@
 package org.apache.sling.api.wrappers.impl;
 
 import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
+import org.apache.jackrabbit.util.ISO8601;
 import org.osgi.util.converter.ConversionException;
 import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.Converters;
@@ -45,21 +48,38 @@ public final class ObjectConverter {
             synchronized (ObjectConverter.class) {
                 if (converter == null) {
                     converter = Converters.newConverterBuilder()
-                            .rule(new TypeRule<String, GregorianCalendar>(String.class, GregorianCalendar.class,
+                            .rule(new TypeRule<String, Calendar>(String.class, Calendar.class,
                                     ObjectConverter::toCalendar))
-                            .rule(new TypeRule<Date, GregorianCalendar>(Date.class, GregorianCalendar.class,
+                            .rule(new TypeRule<Date, Calendar>(Date.class, Calendar.class,
                                     ObjectConverter::toCalendar))
                             .rule(new TypeRule<String, Date>(String.class, Date.class, ObjectConverter::toDate))
                             .rule(new TypeRule<Calendar, String>(Calendar.class, String.class,
                                     ObjectConverter::toString))
                             .rule(new TypeRule<Date, String>(Date.class, String.class, ObjectConverter::toString))
-                            .rule(new TypeRule<GregorianCalendar, Date>(GregorianCalendar.class, Date.class,
+                            .rule(new TypeRule<Calendar, Date>(Calendar.class, Date.class,
                                     ObjectConverter::toDate))
+                            .rule(new TypeRule<>(Calendar.class, ZonedDateTime.class, ObjectConverter::toZonedDateTime))
+                            .rule(new TypeRule<ZonedDateTime, Calendar>(ZonedDateTime.class, Calendar.class, ObjectConverter::toCalendar))
+                            .rule(new TypeRule<ZonedDateTime, String>(ZonedDateTime.class, String.class, ObjectConverter::toString))
                             .build();
                 }
             }
         }
         return converter;
+    }
+
+    private static String toString(ZonedDateTime zonedDateTime) {
+        return DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(zonedDateTime);
+    }
+
+    private static Calendar toCalendar(ZonedDateTime zonedDateTime) {
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(zonedDateTime.getOffset()));
+        calendar.setTimeInMillis(zonedDateTime.toInstant().toEpochMilli());
+        return calendar;
+    }
+
+    private static ZonedDateTime toZonedDateTime(Calendar calendar) {
+        return ZonedDateTime.ofInstant(calendar.toInstant(), calendar.getTimeZone().toZoneId().normalized());
     }
 
     private static String toString(Calendar cal) {
@@ -70,16 +90,15 @@ public final class ObjectConverter {
         return cal.toInstant().toString();
     }
 
-    private static GregorianCalendar toCalendar(String date) {
-        Calendar response = Calendar.getInstance();
-        response.setTime(Date.from(Instant.parse(date)));
-        return (GregorianCalendar) response;
+    private static Calendar toCalendar(String date) {
+        ZonedDateTime zonedDateTime = ZonedDateTime.parse(date, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        return toCalendar(zonedDateTime);
     }
 
-    private static GregorianCalendar toCalendar(Date date) {
+    private static Calendar toCalendar(Date date) {
         Calendar response = Calendar.getInstance();
         response.setTime(date);
-        return (GregorianCalendar) response;
+        return response;
     }
 
     private static Date toDate(String date) {
