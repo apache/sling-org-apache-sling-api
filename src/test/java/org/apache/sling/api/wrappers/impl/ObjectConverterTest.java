@@ -60,24 +60,24 @@ public class ObjectConverterTest {
 
     @Test
     public void testDateToString() {
-        Convert.from(STRING_1, STRING_2).to(STRING_1, STRING_2).test();
-        Convert.fromPrimitive(BOOLEAN_1, BOOLEAN_2).to(Boolean.toString(BOOLEAN_1), Boolean.toString(BOOLEAN_2)).test();
-        Convert.from(BOOLEAN_1, BOOLEAN_2).to(Boolean.toString(BOOLEAN_1), Boolean.toString(BOOLEAN_2)).test();
-        Convert.fromPrimitive(BYTE_1, BYTE_2).to(Byte.toString(BYTE_1), Byte.toString(BYTE_2)).test();
-        Convert.from(BYTE_1, BYTE_2).to(Byte.toString(BYTE_1), Byte.toString(BYTE_2)).test();
-        Convert.fromPrimitive(SHORT_1, SHORT_2).to(Short.toString(SHORT_1), Short.toString(SHORT_2)).test();
-        Convert.from(SHORT_1, SHORT_2).to(Short.toString(SHORT_1), Short.toString(SHORT_2)).test();
-        Convert.fromPrimitive(INT_1, INT_2).to(Integer.toString(INT_1), Integer.toString(INT_2)).test();
-        Convert.from(INT_1, INT_2).to(Integer.toString(INT_1), Integer.toString(INT_2)).test();
-        Convert.fromPrimitive(LONG_1, LONG_2).to(Long.toString(LONG_1), Long.toString(LONG_2)).test();
-        Convert.from(LONG_1, LONG_2).to(Long.toString(LONG_1), Long.toString(LONG_2)).test();
-        Convert.fromPrimitive(FLOAT_1, FLOAT_2).to(Float.toString(FLOAT_1), Float.toString(FLOAT_2)).test();
-        Convert.from(FLOAT_1, FLOAT_2).to(Float.toString(FLOAT_1), Float.toString(FLOAT_2)).test();
-        Convert.fromPrimitive(DOUBLE_1, DOUBLE_2).to(Double.toString(DOUBLE_1), Double.toString(DOUBLE_2)).test();
-        Convert.from(DOUBLE_1, DOUBLE_2).to(Double.toString(DOUBLE_1), Double.toString(DOUBLE_2)).test();
-        Convert.from(BIGDECIMAL_1, BIGDECIMAL_2).to(BIGDECIMAL_1.toString(), BIGDECIMAL_2.toString()).test();
-        Convert.from(CALENDAR_1, CALENDAR_2).to(calendarToString(CALENDAR_1), calendarToString(CALENDAR_2)).test();
-        Convert.from(DATE_1, DATE_2).to(calendarToString(toCalendar(DATE_1)), calendarToString(toCalendar(DATE_2))).test();
+        Convert.from(STRING_1, STRING_2, String.class).to(STRING_1, STRING_2, String.class).test();
+        Convert.from(BOOLEAN_1, BOOLEAN_2, boolean.class).to(Boolean.toString(BOOLEAN_1), Boolean.toString(BOOLEAN_2), String.class).test();
+        Convert.from(BOOLEAN_1, BOOLEAN_2, Boolean.class).to(Boolean.toString(BOOLEAN_1), Boolean.toString(BOOLEAN_2), String.class).test();
+        Convert.from(BYTE_1, BYTE_2, byte.class).to(Byte.toString(BYTE_1), Byte.toString(BYTE_2), String.class).test();
+        Convert.from(BYTE_1, BYTE_2, Byte.class).to(Byte.toString(BYTE_1), Byte.toString(BYTE_2), String.class).test();
+        Convert.from(SHORT_1, SHORT_2, short.class).to(Short.toString(SHORT_1), Short.toString(SHORT_2), String.class).test();
+        Convert.from(SHORT_1, SHORT_2, Short.class).to(Short.toString(SHORT_1), Short.toString(SHORT_2), String.class).test();
+        Convert.from(INT_1, INT_2, int.class).to(Integer.toString(INT_1), Integer.toString(INT_2), String.class).test();
+        Convert.from(INT_1, INT_2, Integer.class).to(Integer.toString(INT_1), Integer.toString(INT_2), String.class).test();
+        Convert.from(LONG_1, LONG_2, long.class).to(Long.toString(LONG_1), Long.toString(LONG_2), String.class).test();
+        Convert.from(LONG_1, LONG_2, Long.class).to(Long.toString(LONG_1), Long.toString(LONG_2), String.class).test();
+        Convert.from(FLOAT_1, FLOAT_2, float.class).to(Float.toString(FLOAT_1), Float.toString(FLOAT_2), String.class).test();
+        Convert.from(FLOAT_1, FLOAT_2, float.class).to(Float.toString(FLOAT_1), Float.toString(FLOAT_2), String.class).test();
+        Convert.from(DOUBLE_1, DOUBLE_2, double.class).to(Double.toString(DOUBLE_1), Double.toString(DOUBLE_2), String.class).test();
+        Convert.from(DOUBLE_1, DOUBLE_2, Double.class).to(Double.toString(DOUBLE_1), Double.toString(DOUBLE_2), String.class).test();
+        Convert.from(BIGDECIMAL_1, BIGDECIMAL_2, BigDecimal.class).to(BIGDECIMAL_1.toString(), BIGDECIMAL_2.toString(), String.class).test();
+        Convert.from(CALENDAR_1, CALENDAR_2, Calendar.class).to(calendarToString(CALENDAR_1), calendarToString(CALENDAR_2), String.class).test();
+        Convert.from(DATE_1, DATE_2, Date.class).to(calendarToString(toCalendar(DATE_1)), calendarToString(toCalendar(DATE_2)), String.class).test();
     }
     
     private String calendarToString(Calendar calendar) {
@@ -92,144 +92,144 @@ public class ObjectConverterTest {
 
     @Test
     public void testToBoolean() {
-        Convert.fromPrimitive(BOOLEAN_1, BOOLEAN_2).to(BOOLEAN_1, BOOLEAN_2).test();
-        Convert.from(BOOLEAN_1, BOOLEAN_2).to(BOOLEAN_1, BOOLEAN_2).test();
-        Convert.from(Boolean.toString(BOOLEAN_1), Boolean.toString(BOOLEAN_2)).to(BOOLEAN_1, BOOLEAN_2).test();
-        Convert.<Integer,Boolean>from(INT_1, INT_2).to(true,true).test();
-        Convert.<Integer,Boolean>from(1, 0).to(true,false).test();
-        Convert.<Date,Boolean>from(DATE_1, DATE_2).to(false,false).test();
+        Convert.from(BOOLEAN_1, BOOLEAN_2, boolean.class).to(BOOLEAN_1, BOOLEAN_2, Boolean.class).test();
+        Convert.from(BOOLEAN_1, BOOLEAN_2, Boolean.class).to(BOOLEAN_1, BOOLEAN_2, Boolean.class).test();
+        Convert.from(Boolean.toString(BOOLEAN_1), Boolean.toString(BOOLEAN_2), String.class).to(BOOLEAN_1, BOOLEAN_2, Boolean.class).test();
+        Convert.from(INT_1, INT_2, int.class).to(true, true, boolean.class).test();
+        Convert.from(1, 0, int.class).to(true, false, boolean.class).test();
+        Convert.from(DATE_1, DATE_2, Date.class).to(false, false, boolean.class).test();
     }
     
     @Test
     public void testToByte() {
-        Convert.fromPrimitive(BYTE_1, BYTE_2).to(BYTE_1, BYTE_2).test();
-        Convert.from(BYTE_1, BYTE_2).to(BYTE_1, BYTE_2).test();
-        Convert.from(Byte.toString(BYTE_1), Byte.toString(BYTE_2)).to(BYTE_1, BYTE_2).test();
+        Convert.from(BYTE_1, BYTE_2, byte.class).to(BYTE_1, BYTE_2, Byte.class).test();
+        Convert.from(BYTE_1, BYTE_2, Byte.class).to(BYTE_1, BYTE_2, Byte.class).test();
+        Convert.from(Byte.toString(BYTE_1), Byte.toString(BYTE_2), String.class).to(BYTE_1, BYTE_2, byte.class).test();
         
         // test conversion from other number types
-        Convert.from(INT_1, INT_2).to((byte)INT_1, (byte)INT_2).test();
-        Convert.fromPrimitive(INT_1, INT_2).to((byte)INT_1, (byte)INT_2).test();
+        Convert.from(INT_1, INT_2, Integer.class).to((byte)INT_1, (byte)INT_2, byte.class).test();
+        Convert.from(INT_1, INT_2, int.class).to((byte)INT_1, (byte)INT_2, Byte.class).test();
 
         // test other types that should not be converted
-        Convert.<Date,Byte>from(DATE_1, DATE_2).toNull(Byte.class).test();
+        Convert.from(DATE_1, DATE_2, Date.class).to(null, null, Byte.class).test();
     }
     
     @Test
     public void testToShort() {
-        Convert.fromPrimitive(SHORT_1, SHORT_2).to(SHORT_1, SHORT_2).test();
-        Convert.from(SHORT_1, SHORT_2).to(SHORT_1, SHORT_2).test();
-        Convert.from(Short.toString(SHORT_1), Short.toString(SHORT_2)).to(SHORT_1, SHORT_2).test();
+        Convert.from(SHORT_1, SHORT_2, short.class).to(SHORT_1, SHORT_2, Short.class).test();
+        Convert.from(SHORT_1, SHORT_2, Short.class).to(SHORT_1, SHORT_2, short.class).test();
+        Convert.from(Short.toString(SHORT_1), Short.toString(SHORT_2), String.class).to(SHORT_1, SHORT_2, short.class).test();
         
         // test conversion from other number types
-        Convert.from(INT_1, INT_2).to((short)INT_1, (short)INT_2).test();
-        Convert.fromPrimitive(INT_1, INT_2).to((short)INT_1, (short)INT_2).test();
+        Convert.from(INT_1, INT_2, Integer.class).to((short)INT_1, (short)INT_2, short.class).test();
+        Convert.from(INT_1, INT_2, int.class).to((short)INT_1, (short)INT_2, Short.class).test();
 
         // test other types that should not be converted
-        Convert.<Date,Short>from(DATE_1, DATE_2).toNull(Short.class).test();
+        Convert.from(DATE_1, DATE_2, Date.class).to(null, null, Short.class).test();
     }
     
     @Test
     public void testToInteger() {
-        Convert.fromPrimitive(INT_1, INT_2).to(INT_1, INT_2).test();
-        Convert.from(INT_1, INT_2).to(INT_1, INT_2).test();
-        Convert.from(Integer.toString(INT_1), Integer.toString(INT_2)).to(INT_1, INT_2).test();
+        Convert.from(INT_1, INT_2, int.class).to(INT_1, INT_2, int.class).test();
+        Convert.from(INT_1, INT_2, Integer.class).to(INT_1, INT_2, int.class).test();
+        Convert.from(Integer.toString(INT_1), Integer.toString(INT_2), String.class).to(INT_1, INT_2, int.class).test();
         
         // test conversion from other number types
-        Convert.from(SHORT_1, SHORT_2).to((int)SHORT_1, (int)SHORT_2).test();
-        Convert.fromPrimitive(SHORT_1, SHORT_2).to((int)SHORT_1, (int)SHORT_2).test();
+        Convert.from(SHORT_1, SHORT_2, Short.class).to((int)SHORT_1, (int)SHORT_2, Integer.class).test();
+        Convert.from(SHORT_1, SHORT_2, short.class).to((int)SHORT_1, (int)SHORT_2, int.class).test();
 
         // test other types that should not be converted
-        Convert.<Date,Integer>from(DATE_1, DATE_2).toNull(Integer.class).test();
+        Convert.from(DATE_1, DATE_2, Date.class).to(null, null, Integer.class).test();
     }
     
     @Test
     public void testToLong() {
-        Convert.fromPrimitive(LONG_1, LONG_2).to(LONG_1, LONG_2).test();
-        Convert.from(LONG_1, LONG_2).to(LONG_1, LONG_2).test();
-        Convert.from(Long.toString(LONG_1), Long.toString(LONG_2)).to(LONG_1, LONG_2).test();
+        Convert.from(LONG_1, LONG_2, long.class).to(LONG_1, LONG_2, long.class).test();
+        Convert.from(LONG_1, LONG_2, Long.class).to(LONG_1, LONG_2, Long.class).test();
+        Convert.from(Long.toString(LONG_1), Long.toString(LONG_2), String.class).to(LONG_1, LONG_2, long.class).test();
         
         // test conversion from other number types
-        Convert.from(SHORT_1, SHORT_2).to((long)SHORT_1, (long)SHORT_2).test();
-        Convert.fromPrimitive(SHORT_1, SHORT_2).to((long)SHORT_1, (long)SHORT_2).test();
+        Convert.from(SHORT_1, SHORT_2, Short.class).to((long)SHORT_1, (long)SHORT_2, long.class).test();
+        Convert.from(SHORT_1, SHORT_2, short.class).to((long)SHORT_1, (long)SHORT_2, Long.class).test();
 
         // test conversion from DATE to LONG
-        Convert.<Date,Long>from(DATE_1, DATE_2).to(DATE_1.getTime(), DATE_2.getTime()).test();
+        Convert.from(DATE_1, DATE_2, Date.class).to(DATE_1.getTime(), DATE_2.getTime(), long.class).test();
     }
     
     @Test
     public void testToFloat() {
-        Convert.fromPrimitive(FLOAT_1, FLOAT_2).to(FLOAT_1, FLOAT_2).test();
-        Convert.from(FLOAT_1, FLOAT_2).to(FLOAT_1, FLOAT_2).test();
-        Convert.from(Float.toString(FLOAT_1), Float.toString(FLOAT_2)).to(FLOAT_1, FLOAT_2).test();
+        Convert.from(FLOAT_1, FLOAT_2, float.class).to(FLOAT_1, FLOAT_2, float.class).test();
+        Convert.from(FLOAT_1, FLOAT_2, Float.class).to(FLOAT_1, FLOAT_2, float.class).test();
+        Convert.from(Float.toString(FLOAT_1), Float.toString(FLOAT_2), String.class).to(FLOAT_1, FLOAT_2, float.class).test();
         
         // test conversion from other number types
-        Convert.from(SHORT_1, SHORT_2).to((float)SHORT_1, (float)SHORT_2).test();
-        Convert.fromPrimitive(SHORT_1, SHORT_2).to((float)SHORT_1, (float)SHORT_2).test();
+        Convert.from(SHORT_1, SHORT_2, Short.class).to((float)SHORT_1, (float)SHORT_2, Float.class).test();
+        Convert.from(SHORT_1, SHORT_2, short.class).to((float)SHORT_1, (float)SHORT_2, float.class).test();
 
         // test other types that should not be converted
-        Convert.<Date,Float>from(DATE_1, DATE_2).toNull(Float.class).test();
+        Convert.from(DATE_1, DATE_2, Date.class).to(null, null, Float.class).test();
     }
     
     @Test
     public void testToDouble() {
-        Convert.fromPrimitive(DOUBLE_1, DOUBLE_2).to(DOUBLE_1, DOUBLE_2).test();
-        Convert.from(DOUBLE_1, DOUBLE_2).to(DOUBLE_1, DOUBLE_2).test();
-        Convert.from(Double.toString(DOUBLE_1), Double.toString(DOUBLE_2)).to(DOUBLE_1, DOUBLE_2).test();
+        Convert.from(DOUBLE_1, DOUBLE_2, double.class).to(DOUBLE_1, DOUBLE_2, double.class).test();
+        Convert.from(DOUBLE_1, DOUBLE_2, Double.class).to(DOUBLE_1, DOUBLE_2, Double.class).test();
+        Convert.from(Double.toString(DOUBLE_1), Double.toString(DOUBLE_2), String.class).to(DOUBLE_1, DOUBLE_2, double.class).test();
         
         // test conversion from other number types
-        Convert.from(SHORT_1, SHORT_2).to((double)SHORT_1, (double)SHORT_2).test();
-        Convert.fromPrimitive(SHORT_1, SHORT_2).to((double)SHORT_1, (double)SHORT_2).test();
+        Convert.from(SHORT_1, SHORT_2, Short.class).to((double)SHORT_1, (double)SHORT_2, Double.class).test();
+        Convert.from(SHORT_1, SHORT_2, short.class).to((double)SHORT_1, (double)SHORT_2, double.class).test();
 
         // test other types that should not be converted
-        Convert.<Date,Double>from(DATE_1, DATE_2).toNull(Double.class).test();
+        Convert.from(DATE_1, DATE_2, Date.class).to(null, null, Double.class).test();
     }
     
     @Test
     public void testToBigDecimal() {
-        Convert.from(BIGDECIMAL_1, BIGDECIMAL_2).to(BIGDECIMAL_1, BIGDECIMAL_2).test();
-        Convert.from(BIGDECIMAL_1.toString(), BIGDECIMAL_2.toString()).to(BIGDECIMAL_1, BIGDECIMAL_2).test();
+        Convert.from(BIGDECIMAL_1, BIGDECIMAL_2, BigDecimal.class).to(BIGDECIMAL_1, BIGDECIMAL_2, BigDecimal.class).test();
+        Convert.from(BIGDECIMAL_1.toString(), BIGDECIMAL_2.toString(), String.class).to(BIGDECIMAL_1, BIGDECIMAL_2, BigDecimal.class).test();
         
         // test conversion from other number types
-        Convert.from(LONG_1, LONG_2).to(BigDecimal.valueOf(LONG_1), BigDecimal.valueOf(LONG_2)).test();
-        Convert.fromPrimitive(LONG_1, LONG_2).to(BigDecimal.valueOf(LONG_1), BigDecimal.valueOf(LONG_2)).test();
-        Convert.from(DOUBLE_1, DOUBLE_2).to(BigDecimal.valueOf(DOUBLE_1), BigDecimal.valueOf(DOUBLE_2)).test();
-        Convert.fromPrimitive(DOUBLE_1, DOUBLE_2).to(BigDecimal.valueOf(DOUBLE_1), BigDecimal.valueOf(DOUBLE_2)).test();
+        Convert.from(LONG_1, LONG_2, Long.class).to(BigDecimal.valueOf(LONG_1), BigDecimal.valueOf(LONG_2), BigDecimal.class).test();
+        Convert.from(LONG_1, LONG_2, Long.class).to(BigDecimal.valueOf(LONG_1), BigDecimal.valueOf(LONG_2), BigDecimal.class).test();
+        Convert.from(DOUBLE_1, DOUBLE_2, Double.class).to(BigDecimal.valueOf(DOUBLE_1), BigDecimal.valueOf(DOUBLE_2), BigDecimal.class).test();
+        Convert.from(DOUBLE_1, DOUBLE_2, double.class).to(BigDecimal.valueOf(DOUBLE_1), BigDecimal.valueOf(DOUBLE_2), BigDecimal.class).test();
 
         // test other types that should not be converted
-        Convert.<Date,BigDecimal>from(DATE_1, DATE_2).toNull(BigDecimal.class).test();
+        Convert.from(DATE_1, DATE_2, Date.class).to(null, null, BigDecimal.class).test();
     }
     
     @Test
     public void testToCalendar() {
-        Convert.from(CALENDAR_1, CALENDAR_2).to(CALENDAR_1, CALENDAR_2).test();
-        Convert.from(calendarToString(CALENDAR_1), calendarToString(CALENDAR_2)).to(CALENDAR_1, CALENDAR_2).test();
+        Convert.from(CALENDAR_1, CALENDAR_2, Calendar.class).to(CALENDAR_1, CALENDAR_2, Calendar.class).test();
+        Convert.from(calendarToString(CALENDAR_1), calendarToString(CALENDAR_2), String.class).to(CALENDAR_1, CALENDAR_2, Calendar.class).test();
         
         // test conversion from other date types
-        Convert.from(DATE_1, DATE_2).to(toCalendar(DATE_1), toCalendar(DATE_2)).test();
+        Convert.from(DATE_1, DATE_2, Date.class).to(toCalendar(DATE_1), toCalendar(DATE_2), Calendar.class).test();
 
         // test other types that should not be converted
-        Convert.<String,Calendar>from(STRING_1, STRING_2).toNull(Calendar.class).test();
-        Convert.<Boolean,Calendar>from(BOOLEAN_1, BOOLEAN_2).toNull(Calendar.class).test();
+        Convert.from(STRING_1, STRING_2, String.class).to(null, null, Calendar.class).test();
+        Convert.from(BOOLEAN_1, BOOLEAN_2, Boolean.class).to(null, null, Calendar.class).test();
     }
     
     @Test
     public void testToDate() {
-        Convert.from(DATE_1, DATE_2).to(DATE_1, DATE_2).test();
-        Convert.from(dateToString(DATE_1), dateToString(DATE_2)).to(DATE_1, DATE_2).test();
+        Convert.from(DATE_1, DATE_2, Date.class).to(DATE_1, DATE_2, Date.class).test();
+        Convert.from(dateToString(DATE_1), dateToString(DATE_2), String.class).to(DATE_1, DATE_2, Date.class).test();
         
         // test conversion from other date types
-        Convert.from(CALENDAR_1, CALENDAR_2).to(toDate(CALENDAR_1), toDate(CALENDAR_2)).test();
+        Convert.from(CALENDAR_1, CALENDAR_2, Calendar.class).to(toDate(CALENDAR_1), toDate(CALENDAR_2), Date.class).test();
 
         // test other types that should not be converted
-        Convert.<String,Date>from(STRING_1, STRING_2).toNull(Date.class).test();
-        Convert.<Boolean,Date>from(BOOLEAN_1, BOOLEAN_2).toNull(Date.class).test();
+        Convert.from(STRING_1, STRING_2, String.class).to(null, null, Date.class).test();
+        Convert.from(BOOLEAN_1, BOOLEAN_2, Boolean.class).to(null, null, Date.class).test();
     }
     
-    private Object toDate(Calendar calendar1) {
+    private Date toDate(Calendar calendar1) {
         return calendar1.getTime();
     }
 
-    private Object dateToString(Date date1) {
+    private String dateToString(Date date1) {
         return date1.toInstant().toString();
     }
 
