@@ -18,14 +18,20 @@
  */
 package org.apache.sling.api.wrappers;
 
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.apache.sling.api.resource.ValueMap;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -165,6 +171,29 @@ public class ValueMapDecoratorTest {
 
         decorated.get("prop1", "defValue");
         verify(original, times(1)).get("prop1", "defValue");
+    }
+
+    @Test
+    public void testGettingZonedDateTime() {
+        String dateAsIso8601 = "2019-07-04T14:05:37.123+02:00";
+        ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateAsIso8601, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(zonedDateTime.getOffset()));
+        calendar.setTimeInMillis(zonedDateTime.toInstant().toEpochMilli());
+
+        map.put("dateAsIso8601", dateAsIso8601);
+        map.put("dateAsCalendar", calendar);
+        map.put("dateAsZonedDateTime", zonedDateTime);
+
+        assertThat("Conversion from \"dateAsIso8601\" to ZonedDateTime",
+                valueMap.get("dateAsIso8601", ZonedDateTime.class), Matchers.is(zonedDateTime));
+        assertThat("Conversion from \"dateAsCalendar\" to ZonedDateTime",
+                valueMap.get("dateAsCalendar", ZonedDateTime.class), Matchers.is(zonedDateTime));
+        assertThat("Conversion from \"dateAsZonedDateTime\" to ZonedDateTime",
+                valueMap.get("dateAsZonedDateTime", ZonedDateTime.class), Matchers.is(zonedDateTime));
+        assertThat("Conversion from \"dateAsZonedDateTime\" to Calendar",
+                valueMap.get("dateAsZonedDateTime", Calendar.class), Matchers.is(calendar));
+        assertThat("Conversion from \"dateAsZonedDateTime\" to String",
+                valueMap.get("dateAsZonedDateTime", String.class), Matchers.is(dateAsIso8601));
     }
     
 }
