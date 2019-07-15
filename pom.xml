@@ -114,8 +114,14 @@
             <version>1.0.0</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.sling</groupId>
+            <artifactId>org.apache.sling.resource.filter</artifactId>
+            <version>1.0.0</version>
+            <scope>provided</scope> <!-- just used for javadoc link -->
+        </dependency>
     </dependencies>
-
+    
     <build>
         <plugins>
             <!-- Create the bundle of the Sling API -->

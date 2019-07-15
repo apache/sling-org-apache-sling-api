@@ -23,13 +23,17 @@ import java.util.Iterator;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * This visitor will traverse the given resource and all its children in a breadth-first approach
+ * This visitor will traverse the given resource and all its children in a depth-first approach
  * and call the {@link AbstractResourceVisitor#visit(Resource)} method for each visited resource.
  * It decouples the actual traversal code from application code. 
  * 
  * Concrete subclasses must implement the {@link AbstractResourceVisitor#visit(Resource)} method.
+ * There is no possibility to stop traversal in this visitor. If you want to skip certain
+ * parts of the subtree or stop traversal at a certain point rather use 
+ * {@link org.apache.sling.resource.filter.ResourceStream} or 
+ * {@link org.apache.sling.resource.filter.ResourceFilterStream}.
  *
- * @see <a href="https://en.wikipedia.org/wiki/Breadth-first_search">Breadth-First-Search</a>
+ * @see <a href="https://en.wikipedia.org/wiki/Depth-first_search">Depth-First-Search</a>
  * @since 2.2 (Sling API Bundle 2.2.0)
  */
 public abstract class AbstractResourceVisitor {
