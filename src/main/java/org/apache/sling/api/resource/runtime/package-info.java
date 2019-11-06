@@ -17,7 +17,7 @@
  * under the License.
  */
 
-@Version("1.0.1")
+@Version("1.0.2")
 package org.apache.sling.api.resource.runtime;
 
 import org.osgi.annotation.versioning.Version;
