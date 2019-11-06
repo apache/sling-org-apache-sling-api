@@ -53,7 +53,6 @@
     <properties>
         <site.jira.version.id>12314252</site.jira.version.id>
         <sling.java.version>8</sling.java.version>
-        <jackrabbit.version>2.13.4</jackrabbit.version>
     </properties>
 
     <dependencies>
@@ -70,13 +69,6 @@
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>16.0.2</version>
-            <scope>provided</scope>
-        </dependency>
-        <!-- No external dependency, we embed some util classes -->
-        <dependency>
-            <groupId>org.apache.jackrabbit</groupId>
-            <artifactId>jackrabbit-jcr-commons</artifactId>
-            <version>${jackrabbit.version}</version>
             <scope>provided</scope>
         </dependency>
         <!-- Testing -->
@@ -135,9 +127,6 @@
                             http://sling.apache.org/site/sling-api.html
                         </Bundle-DocURL>
                         <!-- Include utility classes from Jackrabbit JCR Commons -->
-                        <Embed-Dependency>
-                           jackrabbit-jcr-commons;inline="org/apache/jackrabbit/util/ISO8601.*"
-                        </Embed-Dependency>
                     </instructions>
                 </configuration>
             </plugin>
@@ -156,29 +145,6 @@
                         <exclude>target/*</exclude>
                     </excludes>
                 </configuration>
-            </plugin>
-           <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.1</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <createSourcesJar>true</createSourcesJar>
-                            <shadeSourcesContent>true</shadeSourcesContent>
-                            <relocations>
-                                <relocation>
-                                    <pattern>org/apache/jackrabbit/util</pattern>
-                                    <shadedPattern>org.apache.sling.api.impl.jackrabbit</shadedPattern>
-                                </relocation>
-                            </relocations>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
