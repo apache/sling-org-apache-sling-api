@@ -61,7 +61,7 @@ public class ValueMapDecorator implements ValueMap {
         if (type.isAssignableFrom(value.getClass())) {
             return (T)value;
         }
-        return ObjectConverter.convert(get(name), type);
+        return ObjectConverter.convert(value, type);
     }
 
     /**
