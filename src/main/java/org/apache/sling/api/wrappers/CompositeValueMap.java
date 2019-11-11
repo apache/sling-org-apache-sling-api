@@ -93,7 +93,7 @@ public class CompositeValueMap implements ValueMap {
     public <T> T get(@NotNull String name, @NotNull Class<T> type) {
         Object value = get(name);
         if (value == null) {
-            return (T)null;
+            return null;
         }
         if (type.isAssignableFrom(value.getClass())) {
             return (T)value;
@@ -106,10 +106,13 @@ public class CompositeValueMap implements ValueMap {
      */
     @SuppressWarnings("unchecked")
     @NotNull
-    public <T> T get(@NotNull String name, T defaultValue) {
+    public <T> T get(@NotNull String name, @NotNull T defaultValue) {
+        if (defaultValue == null) {
+            return (T) get(name);
+        }
         T value = (T)get(name, defaultValue.getClass());
         if (value == null) {
-            return (T)defaultValue;
+            return defaultValue;
         }
         return value;
     }

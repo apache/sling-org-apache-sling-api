@@ -21,6 +21,7 @@ package org.apache.sling.api.wrappers;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A value map wrapper which implements deep reading of properties
@@ -69,15 +70,16 @@ public class DeepReadValueMapDecorator extends ValueMapDecorator {
      * @see org.apache.sling.api.resource.ValueMap#get(java.lang.String, java.lang.Class)
      */
     @Override
-    public <T> T get(final String name, final Class<T> type) {
+    public <T> T get(@NotNull final String name, @NotNull final Class<T> type) {
         return this.getValueMap(name).get(this.getPropertyName(name), type);
     }
 
     /**
      * @see org.apache.sling.api.resource.ValueMap#get(java.lang.String, java.lang.Object)
      */
+    @NotNull
     @Override
-    public <T> T get(final String name, T defaultValue) {
+    public <T> T get(@NotNull final String name, @NotNull T defaultValue) {
         return this.getValueMap(name).get(this.getPropertyName(name), defaultValue);
     }
 

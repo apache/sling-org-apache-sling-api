@@ -49,8 +49,8 @@ public interface ValueMap extends Map<String, Object> {
     /**
      * Empty immutable value map.
      */
-    final ValueMap EMPTY = new ValueMapDecorator(
-        Collections.<String, Object> emptyMap());
+    ValueMap EMPTY = new ValueMapDecorator(
+        Collections.emptyMap());
 
     /**
      * Get a named property and convert it into the given type.
@@ -69,7 +69,7 @@ public interface ValueMap extends Map<String, Object> {
     default <T> T get(@NotNull String name, @NotNull Class<T> type) {
         Object value = get(name);
         if (value == null) {
-            return (T)null;
+            return null;
         }
         if (type.isAssignableFrom(value.getClass())) {
             return (T)value;
@@ -100,9 +100,12 @@ public interface ValueMap extends Map<String, Object> {
     @SuppressWarnings("unchecked")
     @NotNull
     default <T> T get(@NotNull String name, @NotNull T defaultValue) {
+        if (defaultValue == null) {
+            return (T) get(name);
+        }
         T value = (T)get(name, defaultValue.getClass());
         if (value == null) {
-            return (T)defaultValue;
+            return defaultValue;
         }
         return value;
     }

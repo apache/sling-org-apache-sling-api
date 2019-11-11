@@ -24,6 +24,7 @@ import java.util.Set;
 
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.wrappers.impl.ObjectConverter;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * <code>ValueMapDecorator</code> decorates another {@link Map}
@@ -48,10 +49,17 @@ public class ValueMapDecorator implements ValueMap {
     /**
      * {@inheritDoc}
      */
-    public <T> T get(String name, Class<T> type) {
+    public <T> T get(@NotNull String name, @NotNull Class<T> type) {
         if (base instanceof ValueMap) {
             // shortcut if decorated map is ValueMap
             return ((ValueMap)base).get(name, type);
+        }
+        Object value = get(name);
+        if (value == null) {
+            return null;
+        }
+        if (type.isAssignableFrom(value.getClass())) {
+            return (T)value;
         }
         return ObjectConverter.convert(get(name), type);
     }
@@ -59,15 +67,19 @@ public class ValueMapDecorator implements ValueMap {
     /**
      * {@inheritDoc}
      */
+    @NotNull
     @SuppressWarnings("unchecked")
-    public <T> T get(String name, T defaultValue) {
+    public <T> T get(@NotNull String name, @NotNull T defaultValue) {
         if (base instanceof ValueMap) {
             // shortcut if decorated map is ValueMap
             return ((ValueMap)base).get(name, defaultValue);
         }
-        T value = (T)get(name, defaultValue.getClass());
+        if (defaultValue == null) {
+            return (T) get(name);
+        }
+        T value = (T) get(name, defaultValue.getClass());
         if (value == null) {
-            return (T)defaultValue;
+            return defaultValue;
         }
         return value;
     }
