@@ -43,7 +43,7 @@ public class LazyBindingsTest {
     private Set<String> usedSuppliers;
     private LazyBindings lazyBindings;
 
-    private final Supplier<?> supplier = new Supplier() {
+    private final LazyBindings.Supplier supplier = new LazyBindings.Supplier() {
         @Override
         public Object get() {
             usedSuppliers.add(THE_QUESTION);
@@ -54,7 +54,7 @@ public class LazyBindingsTest {
     @Before
     public void setUp() {
         usedSuppliers = new HashSet<>();
-        final Map<String, Supplier<?>> supplierMap = new HashMap<>();
+        final Map<String, LazyBindings.Supplier> supplierMap = new HashMap<>();
         supplierMap.put(THE_QUESTION, supplier);
         lazyBindings = new LazyBindings(supplierMap);
     }
@@ -90,7 +90,7 @@ public class LazyBindingsTest {
         assertNull(supplierProvidedValueReplacement);
         assertEquals(43, lazyBindings.get(THE_QUESTION));
 
-        lazyBindings.put("putSupplier", (Supplier) () -> {
+        lazyBindings.put("putSupplier", (LazyBindings.Supplier) () -> {
             usedSuppliers.add("putSupplier");
             return "putSupplierValue";
         });
@@ -103,14 +103,14 @@ public class LazyBindingsTest {
     @Test
     public void testPutAll() {
         Map<String, Object> toMerge = new HashMap<>();
-        toMerge.put(THE_QUESTION, (Supplier) () -> {
+        toMerge.put(THE_QUESTION, (LazyBindings.Supplier) () -> {
             usedSuppliers.add(THE_QUESTION);
             return THE_ANSWER;
         });
         toMerge.put("b", 1);
         toMerge.put("c", 2);
         lazyBindings.put("a", 0);
-        lazyBindings.put("putSupplier", (Supplier) () -> {
+        lazyBindings.put("putSupplier", (LazyBindings.Supplier) () -> {
             usedSuppliers.add("putSupplier");
             return "putSupplierValue";
         });
@@ -190,4 +190,17 @@ public class LazyBindingsTest {
         assertTrue(usedSuppliers.contains(THE_QUESTION));
         assertEquals(1, lazyBindings.getOrDefault("b", 1));
     }
+
+    @Test
+    public void testThatNormalSuppliersAreNotUnwrapped() {
+        final String supplierName = "regularSupplier";
+        Supplier<Object> regularSupplier = () -> {
+            usedSuppliers.add(supplierName);
+            return 0;
+        };
+        lazyBindings.put(supplierName, regularSupplier);
+        assertEquals(regularSupplier, lazyBindings.get(supplierName));
+        assertFalse(usedSuppliers.contains(supplierName));
+    }
+
 }

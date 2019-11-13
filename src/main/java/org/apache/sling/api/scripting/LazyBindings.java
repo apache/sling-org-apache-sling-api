@@ -24,45 +24,48 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Supplier;
 
 import javax.script.Bindings;
 
 import org.jetbrains.annotations.NotNull;
+import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * <p>
- * The {@code LazyBindings} wraps another map and dynamically provides entries for the wrapped map through a map of {@link Supplier}s.
+ * The {@code LazyBindings} wraps another map and dynamically provides entries for the wrapped map through a map of {@link
+ * LazyBindings.Supplier}s.
  * </p>
  * <p>
- * When {@link #get(Object)} is called with a {@code key} that's not present in the wrapped map, then the {@link Supplier}s map will be
- * queried and, if an entry exists for that key, the {@link Supplier}-generated value will be used to populate the wrapped map.
+ * When {@link #get(Object)} is called with a {@code key} that's not present in the wrapped map, then the {@link LazyBindings.Supplier}s map
+ * will be queried and, if an entry exists for that key, the {@link LazyBindings.Supplier}-generated value will be used to populate the
+ * wrapped map.
  * </p>
  * <p>
- * While the {@link #keySet()} and {@link #containsKey(Object)} will also check the keys present in the {@link Supplier}s map, all other
- * methods (e.g. {@link #values()}, {@link #containsValue(Object)}) will only deal with the contents of the wrapped map.
- * <p>{@link #entrySet()} will however return a merged view of both the {@link Supplier}s and the wrapped map, so that copies to other
- * {@code LazyBindings} maps work
- * </p>
+ * While the {@link #keySet()} and {@link #containsKey(Object)} will also check the keys present in the {@link LazyBindings.Supplier}s map,
+ * all other methods (e.g. {@link #values()}, {@link #containsValue(Object)}) will only deal with the contents of the wrapped map.
+ * <p>
+ * {@link #entrySet()} will however return a merged view of both the {@link LazyBindings.Supplier}s and the wrapped map, so that copies to
+ * other {@code LazyBindings} maps preserve the functionality of having lazily-evaluated bindings.</p>
  * <p>
  * This class <b>does not provide any thread-safety guarantees</b>. If {@code this} {@code Bindings} map needs to be used in a concurrent
  * setup it's the responsibility of the caller to synchronize access. The simplest way would be to wrap it through {@link
  * Collections#synchronizedMap(Map)}.
  * </p>
  */
+@ConsumerType
 public class LazyBindings extends HashMap<String, Object> implements Bindings {
 
-    private final Map<String, Supplier<?>> suppliers;
+    private final Map<String, LazyBindings.Supplier> suppliers;
 
     public LazyBindings() {
         this(new HashMap<>(), Collections.emptyMap());
     }
 
-    public LazyBindings(Map<String, Supplier<?>> suppliers) {
+    public LazyBindings(Map<String, LazyBindings.Supplier> suppliers) {
         this(suppliers, Collections.emptyMap());
     }
 
-    public LazyBindings(Map<String, Supplier<?>> suppliers, Map<String, Object> wrapped) {
+    public LazyBindings(Map<String, LazyBindings.Supplier> suppliers, Map<String, Object> wrapped) {
         super(wrapped);
         this.suppliers = suppliers;
     }
@@ -71,8 +74,8 @@ public class LazyBindings extends HashMap<String, Object> implements Bindings {
     @Override
     public Object put(String key, Object value) {
         Object previous = super.get(key);
-        if (value instanceof Supplier<?>) {
-            suppliers.put(key, (Supplier<?>) value);
+        if (value instanceof LazyBindings.Supplier) {
+            suppliers.put(key, (LazyBindings.Supplier) value);
         } else {
             super.put(key, value);
         }
@@ -155,7 +158,7 @@ public class LazyBindings extends HashMap<String, Object> implements Bindings {
     public Object remove(Object key) {
         Object previous = super.remove(key);
         if (previous == null) {
-            Supplier<?> supplier = suppliers.remove(key);
+            LazyBindings.Supplier supplier = suppliers.remove(key);
             if (supplier != null) {
                 return supplier.get();
             }
@@ -171,4 +174,10 @@ public class LazyBindings extends HashMap<String, Object> implements Bindings {
         }
         return result;
     }
+    /**
+     * This marker interface should be used for suppliers which should be unwrapped when used as values stored in a {@link LazyBindings} map.
+     */
+    @ConsumerType
+    @FunctionalInterface
+    interface Supplier extends java.util.function.Supplier {}
 }
