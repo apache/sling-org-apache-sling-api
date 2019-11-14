@@ -53,7 +53,9 @@ public final class ObjectConverter {
                 .rule(new TypeRule<ZonedDateTime, Calendar>(ZonedDateTime.class, Calendar.class, ObjectConverter::toCalendar))
                 .rule(new TypeRule<ZonedDateTime, String>(ZonedDateTime.class, String.class, ObjectConverter::toString))
                 .build();
-}
+    }
+
+    private ObjectConverter() {}
 
     private static String toString(ZonedDateTime zonedDateTime) {
         return DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(zonedDateTime);
