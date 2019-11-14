@@ -20,14 +20,12 @@ package org.apache.sling.api.scripting;
 
 import java.io.PrintWriter;
 import java.io.Reader;
-import java.util.HashMap;
-
-import org.jetbrains.annotations.Nullable;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 /**
@@ -36,7 +34,7 @@ import org.slf4j.Logger;
  * which <em>MUST</em> or <em>MAY</em> be provided for the script execution.
  * Other variables may be define as callers see fit.
  */
-public class SlingBindings extends HashMap<String, Object> {
+public class SlingBindings extends LazyBindings {
 
     private static final long serialVersionUID = 209505693646323450L;
 
