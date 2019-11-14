@@ -179,5 +179,5 @@ public class LazyBindings extends HashMap<String, Object> implements Bindings {
      */
     @ConsumerType
     @FunctionalInterface
-    interface Supplier extends java.util.function.Supplier {}
+    public interface Supplier extends java.util.function.Supplier {}
 }
