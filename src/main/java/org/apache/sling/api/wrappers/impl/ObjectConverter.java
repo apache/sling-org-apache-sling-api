@@ -35,24 +35,26 @@ import org.osgi.util.converter.TypeRule;
  */
 public final class ObjectConverter {
 
-    private static final Converter CONVERTER;
+    private static class ConverterHolder {
+        private static final Converter CONVERTER;
 
-    static {
-        CONVERTER = Converters.newConverterBuilder()
-                .rule(new TypeRule<String, Calendar>(String.class, Calendar.class,
-                        ObjectConverter::toCalendar))
-                .rule(new TypeRule<Date, Calendar>(Date.class, Calendar.class,
-                        ObjectConverter::toCalendar))
-                .rule(new TypeRule<String, Date>(String.class, Date.class, ObjectConverter::toDate))
-                .rule(new TypeRule<Calendar, String>(Calendar.class, String.class,
-                        ObjectConverter::toString))
-                .rule(new TypeRule<Date, String>(Date.class, String.class, ObjectConverter::toString))
-                .rule(new TypeRule<Calendar, Date>(Calendar.class, Date.class,
-                        ObjectConverter::toDate))
-                .rule(new TypeRule<>(Calendar.class, ZonedDateTime.class, ObjectConverter::toZonedDateTime))
-                .rule(new TypeRule<ZonedDateTime, Calendar>(ZonedDateTime.class, Calendar.class, ObjectConverter::toCalendar))
-                .rule(new TypeRule<ZonedDateTime, String>(ZonedDateTime.class, String.class, ObjectConverter::toString))
-                .build();
+        static {
+            CONVERTER = Converters.newConverterBuilder()
+                    .rule(new TypeRule<String, Calendar>(String.class, Calendar.class,
+                            ObjectConverter::toCalendar))
+                    .rule(new TypeRule<Date, Calendar>(Date.class, Calendar.class,
+                            ObjectConverter::toCalendar))
+                    .rule(new TypeRule<String, Date>(String.class, Date.class, ObjectConverter::toDate))
+                    .rule(new TypeRule<Calendar, String>(Calendar.class, String.class,
+                            ObjectConverter::toString))
+                    .rule(new TypeRule<Date, String>(Date.class, String.class, ObjectConverter::toString))
+                    .rule(new TypeRule<Calendar, Date>(Calendar.class, Date.class,
+                            ObjectConverter::toDate))
+                    .rule(new TypeRule<>(Calendar.class, ZonedDateTime.class, ObjectConverter::toZonedDateTime))
+                    .rule(new TypeRule<ZonedDateTime, Calendar>(ZonedDateTime.class, Calendar.class, ObjectConverter::toCalendar))
+                    .rule(new TypeRule<ZonedDateTime, String>(ZonedDateTime.class, String.class, ObjectConverter::toString))
+                    .build();
+        }
     }
 
     private ObjectConverter() {}
@@ -114,7 +116,7 @@ public final class ObjectConverter {
             return null;
         }
         try {
-            return CONVERTER.convert(obj).to(type);
+            return ConverterHolder.CONVERTER.convert(obj).to(type);
         } catch (ConversionException ce) {
             return null;
         }
