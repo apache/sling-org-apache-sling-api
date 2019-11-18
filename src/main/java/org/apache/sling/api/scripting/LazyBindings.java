@@ -139,11 +139,6 @@ public class LazyBindings extends HashMap<String, Object> implements Bindings {
     }
 
     @Override
-    public boolean containsValue(Object value) {
-        return super.containsValue(value);
-    }
-
-    @Override
     public Object get(Object key) {
         String k = key.toString();
         if (!super.containsKey(k) && suppliers.containsKey(k)) {
@@ -164,6 +159,23 @@ public class LazyBindings extends HashMap<String, Object> implements Bindings {
             }
         }
         return previous;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o instanceof LazyBindings && super.equals(o)) {
+            LazyBindings other = (LazyBindings) o;
+            return suppliers.equals(other.suppliers);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode() + suppliers.hashCode();
     }
 
     @Override
