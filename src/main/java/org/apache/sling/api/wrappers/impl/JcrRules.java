@@ -31,7 +31,7 @@ import org.osgi.util.converter.TypeRule;
 
 public final class JcrRules {
 
-    private JcrRules(){};
+    private JcrRules(){}
 
     static void addJcrRules(ConverterBuilder converterBuilder) {
         converterBuilder.rule(new TypeRule<Value, String>(Value.class, String.class, value -> {
