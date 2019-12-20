@@ -1,0 +1,2 @@
+Import-Package: javax.jcr;resolution:=optional;version="[2.0,3)", \\
+                *
