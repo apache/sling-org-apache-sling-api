@@ -50,7 +50,7 @@ public class SlingScriptConstants {
      * {@link #PROPERTY_SCRIPT_ENGINE_FACTORY_EXTENSIONS},
      * {@link #PROPERTY_SCRIPT_ENGINE_FACTORY_LANGUAGE_NAME},
      * {@link #PROPERTY_SCRIPT_ENGINE_FACTORY_LANGUAGE_VERSION},
-     * and {@link #PROPERTY_SCRIPT_ENGINE_FACTORY_MIME_TYPES} poperties.
+     * and {@link #PROPERTY_SCRIPT_ENGINE_FACTORY_MIME_TYPES} properties.
      * @since 2.0.6 (Sling API Bundle 2.0.6)
      */
     public static final String TOPIC_SCRIPT_ENGINE_FACTORY_ADDED = "javax/script/ScriptEngineFactory/ADDED";
@@ -62,7 +62,7 @@ public class SlingScriptConstants {
      * {@link #PROPERTY_SCRIPT_ENGINE_FACTORY_EXTENSIONS},
      * {@link #PROPERTY_SCRIPT_ENGINE_FACTORY_LANGUAGE_NAME},
      * {@link #PROPERTY_SCRIPT_ENGINE_FACTORY_LANGUAGE_VERSION},
-     * and {@link #PROPERTY_SCRIPT_ENGINE_FACTORY_MIME_TYPES} poperties.
+     * and {@link #PROPERTY_SCRIPT_ENGINE_FACTORY_MIME_TYPES} properties.
      * @since 2.0.6 (Sling API Bundle 2.0.6)
      */
     public static final String TOPIC_SCRIPT_ENGINE_FACTORY_REMOVED = "javax/script/ScriptEngineFactory/REMOVED";
