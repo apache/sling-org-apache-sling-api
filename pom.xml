@@ -76,6 +76,15 @@
             <version>16.0.2</version>
             <scope>compile</scope>
         </dependency>
+
+        <!-- This will be an optional import, needed for applying conversion rules in the ObjectConverter -->
+        <dependency>
+            <groupId>javax.jcr</groupId>
+            <artifactId>jcr</artifactId>
+            <version>2.0</version>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- Testing -->
         <dependency>
             <groupId>junit</groupId>

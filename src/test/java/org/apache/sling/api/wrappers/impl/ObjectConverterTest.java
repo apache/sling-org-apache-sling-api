@@ -18,16 +18,24 @@
  */
 package org.apache.sling.api.wrappers.impl;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertNull;
-
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import javax.jcr.Binary;
+import javax.jcr.Value;
+
 import org.junit.Test;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ObjectConverterTest {
     
@@ -240,5 +248,65 @@ public class ObjectConverterTest {
         assertArrayEquals(new byte[0], ObjectConverter.convert(new byte[0], byte[].class));
         assertNull(ObjectConverter.convert(null, byte[].class));
     }
-    
+
+    @Test
+    public void testJcrStringValue() throws Exception {
+        Value stringValue = mock(Value.class);
+        when(stringValue.getString()).thenReturn("42");
+        when(stringValue.getLong()).thenReturn(42L);
+        when(stringValue.getDouble()).thenReturn(42.0);
+        BigDecimal bigDecimal = new BigDecimal(42);
+        when(stringValue.getDecimal()).thenReturn(bigDecimal);
+        assertEquals("42", ObjectConverter.convert(stringValue, String.class));
+        assertEquals(42L, (long) ObjectConverter.convert(stringValue, Long.class));
+        assertEquals(42.0, ObjectConverter.convert(stringValue, Double.class), 0);
+        assertEquals(bigDecimal, ObjectConverter.convert(stringValue, BigDecimal.class));
+    }
+
+    @Test
+    public void testJcrStreamValue() throws Exception {
+        Value streamValue = mock(Value.class);
+        InputStream stream = mock(InputStream.class);
+        when(streamValue.getStream()).thenReturn(stream);
+        assertEquals(stream, ObjectConverter.convert(streamValue, InputStream.class));
+    }
+
+    @Test
+    public void testJcrBinaryValue() throws Exception {
+        Value binaryValue = mock(Value.class);
+        Binary binary = mock(Binary.class);
+        when(binaryValue.getBinary()).thenReturn(binary);
+        assertEquals(binary, ObjectConverter.convert(binaryValue, Binary.class));
+    }
+
+    @Test
+    public void testJcrNumericValue() throws Exception {
+        Value numericValue = mock(Value.class);
+        when(numericValue.getLong()).thenReturn(42L);
+        when(numericValue.getString()).thenReturn("42");
+        when(numericValue.getDouble()).thenReturn(42.0);
+        BigDecimal bigDecimal = new BigDecimal(42);
+        when(numericValue.getDecimal()).thenReturn(bigDecimal);
+        assertEquals(42L, (long) ObjectConverter.convert(numericValue, Long.class));
+        assertEquals("42", ObjectConverter.convert(numericValue, String.class));
+        assertEquals(42.0, ObjectConverter.convert(numericValue, Double.class), 0);
+        assertEquals(bigDecimal, ObjectConverter.convert(numericValue, BigDecimal.class));
+    }
+
+    @Test
+    public void testJcrDateValue() throws Exception {
+        Value dateValue = mock(Value.class);
+        Calendar calendar = Calendar.getInstance();
+        when(dateValue.getDate()).thenReturn(calendar);
+        assertEquals(calendar, ObjectConverter.convert(dateValue, Calendar.class));
+    }
+
+    @Test
+    public void testBooleanValue() throws Exception {
+        Value value = mock(Value.class);
+        when(value.getBoolean()).thenReturn(true);
+        when(value.getString()).thenReturn("true");
+        assertTrue(ObjectConverter.convert(value, Boolean.class));
+        assertEquals("true", ObjectConverter.convert(value, String.class));
+    }
 }

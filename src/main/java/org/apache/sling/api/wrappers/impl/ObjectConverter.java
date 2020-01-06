@@ -27,6 +27,7 @@ import java.util.TimeZone;
 
 import org.osgi.util.converter.ConversionException;
 import org.osgi.util.converter.Converter;
+import org.osgi.util.converter.ConverterBuilder;
 import org.osgi.util.converter.Converters;
 import org.osgi.util.converter.TypeRule;
 
@@ -39,7 +40,7 @@ public final class ObjectConverter {
         private static final Converter CONVERTER;
 
         static {
-            CONVERTER = Converters.newConverterBuilder()
+            ConverterBuilder converterBuilder = Converters.newConverterBuilder()
                     .rule(new TypeRule<String, Calendar>(String.class, Calendar.class,
                             ObjectConverter::toCalendar))
                     .rule(new TypeRule<Date, Calendar>(Date.class, Calendar.class,
@@ -52,8 +53,13 @@ public final class ObjectConverter {
                             ObjectConverter::toDate))
                     .rule(new TypeRule<>(Calendar.class, ZonedDateTime.class, ObjectConverter::toZonedDateTime))
                     .rule(new TypeRule<ZonedDateTime, Calendar>(ZonedDateTime.class, Calendar.class, ObjectConverter::toCalendar))
-                    .rule(new TypeRule<ZonedDateTime, String>(ZonedDateTime.class, String.class, ObjectConverter::toString))
-                    .build();
+                    .rule(new TypeRule<ZonedDateTime, String>(ZonedDateTime.class, String.class, ObjectConverter::toString));
+            try {
+                JcrRules.addJcrRules(converterBuilder);
+            } catch (NoClassDefFoundError e) {
+                // do nothing if the JCR API is not present
+            }
+            CONVERTER = converterBuilder.build();
         }
     }
 
