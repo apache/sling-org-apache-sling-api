@@ -68,6 +68,18 @@ public class SlingScriptConstants {
     public static final String TOPIC_SCRIPT_ENGINE_FACTORY_REMOVED = "javax/script/ScriptEngineFactory/REMOVED";
 
     /**
+     * The topic for the OSGi event which is sent when a script engine factory has been updated.
+     * The event contains at least the {@link #PROPERTY_SCRIPT_ENGINE_FACTORY_NAME},
+     * {@link #PROPERTY_SCRIPT_ENGINE_FACTORY_VERSION},
+     * {@link #PROPERTY_SCRIPT_ENGINE_FACTORY_EXTENSIONS},
+     * {@link #PROPERTY_SCRIPT_ENGINE_FACTORY_LANGUAGE_NAME},
+     * {@link #PROPERTY_SCRIPT_ENGINE_FACTORY_LANGUAGE_VERSION},
+     * and {@link #PROPERTY_SCRIPT_ENGINE_FACTORY_MIME_TYPES} properties.
+     * @since 2.5.0 (Sling API Bundle 2.22.0)
+     */
+    public static final String TOPIC_SCRIPT_ENGINE_FACTORY_UPDATED = "javax/script/ScriptEngineFactory/UPDATED";
+
+    /**
      * The event property listing the script engine factory name. The value is a string.
      * @since 2.0.6 (Sling API Bundle 2.0.6)
      */
