@@ -153,7 +153,7 @@ public interface Resource extends Adaptable {
      * existing, this method returns {@link #RESOURCE_TYPE_NON_EXISTING}.
      * @return The resource type
      */
-    @NotNull String getResourceType();
+    @Nullable String getResourceType();
 
     /**
      * Returns the super type of the resource if the resource defines its
