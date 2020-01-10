@@ -57,7 +57,7 @@ public class ResourceWrapper implements Resource {
      * {@link #getResource() wrapped resource}.
      */
     @Override
-    public String getPath() {
+    public @NotNull String getPath() {
         return getResource().getPath();
     }
 
@@ -68,7 +68,7 @@ public class ResourceWrapper implements Resource {
      * @since 2.1.0 (Sling API Bundle 2.1.0)
      */
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return getResource().getName();
     }
 
@@ -90,7 +90,7 @@ public class ResourceWrapper implements Resource {
      * @since 2.1.0 (Sling API Bundle 2.1.0)
      */
     @Override
-    public Resource getChild(String relPath) {
+    public Resource getChild(@NotNull String relPath) {
         return getResource().getChild(relPath);
     }
 
@@ -101,7 +101,7 @@ public class ResourceWrapper implements Resource {
      * @since 2.1.0 (Sling API Bundle 2.1.0)
      */
     @Override
-    public Iterator<Resource> listChildren() {
+    public @NotNull Iterator<Resource> listChildren() {
         return getResource().listChildren();
     }
 
@@ -109,7 +109,7 @@ public class ResourceWrapper implements Resource {
      * @see org.apache.sling.api.resource.Resource#getChildren()
      */
     @Override
-    public Iterable<Resource> getChildren() {
+    public @NotNull Iterable<Resource> getChildren() {
         return getResource().getChildren();
     }
 
@@ -118,7 +118,7 @@ public class ResourceWrapper implements Resource {
      * {@link #getResource() wrapped resource}.
      */
     @Override
-    public ResourceMetadata getResourceMetadata() {
+    public @NotNull ResourceMetadata getResourceMetadata() {
         return getResource().getResourceMetadata();
     }
 
@@ -127,7 +127,7 @@ public class ResourceWrapper implements Resource {
      * {@link #getResource() wrapped resource}.
      */
     @Override
-    public ResourceResolver getResourceResolver() {
+    public @NotNull ResourceResolver getResourceResolver() {
         return getResource().getResourceResolver();
     }
 
@@ -136,7 +136,7 @@ public class ResourceWrapper implements Resource {
      * {@link #getResource() wrapped resource}.
      */
     @Override
-    public String getResourceType() {
+    public @NotNull String getResourceType() {
         return getResource().getResourceType();
     }
 
@@ -176,7 +176,8 @@ public class ResourceWrapper implements Resource {
      * {@link #getResource() wrapped resource}.
      */
     @Override
-    public <AdapterType> AdapterType adaptTo(Class<AdapterType> type) {
+    @SuppressWarnings("null")
+    public <AdapterType> AdapterType adaptTo(@NotNull Class<AdapterType> type) {
         return getResource().adaptTo(type);
     }
 
@@ -184,7 +185,7 @@ public class ResourceWrapper implements Resource {
      * @see org.apache.sling.api.resource.Resource#getValueMap()
      */
     @Override
-    public ValueMap getValueMap() {
+    public @NotNull ValueMap getValueMap() {
         return getResource().getValueMap();
     }
 

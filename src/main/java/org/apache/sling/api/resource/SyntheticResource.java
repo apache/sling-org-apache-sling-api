@@ -46,8 +46,8 @@ public class SyntheticResource extends AbstractResource {
      * @param path The resource path
      * @param resourceType The type of the resource
      */
-    public SyntheticResource(ResourceResolver resourceResolver, String path,
-            String resourceType) {
+    public SyntheticResource(@NotNull ResourceResolver resourceResolver, @NotNull String path,
+            @NotNull String resourceType) {
         this.resourceResolver = resourceResolver;
         this.path = path;
         this.resourceType = resourceType;
@@ -62,8 +62,8 @@ public class SyntheticResource extends AbstractResource {
      * @param rm The resource meta data
      * @param resourceType The type of the resource
      */
-    public SyntheticResource(ResourceResolver resourceResolver, ResourceMetadata rm,
-    		String resourceType) {
+    public SyntheticResource(@NotNull ResourceResolver resourceResolver, @NotNull ResourceMetadata rm,
+            @NotNull String resourceType) {
         this.resourceResolver = resourceResolver;
         this.path = rm.getResolutionPath();
         this.resourceType = resourceType;
