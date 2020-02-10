@@ -44,6 +44,7 @@ public class RedirectResponse {
      * @param value the value of the header.
      */
     public void setHeader(String name, String value) {
+        throw new UnsupportedOperationException("Setting headers not supported by this implementation, please override this method to use");
     }
 
     /**
@@ -52,7 +53,7 @@ public class RedirectResponse {
      * @param url the url to set, should be set in the context of a request.
      */
     public void setRedirect(String url) {
-
+        throw new UnsupportedOperationException("Setting a redirect not supported, please override this method to use");
     }
 
     /**
@@ -61,6 +62,6 @@ public class RedirectResponse {
      * @param i status code number.
      */
     public void setStatus(int i) {
-
+        throw new UnsupportedOperationException("Setting a status not supported, please override this method to use");
     }
 }
