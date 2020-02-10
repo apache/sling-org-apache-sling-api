@@ -30,8 +30,9 @@ import javax.servlet.http.HttpServletRequest;
  * A RedirectResolver resolves a redirect in the context of a request. It resolves that redirect having first been bound
  * to a Resource. This is typically achieved through the Adapt to mechanism eg resource.adaptTo(RedirectResolver.class).
  * </p><p>
- * Implementations should implement an AdapterFactory to perform the adaption to an implementation of this class. That class
- * should implement the resolve method such that the methods of the Redirect Response are called to define the RedirectResponse.
+ * ResourceProviders should provide implementations of this interface. Alternatively where there is no suitable ResourceProvider
+ * implementations can implement an AdapterFactory to perform the adaption to an implementation of this class. That class
+ * should implement the resolve method such that the methods of the Redirect Response are called to set details the RedirectResponse.
  * </p><p>
  * The implementation of the resolve method indicates that it has successfully resolved a redirect by setting a setting a status code
  * see the documentation of the RedirectResponse class for more information.
