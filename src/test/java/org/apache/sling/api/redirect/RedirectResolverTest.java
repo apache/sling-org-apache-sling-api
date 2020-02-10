@@ -18,6 +18,7 @@
 
 package org.apache.sling.api.redirect;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -115,7 +116,7 @@ public class RedirectResolverTest {
         }
 
         @Override
-        public void resolve(HttpServletRequest request, RedirectResponse redirectResponse) {
+        public void resolve(@NotNull HttpServletRequest request, @NotNull RedirectResponse redirectResponse) {
             for (String[] header: headers) {
                 redirectResponse.setHeader(header[0], header[1]);
             }

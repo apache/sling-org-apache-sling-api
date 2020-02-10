@@ -19,7 +19,8 @@
 package org.apache.sling.api.redirect;
 
 
-import org.osgi.annotation.versioning.ProviderType;
+import org.jetbrains.annotations.NotNull;
+import org.osgi.annotation.versioning.ConsumerType;
 
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +37,7 @@ import javax.servlet.http.HttpServletRequest;
  * see the documentation of the RedirectResponse class for more information.
  * </p>
  */
-@ProviderType
+@ConsumerType
 public interface RedirectResolver {
 
     /**
@@ -51,5 +52,5 @@ public interface RedirectResolver {
      *                         If methods are added to the RedirectResponse class, they will be added in a way to ensure existing
      *                         implementations do not need to be updated to continue to work.
      */
-    void resolve(HttpServletRequest request, RedirectResponse redirectResponse);
+    void resolve(@NotNull  HttpServletRequest request, @NotNull  RedirectResponse redirectResponse);
 }
