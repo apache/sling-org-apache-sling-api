@@ -64,19 +64,31 @@ public interface RedirectResponse {
 
 
     /**
-     * Sets an annotation to a value.
-     * Typically an implementation will use annotations to communicate extra values specific to the implementation
-     * without requiring changes to the API. Updates to an annotation will overwrite previous updates to the same key.
-     * @param key the annotation key. This should be namespaced to avoid clashes eg kubernetes.io/rewrite.
-     * @param attribute the value of the attribute
+     * <p>
+     * Sets an attribute on the runtime instance of this RedirectResponse to a value.
+     * </p><p>
+     * An attribute in this context value associated with a key that extends the API without requiring the API to be changed explicitly.
+     * It allows a private contract between two independent implementations to be established quickly to deal with realities
+     * of production allowing an API evolve with a slower cadence than would otherwise be required. Notable examples of this pattern
+     * can be found in the Kubernetes community, although in the Kubernetes community they are called Annotations and have no relation
+     * to Java Annotations. Since this is Java, the term annotation is replaced by attribute.
+     * </p><p>
+     *
+     * These attributes should follow a similar pattern. Used to avoid constantly inflicting API change on everyone, but
+     * with an intention to inform eventual API change.
+     * </p><p>
+     * Typically an implementation will use attributes to communicate extra values specific to the implementation
+     * without requiring changes to the API. Updates to an attribute key value will overwrite previous updates to the same key.
+     * @param key the attribute key. This should be namespaced to avoid clashes eg kubernetes.io/rewrite.
+     * @param value the value of the attribute
      */
-    void setAnnotation(@NotNull  String key, @NotNull  Object attribute);
+    void setAttribute(@NotNull  String key, @NotNull  Object value);
 
 
     /**
-     * Gets the annotation value associated with a key.
-     * @param key the key of the annotation to get, as per the key in setAnnotation.
-     * @return the value of the annotation or null if no annotation value is available for that key.
+     * Gets the attribute value associated with a key.
+     * @param key the key of the attribute to get, as per the key in setAttribute.
+     * @return the value of the attribute or null if no attribute value is available for that key.
      */
-    @Nullable Object getAnnotation(@NotNull String key);
+    @Nullable Object getAttribute(@NotNull String key);
 }

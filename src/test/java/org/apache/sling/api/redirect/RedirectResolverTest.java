@@ -58,7 +58,7 @@ public class RedirectResolverTest {
         /**
          *
          */
-        private Map<String, Object> annotations = new HashMap<String, Object>();
+        private Map<String, Object> attribute = new HashMap<String, Object>();
 
 
         /**
@@ -95,13 +95,13 @@ public class RedirectResolverTest {
         }
 
         @Override
-        public void setAnnotation(@NotNull String key, @NotNull Object value) {
-            annotations.put(key, value);
+        public void setAttribute(@NotNull String key, @NotNull Object value) {
+            attribute.put(key, value);
         }
 
         @Override
-        public @Nullable Object getAnnotation(@NotNull String key) {
-            return annotations.get(key);
+        public @Nullable Object getAttribute(@NotNull String key) {
+            return attribute.get(key);
         }
 
         @Override
