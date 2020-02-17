@@ -17,6 +17,9 @@
 
 package org.apache.sling.api.redirect;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * <p>
  * A Redirect redirect defines the base class used to hold information to build a redirect.  It is extended
@@ -30,12 +33,8 @@ package org.apache.sling.api.redirect;
  * have to be updated.
  * </p>
  */
-public class RedirectResponse {
+public interface RedirectResponse {
 
-    /**
-     * Value to be used in setStatus to indicate no redirect available for context of the resolution.
-     */
-    public static final int NO_REDIRECT = -1;
     /**
      * Set a header on the redirect. This will replace existing headers of the same name.
      * If called twice, the header will be reset with the latest value.
@@ -43,25 +42,41 @@ public class RedirectResponse {
      * @param name the name of the header.
      * @param value the value of the header.
      */
-    public void setHeader(String name, String value) {
-        throw new UnsupportedOperationException("Setting headers not supported by this implementation, please override this method to use");
-    }
+    void setHeader(@NotNull  String name, @NotNull  String value);
 
     /**
      * Set the redirect to be used. Will not be sent until the RedirectResponse is returned from the
      * RedirectResolver.resolver and processed.
      * @param url the url to set, should be set in the context of a request.
      */
-    public void setRedirect(String url) {
-        throw new UnsupportedOperationException("Setting a redirect not supported, please override this method to use");
-    }
+    void setRedirect(@NotNull  String url);
 
     /**
      * Set the status code used in the redirect redirect. Typically 301, but other status codes may be used.
-     * If the status code is not set, or is set to NO_REDIRECT then the redirect will not be acted on.
      * @param i status code number.
      */
-    public void setStatus(int i) {
-        throw new UnsupportedOperationException("Setting a status not supported, please override this method to use");
-    }
+    void setStatus(int i);
+
+    /**
+     * @return true if the instance has resolved after calling RedirectREesolver
+     */
+    boolean hasResolved();
+
+
+    /**
+     * Sets an annotation to a value.
+     * Typically an implementation will use annotations to communicate extra values specific to the implementation
+     * without requiring changes to the API. Updates to an annotation will overwrite previous updates to the same key.
+     * @param key the annotation key. This should be namespaced to avoid clashes eg kubernetes.io/rewrite.
+     * @param attribute the value of the attribute
+     */
+    void setAnnotation(@NotNull  String key, @NotNull  Object attribute);
+
+
+    /**
+     * Gets the annotation value associated with a key.
+     * @param key the key of the annotation to get, as per the key in setAnnotation.
+     * @return the value of the annotation or null if no annotation value is available for that key.
+     */
+    @Nullable Object getAnnotation(@NotNull String key);
 }

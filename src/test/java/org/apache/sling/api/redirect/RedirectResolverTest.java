@@ -19,6 +19,7 @@
 package org.apache.sling.api.redirect;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -27,6 +28,8 @@ import org.mockito.MockitoAnnotations;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 public class RedirectResolverTest {
 
@@ -38,7 +41,7 @@ public class RedirectResolverTest {
     /**
      * Typical usage pattern extend the redirect response in order to use it.
      */
-    public class RedirectResponseForTests extends RedirectResponse {
+    public class RedirectResponseForTests implements RedirectResponse {
         /**
          * Status code for the redirect
          */
@@ -54,11 +57,9 @@ public class RedirectResolverTest {
 
         /**
          *
-         * @return true if after being passed to RedirectResolver.resolve, the resource was resolved to a redirect.
          */
-        public boolean hasResolved() {
-            return redirect != null;
-        }
+        private Map<String, Object> annotations = new HashMap<String, Object>();
+
 
         /**
          * Headers to be added to the redirect
@@ -82,6 +83,25 @@ public class RedirectResolverTest {
          */
         public int getStatus() {
             return this.status;
+        }
+
+        /**
+         *
+         * @return true if after being passed to RedirectResolver.resolve, the resource was resolved to a redirect.
+         */
+        @Override
+        public boolean hasResolved() {
+            return redirect != null;
+        }
+
+        @Override
+        public void setAnnotation(@NotNull String key, @NotNull Object value) {
+            annotations.put(key, value);
+        }
+
+        @Override
+        public @Nullable Object getAnnotation(@NotNull String key) {
+            return annotations.get(key);
         }
 
         @Override
@@ -152,7 +172,7 @@ public class RedirectResolverTest {
         // this would have been adpated, typically from a resource, not create new.
         List<String[]> headers = new ArrayList<>();
         headers.add(new String[] { "x-test", "header"});
-        RedirectResolver redirectResolver = new RedirectResolverForTesting(null, headers, RedirectResponse.NO_REDIRECT);
+        RedirectResolver redirectResolver = new RedirectResolverForTesting(null, headers, -1);
 
         // test behaviour. This is rather pointless as the behaviour is defined in the test, but
         // it does ensure that the base class and API are as expected.
