@@ -20,7 +20,7 @@ package org.apache.sling.api.redirect;
 
 
 import org.jetbrains.annotations.NotNull;
-import org.osgi.annotation.versioning.ConsumerType;
+import org.osgi.annotation.versioning.ProviderType;
 
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,7 +38,7 @@ import javax.servlet.http.HttpServletRequest;
  * see the documentation of the RedirectResponse class for more information.
  * </p>
  */
-@ConsumerType
+@ProviderType
 public interface RedirectResolver {
 
     /**
@@ -47,7 +47,9 @@ public interface RedirectResolver {
      * @param request the context of the resolution given by a request. This is required and must not be null. It will indicate
      *                where the request came from, including the exposed edge Host and other http request headers. Typically
      *                and implementation will use these to determine aspects of the redirect redirect. For instance, requests through
-     *                a CDN may redirect differently from request made direct from a service running behind the CDN.
+     *                a CDN may redirect differently from request made direct from a service running behind the CDN. Where
+     *                the RedirectResponse does not have support for passing out of band values the request attributes should be used.
+     *                This applies to both the caller and the implementation of this method.
      * @param redirectResponse the redirect redirect class. This is implemented by the caller and will contain the methods
      *                         defined in the base class at the time the implementation of the RedirectResolver was written.
      *                         If methods are added to the RedirectResponse class, they will be added in a way to ensure existing

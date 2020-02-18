@@ -55,10 +55,6 @@ public class RedirectResolverTest {
          */
         private List<String[]> headers = new ArrayList<String[]>();
 
-        /**
-         *
-         */
-        private Map<String, Object> attribute = new HashMap<String, Object>();
 
 
         /**
@@ -94,15 +90,6 @@ public class RedirectResolverTest {
             return redirect != null;
         }
 
-        @Override
-        public void setAttribute(@NotNull String key, @NotNull Object value) {
-            attribute.put(key, value);
-        }
-
-        @Override
-        public @Nullable Object getAttribute(@NotNull String key) {
-            return attribute.get(key);
-        }
 
         @Override
         public void setStatus(int status) {

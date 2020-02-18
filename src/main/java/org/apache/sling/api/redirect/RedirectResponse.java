@@ -18,21 +18,21 @@
 package org.apache.sling.api.redirect;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * <p>
- * A Redirect redirect defines the base class used to hold information to build a redirect.  It is extended
+ * A Redirect redirect defines the interface used to hold information to build a redirect.  It is implemented
  * by the caller to RedirectResolver.resolve, and called by the implementation of the RedirectResolver interface.
  * On return from that call the caller will use the information in the RedirectResponse to perform whatever operation
  * it needs to perform. Typically this will be returning a http redirect, but there may be other uses.
  * </p><p>
- * A class is being used rather than an interface to allow empty setter methods to be added over time.
- * Callers to RedirectResolver.resolve should override those methods that they need information for. New methods to this
- * class should be added with empty implementations to ensure that pre-exiting classes extending this method to not
- * have to be updated.
+ * If the implementation finds that it needs to pass values that the interface does not support, it should set
+ * attributes in the request object passed into resolve operation. If the implementation of the RedirectResolver needs to
+ * pass values that the interface does not support, it should also use the request object attributes.
  * </p>
  */
+@ProviderType
 public interface RedirectResponse {
 
     /**
@@ -58,37 +58,9 @@ public interface RedirectResponse {
     void setStatus(int i);
 
     /**
-     * @return true if the instance has resolved after calling RedirectREesolver
+     * @return true if the instance has resolved after calling RedirectResolver
      */
     boolean hasResolved();
 
 
-    /**
-     * <p>
-     * Sets an attribute on the runtime instance of this RedirectResponse to a value.
-     * </p><p>
-     * An attribute in this context value associated with a key that extends the API without requiring the API to be changed explicitly.
-     * It allows a private contract between two independent implementations to be established quickly to deal with realities
-     * of production allowing an API evolve with a slower cadence than would otherwise be required. Notable examples of this pattern
-     * can be found in the Kubernetes community, although in the Kubernetes community they are called Annotations and have no relation
-     * to Java Annotations. Since this is Java, the term annotation is replaced by attribute.
-     * </p><p>
-     *
-     * These attributes should follow a similar pattern. Used to avoid constantly inflicting API change on everyone, but
-     * with an intention to inform eventual API change.
-     * </p><p>
-     * Typically an implementation will use attributes to communicate extra values specific to the implementation
-     * without requiring changes to the API. Updates to an attribute key value will overwrite previous updates to the same key.
-     * @param key the attribute key. This should be namespaced to avoid clashes eg kubernetes.io/rewrite.
-     * @param value the value of the attribute
-     */
-    void setAttribute(@NotNull  String key, @NotNull  Object value);
-
-
-    /**
-     * Gets the attribute value associated with a key.
-     * @param key the key of the attribute to get, as per the key in setAttribute.
-     * @return the value of the attribute or null if no attribute value is available for that key.
-     */
-    @Nullable Object getAttribute(@NotNull String key);
 }
