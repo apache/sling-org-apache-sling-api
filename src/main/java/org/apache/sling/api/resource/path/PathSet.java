@@ -33,7 +33,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.sling.api.resource.ResourceUtil;
-import org.apache.sling.api.wrappers.IteratorWrapper;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -133,13 +132,13 @@ public class PathSet implements Iterable<Path> {
         }
     }
 
-    private final Iterable<Path> paths;
+    private final Collection<Path> paths;
 
     /**
      * Create a path set from a set of paths
      * @param paths A set of paths
      */
-    private PathSet(final Iterable<Path> paths) {
+    private PathSet(final Collection<Path> paths) {
         this.paths = paths;
     }
 
@@ -220,7 +219,7 @@ public class PathSet implements Iterable<Path> {
      */
     @Override
     public Iterator<Path> iterator() {
-        return new UnmodifiableIterator<>(this.paths.iterator());
+        return Collections.unmodifiableCollection(this.paths).iterator();
     }
 
     @Override
@@ -387,7 +386,7 @@ public class PathSet implements Iterable<Path> {
                     if (patterns != null) {
                         paths = Stream.concat(patterns.stream(), paths);
                     }
-                    return new PathSet(paths::iterator);
+                    return new PathSet(paths.collect(Collectors.toList()));
                 }
             } finally {
                 patterns = null;
@@ -436,30 +435,6 @@ public class PathSet implements Iterable<Path> {
         public void setPayload(Path payload) {
             this.payload = payload;
             this.children = null;
-        }
-    }
-
-    /**
-     * An implementation of {@link IteratorWrapper} that completely denies to
-     * delete elements from it using {@link Iterator#remove()}.
-     *
-     * @param <T>
-     */
-    private static class UnmodifiableIterator<T> extends IteratorWrapper<T> {
-
-        /**
-         * Creates an {@link Iterator} that does not allow to call
-         * {@link Iterator#remove()}.
-         *
-         * @param wrappedIterator the wrapped iterator
-         */
-        public UnmodifiableIterator(Iterator<T> wrappedIterator) {
-            super(wrappedIterator);
-        }
-
-        @Override
-        public void remove() {
-            throw new UnsupportedOperationException();
         }
     }
 }
