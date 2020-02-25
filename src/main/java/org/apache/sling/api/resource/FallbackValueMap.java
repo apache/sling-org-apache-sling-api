@@ -83,7 +83,6 @@ public class FallbackValueMap implements ValueMap {
         return getFromCache(s, requiredClass);
     }
 
-    @NotNull
     @Override
     public <T> T get(@NotNull String s, T defaultValue) {
         T value;
@@ -116,7 +115,7 @@ public class FallbackValueMap implements ValueMap {
         T v = (T)cache.get(s, clazz);
         if (v == null && !accessed.contains(s)) {
             for (Resource resource : resources) {
-                v = resource.getValueMap().get(s, type);
+                v = resource.getValueMap().get(s, (Class<T>)clazz);
                 if (v != null) {
                     cache.put(s, v);
                     break;
