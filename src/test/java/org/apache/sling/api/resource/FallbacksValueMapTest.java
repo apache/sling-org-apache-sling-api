@@ -29,7 +29,7 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class FallbackValueMapTest extends Assert {
+public class FallbacksValueMapTest extends Assert {
 
     @Rule
     public final SlingContext context = new SlingContext();
@@ -38,7 +38,7 @@ public class FallbackValueMapTest extends Assert {
     public void isEmptyTest(){
         Resource empty1 = context.build().resource("/content/test/1").getCurrentParent();
         Resource empty2 = context.build().resource("/content/test/2").getCurrentParent();
-        FallbackValueMap vm = new FallbackValueMap(empty1, empty2);
+        FallbacksValueMap vm = new FallbacksValueMap(empty1, empty2);
         assertTrue("Value map should be empty", vm.isEmpty());
         assertFalse("Typical map should not be empty", typicalVM().isEmpty());
     }
@@ -57,7 +57,7 @@ public class FallbackValueMapTest extends Assert {
 
     @Test
     public void testGet(){
-        FallbackValueMap vm = typicalVM();
+        FallbacksValueMap vm = typicalVM();
         assertEquals("k1-11","11",vm.get("k1"));
         assertEquals("k2-22","22",vm.get("k2"));
         assertEquals("k3-13","13",vm.get("k3"));
@@ -79,10 +79,29 @@ public class FallbackValueMapTest extends Assert {
     }
 
     @Test
-    public void testContainsValue() {
+    public void testNullDefaultValue() {
+        ValueMap vm = typicalVM();
+        String nullDefaultValue = null;
+        assertNull("null default value should be ok", vm.get("random-key", nullDefaultValue));
+    }
+
+
+
+    @Test
+    public void testContainsKey() {
         ValueMap vm = typicalVM();
         assertTrue("should contain 11", vm.containsValue("11"));
         assertFalse("should not contain 21", vm.containsValue("21"));
+    }
+
+    @Test
+    public void testContainsValue() {
+        ValueMap vm = typicalVM();
+        assertTrue("should contain k1", vm.containsKey("k1"));
+        assertTrue("should contain k2", vm.containsKey("k2"));
+        assertTrue("should contain k3", vm.containsKey("k3"));
+        assertTrue("should contain k4", vm.containsKey("k4"));
+        assertTrue("should contain k5", vm.containsKey("k5"));
     }
 
     @Test
@@ -91,7 +110,7 @@ public class FallbackValueMapTest extends Assert {
             "1", "11").getCurrentParent().getParent();
         Resource l2 = context.build().resource("/content/test/2/k",
             "1", "21").getCurrentParent().getParent();
-        ValueMap vm = new FallbackValueMap(l1,l2);
+        ValueMap vm = new FallbacksValueMap(l1,l2);
         assertEquals("value should be 11", "11", vm.get("k/1", String.class));
     }
 
@@ -115,11 +134,32 @@ public class FallbackValueMapTest extends Assert {
         assertEquals("result should be the same than a simple property fetching",true, vm.get("k", Boolean.class).booleanValue());
     }
 
+    @Test(expected = UnsupportedOperationException.class)
+    public void testPutOnVM() {
+        typicalVM().put("foo","bar");
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testRemoveOnVM() {
+        typicalVM().remove("foo");
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testPutAllOnVM() {
+        typicalVM().putAll(typicalVM());
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testClearOnVM() {
+        typicalVM().clear();
+    }
+
+
     /**
      * @return typical vm, with 3 inner resources, sharing properties from k1 to k5, noted kX each level Y's value
      * being YX
      */
-    protected FallbackValueMap typicalVM() {
+    FallbacksValueMap typicalVM() {
         Resource l1 = context.build().resource("/content/test/1",
             "k1", "11",
             "k3", "13").getCurrentParent();
@@ -132,6 +172,6 @@ public class FallbackValueMapTest extends Assert {
             "k3","33",
             "k4","34",
             "k5","35").getCurrentParent();
-        return new FallbackValueMap(l1,l2,l3);
+        return new FallbacksValueMap(l1,l2,l3);
     }
 }

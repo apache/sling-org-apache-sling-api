@@ -34,7 +34,7 @@ import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FallbackValueMap implements ValueMap {
+public class FallbacksValueMap implements ValueMap {
     List<Resource> resources;
 
     Set<Entry<String, Object>> entrySet;
@@ -49,32 +49,17 @@ public class FallbackValueMap implements ValueMap {
     private static final String IMMUTABLE_ERROR_MESSAGE = "Fallback value maps are immutable";
 
     /**
-     * Main entry point for building the value map's list.
+     * Constructor for building the value map's list.
      *
      * @param resources var args resources from where value map will be computed, order matters
      *                  here : will be the order of the lookup.
      */
-    public void setResources(Resource... resources) {
-        this.resources = resources != null ? Arrays.asList(resources) : Collections.emptyList();
-    }
-
-    /**
-     * Main entry point for building the value map's list.
-     *
-     * @param resources list of resources from where value map will be computed, order matters
-     *                  here : will be the order of the lookup.
-     */
-    public void setResources(List<Resource> resources) {
-        this.resources = resources;
-    }
-
-    /**
-     * Constructor.
-     */
-    public FallbackValueMap() {}
-
-    public FallbackValueMap(Resource... resources) {
+    public FallbacksValueMap(@NotNull Resource... resources) {
         setResources(resources);
+    }
+
+    void setResources(@NotNull Resource... resources) {
+        this.resources = Arrays.asList(resources);
     }
 
     @Nullable
