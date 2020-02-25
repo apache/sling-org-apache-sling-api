@@ -46,6 +46,8 @@ public class FallbackValueMap implements ValueMap {
 
     private static final String EMPTY = "";
 
+    private static final String IMMUTABLE_ERROR_MESSAGE = "Fallback value maps are immutable";
+
     /**
      * Main entry point for building the value map's list.
      *
@@ -53,7 +55,7 @@ public class FallbackValueMap implements ValueMap {
      *                  here : will be the order of the lookup.
      */
     public void setResources(Resource... resources) {
-        this.resources = resources != null ? Arrays.asList(resources) : Collections.EMPTY_LIST;
+        this.resources = resources != null ? Arrays.asList(resources) : Collections.emptyList();
     }
 
     /**
@@ -77,13 +79,13 @@ public class FallbackValueMap implements ValueMap {
 
     @Nullable
     @Override
-    public <T> T get(@NotNull String s, @NotNull Class<T> requiredClass) {
+    public <T> T get(@NotNull String s, Class<T> requiredClass) {
         return getFromCache(s, requiredClass);
     }
 
     @NotNull
     @Override
-    public <T> T get(@NotNull String s, @NotNull T defaultValue) {
+    public <T> T get(@NotNull String s, T defaultValue) {
         T value;
         if (defaultValue == null) {
             value = (T)get(s, String.class);
@@ -153,7 +155,7 @@ public class FallbackValueMap implements ValueMap {
     @Override
     public Set<String> keySet() {
         if (keySet == null) {
-            keySet = entrySet().stream().map(e -> e.getKey()).collect(Collectors.toSet());
+            keySet = entrySet().stream().map(Entry::getKey).collect(Collectors.toSet());
         }
         return keySet;
     }
@@ -161,7 +163,7 @@ public class FallbackValueMap implements ValueMap {
     @Override
     public Collection<Object> values() {
         if (values == null) {
-            values = entrySet().stream().map(e -> e.getValue()).collect(Collectors.toCollection(ArrayList::new));
+            values = entrySet().stream().map(Entry::getValue).collect(Collectors.toCollection(ArrayList::new));
         }
         return values;
     }
@@ -185,8 +187,8 @@ public class FallbackValueMap implements ValueMap {
         Collections.reverse(reverse);
         for (Resource resource : reverse) {
             ValueMap map = resource.getValueMap();
-            for (String key : map.keySet()) {
-                cache.put(key, map.get(key));
+            for (Map.Entry<String, Object> e : map.entrySet()) {
+                cache.put(e.getKey(), e.getValue());
             }
         }
         cacheFilled = true;
@@ -195,21 +197,21 @@ public class FallbackValueMap implements ValueMap {
     //mutation operations: we don't support
     @Override
     public Object put(String key, Object value) {
-        throw new UnsupportedOperationException("Fallback value maps are immutable");
+        throw new UnsupportedOperationException(IMMUTABLE_ERROR_MESSAGE);
     }
 
     @Override
     public Object remove(Object key) {
-        throw new UnsupportedOperationException("Fallback value maps are immutable");
+        throw new UnsupportedOperationException(IMMUTABLE_ERROR_MESSAGE);
     }
 
     @Override
     public void putAll(Map<? extends String, ?> m) {
-        throw new UnsupportedOperationException("Fallback value maps are immutable");
+        throw new UnsupportedOperationException(IMMUTABLE_ERROR_MESSAGE);
     }
 
     @Override
     public void clear() {
-        throw new UnsupportedOperationException("Fallback value maps are immutable");
+        throw new UnsupportedOperationException(IMMUTABLE_ERROR_MESSAGE);
     }
 }
