@@ -18,11 +18,22 @@
  */
 package org.apache.sling.api.resource.path;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.apache.sling.api.resource.ResourceUtil;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Simple helper class for path matching against a set of paths.
@@ -32,7 +43,16 @@ import java.util.Set;
 public class PathSet implements Iterable<Path> {
 
     /** Empty path set. */
-    public static final PathSet EMPTY_SET = new PathSet(Collections.<Path> emptySet());
+    public static final PathSet EMPTY_SET = new PathSet(Collections.emptySet());
+
+    /**
+     * When a PathSet is created it gets optimized. For small Sets optimizing
+     * by iterating with O(n^2) is more efficient then building and traversing
+     * a tree with O(n+m), with m being the maximum depth of the tree. For
+     * setting the boundary a max depth of 6 was assumed, which theoretically
+     * results in the same time complexity for both algorithms.
+     */
+    private static final int SMALL_SET_SIZE = 3;
 
     /**
      * Create a path set from a collection of path objects
@@ -40,12 +60,7 @@ public class PathSet implements Iterable<Path> {
      * @return The path set
      */
     public static PathSet fromPathCollection(final Collection<Path> paths) {
-        final Set<Path> set = new HashSet<Path>();
-        for(final Path p : paths) {
-            set.add(p);
-        }
-        optimize(set);
-        return new PathSet(set);
+        return create(paths, paths.size());
     }
 
     /**
@@ -54,12 +69,7 @@ public class PathSet implements Iterable<Path> {
      * @return The path set
      */
     public static PathSet fromPaths(final Path...paths) {
-        final Set<Path> set = new HashSet<Path>();
-        for(final Path p : paths) {
-            set.add(p);
-        }
-        optimize(set);
-        return new PathSet(set);
+        return fromPathCollection(Arrays.asList(paths));
     }
 
     /**
@@ -68,12 +78,7 @@ public class PathSet implements Iterable<Path> {
      * @return The path set
      */
     public static PathSet fromStringCollection(final Collection<String> paths) {
-        final Set<Path> set = new HashSet<Path>();
-        for(final String p : paths) {
-            set.add(new Path(p));
-        }
-        optimize(set);
-        return new PathSet(set);
+        return create(paths.stream().map(Path::new)::iterator, paths.size());
     }
 
     /**
@@ -82,12 +87,27 @@ public class PathSet implements Iterable<Path> {
      * @return The path set
      */
     public static PathSet fromStrings(final String...strings) {
-        final Set<Path> set = new HashSet<Path>();
-        for(final String p : strings) {
-            set.add(new Path(p));
+        return fromStringCollection(Arrays.asList(strings));
+    }
+
+    /**
+     * Create a new PathSet either as a small Set, optimized in O(n^2) or using a tree-like builder for larger Sets.
+     *
+     * @param paths an iterable of paths to add to the PathSet
+     * @param size  the number of paths in the iterable
+     * @return
+     */
+    private static PathSet create(final Iterable<Path> paths, int size) {
+        if (size <= SMALL_SET_SIZE) {
+            Set<Path> simpleSet = new HashSet<>();
+            paths.forEach(simpleSet::add);
+            optimize(simpleSet);
+            return new PathSet(simpleSet);
+        } else {
+            Builder builder = new Builder();
+            builder.addAll(paths);
+            return builder.build();
         }
-        optimize(set);
-        return new PathSet(set);
     }
 
     /**
@@ -112,13 +132,13 @@ public class PathSet implements Iterable<Path> {
         }
     }
 
-    private final Set<Path> paths;
+    private final Iterable<Path> paths;
 
     /**
      * Create a path set from a set of paths
      * @param paths A set of paths
      */
-    private PathSet(final Set<Path> paths) {
+    private PathSet(final Iterable<Path> paths) {
         this.paths = paths;
     }
 
@@ -199,7 +219,7 @@ public class PathSet implements Iterable<Path> {
      */
     @Override
     public Iterator<Path> iterator() {
-        return Collections.unmodifiableSet(this.paths).iterator();
+        return this.paths.iterator();
     }
 
     @Override
@@ -221,5 +241,200 @@ public class PathSet implements Iterable<Path> {
     @Override
     public String toString() {
         return "PathSet [paths=" + paths + "]";
+    }
+
+    /**
+     * Utility method returns all parents recursively of the given
+     * <code>path</code>, which is normalized by
+     * {@link ResourceUtil#normalize(String)} before resolving the parent. The
+     * ancestors are returned ordered parent-first, so that the first element
+     * in the resulting list is always the root path (<code>/</code>) and test
+     * last is the given <code>path</code> itself.
+     *
+     * @param path The path whose ancestors are to be returned
+     * @return a list of all ancestors of the given <code>path</code> starting
+     *         with the root path (<code>/</code>) and ending with the given
+     *         <code>path</code> itself.
+     * @throws IllegalArgumentException If the path cannot be normalized by the
+     *             {@link ResourceUtil#normalize(String)} method.
+     * @throws NullPointerException If <code>path</code> is <code>null</code>.
+     */
+    private static @NotNull List<String> getAncestors(@NotNull String path) {
+        List<String> parts = new LinkedList<>();
+        path = ResourceUtil.normalize(path);
+        for (String parent = path; parent != null && !"/".equals(parent); parent = ResourceUtil.getParent(parent)) {
+            parts.add(parent);
+        }
+        Collections.reverse(parts);
+        return parts;
+    }
+
+    /**
+     * Traverses the given subtree by creating a {@link Stream} that emits the
+     * parent before child axis.
+     *
+     * @param node the subtree given as it's root {@link Node}.
+     * @return a {@link Stream} consisting of all the Nodes in the sub tree
+     */
+    private static Stream<Node> traverse(Node node) {
+        return traverse(node, null);
+    }
+
+    /**
+     * Traverses the given subtree by creating a {@link Stream} that emits the
+     * parent before child axis. If not null the {@link Predicate<Node>} can
+     * be used to stop any deeper traversal at a particular {@link Node}.
+     *
+     * @param node the subtree given as it's root {@link Node}.
+     * @return a {@link Stream} consisting of all the Nodes in the sub tree
+     */
+    private static Stream<Node> traverse(Node node, Predicate<Node> stopAfter) {
+        if (node == null) {
+            return Stream.empty();
+        }
+
+        Stream<Node> self = Stream.of(node);
+        if (node.children != null && !node.children.isEmpty() && (stopAfter == null || !stopAfter.test(node))) {
+            return Stream.concat(self, node.children.values().stream().flatMap(child -> traverse(child, stopAfter)));
+        } else {
+            return self;
+        }
+    }
+
+    /**
+     * A tree-like builder that leverages the known hierarchy information of
+     * {@link Path}s in order to optimize the resulting PathSet on the fly in
+     * O(n+m). This comes on a cost and so this class should only used for
+     * {@link Set}s of {@link Path} that are larger then a small set.
+     *
+     * @see PathSet#SMALL_SET_SIZE
+     */
+    private static class Builder {
+
+        /**
+         * The data structures of the Builder's state are lazily initialised.
+         */
+        private Node root;
+        private Set<Path> patterns;
+
+        /**
+         * Adds all given {@link Path}s to the {@link Builder}
+         *
+         * @param paths an collection of paths
+         * @throws NullPointerException when the collection or any of the
+         *              contained {@link Path}s is null.
+         */
+        private void addAll(@NotNull Iterable<Path> paths) {
+            paths.forEach(this::add);
+        }
+
+        /**
+         * Adds a single {@link Path} to the {@link Builder}.
+         *
+         * @param path the <code>path</code> to be added
+         * @throws NullPointerException when path is <code>null</code>
+         */
+        private void add(Path path) {
+            if (path.isPattern()) {
+                if (patterns == null) {
+                    patterns = new HashSet<>();
+                }
+                if (patterns.add(path) && root != null) {
+                    // remove all that match the added pattern from the current tree
+                    // create a temporary copy to prevent concurrent modification of the base collection(s)
+                    Predicate<Node> condition = node -> path.matches(node.path);
+                    traverse(root, condition).filter(condition).collect(Collectors.toList()).forEach(Node::remove);
+                }
+            } else {
+                if (patterns != null && patterns.stream().anyMatch(pattern -> pattern.matches(path.getPath()))) {
+                    return;
+                }
+                if (root == null) {
+                    root = new Node("/");
+                }
+
+                Node current = root;
+                for (String part : getAncestors(path.getPath())) {
+                    // an ancestor of currently added Path is already included, skipping
+                    if (current.isIncluded()) {
+                        return;
+                    }
+                    current = current.addChild(part);
+                }
+                current.setPayload(path);
+            }
+        }
+
+        /**
+         * Returns a {@link PathSet} from the {@link Builder}'s current state,
+         * resetting the Builder afterwards.
+         *
+         * @return an optimized {@link PathSet}
+         */
+        private PathSet build() {
+            try {
+                if (patterns == null && root == null) {
+                    return PathSet.EMPTY_SET;
+                } else if (patterns != null && root == null) {
+                    // if we only have patterns the set is already optimized.
+                    // According to Path#matches(String) two patterns only
+                    // match when they are equal. For at set of patterns this
+                    // condition is always met for all elements in the Set.
+                    return new PathSet(patterns);
+                } else {
+                    Stream<Path> paths = traverse(root).filter(Node::isIncluded).map(Node::getPayload);
+                    if (patterns != null) {
+                        paths = Stream.concat(patterns.stream(), paths);
+                    }
+                    return new PathSet(paths::iterator);
+                }
+            } finally {
+                patterns = null;
+                root = null;
+            }
+        }
+    }
+
+    /**
+     * A simple implementation of a node in a tree. This class is used to
+     * build the optimized {@link PathSet} in {@link Builder}.
+     */
+    private static class Node {
+        private final String path;
+        private Node parent;
+        private Path payload;
+        private Map<String, Node> children;
+
+        private Node(String path) {
+            this.path = path;
+        }
+
+        private boolean isIncluded() {
+            return payload != null;
+        }
+
+        private Node addChild(String path) {
+            if (children == null) {
+                children = new HashMap<>();
+            }
+            Node child = children.computeIfAbsent(path, Node::new);
+            child.parent = this;
+            return child;
+        }
+
+        private void remove() {
+            if (parent != null) {
+                parent.children.remove(path);
+            }
+        }
+
+        private Path getPayload() {
+            return payload;
+        }
+
+        public void setPayload(Path payload) {
+            this.payload = payload;
+            this.children = null;
+        }
     }
 }

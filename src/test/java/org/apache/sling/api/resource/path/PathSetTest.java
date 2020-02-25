@@ -79,11 +79,25 @@ public class PathSetTest {
     }
 
     @Test public void testOptimize() {
-        final PathSet set1 = PathSet.fromStrings("/", "/a", "/z", "/x/y");
-        assertEqualSets(set1, "/");
+        // small sets
+        PathSet set = PathSet.fromStrings("/", "/a", "/z");
+        assertEqualSets(set, "/");
 
-        final PathSet set2 = PathSet.fromStrings("/a", "/a/x/y", "/z", "/x/y", "/a2");
-        assertEqualSets(set2, "/a", "/z", "/a2", "/x/y");
+        set = PathSet.fromStrings("/a", "/b", "/c");
+        assertEqualSets(set, "/a", "/b", "/c");
+
+        // large sets
+        set = PathSet.fromStrings("/a", "/a/x/y", "/z", "/x/y", "/a2");
+        assertEqualSets(set, "/a", "/z", "/a2", "/x/y");
+
+        set = PathSet.fromStrings("/c/a/ab", "/c/b/bc", "/c/a", "/c", "/c/d/de");
+        assertEqualSets(set, "/c");
+
+        set = PathSet.fromStrings("/c/a/ab", "/c/b/bc", "/c/d/ab", "/c/d/ab/c", "glob:/c/*/ab", "/c/e/ab");
+        assertEqualSets(set, "/c/b/bc", "glob:/c/*/ab");
+
+        set = PathSet.fromStrings("glob:/a/*","glob:/b/*","glob:/c/*","glob:/d/*");
+        assertEqualSets(set, "glob:/a/*","glob:/b/*","glob:/c/*","glob:/d/*");
     }
 
     @Test public void testMatching() {
