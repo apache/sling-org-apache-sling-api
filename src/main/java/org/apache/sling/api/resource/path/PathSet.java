@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.sling.api.resource.ResourceUtil;
+import org.apache.sling.api.wrappers.IteratorWrapper;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -219,7 +220,7 @@ public class PathSet implements Iterable<Path> {
      */
     @Override
     public Iterator<Path> iterator() {
-        return this.paths.iterator();
+        return new UnmodifiableIterator<>(this.paths.iterator());
     }
 
     @Override
@@ -435,6 +436,30 @@ public class PathSet implements Iterable<Path> {
         public void setPayload(Path payload) {
             this.payload = payload;
             this.children = null;
+        }
+    }
+
+    /**
+     * An implementation of {@link IteratorWrapper} that completely denies to
+     * delete elements from it using {@link Iterator#remove()}.
+     *
+     * @param <T>
+     */
+    private static class UnmodifiableIterator<T> extends IteratorWrapper<T> {
+
+        /**
+         * Creates an {@link Iterator} that does not allow to call
+         * {@link Iterator#remove()}.
+         *
+         * @param wrappedIterator the wrapped iterator
+         */
+        public UnmodifiableIterator(Iterator<T> wrappedIterator) {
+            super(wrappedIterator);
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
         }
     }
 }

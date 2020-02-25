@@ -144,4 +144,9 @@ public class PathSetTest {
         final PathSet result = set.getSubset(filter);
         assertEqualSets(result, "/libs/foo/bar", "/apps/foo/bar");
     }
+
+
+    @Test(expected = UnsupportedOperationException.class) public void testImmutability() {
+        PathSet.fromStrings("/foo", "/bar").iterator().remove();
+    }
 }
