@@ -21,29 +21,24 @@ package org.apache.sling.api.resource.internal;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
-import org.apache.sling.api.resource.ModifiableValueMap;
 import org.apache.sling.api.resource.PersistenceException;
-import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.resource.ValueMapUtil;
-import org.apache.sling.testing.mock.sling.junit.SlingContext;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Assert;
-import org.junit.Rule;
 import org.junit.Test;
 
 public class FIFOValueMapTest extends Assert {
 
-    @Rule
-    public final SlingContext context = new SlingContext();
-
     @Test
     public void isEmptyTest(){
-        Resource empty1 = context.build().resource("/content/test/1").getCurrentParent();
-        Resource empty2 = context.build().resource("/content/test/2").getCurrentParent();
-        ValueMap vm = ValueMapUtil.asFIFOValueMap(empty1.getValueMap(), empty2.getValueMap());
+        ValueMap vm = ValueMapUtil.asFIFOValueMap(getValueMap(), getValueMap());
         assertTrue("Value map should be empty", vm.isEmpty());
         assertFalse("Typical map should not be empty", typicalVM().isEmpty());
     }
@@ -75,7 +70,6 @@ public class FIFOValueMapTest extends Assert {
         assertNull("null get should return null", typicalVM().get(null));
     }
 
-
     @Test
     public void testDefaultValue() {
         ValueMap vm = typicalVM();
@@ -89,8 +83,6 @@ public class FIFOValueMapTest extends Assert {
         String nullDefaultValue = null;
         assertNull("null default value should be ok", vm.get("random-key", nullDefaultValue));
     }
-
-
 
     @Test
     public void testContainsKey() {
@@ -111,30 +103,20 @@ public class FIFOValueMapTest extends Assert {
 
     @Test
     public void testDeepGet(){
-        Resource l1 = context.build().resource("/content/test/1/k",
-            "1", "11").getCurrentParent().getParent();
-        Resource l2 = context.build().resource("/content/test/2/k",
-            "1", "21").getCurrentParent().getParent();
-        ValueMap vm = ValueMapUtil.asFIFOValueMap(l1.getValueMap(), l2.getValueMap());
+        ValueMap vm = ValueMapUtil.asFIFOValueMap(getValueMap("k/1", "11"), getValueMap("1", "21"));
         assertEquals("value should be 11", "11", vm.get("k/1", String.class));
     }
 
     @Test
     public void testLong() throws PersistenceException {
-        Resource lLong =  context.build().resource("/content/test/1").getCurrentParent().getParent();
-        ModifiableValueMap vm = lLong.adaptTo(ModifiableValueMap.class);
-        vm.put( "k", 11L);
-        context.resourceResolver().commit();
+        ValueMap vm = ValueMapUtil.asFIFOValueMap(getValueMap("k", 11L));
         assertEquals("result should be the same than a simple property fetching","11", vm.get("k", String.class));
         assertEquals("result should be the same than a simple property fetching",11L, vm.get("k", Long.class).longValue());
     }
 
     @Test
     public void testBoolean() throws PersistenceException {
-        Resource lBoolean =  context.build().resource("/content/test/1").getCurrentParent().getParent();
-        ModifiableValueMap vm = lBoolean.adaptTo(ModifiableValueMap.class);
-        vm.put( "k", true);
-        context.resourceResolver().commit();
+        ValueMap vm = ValueMapUtil.asFIFOValueMap(getValueMap("k", true));
         assertEquals("result should be the same than a simple property fetching","true", vm.get("k", String.class));
         assertEquals("result should be the same than a simple property fetching",true, vm.get("k", Boolean.class).booleanValue());
     }
@@ -160,23 +142,100 @@ public class FIFOValueMapTest extends Assert {
     }
 
 
+    ValueMap getValueMap(Object... pairs) {
+        Map<String, Object> innerMap = new HashMap<>();
+        for (int i = 0; i < pairs.length; i += 2) {
+            innerMap.put(pairs[i].toString(), pairs[i+1]);
+        }
+        return new ValueMap() {
+            @Override
+            public int size() {
+                return innerMap.size();
+            }
+
+            @Override
+            public <T> @Nullable T get(@NotNull String name, @NotNull Class<T> type) {
+                if (name == null) {
+                    return null;
+                }
+                if (type == String.class) {
+                    Object value = innerMap.get(name);
+                    if (value != null) {
+                        return (T) value.toString();
+                    }
+                    return null;
+                }
+                return (T) innerMap.get(name);
+            }
+
+            @Override
+            public boolean isEmpty() {
+                return innerMap.isEmpty();
+            }
+
+            @Override
+            public boolean containsKey(Object key) {
+                return innerMap.containsKey(key);
+            }
+
+            @Override
+            public boolean containsValue(Object value) {
+                return innerMap.containsValue(value);
+            }
+
+            @Override
+            public Object get(Object key) {
+                return innerMap.get(key);
+            }
+
+            @Nullable
+            @Override
+            public Object put(String key, Object value) {
+                return null;
+            }
+
+            @Override
+            public Object remove(Object key) {
+                return null;
+            }
+
+            @Override
+            public void putAll(@NotNull Map<? extends String, ?> m) {
+            }
+
+            @Override
+            public void clear() {
+            }
+
+            @NotNull
+            @Override
+            public Set<String> keySet() {
+                return innerMap.keySet();
+            }
+
+            @NotNull
+            @Override
+            public Collection<Object> values() {
+                return innerMap.values();
+            }
+
+            @NotNull
+            @Override
+            public Set<Entry<String, Object>> entrySet() {
+                return innerMap.entrySet();
+            }
+        };
+    }
+
+
     /**
      * @return typical vm, with 3 inner resources, sharing properties from k1 to k5, noted kX each level Y's value
      * being YX
      */
     ValueMap typicalVM() {
-        Resource l1 = context.build().resource("/content/test/1",
-            "k1", "11",
-            "k3", "13").getCurrentParent();
-        Resource l2 = context.build().resource("/content/test/2",
-            "k1","21",
-            "k2","22",
-            "k4","24").getCurrentParent();
-        Resource l3 = context.build().resource("/content/test/3",
-            "k1","31",
-            "k3","33",
-            "k4","34",
-            "k5","35").getCurrentParent();
-        return ValueMapUtil.asFIFOValueMap(l1.getValueMap(),l2.getValueMap(),l3.getValueMap());
+        ValueMap v1 = getValueMap("k1", "11", "k3", "13");
+        ValueMap v2 = getValueMap("k1","21", "k2","22", "k4","24");
+        ValueMap v3 = getValueMap("k1","31", "k3","33", "k4","34", "k5","35");
+        return ValueMapUtil.asFIFOValueMap(v1, v2, v3);
     }
 }

@@ -47,7 +47,7 @@ public class FIFOValueMap implements ValueMap {
 
     private static final String EMPTY = "";
 
-    private static final String IMMUTABLE_ERROR_MESSAGE = "Fallback value maps are immutable";
+    private static final String IMMUTABLE_ERROR_MESSAGE = "FIFO value maps are immutable";
 
     /**
      * Constructor for building the value map's list.

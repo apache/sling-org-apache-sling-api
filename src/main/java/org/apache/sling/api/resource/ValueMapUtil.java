@@ -19,7 +19,7 @@ package org.apache.sling.api.resource;
 import org.apache.sling.api.resource.internal.FIFOValueMap;
 import org.jetbrains.annotations.NotNull;
 
-public class ValueMapUtil {
+public final class ValueMapUtil {
 
     /**
      * private constructor to hide implicit public one
