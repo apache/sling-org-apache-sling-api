@@ -21,7 +21,15 @@ import org.jetbrains.annotations.NotNull;
 
 public class ValueMapUtil {
 
-    public static ValueMap asFIFOValueMap(@NotNull ValueMap... vms) {
-        return new FIFOValueMap(vms);
+    /**
+     * Merge provided Value Map into a ValueMap in a FIFO way:
+     * typically <code>asFIFOValueMap(v1, v2, v3)</code> considering all of those maps have
+     * a value to return to the key <code>k1</code>, will return v1's value.
+     *
+     * @param valueMaps list of value maps to merge
+     * @return
+     */
+    public static ValueMap asFIFOValueMap(@NotNull ValueMap... valueMaps) {
+        return new FIFOValueMap(valueMaps);
     }
 }
