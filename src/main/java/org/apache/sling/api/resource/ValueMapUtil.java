@@ -22,6 +22,12 @@ import org.jetbrains.annotations.NotNull;
 public class ValueMapUtil {
 
     /**
+     * private constructor to hide implicit public one
+     */
+    private ValueMapUtil() {
+    }
+
+    /**
      * Merge provided Value Map into a ValueMap in a FIFO way:
      * typically <code>asFIFOValueMap(v1, v2, v3)</code> considering all of those maps have
      * a value to return to the key <code>k1</code>, will return v1's value.
