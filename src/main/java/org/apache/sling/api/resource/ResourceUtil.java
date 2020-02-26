@@ -36,7 +36,13 @@ import org.jetbrains.annotations.Nullable;
  * This class is not intended to be extended or instantiated because it just
  * provides static utility methods not intended to be overwritten.
  */
-public class ResourceUtil {
+public final class ResourceUtil {
+
+    /**
+     * prevent implicit constructor to be used
+     */
+    private ResourceUtil() {
+    }
 
     /**
      * Resolves relative path segments '.' and '..' in the absolute path.
