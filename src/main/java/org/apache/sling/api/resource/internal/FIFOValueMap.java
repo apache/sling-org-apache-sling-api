@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.sling.api.resource;
+package org.apache.sling.api.resource.internal;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,12 +30,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FallbacksValueMap implements ValueMap {
-    List<Resource> resources;
+public class FIFOValueMap implements ValueMap {
+    List<ValueMap> valueMaps;
 
     Set<Entry<String, Object>> entrySet;
     Set<String> keySet;
@@ -51,15 +52,11 @@ public class FallbacksValueMap implements ValueMap {
     /**
      * Constructor for building the value map's list.
      *
-     * @param resources var args resources from where value map will be computed, order matters
+     * @param valueMaps var args resources from where value map will be computed, order matters
      *                  here : will be the order of the lookup.
      */
-    public FallbacksValueMap(@NotNull Resource... resources) {
-        setResources(resources);
-    }
-
-    void setResources(@NotNull Resource... resources) {
-        this.resources = Arrays.asList(resources);
+    public FIFOValueMap(@NotNull ValueMap... valueMaps) {
+        this.valueMaps = Arrays.asList(valueMaps);
     }
 
     @Nullable
@@ -99,8 +96,8 @@ public class FallbacksValueMap implements ValueMap {
         Class clazz = type == null ? String.class : type;
         T v = (T)cache.get(s, clazz);
         if (v == null && !accessed.contains(s)) {
-            for (Resource resource : resources) {
-                v = resource.getValueMap().get(s, (Class<T>)clazz);
+            for (ValueMap map : valueMaps) {
+                v = map.get(s, (Class<T>)clazz);
                 if (v != null) {
                     cache.put(s, v);
                     break;
@@ -167,10 +164,9 @@ public class FallbacksValueMap implements ValueMap {
      * Simple and 'superficial' cache fill.
      */
     void fillCache() {
-        List<Resource> reverse = new ArrayList<>(resources);
+        List<ValueMap> reverse = new ArrayList<>(valueMaps);
         Collections.reverse(reverse);
-        for (Resource resource : reverse) {
-            ValueMap map = resource.getValueMap();
+        for (ValueMap map : reverse) {
             for (Map.Entry<String, Object> e : map.entrySet()) {
                 cache.put(e.getKey(), e.getValue());
             }

@@ -17,19 +17,24 @@
  * under the License.
  */
 
-package org.apache.sling.api.resource;
+package org.apache.sling.api.resource.internal;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.sling.api.resource.ModifiableValueMap;
+import org.apache.sling.api.resource.PersistenceException;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.api.resource.ValueMapUtil;
 import org.apache.sling.testing.mock.sling.junit.SlingContext;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class FallbacksValueMapTest extends Assert {
+public class FIFOValueMapTest extends Assert {
 
     @Rule
     public final SlingContext context = new SlingContext();
@@ -38,7 +43,7 @@ public class FallbacksValueMapTest extends Assert {
     public void isEmptyTest(){
         Resource empty1 = context.build().resource("/content/test/1").getCurrentParent();
         Resource empty2 = context.build().resource("/content/test/2").getCurrentParent();
-        FallbacksValueMap vm = new FallbacksValueMap(empty1, empty2);
+        ValueMap vm = ValueMapUtil.asFIFOValueMap(empty1.getValueMap(), empty2.getValueMap());
         assertTrue("Value map should be empty", vm.isEmpty());
         assertFalse("Typical map should not be empty", typicalVM().isEmpty());
     }
@@ -57,7 +62,7 @@ public class FallbacksValueMapTest extends Assert {
 
     @Test
     public void testGet(){
-        FallbacksValueMap vm = typicalVM();
+        ValueMap vm = typicalVM();
         assertEquals("k1-11","11",vm.get("k1"));
         assertEquals("k2-22","22",vm.get("k2"));
         assertEquals("k3-13","13",vm.get("k3"));
@@ -110,7 +115,7 @@ public class FallbacksValueMapTest extends Assert {
             "1", "11").getCurrentParent().getParent();
         Resource l2 = context.build().resource("/content/test/2/k",
             "1", "21").getCurrentParent().getParent();
-        ValueMap vm = new FallbacksValueMap(l1,l2);
+        ValueMap vm = ValueMapUtil.asFIFOValueMap(l1.getValueMap(), l2.getValueMap());
         assertEquals("value should be 11", "11", vm.get("k/1", String.class));
     }
 
@@ -159,7 +164,7 @@ public class FallbacksValueMapTest extends Assert {
      * @return typical vm, with 3 inner resources, sharing properties from k1 to k5, noted kX each level Y's value
      * being YX
      */
-    FallbacksValueMap typicalVM() {
+    ValueMap typicalVM() {
         Resource l1 = context.build().resource("/content/test/1",
             "k1", "11",
             "k3", "13").getCurrentParent();
@@ -172,6 +177,6 @@ public class FallbacksValueMapTest extends Assert {
             "k3","33",
             "k4","34",
             "k5","35").getCurrentParent();
-        return new FallbacksValueMap(l1,l2,l3);
+        return ValueMapUtil.asFIFOValueMap(l1.getValueMap(),l2.getValueMap(),l3.getValueMap());
     }
 }
