@@ -19,7 +19,6 @@
 package org.apache.sling.api.wrappers;
 
 import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.api.wrappers.impl.ObjectConverter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
