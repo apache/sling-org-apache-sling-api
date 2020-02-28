@@ -25,6 +25,7 @@ import org.osgi.annotation.versioning.ProviderType;
 
 import java.util.AbstractMap;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -34,21 +35,36 @@ import java.util.stream.Stream;
 import static java.util.Arrays.asList;
 
 /**
- * An implementation of the {@link ValueMap} based on two {@link ValueMap}s:
- * - One containing the properties
- * - Another one containing the defaults to use in case the properties map
- *   does not contain the values.
+ * Merge provided {@code ValueMaps} into a single view {@code ValueMap} that aggregates
+ * all key-value pairs of the given maps. The value for a key-value pair is taken from
+ * the first {@code ValueMap} (in iteration order) that has a mapping for the given key.
+ * <br>
+ * Two legacy constructors exist that accept only two {@code ValueMaps}:
+ * <ul>
+ *     <li>One containing the properties</li>
+ *     <li>Another one containing the defaults to use in case the properties map
+ *         does not contain the values.</li>
+ * </ul>
+ * If {@code merge = true}, they work just like when a list of two value maps is passed to the
+ * constructor accepting a list. However, if {@code merge = false} the key-set of the
+ * {@code CompositeValueMap} instance is limited to the keys of the default map.
+ *
  * In case you would like to avoid duplicating properties on multiple resources,
  * you can use a <code>CompositeValueMap</code> to get a concatenated map of
  * properties.
+ * 
  * @since 2.3 (Sling API Bundle 2.5.0)
+ *
+ * @see org.apache.sling.api.resource.ValueMapUtil#merge(List)
+ * @see org.apache.sling.api.resource.ValueMapUtil#merge(ValueMap...)
+ * @see org.apache.sling.api.resource.ValueMapUtil#mergeAndCache(List)
  */
 @ProviderType
 public class CompositeValueMap implements ValueMap {
 
     private static final String IMMUTABLE_ERROR_MESSAGE = "CompositeValueMap is immutable";
 
-    private final Collection<ValueMap> valueMaps;
+    private final List<ValueMap> valueMaps;
 
     /**
      * Merge mode (only applicable when valueMaps.size() == 2)
@@ -66,10 +82,10 @@ public class CompositeValueMap implements ValueMap {
      *
      * @param valueMaps The ValueMaps to be merged.
      *
-     * @see org.apache.sling.api.resource.ValueMapUtil#merge(Collection)
+     * @see org.apache.sling.api.resource.ValueMapUtil#merge(List)
      * @see org.apache.sling.api.resource.ValueMapUtil#merge(ValueMap...)
      */
-    public CompositeValueMap(Collection<ValueMap> valueMaps) {
+    public CompositeValueMap(@NotNull List<ValueMap> valueMaps) {
         this.valueMaps = valueMaps;
         this.merge = true;
     }

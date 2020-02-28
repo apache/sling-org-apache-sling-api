@@ -28,6 +28,7 @@ import org.junit.runners.Parameterized;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -47,8 +48,8 @@ public class ValueMapUtilMergeTest {
     @Parameterized.Parameters(name = "using ValueMapUtil#{0}")
     public static Iterable<Object[]> testedMergeMethod() {
         return asList(
-                new Object[] { "mergeAndCache", (Function<Collection<ValueMap>, ValueMap>)ValueMapUtil::mergeAndCache},
-                new Object[] { "merge", (Function<Collection<ValueMap>, ValueMap>)ValueMapUtil::merge}
+                new Object[] { "mergeAndCache", (Function<List<ValueMap>, ValueMap>)ValueMapUtil::mergeAndCache},
+                new Object[] { "merge", (Function<List<ValueMap>, ValueMap>)ValueMapUtil::merge}
         );
     }
 

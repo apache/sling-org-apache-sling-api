@@ -20,7 +20,7 @@ import org.apache.sling.api.wrappers.CompositeValueMap;
 import org.apache.sling.api.wrappers.impl.CachingValueMap;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
+import java.util.List;
 
 import static java.util.Arrays.asList;
 
@@ -28,12 +28,12 @@ public final class ValueMapUtil {
 
     /**
      * A convenience method that turns the var-args into a {@code Collection}
-     * and delegates to {@link #merge(Collection)}.
+     * and delegates to {@link #merge(List)}.
      *
      * @param valueMaps the {@code ValueMap} instances to merge
      * @return the merged {@code ValueMap} view
      *
-     * @see #merge(Collection)
+     * @see #merge(List)
      */
     @NotNull
     public static ValueMap merge(@NotNull ValueMap... valueMaps) {
@@ -42,7 +42,7 @@ public final class ValueMapUtil {
 
     /**
      * Merge provided {@code ValueMaps} into a single view {@code ValueMap} that aggregates
-     * all key-value pairs of  the given maps. The value for a key-value pair is taken from
+     * all key-value pairs of the given maps. The value for a key-value pair is taken from
      * the first {@code ValueMap} (in iteration order) that has a mapping for the given key.
      * <br>
      * E.g. assuming {@code merge(vm1, vm2, vm3} where all maps {@code vm1, vm2, vm3} have
@@ -52,7 +52,7 @@ public final class ValueMapUtil {
      * @return the merged {@code ValueMap} view
      */
     @NotNull
-    public static ValueMap merge(@NotNull Collection<ValueMap> valueMaps) {
+    public static ValueMap merge(@NotNull List<ValueMap> valueMaps) {
         return new CompositeValueMap(valueMaps);
     }
 
@@ -66,7 +66,7 @@ public final class ValueMapUtil {
      * @return the merged and cached {@code ValueMap} view
      */
     @NotNull
-    public static ValueMap mergeAndCache(@NotNull Collection<ValueMap> valueMaps) {
+    public static ValueMap mergeAndCache(@NotNull List<ValueMap> valueMaps) {
         return cache(merge(valueMaps));
     }
 
