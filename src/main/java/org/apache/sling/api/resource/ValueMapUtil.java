@@ -16,26 +16,81 @@
  */
 package org.apache.sling.api.resource;
 
-import org.apache.sling.api.resource.internal.FIFOValueMap;
+import org.apache.sling.api.wrappers.CompositeValueMap;
+import org.apache.sling.api.wrappers.impl.CachingValueMap;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
+
+import static java.util.Arrays.asList;
 
 public final class ValueMapUtil {
 
     /**
-     * private constructor to hide implicit public one
+     * A convenience method that turns the var-args into a {@code Collection}
+     * and delegates to {@link #merge(Collection)}.
+     *
+     * @param valueMaps the {@code ValueMap} instances to merge
+     * @return the merged {@code ValueMap} view
+     *
+     * @see #merge(Collection)
      */
-    private ValueMapUtil() {
+    @NotNull
+    public static ValueMap merge(@NotNull ValueMap... valueMaps) {
+        return merge(asList(valueMaps));
     }
 
     /**
-     * Merge provided Value Map into a ValueMap in a FIFO way:
-     * typically <code>asFIFOValueMap(v1, v2, v3)</code> considering all of those maps have
-     * a value to return to the key <code>k1</code>, will return v1's value.
+     * Merge provided {@code ValueMaps} into a single view {@code ValueMap} that aggregates
+     * all key-value pairs of  the given maps. The value for a key-value pair is taken from
+     * the first {@code ValueMap} (in iteration order) that has a mapping for the given key.
+     * <br>
+     * E.g. assuming {@code merge(vm1, vm2, vm3} where all maps {@code vm1, vm2, vm3} have
+     * a value mapped to the key {@code k1}, then the value from {@code vm1} is returned.
      *
-     * @param valueMaps list of value maps to merge
-     * @return
+     * @param valueMaps the {@code ValueMap} instances to merge
+     * @return the merged {@code ValueMap} view
      */
-    public static ValueMap asFIFOValueMap(@NotNull ValueMap... valueMaps) {
-        return new FIFOValueMap(valueMaps);
+    @NotNull
+    public static ValueMap merge(@NotNull Collection<ValueMap> valueMaps) {
+        return new CompositeValueMap(valueMaps);
+    }
+
+    /**
+     * Convenience method that allows creating a merged {@code ValueMap} where
+     * accessed mappings are cached to optimize repeated lookups.
+     * <br>
+     * This is equivalent to calling {@code cache(merge(valueMaps))}.
+     *
+     * @param valueMaps the {@code ValueMap} instances to merge
+     * @return the merged and cached {@code ValueMap} view
+     */
+    @NotNull
+    public static ValueMap mergeAndCache(@NotNull Collection<ValueMap> valueMaps) {
+        return cache(merge(valueMaps));
+    }
+
+    /**
+     * Decorates the given {@code ValueMap} with a caching layer.
+     * Every key-value pair that is accessed is cached for
+     * subsequent accesses. Calls to {@code ValueMap#keySet()},
+     * {@code ValueMap#values()} and {@code ValueMap#entrySet()}
+     * will cause all entries to be cached.
+     * <br>
+     * Note: if the underlying {@code ValueMap} is modified, the
+     * modification may not be reflected via the caching wrapper.
+     *
+     * @param valueMap the {@code ValueMap} instance to cache
+     * @return the cached {@code ValueMap} view
+     */
+    @NotNull
+    public static ValueMap cache(@NotNull ValueMap valueMap) {
+        return new CachingValueMap(valueMap);
+    }
+    
+    /**
+     * private constructor to hide implicit public one
+     */
+    private ValueMapUtil() {
     }
 }
