@@ -19,7 +19,10 @@
 package org.apache.sling.api.wrappers;
 
 import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.api.wrappers.impl.ObjectConverter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.osgi.annotation.versioning.ProviderType;
 
 import java.util.AbstractMap;
 import java.util.Collection;
@@ -41,6 +44,7 @@ import static java.util.Arrays.asList;
  * properties.
  * @since 2.3 (Sling API Bundle 2.5.0)
  */
+@ProviderType
 public class CompositeValueMap implements ValueMap {
 
     private static final String IMMUTABLE_ERROR_MESSAGE = "CompositeValueMap is immutable";
@@ -104,6 +108,28 @@ public class CompositeValueMap implements ValueMap {
         return object;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Nullable
+    public <T> T get(@NotNull String name, @NotNull Class<T> type) {
+        // removing the method in order to use the default method causes
+        // baselining to suggest a major version bump. calling the default
+        // method explicitly works around this issue
+        return ValueMap.super.get(name, type);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
+    public <T> T get(@NotNull String name, @NotNull T defaultValue) {
+        // removing the method in order to use the default method causes
+        // baselining to suggest a major version bump. calling the default
+        // method explicitly works around this issue
+        return ValueMap.super.get(name, defaultValue);
+    }
+
     // ---- Map
 
     /**
@@ -141,17 +167,17 @@ public class CompositeValueMap implements ValueMap {
     /**
      * {@inheritDoc}
      */
-
     @Override
     public Object get(Object key) {
-        if (!merge && keyStream().noneMatch(k -> Objects.equals(k, key))) {
-            return null;
+        // containsKey check is necessary to support merge == false (indirectly via keyStream())
+        if (containsKey(key)) {
+            return valueMaps.stream()
+                    .map(vm -> vm.get(key))
+                    .filter(Objects::nonNull)
+                    .findFirst()
+                    .orElse(null);
         }
-        return valueMaps.stream()
-                .map(vm -> vm.get(key))
-                .filter(Objects::nonNull)
-                .findFirst()
-                .orElse(null);
+        return null;
     }
 
     @NotNull
@@ -176,7 +202,8 @@ public class CompositeValueMap implements ValueMap {
 
     @NotNull
     private Stream<String> keyStream() {
-        if (!merge && valueMaps.size() == 2) {
+        if (!merge) {
+            assert valueMaps.size() == 2;
             return valueMaps.stream()
                     .skip(1).findFirst() // get "default" ValueMap
                     .map(Map::keySet)
