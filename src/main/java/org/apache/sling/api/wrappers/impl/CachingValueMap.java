@@ -29,7 +29,7 @@ import java.util.Set;
 
 public class CachingValueMap implements ValueMap {
 
-    private static final String IMMUTABLE_ERROR_MESSAGE = "CompositeValueMap is immutable";
+    private static final String IMMUTABLE_ERROR_MESSAGE = "CachingValueMap is immutable";
 
     private final ValueMap delegate;
 
