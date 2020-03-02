@@ -14,10 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.sling.api.resource;
+package org.apache.sling.api.wrappers;
 
-import org.apache.sling.api.wrappers.CompositeValueMap;
+import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.wrappers.impl.CachingValueMap;
+import org.apache.sling.api.wrappers.impl.MergingValueMap;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -53,7 +54,7 @@ public final class ValueMapUtil {
      */
     @NotNull
     public static ValueMap merge(@NotNull List<ValueMap> valueMaps) {
-        return new CompositeValueMap(valueMaps);
+        return new MergingValueMap(valueMaps);
     }
 
     /**

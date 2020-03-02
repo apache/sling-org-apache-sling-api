@@ -20,7 +20,7 @@
 package org.apache.sling.api.resource.impl;
 
 import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.api.resource.ValueMapUtil;
+import org.apache.sling.api.wrappers.ValueMapUtil;
 import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.junit.Test;
 import org.junit.runner.RunWith;

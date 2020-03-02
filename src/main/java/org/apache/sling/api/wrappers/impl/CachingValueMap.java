@@ -19,6 +19,7 @@
 package org.apache.sling.api.wrappers.impl;
 
 import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.api.wrappers.ValueMapUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,6 +28,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * ValueMap decorator that caches key-value pairs that were accessed before.
+ *
+ * @see ValueMapUtil#cache(org.apache.sling.api.resource.ValueMap)
+ */
 public class CachingValueMap implements ValueMap {
 
     private static final String IMMUTABLE_ERROR_MESSAGE = "CachingValueMap is immutable";

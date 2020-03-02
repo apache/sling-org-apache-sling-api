@@ -18,77 +18,48 @@
  */
 package org.apache.sling.api.wrappers;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.api.wrappers.impl.ObjectConverter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.osgi.annotation.versioning.ProviderType;
-
-import java.util.AbstractMap;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static java.util.Arrays.asList;
 
 /**
- * Merge provided {@code ValueMaps} into a single view {@code ValueMap} that aggregates
- * all key-value pairs of the given maps. The value for a key-value pair is taken from
- * the first {@code ValueMap} (in iteration order) that has a mapping for the given key.
- * <br>
- * Two legacy constructors exist that accept only two {@code ValueMaps}:
- * <ul>
- *     <li>One containing the properties</li>
- *     <li>Another one containing the defaults to use in case the properties map
- *         does not contain the values.</li>
- * </ul>
- * If {@code merge = true}, they work just like when a list of two value maps is passed to the
- * constructor accepting a list. However, if {@code merge = false} the key-set of the
- * {@code CompositeValueMap} instance is limited to the keys of the default map.
- *
+ * An implementation of the {@link ValueMap} based on two {@link ValueMap}s:
+ * - One containing the properties
+ * - Another one containing the defaults to use in case the properties map
+ *   does not contain the values.
  * In case you would like to avoid duplicating properties on multiple resources,
  * you can use a <code>CompositeValueMap</code> to get a concatenated map of
  * properties.
  * 
  * @since 2.3 (Sling API Bundle 2.5.0)
  *
- * @see org.apache.sling.api.resource.ValueMapUtil#merge(List)
- * @see org.apache.sling.api.resource.ValueMapUtil#merge(ValueMap...)
- * @see org.apache.sling.api.resource.ValueMapUtil#mergeAndCache(List)
+ * @deprecated Use {@link ValueMapUtil#merge(ValueMap...)} instead. Note that it
+ * does not support the parameter {@code merge = false}. However, this could easily
+ * be achieved with another decorator that restricts the set of allowed keys.
  */
-@ProviderType
+@Deprecated
 public class CompositeValueMap implements ValueMap {
 
-    private static final String IMMUTABLE_ERROR_MESSAGE = "CompositeValueMap is immutable";
-
-    private final List<ValueMap> valueMaps;
+    /**
+     * Current properties
+     */
+    private final ValueMap properties;
 
     /**
-     * Merge mode (only applicable when valueMaps.size() == 2)
+     * Default properties
+     */
+    private final ValueMap defaults;
+
+    /**
+     * Merge mode
      */
     private final boolean merge;
-
-    /**
-     * Constructor that allows merging any number of {@code ValueMap}
-     * instances into a single {@code ValueMap} view. The keys of the
-     * view are the union of the keys of all value maps. The values of
-     * the view is the mapping of all keys to their respective value.
-     * The entries are the key-value pairs. Values are retrieved by
-     * getting the value for a key for each {@code ValueMap} until a
-     * non-null value is found.
-     *
-     * @param valueMaps The ValueMaps to be merged.
-     *
-     * @see org.apache.sling.api.resource.ValueMapUtil#merge(List)
-     * @see org.apache.sling.api.resource.ValueMapUtil#merge(ValueMap...)
-     */
-    public CompositeValueMap(@NotNull List<ValueMap> valueMaps) {
-        this.valueMaps = valueMaps;
-        this.merge = true;
-    }
 
     /**
      * Constructor
@@ -112,45 +83,50 @@ public class CompositeValueMap implements ValueMap {
      *              exist
      */
     public CompositeValueMap(final ValueMap properties, final ValueMap defaults, boolean merge) {
-        this.valueMaps = asList(checkNotNull(properties, "Properties need to be provided"), defaults != null ? defaults : ValueMap.EMPTY);
+        if (properties == null) {
+            throw new IllegalArgumentException("Properties need to be provided");
+        }
+        this.properties = properties;
+        this.defaults = defaults != null ? defaults : ValueMap.EMPTY;
         this.merge = merge;
     }
 
-    private static <T> T checkNotNull(T object, String message) {
-        if (object == null) {
-            throw new IllegalArgumentException(message);
-        }
-        return object;
-    }
-
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     @Nullable
     public <T> T get(@NotNull String name, @NotNull Class<T> type) {
-        // removing the method in order to use the default method causes
-        // baselining to suggest a major version bump. calling the default
-        // method explicitly works around this issue
-        return ValueMap.super.get(name, type);
+        Object value = get(name);
+        if (value == null) {
+            return null;
+        }
+        if (type.isAssignableFrom(value.getClass())) {
+            return (T)value;
+        }
+        return ObjectConverter.convert(value,type);
     }
 
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     @NotNull
     public <T> T get(@NotNull String name, @NotNull T defaultValue) {
-        // removing the method in order to use the default method causes
-        // baselining to suggest a major version bump. calling the default
-        // method explicitly works around this issue
-        return ValueMap.super.get(name, defaultValue);
+        if (defaultValue == null) {
+            return (T) get(name);
+        }
+        T value = (T)get(name, defaultValue.getClass());
+        if (value == null) {
+            return defaultValue;
+        }
+        return value;
     }
-
     // ---- Map
 
     /**
      * {@inheritDoc}
      */
-    @Override
     public int size() {
         return keySet().size();
     }
@@ -158,110 +134,113 @@ public class CompositeValueMap implements ValueMap {
     /**
      * {@inheritDoc}
      */
-    @Override
     public boolean isEmpty() {
+        if ( defaults.size() > 0 || (merge && properties.size() > 0) ) {
+            return false;
+        }
         return size() == 0;
     }
 
     /**
      * {@inheritDoc}
      */
-    @Override
     public boolean containsKey(final Object key) {
-        return keyStream().anyMatch(k -> Objects.equals(k, key));
+        return keySet().contains(key.toString());
     }
 
     /**
      * {@inheritDoc}
      */
-    @Override
     public boolean containsValue(final Object value) {
-        return valueStream().anyMatch(v -> Objects.equals(v, value));
+        return values().contains(value);
     }
 
     /**
      * {@inheritDoc}
      */
-    @Override
-    public Object get(Object key) {
-        // containsKey check is necessary to support merge == false (indirectly via keyStream())
-        if (containsKey(key)) {
-            return valueMaps.stream()
-                    .map(vm -> vm.get(key))
-                    .filter(Objects::nonNull)
-                    .findFirst()
-                    .orElse(null);
+    public Object get(final Object key) {
+        if (merge || defaults.containsKey(key)) {
+            // Check if property has been provided, if not use defaults
+            if (properties.containsKey(key)) {
+                return properties.get(key);
+            } else {
+                return defaults.get(key);
+            }
         }
+
+        // Override mode and no default value provided for this key
         return null;
-    }
-
-    @NotNull
-    @Override
-    public Set<String> keySet() {
-        return keyStream().collect(Collectors.toSet());
-    }
-
-    @NotNull
-    @Override
-    public Collection<Object> values() {
-        return valueStream().collect(Collectors.toList());
-    }
-
-    @NotNull
-    @Override
-    public Set<Entry<String, Object>> entrySet() {
-        return keyStream()
-                .map(key -> new AbstractMap.SimpleEntry<>(key, get(key)))
-                .collect(Collectors.toSet());
-    }
-
-    @NotNull
-    private Stream<String> keyStream() {
-        if (!merge) {
-            assert valueMaps.size() == 2;
-            return valueMaps.stream()
-                    .skip(1).findFirst() // get "default" ValueMap
-                    .map(Map::keySet)
-                    .map(Collection::stream)
-                    .orElseGet(Stream::empty)
-                    .distinct();
-        }
-        return valueMaps.stream()
-                .map(Map::keySet)
-                .flatMap(Collection::stream)
-                .distinct();
-    }
-
-    @NotNull
-    private Stream<Object> valueStream() {
-        return keyStream().map(this::get);
     }
 
     /**
      * {@inheritDoc}
      */
     public Object put(final String aKey, final Object value) {
-        throw new UnsupportedOperationException(IMMUTABLE_ERROR_MESSAGE);
+        throw new UnsupportedOperationException();
     }
 
     /**
      * {@inheritDoc}
      */
     public Object remove(final Object key) {
-        throw new UnsupportedOperationException(IMMUTABLE_ERROR_MESSAGE);
+        throw new UnsupportedOperationException();
     }
 
     /**
      * {@inheritDoc}
      */
     public void putAll(final Map<? extends String, ?> properties) {
-        throw new UnsupportedOperationException(IMMUTABLE_ERROR_MESSAGE);
+        throw new UnsupportedOperationException();
     }
 
     /**
      * {@inheritDoc}
      */
     public void clear() {
-        throw new UnsupportedOperationException(IMMUTABLE_ERROR_MESSAGE);
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Set<String> keySet() {
+        return buildAggregatedMap().keySet();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Collection<Object> values() {
+        return buildAggregatedMap().values();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Set<Entry<String, Object>> entrySet() {
+        return buildAggregatedMap().entrySet();
+    }
+
+    /**
+     * Build the aggregated map containing all values.
+     */
+    private Map<String, Object> buildAggregatedMap() {
+        final Map<String, Object> entries = new HashMap<String, Object>();
+
+        // Add properties in merge mode or if defaults exists
+        for (final Entry<String, Object> entry : properties.entrySet()) {
+            if (merge || defaults.containsKey(entry.getKey())) {
+                entries.put(entry.getKey(), entry.getValue());
+            }
+        }
+
+        // Add missing defaults
+        for (final Entry<String, Object> entry : defaults.entrySet()) {
+            if ( ! entries.containsKey(entry.getKey()) ) {
+                entries.put(entry.getKey(), entry.getValue());
+            }
+        }
+
+        return entries;
     }
 }
