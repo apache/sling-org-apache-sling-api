@@ -18,15 +18,16 @@
  */
 package org.apache.sling.api.wrappers;
 
+import org.apache.sling.api.resource.ValueMap;
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.sling.api.resource.ValueMap;
-import org.junit.Assert;
-import org.junit.Test;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 
 public class CompositeValueMapTest {
 
@@ -168,7 +169,7 @@ public class CompositeValueMapTest {
                 }
 
                 if (testResult.shouldHaveNewType()) {
-                    Assert.assertTrue("Type of property '" + property + "' should have changed", valueMap.get(property).getClass().equals(testResult.expectedNewType));
+                    Assert.assertEquals("Type of property '" + property + "' should have changed",testResult.expectedNewType, valueMap.get(property).getClass());
                     expectedMap.put(property, testResult.extendedValue);
                 }
 
@@ -180,9 +181,9 @@ public class CompositeValueMapTest {
         }
 
         Assert.assertEquals("Final map size does NOT match", expectedSize, valueMap.size());
-        Assert.assertEquals("Final map entries do NOT match", expectedMap.entrySet(), valueMap.entrySet());
-        Assert.assertEquals("Final map keys do NOT match", expectedMap.keySet(), valueMap.keySet());
-        Assert.assertTrue("Final map values do NOT match expected: <" + expectedMap.values() + "> but was: <" + valueMap.values() + ">", CollectionUtils.isEqualCollection(expectedMap.values(), valueMap.values()));
+        Assert.assertThat("Final map keys do NOT match", valueMap.keySet(), containsInAnyOrder(expectedMap.keySet().toArray()));
+        Assert.assertThat("Final map values do NOT match", valueMap.values(), containsInAnyOrder(expectedMap.values().toArray()));
+        Assert.assertThat("Final map entries do NOT match", valueMap.entrySet(), containsInAnyOrder(expectedMap.entrySet().toArray()));
     }
 
     /**

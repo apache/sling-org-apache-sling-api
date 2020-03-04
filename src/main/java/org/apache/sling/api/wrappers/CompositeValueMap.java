@@ -36,8 +36,14 @@ import org.jetbrains.annotations.Nullable;
  * In case you would like to avoid duplicating properties on multiple resources,
  * you can use a <code>CompositeValueMap</code> to get a concatenated map of
  * properties.
+ * 
  * @since 2.3 (Sling API Bundle 2.5.0)
+ *
+ * @deprecated Use {@link ValueMapUtil#merge(ValueMap...)} instead. Note that it
+ * does not support the parameter {@code merge = false}. However, this could easily
+ * be achieved with another decorator that restricts the set of allowed keys.
  */
+@Deprecated
 public class CompositeValueMap implements ValueMap {
 
     /**
