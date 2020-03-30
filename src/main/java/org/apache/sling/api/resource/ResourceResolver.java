@@ -22,12 +22,13 @@ import java.io.Closeable;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.sling.api.adapter.Adaptable;
 import org.apache.sling.api.resource.mapping.ResourceMapper;
+import org.apache.sling.api.resource.uri.ResourceURI;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -330,6 +331,10 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * @see <a href="https://sling.apache.org/documentation/the-sling-engine/mappings-for-resource-resolution.html">Mappings for Resource Resolution</a>
      */
     @Nullable String map(@NotNull HttpServletRequest request, @NotNull String resourcePath);
+
+    /** Same as map(request, resourcePath) but returns a {@link ResourceURI} */
+    @Nullable
+    ResourceURI mapToURI(@NotNull HttpServletRequest request, @NotNull String resourcePath);
 
     /**
      * Returns a {@link Resource} object for data located at the given path.
