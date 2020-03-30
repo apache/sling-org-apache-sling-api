@@ -18,7 +18,7 @@ package org.apache.sling.api.wrappers;
 
 import java.util.Iterator;
 import java.util.Map;
-import org.jetbrains.annotations.NotNull;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.sling.api.resource.LoginException;
@@ -26,6 +26,8 @@ import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceWrapper;
+import org.apache.sling.api.resource.uri.ResourceUri;
+import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
@@ -105,6 +107,11 @@ public class ResourceResolverWrapper implements ResourceResolver {
     @Override
     public String map(@NotNull HttpServletRequest request, @NotNull String resourcePath) {
         return wrapped.map(request, resourcePath);
+    }
+
+    /** Same as map(request, resourcePath) but returns a {@link ResourceUri} */
+    public ResourceUri mapToURI(@NotNull HttpServletRequest request, @NotNull String resourcePath) {
+        throw new UnsupportedOperationException("");
     }
 
     /**
