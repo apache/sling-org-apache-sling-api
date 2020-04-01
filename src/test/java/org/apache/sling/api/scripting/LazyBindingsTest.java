@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
 import org.junit.After;
@@ -41,19 +42,16 @@ public class LazyBindingsTest {
     private static final int THE_ANSWER = 42;
 
     private Set<String> usedSuppliers;
+    private Map<String, Integer> hashCodeCalls;
     private LazyBindings lazyBindings;
 
-    private final LazyBindings.Supplier supplier = new LazyBindings.Supplier() {
-        @Override
-        public Object get() {
-            usedSuppliers.add(THE_QUESTION);
-            return THE_ANSWER;
-        }
-    };
+    private TestSupplier supplier;
 
     @Before
     public void setUp() {
+        hashCodeCalls = new HashMap<>();
         usedSuppliers = new HashSet<>();
+        supplier = new TestSupplier(THE_QUESTION, () -> THE_ANSWER);
         final Map<String, LazyBindings.Supplier> supplierMap = new HashMap<>();
         supplierMap.put(THE_QUESTION, supplier);
         lazyBindings = new LazyBindings(supplierMap);
@@ -158,7 +156,13 @@ public class LazyBindingsTest {
         expectedEntrySet.add(new AbstractMap.SimpleEntry<>("a", 0));
         expectedEntrySet.add(new AbstractMap.SimpleEntry<>(THE_QUESTION, supplier));
         assertFalse(usedSuppliers.contains(THE_QUESTION));
+        supplier.trackHashCodeCalls = true;
+        assertEquals(2, lazyBindings.entrySet().size());
+        assertEquals("Unexpected hashCode call for the test supplier.", 0, (int) hashCodeCalls.get(THE_QUESTION));
         assertEquals(expectedEntrySet, lazyBindings.entrySet());
+        // the equals implementation will have to call hashCode on the supplier, but the entrySet method should not, so we expect only
+        // one hashCode call
+        assertEquals(1, (int) hashCodeCalls.get(THE_QUESTION));
         assertFalse(usedSuppliers.contains(THE_QUESTION));
     }
 
@@ -201,6 +205,33 @@ public class LazyBindingsTest {
         lazyBindings.put(supplierName, regularSupplier);
         assertEquals(regularSupplier, lazyBindings.get(supplierName));
         assertFalse(usedSuppliers.contains(supplierName));
+    }
+
+    private class TestSupplier implements LazyBindings.Supplier {
+
+        private final String name;
+        private final LazyBindings.Supplier wrapped;
+        private boolean trackHashCodeCalls;
+
+        TestSupplier(String name, LazyBindings.Supplier wrapped) {
+            this.name = name;
+            this.wrapped = wrapped;
+            hashCodeCalls.putIfAbsent(name, 0);
+        }
+
+        @Override
+        public Object get() {
+            usedSuppliers.add(name);
+            return wrapped.get();
+        }
+
+        @Override
+        public int hashCode() {
+            if (trackHashCodeCalls) {
+                hashCodeCalls.compute(name, (s, integer) -> integer == null ? 0 : integer + 1);
+            }
+            return super.hashCode();
+        }
     }
 
 }

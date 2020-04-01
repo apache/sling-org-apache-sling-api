@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import javax.script.Bindings;
 
@@ -114,11 +115,10 @@ public class LazyBindings extends HashMap<String, Object> implements Bindings {
     @NotNull
     @Override
     public Set<Entry<String, Object>> entrySet() {
-        HashSet<Entry<String, Object>> entrySet = new HashSet<>(super.entrySet());
-        for (Map.Entry supplierEntry : suppliers.entrySet()) {
-            entrySet.add(supplierEntry);
-        }
-        return Collections.unmodifiableSet(entrySet);
+        Map<String, Object> holder = new HashMap<>();
+        Stream.concat(super.entrySet().stream(), suppliers.entrySet().stream())
+                .forEach(entry -> holder.put(entry.getKey(), entry.getValue()));
+        return holder.entrySet();
     }
 
     @Override
