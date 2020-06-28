@@ -92,10 +92,40 @@ public interface ResourceChangeListener {
      * If this property is missing, added, removed and changed events for resources
      * and added and removed events for resource providers are reported.
      * If this property is invalid, the listener is ignored. The type of the property
-     * must either be String, or a String array. Valid values are the constants from
-     * {@link ResourceChange.ChangeType}.
+     * must either be String, or a String array. Valid values are the constants from this class
+     * whose names are starting with {@code CHANGE_}. They map to one of the values of {@link ResourceChange.ChangeType}.
      */
     String CHANGES = "resource.change.types";
+
+    /**
+     * String constant for {@link ResourceChange.ChangeType#ADDED}.
+     * @since 1.3.0 (Sling API Bundle 2.23.0)
+     */
+    String CHANGE_ADDED = "ADDED";
+
+    /**
+     * String constant for {@link ResourceChange.ChangeType#REMOVED}.
+     * @since 1.3.0 (Sling API Bundle 2.23.0)
+     */
+    String CHANGE_REMOVED = "REMOVED";
+
+    /**
+     * String constant for {@link ResourceChange.ChangeType#CHANGED}.
+     * @since 1.3.0 (Sling API Bundle 2.23.0)
+     */
+    String CHANGE_CHANGED = "CHANGED";
+
+    /**
+     * String constant for {@link ResourceChange.ChangeType#PROVIDER_ADDED}.
+     * @since 1.3.0 (Sling API Bundle 2.23.0)
+     */
+    String CHANGE_PROVIDER_ADDED = "PROVIDER_ADDED";
+
+    /**
+     * String constant for {@link ResourceChange.ChangeType#PROVIDER_REMOVED}.
+     * @since 1.3.0 (Sling API Bundle 2.23.0)
+     */
+    String CHANGE_PROVIDER_REMOVED = "PROVIDER_REMOVED";
 
     /**
      * An optional hint indicating to the underlying implementation that for
