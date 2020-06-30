@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.sling</groupId>
         <artifactId>sling-bundle-parent</artifactId>
-        <version>35</version>
+        <version>39</version>
         <relativePath />
     </parent>
 
@@ -52,6 +52,7 @@
     <properties>
         <site.jira.version.id>12314252</site.jira.version.id>
         <sling.java.version>8</sling.java.version>
+        <project.build.outputTimestamp>2019-10-02T08:04:00Z</project.build.outputTimestamp>
     </properties>
 
     <dependencies>
@@ -73,7 +74,6 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>16.0.2</version>
             <scope>compile</scope>
         </dependency>
 
@@ -81,7 +81,6 @@
         <dependency>
             <groupId>javax.jcr</groupId>
             <artifactId>jcr</artifactId>
-            <version>2.0</version>
             <scope>provided</scope>
         </dependency>
 
@@ -130,6 +129,20 @@
     
     <build>
         <plugins>
+            <plugin>
+                <groupId>biz.aQute.bnd</groupId>
+                <artifactId>bnd-baseline-maven-plugin</artifactId>
+                <configuration>
+                    <diffpackages>
+                        <!-- Temporarily don't baseline due to https://issues.apache.org/jira/browse/SLING-9555:
+                             Although it might be incompatible with consumers, baseline only suggests a minor version increase.
+                             We decided to go for a micro increase only as it is very unlikely that any consumer nor any providers will be broken.
+                          -->
+                        <diffpackage>!org.apache.sling.api.resource.observation</diffpackage>
+                        <diffpackage>*</diffpackage>
+                    </diffpackages>
+                </configuration>
+             </plugin>
             <plugin>
                 <groupId>org.apache.rat</groupId>
                 <artifactId>apache-rat-plugin</artifactId>
