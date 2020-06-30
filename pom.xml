@@ -52,6 +52,7 @@
     <properties>
         <site.jira.version.id>12314252</site.jira.version.id>
         <sling.java.version>8</sling.java.version>
+        <project.build.outputTimestamp>2019-10-02T08:04:00Z</project.build.outputTimestamp>
     </properties>
 
     <dependencies>
@@ -137,7 +138,7 @@
                              Although it might be incompatible with consumers, baseline only suggests a minor version increase.
                              We decided to go for a micro increase only as it is very unlikely that any consumer nor any providers will be broken.
                           -->
-                        <diffpackage>!org.apache.sling.api.resource.observation</diffpackage>
+                        <diffpackage>!org.apache.sling.api.resource.observation2</diffpackage>
                         <diffpackage>*</diffpackage>
                     </diffpackages>
                 </configuration>
