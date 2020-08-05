@@ -16,11 +16,9 @@
  */
 package org.apache.sling.api.scripting;
 
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
-
 import org.apache.sling.api.resource.ResourceResolver;
-
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -32,6 +30,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * and also used by project specific code. To keep the API as clean as possible
  * this interface was deprecated
  */
+@Deprecated
 @ProviderType
 public interface SlingScriptResolver {
 

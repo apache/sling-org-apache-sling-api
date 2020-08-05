@@ -25,8 +25,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The <code>ResourceMetadata</code> interface defines the API for the
@@ -130,6 +130,7 @@ public class ResourceMetadata extends HashMap<String, Object> {
      * @deprecated This flag is not supported anymore when implementing the SPI
      *             based {@code org.apache.sling.spi.resource.provider.ResourceProvider}
      */
+    @Deprecated
     public static final String INTERNAL_CONTINUE_RESOLVING = ":org.apache.sling.resource.internal.continue.resolving";
 
     /**
