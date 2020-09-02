@@ -16,9 +16,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-@Version("1.1.0")
 package org.apache.sling.api.resource.mapping;
 
-import org.osgi.annotation.versioning.Version;
+import javax.servlet.http.HttpServletRequest;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.osgi.annotation.versioning.ProviderType;
+
+/**
+ * @since 1.1.0
+ */
+@ProviderType
+public interface PathRewriter {
+
+    @NotNull String rewrite(@NotNull String path);
+
+    @NotNull String rewrite(@NotNull HttpServletRequest request, @NotNull String path);
+
+    @NotNull String reverseRewrite(@NotNull String path);
+
+    @NotNull String reverseRewrite(@NotNull HttpServletRequest request, @NotNull String path);
+
+
+    @Nullable HttpServletRequest getDefaultRequest();
+}

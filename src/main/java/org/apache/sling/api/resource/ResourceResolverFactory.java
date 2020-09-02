@@ -21,9 +21,8 @@ package org.apache.sling.api.resource;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
-
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -98,6 +97,13 @@ public interface ResourceResolverFactory {
      * @since 2.4 (Sling API Bundle 2.5.0)
      */
     String SUBSERVICE = "sling.service.subservice";
+
+    /**
+     * Name of the authentication information property to pass in a
+     * dedicated PathRewriter object
+     * @since 2.13.0
+     */
+    String PATH_REWRITER = "service.path.rewriter";
 
     /**
      * Returns a new {@link ResourceResolver} instance with further
