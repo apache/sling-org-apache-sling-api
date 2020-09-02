@@ -16,15 +16,19 @@
  */
 package org.apache.sling.api.wrappers;
 
+import static java.util.Arrays.asList;
+
+import java.util.List;
+
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.wrappers.impl.CachingValueMap;
 import org.apache.sling.api.wrappers.impl.MergingValueMap;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
-import static java.util.Arrays.asList;
-
+/**
+ * Factory methods to create {@code ValueMap}s.
+ * @since 2.7
+ */
 public final class ValueMapUtil {
 
     /**
@@ -88,7 +92,7 @@ public final class ValueMapUtil {
     public static ValueMap cache(@NotNull ValueMap valueMap) {
         return new CachingValueMap(valueMap);
     }
-    
+
     /**
      * private constructor to hide implicit public one
      */
