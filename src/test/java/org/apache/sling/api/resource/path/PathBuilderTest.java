@@ -20,7 +20,6 @@ package org.apache.sling.api.resource.path;
 
 import static org.junit.Assert.assertThat;
 
-import org.apache.sling.api.resource.path.PathBuilder;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
@@ -28,49 +27,49 @@ public class PathBuilderTest {
 
     @Test
     public void noChangeNeeded_root() {
-        
+
         assertThat(new PathBuilder("/").append("path").toString(), Matchers.equalTo("/path"));
     }
 
     @Test
     public void noChangeNeeded_intermediate() {
-        
+
         assertThat(new PathBuilder("/parent").append("/child").toString(), Matchers.equalTo("/parent/child"));
     }
-    
+
     @Test
     public void removeSlash_root() {
-        
+
         assertThat(new PathBuilder("/").append("/path").toString(), Matchers.equalTo("/path"));
     }
 
     @Test
     public void removeSlash_intermediate() {
-        
+
         assertThat(new PathBuilder("/parent/").append("/child").toString(), Matchers.equalTo("/parent/child"));
     }
-    
+
     @Test
     public void addSlash() {
-        
+
         assertThat(new PathBuilder("/parent").append("child").toString(), Matchers.equalTo("/parent/child"));
     }
-    
-    @Test(expected = IllegalArgumentException.class) 
+
+    @Test(expected = IllegalArgumentException.class)
     public void relativeInitialPaths() {
         new PathBuilder("relative");
     }
 
-    @Test(expected = IllegalArgumentException.class) 
+    @Test(expected = IllegalArgumentException.class)
     public void nullInitialPath() {
         new PathBuilder(null);
     }
 
-    @Test(expected = IllegalArgumentException.class) 
+    @Test(expected = IllegalArgumentException.class)
     public void emptyInitialPath() {
         new PathBuilder("");
     }
-    
+
     @Test(expected = IllegalArgumentException.class)
     public void emptyAppendedPath() {
         new PathBuilder("/parent").append("");

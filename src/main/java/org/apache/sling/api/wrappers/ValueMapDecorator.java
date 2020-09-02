@@ -49,6 +49,8 @@ public class ValueMapDecorator implements ValueMap {
     /**
      * {@inheritDoc}
      */
+    @Override
+    @SuppressWarnings("unchecked")
     public <T> T get(@NotNull String name, @NotNull Class<T> type) {
         if (base instanceof ValueMap) {
             // shortcut if decorated map is ValueMap
@@ -67,6 +69,7 @@ public class ValueMapDecorator implements ValueMap {
     /**
      * {@inheritDoc}
      */
+    @Override
     @NotNull
     @SuppressWarnings("unchecked")
     public <T> T get(@NotNull String name, @NotNull T defaultValue) {
@@ -87,6 +90,7 @@ public class ValueMapDecorator implements ValueMap {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int size() {
         return base.size();
     }
@@ -94,6 +98,7 @@ public class ValueMapDecorator implements ValueMap {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isEmpty() {
         return base.isEmpty();
     }
@@ -101,6 +106,7 @@ public class ValueMapDecorator implements ValueMap {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean containsKey(Object key) {
         return base.containsKey(key);
     }
@@ -108,6 +114,7 @@ public class ValueMapDecorator implements ValueMap {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean containsValue(Object value) {
         return base.containsValue(value);
     }
@@ -115,6 +122,7 @@ public class ValueMapDecorator implements ValueMap {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object get(Object key) {
         return base.get(key);
     }
@@ -122,6 +130,7 @@ public class ValueMapDecorator implements ValueMap {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object put(String key, Object value) {
         return base.put(key, value);
     }
@@ -129,6 +138,7 @@ public class ValueMapDecorator implements ValueMap {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object remove(Object key) {
         return base.remove(key);
     }
@@ -136,6 +146,7 @@ public class ValueMapDecorator implements ValueMap {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void putAll(Map<? extends String, ?> t) {
         base.putAll(t);
     }
@@ -143,6 +154,7 @@ public class ValueMapDecorator implements ValueMap {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void clear() {
         base.clear();
     }
@@ -150,6 +162,7 @@ public class ValueMapDecorator implements ValueMap {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<String> keySet() {
         return base.keySet();
     }
@@ -157,6 +170,7 @@ public class ValueMapDecorator implements ValueMap {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<Object> values() {
         return base.values();
     }
@@ -164,6 +178,7 @@ public class ValueMapDecorator implements ValueMap {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Set<Entry<String, Object>> entrySet() {
         return base.entrySet();
     }

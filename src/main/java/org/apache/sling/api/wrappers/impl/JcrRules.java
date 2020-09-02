@@ -43,7 +43,7 @@ public final class JcrRules {
         }));
         converterBuilder.rule(new TypeRule<Value, InputStream>(Value.class, InputStream.class, value -> {
             try {
-                return value.getStream();
+                return value.getBinary().getStream();
             } catch (Exception e) {
                 return (InputStream) ConverterFunction.CANNOT_HANDLE;
             }

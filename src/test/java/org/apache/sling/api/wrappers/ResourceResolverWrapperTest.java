@@ -16,11 +16,20 @@
  ******************************************************************************/
 package org.apache.sling.api.wrappers;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.sling.api.resource.Resource;
@@ -30,11 +39,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class ResourceResolverWrapperTest {
 
@@ -427,7 +431,7 @@ public class ResourceResolverWrapperTest {
 
     @Test
     public void testAdaptTo() throws Exception {
-        List list = mock(List.class);
+        List<?> list = mock(List.class);
         when(wrappedResolver.adaptTo(List.class)).thenReturn(list);
 
         assertEquals(list, underTest.adaptTo(List.class));

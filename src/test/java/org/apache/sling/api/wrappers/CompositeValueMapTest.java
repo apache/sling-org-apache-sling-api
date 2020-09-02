@@ -18,16 +18,16 @@
  */
 package org.apache.sling.api.wrappers;
 
-import org.apache.sling.api.resource.ValueMap;
-import org.junit.Assert;
-import org.junit.Test;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static org.hamcrest.Matchers.containsInAnyOrder;
+import org.apache.sling.api.resource.ValueMap;
+import org.junit.Assert;
+import org.junit.Test;
 
 public class CompositeValueMapTest {
 
@@ -54,6 +54,7 @@ public class CompositeValueMapTest {
     @Test
     public void testMerge() throws Exception {
         // Get value map for extended node using default node as defaults
+        @SuppressWarnings("deprecation")
         CompositeValueMap valueMap = new CompositeValueMap(
                 getExtendedProps(),
                 getDefaultProps()
@@ -72,6 +73,7 @@ public class CompositeValueMapTest {
     @Test
     public void testMergeNoDefaults() throws Exception {
         // Get value map for extended node using an empty default
+        @SuppressWarnings("deprecation")
         CompositeValueMap valueMap = new CompositeValueMap(
                 getExtendedProps(),
                 null
@@ -91,6 +93,7 @@ public class CompositeValueMapTest {
     public void testOverride() throws Exception {
         // Get value map for extended node using default node as defaults
         // and override only mode
+        @SuppressWarnings("deprecation")
         CompositeValueMap valueMap = new CompositeValueMap(
                 getExtendedProps(),
                 getDefaultProps(),
@@ -107,6 +110,7 @@ public class CompositeValueMapTest {
         verifyResults(valueMap, expectations);
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testOverrideNoDefaults() throws Exception {
         // Get value map for extended node using an empty default
@@ -140,6 +144,7 @@ public class CompositeValueMapTest {
         return new ValueMapDecorator(defaultProps);
     }
 
+    @SuppressWarnings("deprecation")
     private void verifyResults(CompositeValueMap valueMap, Set<CompositeValueMapTestResult> expectations) {
         Map<String, Object> expectedMap = new HashMap<String, Object>();
 

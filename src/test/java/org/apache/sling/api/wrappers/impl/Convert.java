@@ -18,8 +18,6 @@
  */
 package org.apache.sling.api.wrappers.impl;
 
-import org.apache.commons.lang3.ClassUtils;
-
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -27,13 +25,12 @@ import static org.junit.Assert.assertNull;
 import java.lang.reflect.Array;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 /**
  * Tests all permutations of object conversions between single values and array types, and null handling.
  */
 final class Convert {
-    
+
     private Convert() {
         // static methods only
     }
@@ -62,7 +59,7 @@ final class Convert {
             return new ConversionAssert<T, U>(input1, input2, inputType, expected1, expected2, expectedType);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public static class ConversionAssert<T,U> {
 
@@ -105,10 +102,10 @@ final class Convert {
 
     private static <T, U> void assertPermuations(T input1, T input2, Class<? super T> inputType,
             U expected1, U expected2, U nullValue, Class<? super U> expectedType, Class<? super U[]> expectedArrayType) {
-        
+
         // single value to single value
         assertConversion(expected1, input1, expectedType);
-        
+
         // single value to array
         Object expectedSingletonArray;
         if (expected1 == null && expected2 == null) {
@@ -119,7 +116,7 @@ final class Convert {
             Array.set(expectedSingletonArray, 0, expected1);
         }
         assertConversion(expectedSingletonArray, input1, expectedArrayType);
-        
+
         // array to array
         Object inputDoubleArray = Array.newInstance(inputType, 2);
         Array.set(inputDoubleArray, 0, input1);
@@ -134,16 +131,16 @@ final class Convert {
             Array.set(expectedDoubleArray, 1,  expected2);
         }
         assertConversion(expectedDoubleArray, inputDoubleArray, expectedArrayType);
-        
+
         // array to single (first) value
         assertConversion(expected1, inputDoubleArray, expectedType);
-        
+
         // null to single value
         assertConversion(nullValue, null, expectedType);
-        
+
         // null to array
         // assertConversion(null, null, expectedArrayType);
-        
+
         // empty array to single value
         Object inputEmptyArray = Array.newInstance(inputType, 0);
         assertConversion(nullValue, inputEmptyArray, expectedType);
@@ -152,8 +149,7 @@ final class Convert {
         Object expectedEmptyArray = Array.newInstance(expectedType, 0);
         assertConversion(expectedEmptyArray, inputEmptyArray, expectedArrayType);
     }
-    
-    @SuppressWarnings("unchecked")
+
     private static <T,U> void assertConversion(Object expected, Object input, Class<U> expectedType) {
         U result = ObjectConverter.convert(input, expectedType);
         String msg = "Convert '" + toString(input) + "' to " + expectedType.getSimpleName();
@@ -167,7 +163,7 @@ final class Convert {
             assertEquals(msg, toStringIfDate(expected), toStringIfDate(result));
         }
     }
-    
+
     private static String toString(Object input) {
         if (input == null) {
             return "null";
@@ -188,7 +184,7 @@ final class Convert {
             return toStringIfDate(input);
         }
     }
-    
+
     private static String toStringIfDate(Object input) {
         if (input instanceof Calendar) {
             return "(Calendar)" + ((Calendar)input).getTime().toInstant().toString();
@@ -210,5 +206,5 @@ final class Convert {
         }
         return null;
     }
-        
+
 }
