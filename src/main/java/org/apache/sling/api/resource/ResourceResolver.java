@@ -22,12 +22,14 @@ import java.io.Closeable;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.sling.api.adapter.Adaptable;
 import org.apache.sling.api.resource.mapping.ResourceMapper;
+import org.apache.sling.api.resource.uri.ResourceUri;
+import org.apache.sling.api.resource.uri.ResourceUriBuilder;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**

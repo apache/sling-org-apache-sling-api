@@ -17,8 +17,8 @@
  * under the License.
  */
 
-@Version("1.1.0")
-package org.apache.sling.api.resource.mapping;
+@Version("1.0.0")
+package org.apache.sling.spi.resource.mapping;
 
 import org.osgi.annotation.versioning.Version;
 
