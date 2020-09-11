@@ -34,6 +34,8 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.request.RequestPathInfo;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ResourceUriBuilder {
 
@@ -90,7 +92,9 @@ public class ResourceUriBuilder {
      * @param requestPathInfo
      * @return a ResourceUriBuilder */
     public static ResourceUriBuilder createFrom(RequestPathInfo requestPathInfo) {
+        Resource suffixResource = requestPathInfo.getSuffixResource();
         return create()
+                .setResourceResolver(suffixResource != null ? suffixResource.getResourceResolver() : null)
                 .setResourcePath(requestPathInfo.getResourcePath())
                 .setSelectors(requestPathInfo.getSelectors())
                 .setExtension(requestPathInfo.getExtension())
@@ -106,14 +110,17 @@ public class ResourceUriBuilder {
                 .setResourceResolver(request.getResourceResolver())
                 .setScheme(request.getScheme())
                 .setHost(request.getServerName())
-                .setPort(request.getServerPort());
+                .setPort(request.getServerPort())
+                .setQuery(request.getQueryString());
     }
 
-    /** Creates a builder from a URI.
+    /** Creates a builder from an arbitrary URI.
      * 
-     * @param uri
+     * @param uri the uri to transform to a ResourceUri
+     * @param resourceResolver a resource resolver is needed to decide up to what part the path is the resource path (that decision is only
+     *            possible by checking against the underlying repository). If null is passed in, the shortest viable resource path is used.
      * @return a ResourceUriBuilder */
-    public static ResourceUriBuilder createFrom(URI uri, ResourceResolver resourceResolver) {
+    public static ResourceUriBuilder createFrom(@NotNull URI uri, @Nullable ResourceResolver resourceResolver) {
         String path = uri.getPath();
         boolean pathExists = !StringUtils.isBlank(path);
         boolean schemeSpecificRelevant = !pathExists && uri.getQuery() == null;
@@ -131,15 +138,17 @@ public class ResourceUriBuilder {
 
     /** Creates a builder from an arbitrary URI string.
      * 
-     * @param resourceUriStr
+     * @param uriStr to uri string to parse
+     * @param resourceResolver a resource resolver is needed to decide up to what part the path is the resource path (that decision is only
+     *            possible by checking against the underlying repository). If null is passed in, the shortest viable resource path is used.
      * @return a ResourceUriBuilder */
-    public static ResourceUriBuilder parse(String resourceUriStr, ResourceResolver resourceResolver) {
+    public static ResourceUriBuilder parse(@NotNull String uriStr, @Nullable ResourceResolver resourceResolver) {
         URI uri;
         try {
-            uri = new URI(resourceUriStr);
+            uri = new URI(uriStr);
             return createFrom(uri, resourceResolver);
         } catch (URISyntaxException e) {
-            throw new IllegalArgumentException("Invalid URI " + resourceUriStr + ": " + e.getMessage(), e);
+            throw new IllegalArgumentException("Invalid URI " + uriStr + ": " + e.getMessage(), e);
         }
     }
 

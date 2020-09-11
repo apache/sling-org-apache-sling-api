@@ -54,16 +54,17 @@ public interface PathToUriMappingService {
         Map<String, ResourceUri> getIntermediateMappings();
     }
 
+    /** Maps a path to a URI
+     * 
+     * @param request
+     * @param resourcePath
+     * @return a @{link PathToUriMappingService.Result} */
+    Result map(@Nullable HttpServletRequest exampleRequest, @NotNull String resourcePath);
+
     /** Resolves a path relative to the given request.
      * 
      * @param request
      * @param path
      * @return a @{link PathToUriMappingService.Result} */
-    Result resolve(@Nullable HttpServletRequest request, @NotNull String path);
-
-    /** @param request
-     * @param resourcePath
-     * @return a @{link PathToUriMappingService.Result} */
-    Result map(@Nullable HttpServletRequest request, @NotNull String resourcePath);
-
+    Result resolve(@Nullable HttpServletRequest request, @Nullable String path);
 }
