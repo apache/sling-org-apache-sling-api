@@ -18,8 +18,8 @@
  */
 package org.apache.sling.api.resource.uri;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.apache.sling.api.resource.uri.ResourceUriBuilder.isBlank;
+import static org.apache.sling.api.resource.uri.ResourceUriBuilder.isNotBlank;
 
 import java.net.URI;
 import java.util.Map;

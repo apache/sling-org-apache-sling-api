@@ -18,8 +18,6 @@
  */
 package org.apache.sling.api.resource.uri;
 
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
@@ -33,7 +31,6 @@ import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.request.RequestPathInfo;
 import org.apache.sling.api.resource.Resource;
@@ -147,7 +144,7 @@ public class ResourceUriBuilder {
      */
     public static ResourceUriBuilder createFrom(@NotNull URI uri, @Nullable ResourceResolver resourceResolver) {
         String path = uri.getPath();
-        boolean pathExists = !StringUtils.isBlank(path);
+        boolean pathExists = isNotBlank(path);
         boolean schemeSpecificRelevant = !pathExists && uri.getQuery() == null;
         return create()
                 .setResourceResolver(resourceResolver)
@@ -179,6 +176,15 @@ public class ResourceUriBuilder {
         } catch (URISyntaxException e) {
             throw new IllegalArgumentException("Invalid URI " + uriStr + ": " + e.getMessage(), e);
         }
+    }
+
+    // simple package scope helper to avoid stringutil dependency
+    static boolean isBlank(final CharSequence cs) {
+        return cs == null || cs.chars().allMatch(Character::isWhitespace);
+    }
+
+    static boolean isNotBlank(final CharSequence cs) {
+        return !isBlank(cs);
     }
 
     private String scheme = null;
@@ -377,7 +383,7 @@ public class ResourceUriBuilder {
         if (schemeSpecificPart != null || resourcePath == null) {
             return this;
         }
-        if (suffix != null && !StringUtils.startsWith(suffix, "/")) {
+        if (suffix != null && !suffix.startsWith("/")) {
             throw new IllegalArgumentException("Suffix needs to start with slash");
         }
         this.suffix = suffix;
@@ -479,12 +485,12 @@ public class ResourceUriBuilder {
     private String toStringInternal(boolean includeScheme, boolean includeFragment) {
         StringBuilder requestUri = new StringBuilder();
 
-        if (includeScheme && StringUtils.isNotBlank(scheme)) {
+        if (includeScheme && isNotBlank(scheme)) {
             requestUri.append(scheme + CHAR_COLON);
         }
         if (isNotBlank(scheme) && isNotBlank(host)) {
             requestUri.append(CHAR_SLASH + CHAR_SLASH);
-            if (StringUtils.isNotBlank(userInfo)) {
+            if (isNotBlank(userInfo)) {
                 requestUri.append(userInfo + CHAR_AT);
             }
             requestUri.append(host);
@@ -545,7 +551,7 @@ public class ResourceUriBuilder {
                 }
                 regexMatcher.appendReplacement(resultString, "");
                 String key = regexMatcher.group(1);
-                String value = StringUtils.defaultIfEmpty(regexMatcher.group(2), regexMatcher.group(3));
+                String value = isNotBlank(regexMatcher.group(2)) ? regexMatcher.group(2) : regexMatcher.group(3);
                 currentPathParameters.put(key, value);
             }
             if (resultString != null) {
@@ -576,12 +582,12 @@ public class ResourceUriBuilder {
             pathBuilder.append(CHAR_DOT + String.join(CHAR_DOT, selectors));
             dotAdded = true;
         }
-        if (!StringUtils.isBlank(extension)) {
+        if (isNotBlank(extension)) {
             pathBuilder.append(CHAR_DOT + extension);
             dotAdded = true;
         }
 
-        if (!StringUtils.isBlank(suffix)) {
+        if (isNotBlank(suffix)) {
             if (!dotAdded) {
                 pathBuilder.append(CHAR_DOT);
             }
@@ -667,7 +673,7 @@ public class ResourceUriBuilder {
 
         @Override
         public Resource getSuffixResource() {
-            if (StringUtils.isNotBlank(suffix) && resourceResolver != null) {
+            if (isNotBlank(suffix) && resourceResolver != null) {
                 return resourceResolver.resolve(suffix);
             } else {
                 return null;
