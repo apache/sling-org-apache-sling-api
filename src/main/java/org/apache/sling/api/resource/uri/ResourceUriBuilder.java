@@ -86,7 +86,7 @@ public class ResourceUriBuilder {
                 .setSuffix(resourceUri.getSuffix())
                 .setQuery(resourceUri.getQuery())
                 .setFragment(resourceUri.getFragment())
-                .setSchemeSpecificPart(resourceUri.getSchemeSpecificPart())
+                .setSchemeSpecificPart(resourceUri.isOpaque() ? resourceUri.getSchemeSpecificPart() : null)
                 .setResourceResolver(resourceUri instanceof ImmutableResourceUri
                         ? ((ImmutableResourceUri) resourceUri).getBuilder().resourceResolver
                         : null);
@@ -476,10 +476,10 @@ public class ResourceUriBuilder {
         return new ImmutableResourceUri();
     }
 
-    private String toStringInternal() {
+    private String toStringInternal(boolean includeScheme, boolean includeFragment) {
         StringBuilder requestUri = new StringBuilder();
 
-        if (StringUtils.isNotBlank(scheme)) {
+        if (includeScheme && StringUtils.isNotBlank(scheme)) {
             requestUri.append(scheme + CHAR_COLON);
         }
         if (isNotBlank(scheme) && isNotBlank(host)) {
@@ -504,7 +504,7 @@ public class ResourceUriBuilder {
         if (query != null) {
             requestUri.append(CHAR_QM + query);
         }
-        if (fragment != null) {
+        if (includeFragment && fragment != null) {
             requestUri.append(CHAR_HASH + fragment);
         }
         return requestUri.toString();
@@ -512,7 +512,7 @@ public class ResourceUriBuilder {
 
     /** @return string representation of builder */
     public String toString() {
-        return toStringInternal();
+        return toStringInternal(true, true);
     }
 
     private void setPathWithDefinedResourcePosition(String path, int firstDotPositionAfterResourcePath) {
@@ -633,7 +633,11 @@ public class ResourceUriBuilder {
 
         @Override
         public String getSchemeSpecificPart() {
-            return schemeSpecificPart;
+            if (isOpaque()) {
+                return schemeSpecificPart;
+            } else {
+                return toStringInternal(false, false);
+            }
         }
 
         @Override
@@ -675,9 +679,15 @@ public class ResourceUriBuilder {
             return userInfo;
         }
 
+        // overwriting default, this implementation keeps the schemeSpecificPart empty for all non-opaque URLs
+        public boolean isOpaque() {
+            return isNotBlank(getScheme())
+                    && isNotBlank(schemeSpecificPart);
+        }
+
         @Override
         public String toString() {
-            return toStringInternal();
+            return toStringInternal(true, true);
         }
 
         @Override

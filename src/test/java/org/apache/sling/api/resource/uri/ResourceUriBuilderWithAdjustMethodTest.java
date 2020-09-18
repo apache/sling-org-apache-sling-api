@@ -151,7 +151,7 @@ public class ResourceUriBuilderWithAdjustMethodTest {
                 },
                 "https://example.com/path/to/resource.html",
                 resourceUri -> {
-                    assertNull(resourceUri.getSchemeSpecificPart());
+                    assertEquals("//example.com/path/to/resource.html", resourceUri.getSchemeSpecificPart());
                 });
     }
 

@@ -42,6 +42,7 @@ public class ResourceUriTest {
         String testUriStr = "http://host.com/test/to/path.html";
         testUri(testUriStr, false, false, false, true, false, resourceUri -> {
             assertEquals("http", resourceUri.getScheme());
+            assertEquals("//host.com/test/to/path.html", resourceUri.getSchemeSpecificPart());
             assertEquals(null, resourceUri.getUserInfo());
             assertEquals("host.com", resourceUri.getHost());
             assertEquals(-1, resourceUri.getPort());
@@ -49,7 +50,6 @@ public class ResourceUriTest {
             assertEquals(null, resourceUri.getSelectorString());
             assertEquals("html", resourceUri.getExtension());
             assertEquals(null, resourceUri.getSuffix());
-            assertEquals(null, resourceUri.getSchemeSpecificPart());
             assertEquals(null, resourceUri.getQuery());
             assertEquals(null, resourceUri.getFragment());
         }, asList(resolver, null));
@@ -62,6 +62,7 @@ public class ResourceUriTest {
         String testUriStr = "https://test:pw@host.com:888/test/to/path.sel1.json/suffix/path?p1=2&p2=3#frag3939";
         testUri(testUriStr, false, false, false, true, false, resourceUri -> {
             assertEquals("https", resourceUri.getScheme());
+            assertEquals("//test:pw@host.com:888/test/to/path.sel1.json/suffix/path?p1=2&p2=3", resourceUri.getSchemeSpecificPart());
             assertEquals("test:pw", resourceUri.getUserInfo());
             assertEquals("host.com", resourceUri.getHost());
             assertEquals(888, resourceUri.getPort());
@@ -69,7 +70,6 @@ public class ResourceUriTest {
             assertEquals("sel1", resourceUri.getSelectorString());
             assertEquals("json", resourceUri.getExtension());
             assertEquals("/suffix/path", resourceUri.getSuffix());
-            assertEquals(null, resourceUri.getSchemeSpecificPart());
             assertEquals("p1=2&p2=3", resourceUri.getQuery());
             assertEquals("frag3939", resourceUri.getFragment());
         }, asList(resolver, null));
@@ -89,7 +89,6 @@ public class ResourceUriTest {
             assertEquals("sel1", resourceUri.getSelectorString());
             assertEquals("json", resourceUri.getExtension());
             assertEquals("/suffix/path", resourceUri.getSuffix());
-            assertEquals(null, resourceUri.getSchemeSpecificPart());
             assertEquals("p1=2&p2=3", resourceUri.getQuery());
             assertEquals("frag3939", resourceUri.getFragment());
         }, asList(resolver, null));
@@ -108,7 +107,6 @@ public class ResourceUriTest {
             assertEquals("min", resourceUri.getSelectorString());
             assertEquals("js", resourceUri.getExtension());
             assertEquals("/suffix/app.nodesbrowser.js", resourceUri.getSuffix());
-            assertEquals(null, resourceUri.getSchemeSpecificPart());
             assertEquals(null, resourceUri.getQuery());
             assertEquals(null, resourceUri.getFragment());
         }, asList(resolver, null));
@@ -128,7 +126,6 @@ public class ResourceUriTest {
             assertEquals("sel1.sel2..sel4", resourceUri.getSelectorString());
             assertEquals("js", resourceUri.getExtension());
             assertEquals(null, resourceUri.getSuffix());
-            assertEquals(null, resourceUri.getSchemeSpecificPart());
             assertEquals(null, resourceUri.getQuery());
             assertEquals(null, resourceUri.getFragment());
         }, asList(resolver, null));
@@ -144,7 +141,6 @@ public class ResourceUriTest {
             assertEquals("sel1", resourceUri.getSelectorString());
             assertEquals("sel2", resourceUri.getExtension());
             assertEquals("/sel4.js", resourceUri.getSuffix());
-            assertEquals(null, resourceUri.getSchemeSpecificPart());
             assertEquals(null, resourceUri.getQuery());
             assertEquals(null, resourceUri.getFragment());
         }, null, true);
@@ -163,7 +159,6 @@ public class ResourceUriTest {
             assertEquals(null, resourceUri.getSelectorString());
             assertEquals("html", resourceUri.getExtension());
             assertEquals(null, resourceUri.getSuffix());
-            assertEquals(null, resourceUri.getSchemeSpecificPart());
             assertEquals(null, resourceUri.getQuery());
             assertEquals("frag1", resourceUri.getFragment());
         }, asList(resolver, null));
@@ -182,7 +177,6 @@ public class ResourceUriTest {
             assertEquals("sel1.sel2", resourceUri.getSelectorString());
             assertEquals("html", resourceUri.getExtension());
             assertEquals(null, resourceUri.getSuffix());
-            assertEquals(null, resourceUri.getSchemeSpecificPart());
             assertEquals("test=1", resourceUri.getQuery());
             assertEquals("frag1", resourceUri.getFragment());
         }, asList(resolver, null));
@@ -203,7 +197,6 @@ public class ResourceUriTest {
             assertEquals(1, resourceUri.getPathParameters().size());
             assertEquals("1.0", resourceUri.getPathParameters().get("v"));
             assertEquals("/suffix/path", resourceUri.getSuffix());
-            assertEquals(null, resourceUri.getSchemeSpecificPart());
             assertEquals("p1=2&p2=3", resourceUri.getQuery());
             assertEquals("frag3939", resourceUri.getFragment());
         }, asList(resolver, null));
@@ -220,7 +213,6 @@ public class ResourceUriTest {
             assertEquals(1, resourceUri.getPathParameters().size());
             assertEquals("bar", resourceUri.getPathParameters().get("foo"));
             assertEquals("/suffix/path", resourceUri.getSuffix());
-            assertEquals(null, resourceUri.getSchemeSpecificPart());
             assertEquals(null, resourceUri.getQuery());
             assertEquals(null, resourceUri.getFragment());
         }, asList(resolver, null));
@@ -245,7 +237,6 @@ public class ResourceUriTest {
             assertEquals("7", resourceUri.getPathParameters().get("antotherParam2"));
 
             assertEquals("/suffix/path", resourceUri.getSuffix());
-            assertEquals(null, resourceUri.getSchemeSpecificPart());
             assertEquals("p1=2&p2=3", resourceUri.getQuery());
             assertEquals("frag3939", resourceUri.getFragment());
         }, asList(resolver, null));
@@ -266,7 +257,6 @@ public class ResourceUriTest {
             assertEquals(1, resourceUri.getPathParameters().size());
             assertEquals("1.0", resourceUri.getPathParameters().get("v"));
             assertEquals("/suffix/path", resourceUri.getSuffix());
-            assertEquals(null, resourceUri.getSchemeSpecificPart());
             assertEquals("p1=2&p2=3", resourceUri.getQuery());
             assertEquals("frag3939", resourceUri.getFragment());
         }, null, true /* URL is restructured (parameter moved to end), assertion below */);
@@ -323,7 +313,6 @@ public class ResourceUriTest {
             assertEquals(null, resourceUri.getSelectorString());
             assertEquals(null, resourceUri.getExtension());
             assertEquals(null, resourceUri.getSuffix());
-            assertEquals(null, resourceUri.getSchemeSpecificPart());
             assertEquals(null, resourceUri.getQuery());
             assertEquals("", resourceUri.getFragment());
         }, asList(resolver, null));
@@ -337,7 +326,6 @@ public class ResourceUriTest {
             assertEquals(null, resourceUri.getSelectorString());
             assertEquals(null, resourceUri.getExtension());
             assertEquals(null, resourceUri.getSuffix());
-            assertEquals(null, resourceUri.getSchemeSpecificPart());
             assertEquals(null, resourceUri.getQuery());
             assertEquals("fragment", resourceUri.getFragment());
         }, asList(resolver, null));
@@ -355,7 +343,6 @@ public class ResourceUriTest {
             assertEquals(null, resourceUri.getSelectorString());
             assertEquals(null, resourceUri.getExtension());
             assertEquals(null, resourceUri.getSuffix());
-            assertEquals(null, resourceUri.getSchemeSpecificPart());
             assertEquals("", resourceUri.getQuery());
             assertEquals(null, resourceUri.getFragment());
         }, asList(resolver, null));
@@ -369,7 +356,6 @@ public class ResourceUriTest {
             assertEquals(null, resourceUri.getSelectorString());
             assertEquals(null, resourceUri.getExtension());
             assertEquals(null, resourceUri.getSuffix());
-            assertEquals(null, resourceUri.getSchemeSpecificPart());
             assertEquals("test=test", resourceUri.getQuery());
             assertEquals(null, resourceUri.getFragment());
         }, asList(resolver, null));
@@ -428,6 +414,9 @@ public class ResourceUriTest {
         assertEquals("isFullUri()", isFullUri, resourceUri.isFullUri());
         assertEquals("isOpaque()", isOpaque, resourceUri.isOpaque());
         assertEquals("isOpaque() matches to java URI impl", resourceUri.toUri().isOpaque(), resourceUri.isOpaque());
+        assertEquals("getSchemeSpecificPart() matches to java URI impl", resourceUri.toUri().getSchemeSpecificPart(),
+                resourceUri.getSchemeSpecificPart());
+
 
         additionalAssertions.accept(resourceUri);
 

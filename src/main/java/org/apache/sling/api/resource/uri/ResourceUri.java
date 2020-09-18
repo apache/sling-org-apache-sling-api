@@ -162,11 +162,10 @@ public interface ResourceUri extends RequestPathInfo {
     }
 
     /**
-     * @return true if the uri is an opaque URI like e.g. mailto:
+     * @return true if the uri is an opaque URI like e.g. mailto:jon@example.com
      */
     default boolean isOpaque() {
-        return isNotBlank(getScheme())
-                && isNotBlank(getSchemeSpecificPart());
+        return toUri().isOpaque();
     }
 
     /**
