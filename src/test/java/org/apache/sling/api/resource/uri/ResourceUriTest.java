@@ -21,6 +21,7 @@ package org.apache.sling.api.resource.uri;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 
+import java.net.URI;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -413,10 +414,13 @@ public class ResourceUriTest {
         assertEquals("isRelativePath()", isRelativePath, resourceUri.isRelativePath());
         assertEquals("isFullUri()", isFullUri, resourceUri.isFullUri());
         assertEquals("isOpaque()", isOpaque, resourceUri.isOpaque());
-        assertEquals("isOpaque() matches to java URI impl", resourceUri.toUri().isOpaque(), resourceUri.isOpaque());
-        assertEquals("getSchemeSpecificPart() matches to java URI impl", resourceUri.toUri().getSchemeSpecificPart(),
-                resourceUri.getSchemeSpecificPart());
 
+        URI javaUri = resourceUri.toUri();
+        assertEquals("isOpaque() matches to java URI impl", javaUri.isOpaque(), resourceUri.isOpaque());
+        assertEquals("getSchemeSpecificPart() matches to java URI impl", javaUri.getSchemeSpecificPart(),
+                resourceUri.getSchemeSpecificPart());
+        assertEquals("getFragment() matches to java URI impl", javaUri.getFragment(), resourceUri.getFragment());
+        assertEquals("getQuery() matches to java URI impl", javaUri.getQuery(), resourceUri.getQuery());
 
         additionalAssertions.accept(resourceUri);
 

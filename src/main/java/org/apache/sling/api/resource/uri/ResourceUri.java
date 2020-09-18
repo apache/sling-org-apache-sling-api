@@ -105,12 +105,12 @@ public interface ResourceUri extends RequestPathInfo {
     public String getPath();
 
     /**
-     * @return returns the query part of the uri
+     * @return returns the query part of the URI or null if the URI does not contain a query
      */
     public String getQuery();
 
     /**
-     * @return returns the url fragment of the uri
+     * @return returns the fragment or null if the URI does not contain a fragment
      */
     public String getFragment();
 
@@ -123,13 +123,18 @@ public interface ResourceUri extends RequestPathInfo {
     public String getSchemeSpecificPart();
 
     /**
-     * @return returns the corresponding suffix resource
+     * @return returns the corresponding suffix resource or null if
+     *         <ul>
+     *         <li>no resource resolver is available (depends on the create method used in ResourceUriBuilder)</li>
+     *         <li>the URI does not contain a suffix</li>
+     *         <li>if the suffix resource could not be found</li>
+     *         </ul>
      */
     @Override
     public Resource getSuffixResource();
 
     /**
-     * @return returns true if the uri is either a relative or absolute path (this is the case if scheme and host is empty and the URI path
+     * @return returns true if the URI is either a relative or absolute path (this is the case if scheme and host is empty and the URI path
      *         is set)
      */
     default boolean isPath() {
@@ -139,22 +144,21 @@ public interface ResourceUri extends RequestPathInfo {
     }
 
     /**
-     * @return true if the uri is a absolute path starting with a slash ('/'). This is the default case for all links to pages and assets in
-     *         AEM.
+     * @return true if the URI is a absolute path starting with a slash ('/').
      */
     default boolean isAbsolutePath() {
         return isPath() && getResourcePath().startsWith(ResourceUriBuilder.CHAR_SLASH);
     }
 
     /**
-     * @return true if uri is relative (not an URL and not starting with '/')
+     * @return true if URI is relative (not an URL and not starting with '/')
      */
     default boolean isRelativePath() {
         return isPath() && !getResourcePath().startsWith(ResourceUriBuilder.CHAR_SLASH);
     }
 
     /**
-     * @return true if the uri is an absolute URI containing a scheme.
+     * @return true if the URI is an absolute URI containing a scheme.
      */
     default boolean isFullUri() {
         return isNotBlank(getScheme())
@@ -162,7 +166,7 @@ public interface ResourceUri extends RequestPathInfo {
     }
 
     /**
-     * @return true if the uri is an opaque URI like e.g. mailto:jon@example.com
+     * @return true if the URI is an opaque URI like e.g. mailto:jon@example.com
      */
     default boolean isOpaque() {
         return toUri().isOpaque();
