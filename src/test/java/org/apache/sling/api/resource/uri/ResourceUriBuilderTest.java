@@ -19,6 +19,7 @@
 package org.apache.sling.api.resource.uri;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.when;
 
@@ -154,4 +155,12 @@ public class ResourceUriBuilderTest {
         assertEquals("https://example.com:8080/path/to/page.html", testUri.toString());
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void testBuilderMayOnlyBeUsedToBuildAnUri() {
+        ResourceUriBuilder builder = ResourceUriBuilder.parse("/path/to/page.html", null);
+        ResourceUri resourceUri = builder.build();
+        assertNotNull(resourceUri);
+        // calling build twice is not allowed
+        builder.build();
+    }
 }

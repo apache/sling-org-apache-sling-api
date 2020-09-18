@@ -51,16 +51,16 @@ public class ResourceUriBuilder {
     private static final String HTTP_SCHEME = "http";
     private static final int HTTP_DEFAULT_PORT = 80;
 
-    static final String CHAR_HASH = "#";
-    static final String CHAR_QM = "?";
+    static final char CHAR_HASH = '#';
+    static final char CHAR_QM = '?';
+    static final char CHAR_AT = '@';
+    static final char CHAR_COLON = ':';
+    static final char CHAR_SEMICOLON = ';';
+    static final char CHAR_EQUALS = '=';
+    static final char CHAR_SINGLEQUOTE = '\'';
     static final String CHAR_DOT = ".";
     static final String CHAR_SLASH = "/";
-    static final String CHAR_AT = "@";
     static final String SELECTOR_DOT_REGEX = "\\.(?!\\.?/)"; // (?!\\.?/) to avoid matching ./ and ../
-    static final String CHAR_COLON = ":";
-    static final String CHAR_SEMICOLON = ";";
-    static final String CHAR_EQUALS = "=";
-    static final String CHAR_SINGLEQUOTE = "'";
     static final String PATH_PARAMETERS_REGEX = ";([a-zA-z0-9]+)=(?:\\'([^']*)\\'|([^/]+))";
 
     public static ResourceUriBuilder create() {
@@ -198,6 +198,9 @@ public class ResourceUriBuilder {
 
     // only needed for getSuffixResource() from interface RequestPathInfo
     private ResourceResolver resourceResolver = null;
+
+    // to ensure a builder is used only once (as the ImmutableResourceUri being created in build() is sharing its state)
+    private boolean isBuilt = false;
 
     private ResourceUriBuilder() {
     }
@@ -466,6 +469,10 @@ public class ResourceUriBuilder {
      * 
      * @return the builder for method chaining */
     public ResourceUri build() {
+        if (isBuilt) {
+            throw new IllegalStateException("ResourceUriBuilder.build() may only be called once per builder instance");
+        }
+        isBuilt = true;
         return new ImmutableResourceUri();
     }
 
@@ -484,7 +491,8 @@ public class ResourceUriBuilder {
             if (port > 0
                     && !(scheme.equals(HTTP_SCHEME) && port == HTTP_DEFAULT_PORT)
                     && !(scheme.equals(HTTPS_SCHEME) && port == HTTPS_DEFAULT_PORT)) {
-                requestUri.append(CHAR_COLON + port);
+                requestUri.append(CHAR_COLON);
+                requestUri.append(port);
             }
         }
         if (resourcePath != null) {

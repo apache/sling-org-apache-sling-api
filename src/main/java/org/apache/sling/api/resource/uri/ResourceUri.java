@@ -115,6 +115,9 @@ public interface ResourceUri extends RequestPathInfo {
     public String getFragment();
 
     /**
+     * The scheme-specific part of the URI, compare with Javadoc of class
+     * <h href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/URI.html">URI</a>.
+     * 
      * @return scheme specific part of the URI
      */
     public String getSchemeSpecificPart();
