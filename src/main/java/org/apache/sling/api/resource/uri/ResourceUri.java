@@ -24,144 +24,203 @@ import java.util.function.Consumer;
 
 import org.apache.sling.api.request.RequestPathInfo;
 import org.apache.sling.api.resource.Resource;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * Represents an immutable URI that points to a resource or alternatively, can contain opaque URIs like {@code mailto:} or
  * {@code javascript:}. Use {@link ResourceUri#adjust(Consumer)} or {@link ResourceUriBuilder} to create new or modified instances.
+ * 
+ * @since 1.0.0 (Sling API Bundle 2.23.0)
  */
 @ProviderType
 public interface ResourceUri extends RequestPathInfo {
 
     /**
-     * @return returns the java.net.URI.
+     * Returns the java.net.URI.
+     * 
+     * @return the URI
      */
-    public URI toUri();
+    @NotNull
+    URI toUri();
 
     /**
-     * @return returns the URI as String.
+     * Returns the URI as String.
+     * 
+     * @return the URI string
      */
-    public String toString();
+    @NotNull
+    String toString();
 
     /**
-     * @return returns the scheme of the ResourceUri or null if not set
+     * Returns the scheme.
+     * 
+     * @return the scheme or null if not set
      */
-    public String getScheme();
+    @Nullable
+    String getScheme();
 
     /**
-     * @return returns the user info of the ResourceUri or null if not set
+     * Returns the user info.
+     * 
+     * @return the user info of the ResourceUri or null if not set
      */
-    public String getUserInfo();
+    @Nullable
+    String getUserInfo();
 
     /**
+     * Returns the host.
+     * 
      * @return returns the host of the ResourceUri or null if not set
      */
-    public String getHost();
+    @Nullable
+    String getHost();
 
     /**
-     * @return returns the port of the ResourceUri or null if not set
+     * Returns the port.
+     * 
+     * @return returns the port of the ResourceUri or -1 if not set
      */
-    public int getPort();
+    int getPort();
 
     /**
+     * Returns the resource path.
+     * 
      * @return returns the resource path or null if the URI does not contain a path.
      */
     @Override
-    public String getResourcePath();
+    @Nullable
+    String getResourcePath();
 
     /**
+     * Returns the selector string.
+     * 
      * @return returns the selector string or null if the URI does not contain selector(s)
      */
     @Override
-    public String getSelectorString();
+    @Nullable
+    String getSelectorString();
 
     /**
-     * @return returns the selector array (empty if the URI does not contain selector(s))
+     * Returns the selectors array.
+     * 
+     * @return the selectors array (empty if the URI does not contain selector(s))
      */
     @Override
-    public String[] getSelectors();
+    String[] getSelectors();
 
     /**
-     * @return returns the extension or null if the URI does not contain an extension
+     * Returns the extension.
+     * 
+     * @return the extension or null if the URI does not contain an extension
      */
     @Override
-    public String getExtension();
+    @Nullable
+    String getExtension();
 
     /**
-     * @return returns the path parameters or an empty Map if the URI does not contain any
+     * Returns the path parameters.
+     * 
+     * @return the path parameters or an empty Map if the URI does not contain any
      */
-    public Map<String, String> getPathParameters();
+    Map<String, String> getPathParameters();
 
     /**
-     * @return returns the suffix or null if the URI does not contain a suffix
+     * Returns the suffix part of the URI
+     * 
+     * @return the suffix string or null if the URI does not contain a suffix
      */
     @Override
-    public String getSuffix();
+    @Nullable
+    String getSuffix();
 
     /**
-     * @return returns the joint path of resource path, selectors, extension and suffix or null if resource path is not set
+     * Returns the joint path of resource path, selectors, extension and suffix.
+     * 
+     * @return the path or null if no path is set
      */
-    public String getPath();
+    @Nullable
+    String getPath();
 
     /**
-     * @return returns the query part of the URI or null if the URI does not contain a query
+     * Returns the query.
+     * 
+     * @return the query part of the URI or null if the URI does not contain a query
      */
-    public String getQuery();
+    @Nullable
+    String getQuery();
 
     /**
-     * @return returns the fragment or null if the URI does not contain a fragment
+     * Returns the fragment.
+     * 
+     * @return the fragment or null if the URI does not contain a fragment
      */
-    public String getFragment();
+    @Nullable
+    String getFragment();
 
     /**
-     * The scheme-specific part of the URI, compare with Javadoc of class
-     * <h href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/URI.html">URI</a>.
+     * Returns the scheme-specific part of the URI, compare with Javadoc of class
+     * <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/URI.html">URI</a>.
      * 
      * @return scheme specific part of the URI
      */
-    public String getSchemeSpecificPart();
+    @Nullable
+    String getSchemeSpecificPart();
 
     /**
-     * @return returns the corresponding suffix resource or null if
-     *         <ul>
-     *         <li>no resource resolver is available (depends on the create method used in ResourceUriBuilder)</li>
-     *         <li>the URI does not contain a suffix</li>
-     *         <li>if the suffix resource could not be found</li>
-     *         </ul>
+     * Returns the corresponding suffix resource or null if
+     * <ul>
+     * <li>no resource resolver is available (depends on the create method used in ResourceUriBuilder)</li>
+     * <li>the URI does not contain a suffix</li>
+     * <li>if the suffix resource could not be found</li>
+     * </ul>
+     * 
+     * @return the suffix resource if available or null
      */
     @Override
-    public Resource getSuffixResource();
+    @Nullable
+    Resource getSuffixResource();
 
     /**
-     * @return returns true if the URI is either a relative or absolute path (this is the case if scheme and host is empty and the URI path
-     *         is set)
+     * Returns true the URI is either a relative or absolute path (this is the case if scheme and host is empty and the URI path is set)
+     * 
+     * @return returns true for path URIs
      */
     boolean isPath();
 
     /**
-     * @return true if the URI is a absolute path starting with a slash ('/').
+     * Returns true if the URI has an absolute path starting with a slash ('/').
+     * 
+     * @return true if the URI is an absolute path
      */
     boolean isAbsolutePath();
 
     /**
-     * @return true if URI is relative (not an URL and not starting with '/')
+     * Returns true if the URI is a relative path (no scheme and path does not start with '/').
+     * 
+     * @return true if URI is a relative path
      */
     boolean isRelativePath();
 
     /**
+     * Returns true the URI is an absolute URI.
+     * 
      * @return true if the URI is an absolute URI containing a scheme.
      */
     boolean isAbsolute();
 
     /**
-     * @return true if the URI is an opaque URI like e.g. mailto:jon@example.com
+     * Returns true for opaque URIs like e.g. mailto:jon@example.com.
+     * 
+     * @return true if the URI is an opaque URI
      */
     boolean isOpaque();
 
     /**
      * Shortcut to adjust resource URIs, e.g. {@code resourceUri = resourceUri.adjust(b -> b.setExtension("html")); }.
      * 
-     * @param builderConsumer
+     * @param builderConsumer the consumer (e.g. {@code b -> b.setExtension("html")})
      * @return the adjusted ResourceUri (new instance)
      */
     default ResourceUri adjust(Consumer<ResourceUriBuilder> builderConsumer) {

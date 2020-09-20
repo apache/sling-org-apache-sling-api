@@ -41,6 +41,21 @@ import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * Builder for ResourceUris.
+ * <p>
+ * Example:
+ * 
+ * <pre>
+ * ResourceUri testUri = ResourceUriBuilder.create()
+ *         .setResourcePath("/test/to/path")
+ *         .setSelectors(new String[] { "sel1", "sel2" })
+ *         .setExtension("html")
+ *         .setSuffix("/suffix/path")
+ *         .setQuery("par1=val1&amp;par2=val2")
+ *         .build();
+ * </pre>
+ * <p>
+ * 
+ * @since 1.0.0 (Sling API Bundle 2.23.0)
  */
 @ProviderType
 public class ResourceUriBuilder {
@@ -67,12 +82,12 @@ public class ResourceUriBuilder {
     }
 
     /**
-     * Creates a builder from another ResourceUri.
+     * Creates a builder from another ResourceUri (clone and modify use case).
      * 
-     * @param resourceUri
+     * @param resourceUri the resource URI to clone
      * @return a ResourceUriBuilder
      */
-    public static ResourceUriBuilder createFrom(ResourceUri resourceUri) {
+    public static ResourceUriBuilder createFrom(@NotNull ResourceUri resourceUri) {
         return create()
                 .setScheme(resourceUri.getScheme())
                 .setUserInfo(resourceUri.getUserInfo())
@@ -92,12 +107,12 @@ public class ResourceUriBuilder {
     }
 
     /**
-     * Creates a builder from a Resource (only taking the resource path into account).
+     * Creates a builder from a resource (only taking the resource path into account).
      * 
-     * @param resource
+     * @param resource the resource to take the resource path from
      * @return a ResourceUriBuilder
      */
-    public static ResourceUriBuilder createFrom(Resource resource) {
+    public static ResourceUriBuilder createFrom(@NotNull Resource resource) {
         return create()
                 .setResourcePath(resource.getPath())
                 .setResourceResolver(resource.getResourceResolver());
@@ -106,10 +121,10 @@ public class ResourceUriBuilder {
     /**
      * Creates a builder from a RequestPathInfo instance .
      * 
-     * @param requestPathInfo
+     * @param requestPathInfo the request path info to take resource path, selectors, extension and suffix from.
      * @return a ResourceUriBuilder
      */
-    public static ResourceUriBuilder createFrom(RequestPathInfo requestPathInfo) {
+    public static ResourceUriBuilder createFrom(@NotNull RequestPathInfo requestPathInfo) {
         Resource suffixResource = requestPathInfo.getSuffixResource();
         return create()
                 .setResourceResolver(suffixResource != null ? suffixResource.getResourceResolver() : null)
@@ -122,10 +137,10 @@ public class ResourceUriBuilder {
     /**
      * Creates a builder from a request.
      * 
-     * @param request
+     * @param request request to take the URI information from
      * @return a ResourceUriBuilder
      */
-    public static ResourceUriBuilder createFrom(SlingHttpServletRequest request) {
+    public static ResourceUriBuilder createFrom(@NotNull SlingHttpServletRequest request) {
         return createFrom(request.getRequestPathInfo())
                 .setResourceResolver(request.getResourceResolver())
                 .setScheme(request.getScheme())
@@ -137,11 +152,9 @@ public class ResourceUriBuilder {
     /**
      * Creates a builder from an arbitrary URI.
      * 
-     * @param uri
-     *            the uri to transform to a ResourceUri
-     * @param resourceResolver
-     *            a resource resolver is needed to decide up to what part the path is the resource path (that decision is only possible by
-     *            checking against the underlying repository). If null is passed in, the shortest viable resource path is used.
+     * @param uri the uri to transform to a ResourceUri
+     * @param resourceResolver a resource resolver is needed to decide up to what part the path is the resource path (that decision is only
+     *        possible by checking against the underlying repository). If null is passed in, the shortest viable resource path is used.
      * @return a ResourceUriBuilder
      */
     public static ResourceUriBuilder createFrom(@NotNull URI uri, @Nullable ResourceResolver resourceResolver) {
@@ -163,11 +176,9 @@ public class ResourceUriBuilder {
     /**
      * Creates a builder from an arbitrary URI string.
      * 
-     * @param uriStr
-     *            to uri string to parse
-     * @param resourceResolver
-     *            a resource resolver is needed to decide up to what part the path is the resource path (that decision is only possible by
-     *            checking against the underlying repository). If null is passed in, the shortest viable resource path is used.
+     * @param uriStr to uri string to parse
+     * @param resourceResolver a resource resolver is needed to decide up to what part the path is the resource path (that decision is only
+     *        possible by checking against the underlying repository). If null is passed in, the shortest viable resource path is used.
      * @return a ResourceUriBuilder
      */
     public static ResourceUriBuilder parse(@NotNull String uriStr, @Nullable ResourceResolver resourceResolver) {
@@ -180,12 +191,12 @@ public class ResourceUriBuilder {
         }
     }
 
-    // simple package scope helper to avoid stringutil dependency
-    static boolean isBlank(final CharSequence cs) {
+    // simple helper to avoid StringUtils dependency
+    private static boolean isBlank(final CharSequence cs) {
         return cs == null || cs.chars().allMatch(Character::isWhitespace);
     }
 
-    static boolean isNotBlank(final CharSequence cs) {
+    private static boolean isNotBlank(final CharSequence cs) {
         return !isBlank(cs);
     }
 
@@ -204,7 +215,7 @@ public class ResourceUriBuilder {
     private String query = null;
     private String fragment = null;
 
-    // only needed for getSuffixResource() from interface RequestPathInfo
+    // needed for getSuffixResource() from interface RequestPathInfo and rebaseResourcePath()
     private ResourceResolver resourceResolver = null;
 
     // to ensure a builder is used only once (as the ImmutableResourceUri being created in build() is sharing its state)
@@ -213,8 +224,12 @@ public class ResourceUriBuilder {
     private ResourceUriBuilder() {
     }
 
-    /** @param userInfo
-     * @return the builder for method chaining */
+    /**
+     * Set the user info of the URI.
+     * 
+     * @param userInfo the user info
+     * @return the builder for method chaining
+     */
     public ResourceUriBuilder setUserInfo(String userInfo) {
         if (schemeSpecificPart != null) {
             return this;
@@ -223,8 +238,12 @@ public class ResourceUriBuilder {
         return this;
     }
 
-    /** @param host
-     * @return the builder for method chaining */
+    /**
+     * Set the host of the URI.
+     * 
+     * @param host the host
+     * @return the builder for method chaining
+     */
     public ResourceUriBuilder setHost(String host) {
         if (schemeSpecificPart != null) {
             return this;
@@ -233,8 +252,12 @@ public class ResourceUriBuilder {
         return this;
     }
 
-    /** @param port
-     * @return the builder for method chaining */
+    /**
+     * Set the port of the URI.
+     * 
+     * @param port the port
+     * @return the builder for method chaining
+     */
     public ResourceUriBuilder setPort(int port) {
         if (schemeSpecificPart != null) {
             return this;
@@ -243,8 +266,12 @@ public class ResourceUriBuilder {
         return this;
     }
 
-    /** @param path
-     * @return the builder for method chaining */
+    /**
+     * Set the path of the URI that contains a resource path and optionally path parameters, selectors, an extension and a suffix.
+     * 
+     * @param path the path
+     * @return the builder for method chaining
+     */
     public ResourceUriBuilder setPath(String path) {
         if (schemeSpecificPart != null) {
             return this;
@@ -312,7 +339,9 @@ public class ResourceUriBuilder {
     }
 
     /**
-     * @param resourcePath
+     * Set the resource path of the URI.
+     * 
+     * @param resourcePath the resource path
      * @return the builder for method chaining
      */
     public ResourceUriBuilder setResourcePath(String resourcePath) {
@@ -324,7 +353,9 @@ public class ResourceUriBuilder {
     }
 
     /**
-     * @param selectors
+     * Set the selectors of the URI.
+     * 
+     * @param selectors the selectors
      * @return the builder for method chaining
      */
     public ResourceUriBuilder setSelectors(String[] selectors) {
@@ -337,7 +368,9 @@ public class ResourceUriBuilder {
     }
 
     /**
-     * @param selector
+     * Add a selector to the URI.
+     * 
+     * @param selector the selector to add
      * @return the builder for method chaining
      */
     public ResourceUriBuilder addSelector(String selector) {
@@ -349,7 +382,9 @@ public class ResourceUriBuilder {
     }
 
     /**
-     * @param extension
+     * Set the extension of the URI.
+     * 
+     * @param extension the extension
      * @return the builder for method chaining
      */
     public ResourceUriBuilder setExtension(String extension) {
@@ -361,7 +396,11 @@ public class ResourceUriBuilder {
     }
 
     /**
-     * @return returns the path parameters
+     * Set a path parameter to the URI.
+     * 
+     * @param key the path parameter key
+     * @param value the path parameter value
+     * @return the builder for method chaining
      */
     public ResourceUriBuilder setPathParameter(String key, String value) {
         if (schemeSpecificPart != null || resourcePath == null) {
@@ -371,6 +410,12 @@ public class ResourceUriBuilder {
         return this;
     }
 
+    /**
+     * Replaces all path parameters in the URI.
+     * 
+     * @param pathParameters the path parameters
+     * @return the builder for method chaining
+     */
     public ResourceUriBuilder setPathParameters(Map<String, String> pathParameters) {
         this.pathParameters.clear();
         this.pathParameters.putAll(pathParameters);
@@ -378,7 +423,9 @@ public class ResourceUriBuilder {
     }
 
     /**
-     * @param suffix
+     * Set the suffix of the URI.
+     * 
+     * @param suffix the suffix
      * @return the builder for method chaining
      */
     public ResourceUriBuilder setSuffix(String suffix) {
@@ -392,8 +439,12 @@ public class ResourceUriBuilder {
         return this;
     }
 
-    /** @param query
-     * @return the builder for method chaining */
+    /**
+     * Set the query of the URI.
+     * 
+     * @param query the query
+     * @return the builder for method chaining
+     */
     public ResourceUriBuilder setQuery(String query) {
         if (schemeSpecificPart != null) {
             return this;
@@ -402,25 +453,37 @@ public class ResourceUriBuilder {
         return this;
     }
 
-    /** @param urlFragment
-     * @return the builder for method chaining */
-    public ResourceUriBuilder setFragment(String urlFragment) {
+    /**
+     * Set the fragment of the URI.
+     * 
+     * @param fragment the fragment
+     * @return the builder for method chaining
+     */
+    public ResourceUriBuilder setFragment(String fragment) {
         if (schemeSpecificPart != null) {
             return this;
         }
-        this.fragment = urlFragment;
+        this.fragment = fragment;
         return this;
     }
 
-    /** @param scheme
-     * @return the builder for method chaining */
+    /**
+     * Set the scheme of the URI.
+     * 
+     * @param scheme the scheme
+     * @return the builder for method chaining
+     */
     public ResourceUriBuilder setScheme(String scheme) {
         this.scheme = scheme;
         return this;
     }
 
-    /** @param schemeSpecificPart
-     * @return the builder for method chaining */
+    /**
+     * Set the scheme specific part of the URI. Use this for e.g. mail:jon@example.com URIs.
+     * 
+     * @param schemeSpecificPart the scheme specific part
+     * @return the builder for method chaining
+     */
     public ResourceUriBuilder setSchemeSpecificPart(String schemeSpecificPart) {
         if (schemeSpecificPart != null && schemeSpecificPart.isEmpty()) {
             return this;
@@ -429,9 +492,11 @@ public class ResourceUriBuilder {
         return this;
     }
 
-    /** Will remove scheme and authority (that is user info, host and port).
+    /**
+     * Will remove scheme and authority (that is user info, host and port).
      * 
-     * @return the builder for method chaining */
+     * @return the builder for method chaining
+     */
     public ResourceUriBuilder removeSchemeAndAuthority() {
         setScheme(null);
         setUserInfo(null);
@@ -440,11 +505,13 @@ public class ResourceUriBuilder {
         return this;
     }
 
-    /** Will take over scheme and authority (user info, host and port) from provided resourceUri.
+    /**
+     * Will take over scheme and authority (user info, host and port) from provided resourceUri.
      * 
-     * @param resourceUri
-     * @return the builder for method chaining */
-    public ResourceUriBuilder useSchemeAndAuthority(ResourceUri resourceUri) {
+     * @param resourceUri the resource URI
+     * @return the builder for method chaining
+     */
+    public ResourceUriBuilder useSchemeAndAuthority(@NotNull ResourceUri resourceUri) {
         setScheme(resourceUri.getScheme());
         setUserInfo(resourceUri.getUserInfo());
         setHost(resourceUri.getHost());
@@ -453,23 +520,24 @@ public class ResourceUriBuilder {
     }
 
     /**
+     * Will take over scheme and authority (user info, host and port) from provided URI.
+     * 
+     * @param uri the URI
+     * @return the builder for method chaining
+     */
+    public ResourceUriBuilder useSchemeAndAuthority(@NotNull URI uri) {
+        useSchemeAndAuthority(createFrom(uri, resourceResolver).build());
+        return this;
+    }
+
+    /**
      * Sets the resource resolver (required for {@link RequestPathInfo#getSuffixResource()}).
      * 
-     * @param resourceResolver
-     *            the resource resolver
+     * @param resourceResolver the resource resolver
      * @return the builder for method chaining
      */
     public ResourceUriBuilder setResourceResolver(ResourceResolver resourceResolver) {
         this.resourceResolver = resourceResolver;
-        return this;
-    }
-
-    /** Will take over scheme and authority (user info, host and port) from provided uri.
-     * 
-     * @param uri
-     * @return the builder for method chaining */
-    public ResourceUriBuilder useSchemeAndAuthority(URI uri) {
-        useSchemeAndAuthority(createFrom(uri, resourceResolver).build());
         return this;
     }
 
@@ -484,15 +552,20 @@ public class ResourceUriBuilder {
         return new ImmutableResourceUri();
     }
 
-    /** @return string representation of builder */
+    /**
+     * Builds the corresponding string URI for this builder.
+     * 
+     * @return string representation of builder
+     */
     public String toString() {
         return toStringInternal(true, true);
     }
 
 
     /**
-     * @return returns true if the URI is either a relative or absolute path (this is the case if scheme and host is empty and the URI path
-     *         is set)
+     * Returns true the URI is either a relative or absolute path (this is the case if scheme and host is empty and the URI path is set)
+     * 
+     * @return returns true for path URIs
      */
     public boolean isPath() {
         return isBlank(scheme)
@@ -501,20 +574,26 @@ public class ResourceUriBuilder {
     }
 
     /**
-     * @return true if the URI is a absolute path starting with a slash ('/').
+     * Returns true if the URI has an absolute path starting with a slash ('/').
+     * 
+     * @return true if the URI is an absolute path
      */
     public boolean isAbsolutePath() {
         return isPath() && resourcePath.startsWith(ResourceUriBuilder.CHAR_SLASH);
     }
 
     /**
-     * @return true if URI is relative (not an URL and not starting with '/')
+     * Returns true if the URI is a relative path (no scheme and path does not start with '/').
+     * 
+     * @return true if URI is a relative path
      */
     public boolean isRelativePath() {
         return isPath() && !resourcePath.startsWith(ResourceUriBuilder.CHAR_SLASH);
     }
 
     /**
+     * Returns true the URI is an absolute URI.
+     * 
      * @return true if the URI is an absolute URI containing a scheme.
      */
     public boolean isAbsolute() {
@@ -522,7 +601,9 @@ public class ResourceUriBuilder {
     }
 
     /**
-     * @return true if the URI is an opaque URI like e.g. mailto:jon@example.com
+     * Returns true for opaque URIs like e.g. mailto:jon@example.com.
+     * 
+     * @return true if the URI is an opaque URI
      */
     public boolean isOpaque() {
         return isNotBlank(scheme)
@@ -764,7 +845,7 @@ public class ResourceUriBuilder {
             try {
                 return new URI(uriString);
             } catch (URISyntaxException e) {
-                throw new IllegalArgumentException("Invalid Sling URI: " + uriString, e);
+                throw new IllegalStateException("Invalid Sling URI: " + uriString, e);
             }
         }
 
