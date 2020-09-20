@@ -18,24 +18,23 @@
  */
 package org.apache.sling.api.resource.uri;
 
-import static org.apache.sling.api.resource.uri.ResourceUriBuilder.isBlank;
-import static org.apache.sling.api.resource.uri.ResourceUriBuilder.isNotBlank;
-
 import java.net.URI;
 import java.util.Map;
 import java.util.function.Consumer;
 
 import org.apache.sling.api.request.RequestPathInfo;
 import org.apache.sling.api.resource.Resource;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * Represents an immutable URI that points to a resource or alternatively, can contain opaque URIs like {@code mailto:} or
  * {@code javascript:}. Use {@link ResourceUri#adjust(Consumer)} or {@link ResourceUriBuilder} to create new or modified instances.
  */
+@ProviderType
 public interface ResourceUri extends RequestPathInfo {
 
     /**
-     * @return returns the URI.
+     * @return returns the java.net.URI.
      */
     public URI toUri();
 
@@ -137,40 +136,27 @@ public interface ResourceUri extends RequestPathInfo {
      * @return returns true if the URI is either a relative or absolute path (this is the case if scheme and host is empty and the URI path
      *         is set)
      */
-    default boolean isPath() {
-        return isBlank(getScheme())
-                && isBlank(getHost())
-                && isNotBlank(getResourcePath());
-    }
+    boolean isPath();
 
     /**
      * @return true if the URI is a absolute path starting with a slash ('/').
      */
-    default boolean isAbsolutePath() {
-        return isPath() && getResourcePath().startsWith(ResourceUriBuilder.CHAR_SLASH);
-    }
+    boolean isAbsolutePath();
 
     /**
      * @return true if URI is relative (not an URL and not starting with '/')
      */
-    default boolean isRelativePath() {
-        return isPath() && !getResourcePath().startsWith(ResourceUriBuilder.CHAR_SLASH);
-    }
+    boolean isRelativePath();
 
     /**
      * @return true if the URI is an absolute URI containing a scheme.
      */
-    default boolean isFullUri() {
-        return isNotBlank(getScheme())
-                && isNotBlank(getHost());
-    }
+    boolean isAbsolute();
 
     /**
      * @return true if the URI is an opaque URI like e.g. mailto:jon@example.com
      */
-    default boolean isOpaque() {
-        return toUri().isOpaque();
-    }
+    boolean isOpaque();
 
     /**
      * Shortcut to adjust resource URIs, e.g. {@code resourceUri = resourceUri.adjust(b -> b.setExtension("html")); }.

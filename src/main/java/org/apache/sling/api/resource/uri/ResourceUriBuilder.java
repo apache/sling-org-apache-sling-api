@@ -37,10 +37,12 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * Builder for ResourceUris.
  */
+@ProviderType
 public class ResourceUriBuilder {
 
     private static final String HTTPS_SCHEME = "https";
@@ -482,30 +484,76 @@ public class ResourceUriBuilder {
         return new ImmutableResourceUri();
     }
 
+    /** @return string representation of builder */
+    public String toString() {
+        return toStringInternal(true, true);
+    }
+
+
+    /**
+     * @return returns true if the URI is either a relative or absolute path (this is the case if scheme and host is empty and the URI path
+     *         is set)
+     */
+    public boolean isPath() {
+        return isBlank(scheme)
+                && isBlank(host)
+                && isNotBlank(resourcePath);
+    }
+
+    /**
+     * @return true if the URI is a absolute path starting with a slash ('/').
+     */
+    public boolean isAbsolutePath() {
+        return isPath() && resourcePath.startsWith(ResourceUriBuilder.CHAR_SLASH);
+    }
+
+    /**
+     * @return true if URI is relative (not an URL and not starting with '/')
+     */
+    public boolean isRelativePath() {
+        return isPath() && !resourcePath.startsWith(ResourceUriBuilder.CHAR_SLASH);
+    }
+
+    /**
+     * @return true if the URI is an absolute URI containing a scheme.
+     */
+    public boolean isAbsolute() {
+        return isNotBlank(scheme);
+    }
+
+    /**
+     * @return true if the URI is an opaque URI like e.g. mailto:jon@example.com
+     */
+    public boolean isOpaque() {
+        return isNotBlank(scheme)
+                && isNotBlank(schemeSpecificPart);
+    }
+
     private String toStringInternal(boolean includeScheme, boolean includeFragment) {
         StringBuilder requestUri = new StringBuilder();
 
-        if (includeScheme && isNotBlank(scheme)) {
-            requestUri.append(scheme + CHAR_COLON);
-        }
-        if (isNotBlank(scheme) && isNotBlank(host)) {
-            requestUri.append(CHAR_SLASH + CHAR_SLASH);
-            if (isNotBlank(userInfo)) {
-                requestUri.append(userInfo + CHAR_AT);
+        if (isAbsolute()) {
+            if (includeScheme) {
+                requestUri.append(scheme + CHAR_COLON);
             }
-            requestUri.append(host);
-            if (port > 0
-                    && !(scheme.equals(HTTP_SCHEME) && port == HTTP_DEFAULT_PORT)
-                    && !(scheme.equals(HTTPS_SCHEME) && port == HTTPS_DEFAULT_PORT)) {
-                requestUri.append(CHAR_COLON);
-                requestUri.append(port);
+            if (schemeSpecificPart != null) {
+                requestUri.append(schemeSpecificPart);
+            } else {
+                requestUri.append(CHAR_SLASH + CHAR_SLASH);
+                if (isNotBlank(userInfo)) {
+                    requestUri.append(userInfo + CHAR_AT);
+                }
+                requestUri.append(host);
+                if (port > 0
+                        && !(scheme.equals(HTTP_SCHEME) && port == HTTP_DEFAULT_PORT)
+                        && !(scheme.equals(HTTPS_SCHEME) && port == HTTPS_DEFAULT_PORT)) {
+                    requestUri.append(CHAR_COLON);
+                    requestUri.append(port);
+                }
             }
         }
         if (resourcePath != null) {
             requestUri.append(assemblePath(true));
-        }
-        if (schemeSpecificPart != null) {
-            requestUri.append(schemeSpecificPart);
         }
         if (query != null) {
             requestUri.append(CHAR_QM + query);
@@ -514,11 +562,6 @@ public class ResourceUriBuilder {
             requestUri.append(CHAR_HASH + fragment);
         }
         return requestUri.toString();
-    }
-
-    /** @return string representation of builder */
-    public String toString() {
-        return toStringInternal(true, true);
     }
 
     private void setPathWithDefinedResourcePosition(String path, int firstDotPositionAfterResourcePath) {
@@ -685,10 +728,29 @@ public class ResourceUriBuilder {
             return userInfo;
         }
 
-        // overwriting default, this implementation keeps the schemeSpecificPart empty for all non-opaque URLs
+        @Override
         public boolean isOpaque() {
-            return isNotBlank(getScheme())
-                    && isNotBlank(schemeSpecificPart);
+            return getBuilder().isOpaque();
+        }
+
+        @Override
+        public boolean isPath() {
+            return getBuilder().isPath();
+        }
+
+        @Override
+        public boolean isAbsolutePath() {
+            return getBuilder().isAbsolutePath();
+        }
+
+        @Override
+        public boolean isRelativePath() {
+            return getBuilder().isRelativePath();
+        }
+
+        @Override
+        public boolean isAbsolute() {
+            return getBuilder().isAbsolute();
         }
 
         @Override
@@ -798,7 +860,6 @@ public class ResourceUriBuilder {
                 return false;
             return true;
         }
-
     }
 
     /** Iterate over a path by creating shorter segments of that path using "." as a separator.
@@ -859,6 +920,7 @@ public class ResourceUriBuilder {
             return result;
         }
 
+        @Override
         public void remove() {
             throw new UnsupportedOperationException("remove");
         }

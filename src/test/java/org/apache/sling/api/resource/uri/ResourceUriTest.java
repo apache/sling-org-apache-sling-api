@@ -270,7 +270,7 @@ public class ResourceUriTest {
     public void testJavascriptUri() {
         String testUriStr = "javascript:void(0)";
 
-        testUri(testUriStr, false, false, false, false, true, resourceUri -> {
+        testUri(testUriStr, false, false, false, true, true, resourceUri -> {
             assertEquals("javascript", resourceUri.getScheme());
             assertEquals(null, resourceUri.getUserInfo());
             assertEquals(null, resourceUri.getHost());
@@ -288,7 +288,7 @@ public class ResourceUriTest {
     public void testMailtotUri() {
         String testUriStr = "mailto:jon.doe@example.com";
 
-        testUri(testUriStr, false, false, false, false, true, resourceUri -> {
+        testUri(testUriStr, false, false, false, true, true, resourceUri -> {
             assertEquals("mailto", resourceUri.getScheme());
             assertEquals(null, resourceUri.getUserInfo());
             assertEquals(null, resourceUri.getHost());
@@ -383,24 +383,26 @@ public class ResourceUriTest {
     }
 
     // -- helper methods
-    public static void testUri(String testUri, boolean isPath, boolean isAbsolutePath, boolean isRelativePath, boolean isFullUri,
+    public static void testUri(String testUri, boolean isPath, boolean isAbsolutePath, boolean isRelativePath, boolean isAbsolute,
             boolean isOpaque, Consumer<ResourceUri> additionalAssertions, List<ResourceResolver> resourceResolvers) {
         for (ResourceResolver rr : resourceResolvers) {
-            testUri(testUri, isPath, isAbsolutePath, isRelativePath, isFullUri, isOpaque, additionalAssertions, rr);
+            testUri(testUri, isPath, isAbsolutePath, isRelativePath, isAbsolute, isOpaque, additionalAssertions, rr);
         }
     }
 
-    public static ResourceUri testUri(String testUri, boolean isPath, boolean isAbsolutePath, boolean isRelativePath, boolean isFullUri,
+    public static ResourceUri testUri(String testUri, boolean isPath, boolean isAbsolutePath, boolean isRelativePath, boolean isAbsolute,
             boolean isOpaque, Consumer<ResourceUri> additionalAssertions) {
-        return testUri(testUri, isPath, isAbsolutePath, isRelativePath, isFullUri, isOpaque, additionalAssertions, (ResourceResolver) null);
+        return testUri(testUri, isPath, isAbsolutePath, isRelativePath, isAbsolute, isOpaque, additionalAssertions,
+                (ResourceResolver) null);
     }
 
-    public static ResourceUri testUri(String testUri, boolean isPath, boolean isAbsolutePath, boolean isRelativePath, boolean isFullUri,
+    public static ResourceUri testUri(String testUri, boolean isPath, boolean isAbsolutePath, boolean isRelativePath, boolean isAbsolute,
             boolean isOpaque, Consumer<ResourceUri> additionalAssertions, ResourceResolver resourceResolver) {
-        return testUri(testUri, isPath, isAbsolutePath, isRelativePath, isFullUri, isOpaque, additionalAssertions, resourceResolver, false);
+        return testUri(testUri, isPath, isAbsolutePath, isRelativePath, isAbsolute, isOpaque, additionalAssertions, resourceResolver,
+                false);
     }
 
-    public static ResourceUri testUri(String testUri, boolean isPath, boolean isAbsolutePath, boolean isRelativePath, boolean isFullUri,
+    public static ResourceUri testUri(String testUri, boolean isPath, boolean isAbsolutePath, boolean isRelativePath, boolean isAbsolute,
             boolean isOpaque, Consumer<ResourceUri> additionalAssertions, ResourceResolver resourceResolver, boolean urlIsRestructured) {
         ResourceUri resourceUri = ResourceUriBuilder.parse(testUri, resourceResolver).build();
 
@@ -412,7 +414,7 @@ public class ResourceUriTest {
         assertEquals("isPath()", isPath, resourceUri.isPath());
         assertEquals("isAbsolutePath()", isAbsolutePath, resourceUri.isAbsolutePath());
         assertEquals("isRelativePath()", isRelativePath, resourceUri.isRelativePath());
-        assertEquals("isFullUri()", isFullUri, resourceUri.isFullUri());
+        assertEquals("isAbsolute()", isAbsolute, resourceUri.isAbsolute());
         assertEquals("isOpaque()", isOpaque, resourceUri.isOpaque());
 
         URI javaUri = resourceUri.toUri();
@@ -421,6 +423,7 @@ public class ResourceUriTest {
                 resourceUri.getSchemeSpecificPart());
         assertEquals("getFragment() matches to java URI impl", javaUri.getFragment(), resourceUri.getFragment());
         assertEquals("getQuery() matches to java URI impl", javaUri.getQuery(), resourceUri.getQuery());
+        assertEquals("isAbsolute() matches to java URI impl", javaUri.isAbsolute(), resourceUri.isAbsolute());
 
         additionalAssertions.accept(resourceUri);
 
