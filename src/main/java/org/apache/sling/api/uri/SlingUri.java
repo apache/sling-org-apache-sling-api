@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.sling.api.resource.uri;
+package org.apache.sling.api.uri;
 
 import java.net.URI;
 import java.util.Map;
@@ -30,15 +30,15 @@ import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * Represents an immutable URI that points to a resource or alternatively, can contain opaque URIs like {@code mailto:} or
- * {@code javascript:}. Use {@link ResourceUri#adjust(Consumer)} or {@link ResourceUriBuilder} to create new or modified instances.
+ * {@code javascript:}. Use {@link SlingUri#adjust(Consumer)} or {@link SlingUriBuilder} to create new or modified instances.
  * 
  * @since 1.0.0 (Sling API Bundle 2.23.0)
  */
 @ProviderType
-public interface ResourceUri extends RequestPathInfo {
+public interface SlingUri extends RequestPathInfo {
 
     /**
-     * Returns the java.net.URI.
+     * Returns the @{link URI}.
      * 
      * @return the URI
      */
@@ -64,7 +64,7 @@ public interface ResourceUri extends RequestPathInfo {
     /**
      * Returns the user info.
      * 
-     * @return the user info of the ResourceUri or null if not set
+     * @return the user info of the SlingUri or null if not set
      */
     @Nullable
     String getUserInfo();
@@ -72,7 +72,7 @@ public interface ResourceUri extends RequestPathInfo {
     /**
      * Returns the host.
      * 
-     * @return returns the host of the ResourceUri or null if not set
+     * @return returns the host of the SlingUri or null if not set
      */
     @Nullable
     String getHost();
@@ -80,7 +80,7 @@ public interface ResourceUri extends RequestPathInfo {
     /**
      * Returns the port.
      * 
-     * @return returns the port of the ResourceUri or -1 if not set
+     * @return returns the port of the SlingUri or -1 if not set
      */
     int getPort();
 
@@ -171,7 +171,7 @@ public interface ResourceUri extends RequestPathInfo {
     /**
      * Returns the corresponding suffix resource or null if
      * <ul>
-     * <li>no resource resolver is available (depends on the create method used in ResourceUriBuilder)</li>
+     * <li>no resource resolver is available (depends on the create method used in SlingUriBuilder)</li>
      * <li>the URI does not contain a suffix</li>
      * <li>if the suffix resource could not be found</li>
      * </ul>
@@ -218,13 +218,13 @@ public interface ResourceUri extends RequestPathInfo {
     boolean isOpaque();
 
     /**
-     * Shortcut to adjust resource URIs, e.g. {@code resourceUri = resourceUri.adjust(b -> b.setExtension("html")); }.
+     * Shortcut to adjust Sling URIs, e.g. {@code slingUri = slingUri.adjust(b -> b.setExtension("html")); }.
      * 
      * @param builderConsumer the consumer (e.g. {@code b -> b.setExtension("html")})
-     * @return the adjusted ResourceUri (new instance)
+     * @return the adjusted SlingUri (new instance)
      */
-    default ResourceUri adjust(Consumer<ResourceUriBuilder> builderConsumer) {
-        ResourceUriBuilder builder = ResourceUriBuilder.createFrom(this);
+    default SlingUri adjust(Consumer<SlingUriBuilder> builderConsumer) {
+        SlingUriBuilder builder = SlingUriBuilder.createFrom(this);
         builderConsumer.accept(builder);
         return builder.build();
     }

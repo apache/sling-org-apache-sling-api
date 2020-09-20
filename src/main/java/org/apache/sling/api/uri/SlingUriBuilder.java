@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.sling.api.resource.uri;
+package org.apache.sling.api.uri;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -40,12 +40,12 @@ import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
- * Builder for ResourceUris.
+ * Builder for SlingUris.
  * <p>
  * Example:
  * 
  * <pre>
- * ResourceUri testUri = ResourceUriBuilder.create()
+ * SlingUri testUri = SlingUriBuilder.create()
  *         .setResourcePath("/test/to/path")
  *         .setSelectors(new String[] { "sel1", "sel2" })
  *         .setExtension("html")
@@ -58,7 +58,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * @since 1.0.0 (Sling API Bundle 2.23.0)
  */
 @ProviderType
-public class ResourceUriBuilder {
+public class SlingUriBuilder {
 
     private static final String HTTPS_SCHEME = "https";
     private static final int HTTPS_DEFAULT_PORT = 443;
@@ -77,32 +77,37 @@ public class ResourceUriBuilder {
     static final String SELECTOR_DOT_REGEX = "\\.(?!\\.?/)"; // (?!\\.?/) to avoid matching ./ and ../
     static final String PATH_PARAMETERS_REGEX = ";([a-zA-z0-9]+)=(?:\\'([^']*)\\'|([^/]+))";
 
-    public static ResourceUriBuilder create() {
-        return new ResourceUriBuilder();
+    /**
+     * Creates a builder without any URI parameters set.
+     * 
+     * @return a SlingUriBuilder
+     */
+    public static SlingUriBuilder create() {
+        return new SlingUriBuilder();
     }
 
     /**
-     * Creates a builder from another ResourceUri (clone and modify use case).
+     * Creates a builder from another SlingUri (clone and modify use case).
      * 
-     * @param resourceUri the resource URI to clone
-     * @return a ResourceUriBuilder
+     * @param slingUri the Sling URI to clone
+     * @return a SlingUriBuilder
      */
-    public static ResourceUriBuilder createFrom(@NotNull ResourceUri resourceUri) {
+    public static SlingUriBuilder createFrom(@NotNull SlingUri slingUri) {
         return create()
-                .setScheme(resourceUri.getScheme())
-                .setUserInfo(resourceUri.getUserInfo())
-                .setHost(resourceUri.getHost())
-                .setPort(resourceUri.getPort())
-                .setResourcePath(resourceUri.getResourcePath())
-                .setPathParameters(resourceUri.getPathParameters())
-                .setSelectors(resourceUri.getSelectors())
-                .setExtension(resourceUri.getExtension())
-                .setSuffix(resourceUri.getSuffix())
-                .setQuery(resourceUri.getQuery())
-                .setFragment(resourceUri.getFragment())
-                .setSchemeSpecificPart(resourceUri.isOpaque() ? resourceUri.getSchemeSpecificPart() : null)
-                .setResourceResolver(resourceUri instanceof ImmutableResourceUri
-                        ? ((ImmutableResourceUri) resourceUri).getBuilder().resourceResolver
+                .setScheme(slingUri.getScheme())
+                .setUserInfo(slingUri.getUserInfo())
+                .setHost(slingUri.getHost())
+                .setPort(slingUri.getPort())
+                .setResourcePath(slingUri.getResourcePath())
+                .setPathParameters(slingUri.getPathParameters())
+                .setSelectors(slingUri.getSelectors())
+                .setExtension(slingUri.getExtension())
+                .setSuffix(slingUri.getSuffix())
+                .setQuery(slingUri.getQuery())
+                .setFragment(slingUri.getFragment())
+                .setSchemeSpecificPart(slingUri.isOpaque() ? slingUri.getSchemeSpecificPart() : null)
+                .setResourceResolver(slingUri instanceof ImmutableSlingUri
+                        ? ((ImmutableSlingUri) slingUri).getBuilder().resourceResolver
                         : null);
     }
 
@@ -110,9 +115,9 @@ public class ResourceUriBuilder {
      * Creates a builder from a resource (only taking the resource path into account).
      * 
      * @param resource the resource to take the resource path from
-     * @return a ResourceUriBuilder
+     * @return a SlingUriBuilder
      */
-    public static ResourceUriBuilder createFrom(@NotNull Resource resource) {
+    public static SlingUriBuilder createFrom(@NotNull Resource resource) {
         return create()
                 .setResourcePath(resource.getPath())
                 .setResourceResolver(resource.getResourceResolver());
@@ -122,9 +127,9 @@ public class ResourceUriBuilder {
      * Creates a builder from a RequestPathInfo instance .
      * 
      * @param requestPathInfo the request path info to take resource path, selectors, extension and suffix from.
-     * @return a ResourceUriBuilder
+     * @return a SlingUriBuilder
      */
-    public static ResourceUriBuilder createFrom(@NotNull RequestPathInfo requestPathInfo) {
+    public static SlingUriBuilder createFrom(@NotNull RequestPathInfo requestPathInfo) {
         Resource suffixResource = requestPathInfo.getSuffixResource();
         return create()
                 .setResourceResolver(suffixResource != null ? suffixResource.getResourceResolver() : null)
@@ -138,9 +143,9 @@ public class ResourceUriBuilder {
      * Creates a builder from a request.
      * 
      * @param request request to take the URI information from
-     * @return a ResourceUriBuilder
+     * @return a SlingUriBuilder
      */
-    public static ResourceUriBuilder createFrom(@NotNull SlingHttpServletRequest request) {
+    public static SlingUriBuilder createFrom(@NotNull SlingHttpServletRequest request) {
         return createFrom(request.getRequestPathInfo())
                 .setResourceResolver(request.getResourceResolver())
                 .setScheme(request.getScheme())
@@ -152,12 +157,12 @@ public class ResourceUriBuilder {
     /**
      * Creates a builder from an arbitrary URI.
      * 
-     * @param uri the uri to transform to a ResourceUri
+     * @param uri the uri to transform to a SlingUri
      * @param resourceResolver a resource resolver is needed to decide up to what part the path is the resource path (that decision is only
      *        possible by checking against the underlying repository). If null is passed in, the shortest viable resource path is used.
-     * @return a ResourceUriBuilder
+     * @return a SlingUriBuilder
      */
-    public static ResourceUriBuilder createFrom(@NotNull URI uri, @Nullable ResourceResolver resourceResolver) {
+    public static SlingUriBuilder createFrom(@NotNull URI uri, @Nullable ResourceResolver resourceResolver) {
         String path = uri.getPath();
         boolean pathExists = isNotBlank(path);
         boolean schemeSpecificRelevant = !pathExists && uri.getQuery() == null;
@@ -179,9 +184,9 @@ public class ResourceUriBuilder {
      * @param uriStr to uri string to parse
      * @param resourceResolver a resource resolver is needed to decide up to what part the path is the resource path (that decision is only
      *        possible by checking against the underlying repository). If null is passed in, the shortest viable resource path is used.
-     * @return a ResourceUriBuilder
+     * @return a SlingUriBuilder
      */
-    public static ResourceUriBuilder parse(@NotNull String uriStr, @Nullable ResourceResolver resourceResolver) {
+    public static SlingUriBuilder parse(@NotNull String uriStr, @Nullable ResourceResolver resourceResolver) {
         URI uri;
         try {
             uri = new URI(uriStr);
@@ -218,10 +223,10 @@ public class ResourceUriBuilder {
     // needed for getSuffixResource() from interface RequestPathInfo and rebaseResourcePath()
     private ResourceResolver resourceResolver = null;
 
-    // to ensure a builder is used only once (as the ImmutableResourceUri being created in build() is sharing its state)
+    // to ensure a builder is used only once (as the ImmutableSlingUri being created in build() is sharing its state)
     private boolean isBuilt = false;
 
-    private ResourceUriBuilder() {
+    private SlingUriBuilder() {
     }
 
     /**
@@ -230,7 +235,7 @@ public class ResourceUriBuilder {
      * @param userInfo the user info
      * @return the builder for method chaining
      */
-    public ResourceUriBuilder setUserInfo(String userInfo) {
+    public SlingUriBuilder setUserInfo(String userInfo) {
         if (schemeSpecificPart != null) {
             return this;
         }
@@ -244,7 +249,7 @@ public class ResourceUriBuilder {
      * @param host the host
      * @return the builder for method chaining
      */
-    public ResourceUriBuilder setHost(String host) {
+    public SlingUriBuilder setHost(String host) {
         if (schemeSpecificPart != null) {
             return this;
         }
@@ -258,7 +263,7 @@ public class ResourceUriBuilder {
      * @param port the port
      * @return the builder for method chaining
      */
-    public ResourceUriBuilder setPort(int port) {
+    public SlingUriBuilder setPort(int port) {
         if (schemeSpecificPart != null) {
             return this;
         }
@@ -272,7 +277,7 @@ public class ResourceUriBuilder {
      * @param path the path
      * @return the builder for method chaining
      */
-    public ResourceUriBuilder setPath(String path) {
+    public SlingUriBuilder setPath(String path) {
         if (schemeSpecificPart != null) {
             return this;
         }
@@ -282,7 +287,7 @@ public class ResourceUriBuilder {
 
         // split in resource path, selectors, extension and suffix
         Matcher dotMatcher;
-        if (path != null && path.startsWith(ResourceUriBuilder.CHAR_SLASH) && resourceResolver != null) {
+        if (path != null && path.startsWith(SlingUriBuilder.CHAR_SLASH) && resourceResolver != null) {
             setResourcePath(path);
             rebaseResourcePath();
         } else if (path != null && (dotMatcher = Pattern.compile(SELECTOR_DOT_REGEX).matcher(path)).find()) {
@@ -303,7 +308,7 @@ public class ResourceUriBuilder {
      * @throws IllegalStateException
      *             if no resource resolver is available
      */
-    public ResourceUriBuilder rebaseResourcePath() {
+    public SlingUriBuilder rebaseResourcePath() {
         if (schemeSpecificPart != null || resourcePath == null) {
             return this;
         }
@@ -344,7 +349,7 @@ public class ResourceUriBuilder {
      * @param resourcePath the resource path
      * @return the builder for method chaining
      */
-    public ResourceUriBuilder setResourcePath(String resourcePath) {
+    public SlingUriBuilder setResourcePath(String resourcePath) {
         if (schemeSpecificPart != null) {
             return this;
         }
@@ -358,7 +363,7 @@ public class ResourceUriBuilder {
      * @param selectors the selectors
      * @return the builder for method chaining
      */
-    public ResourceUriBuilder setSelectors(String[] selectors) {
+    public SlingUriBuilder setSelectors(String[] selectors) {
         if (schemeSpecificPart != null || resourcePath == null) {
             return this;
         }
@@ -373,7 +378,7 @@ public class ResourceUriBuilder {
      * @param selector the selector to add
      * @return the builder for method chaining
      */
-    public ResourceUriBuilder addSelector(String selector) {
+    public SlingUriBuilder addSelector(String selector) {
         if (schemeSpecificPart != null || resourcePath == null) {
             return this;
         }
@@ -387,7 +392,7 @@ public class ResourceUriBuilder {
      * @param extension the extension
      * @return the builder for method chaining
      */
-    public ResourceUriBuilder setExtension(String extension) {
+    public SlingUriBuilder setExtension(String extension) {
         if (schemeSpecificPart != null || resourcePath == null) {
             return this;
         }
@@ -402,7 +407,7 @@ public class ResourceUriBuilder {
      * @param value the path parameter value
      * @return the builder for method chaining
      */
-    public ResourceUriBuilder setPathParameter(String key, String value) {
+    public SlingUriBuilder setPathParameter(String key, String value) {
         if (schemeSpecificPart != null || resourcePath == null) {
             return this;
         }
@@ -416,7 +421,7 @@ public class ResourceUriBuilder {
      * @param pathParameters the path parameters
      * @return the builder for method chaining
      */
-    public ResourceUriBuilder setPathParameters(Map<String, String> pathParameters) {
+    public SlingUriBuilder setPathParameters(Map<String, String> pathParameters) {
         this.pathParameters.clear();
         this.pathParameters.putAll(pathParameters);
         return this;
@@ -428,7 +433,7 @@ public class ResourceUriBuilder {
      * @param suffix the suffix
      * @return the builder for method chaining
      */
-    public ResourceUriBuilder setSuffix(String suffix) {
+    public SlingUriBuilder setSuffix(String suffix) {
         if (schemeSpecificPart != null || resourcePath == null) {
             return this;
         }
@@ -445,7 +450,7 @@ public class ResourceUriBuilder {
      * @param query the query
      * @return the builder for method chaining
      */
-    public ResourceUriBuilder setQuery(String query) {
+    public SlingUriBuilder setQuery(String query) {
         if (schemeSpecificPart != null) {
             return this;
         }
@@ -459,7 +464,7 @@ public class ResourceUriBuilder {
      * @param fragment the fragment
      * @return the builder for method chaining
      */
-    public ResourceUriBuilder setFragment(String fragment) {
+    public SlingUriBuilder setFragment(String fragment) {
         if (schemeSpecificPart != null) {
             return this;
         }
@@ -473,7 +478,7 @@ public class ResourceUriBuilder {
      * @param scheme the scheme
      * @return the builder for method chaining
      */
-    public ResourceUriBuilder setScheme(String scheme) {
+    public SlingUriBuilder setScheme(String scheme) {
         this.scheme = scheme;
         return this;
     }
@@ -484,7 +489,7 @@ public class ResourceUriBuilder {
      * @param schemeSpecificPart the scheme specific part
      * @return the builder for method chaining
      */
-    public ResourceUriBuilder setSchemeSpecificPart(String schemeSpecificPart) {
+    public SlingUriBuilder setSchemeSpecificPart(String schemeSpecificPart) {
         if (schemeSpecificPart != null && schemeSpecificPart.isEmpty()) {
             return this;
         }
@@ -497,7 +502,7 @@ public class ResourceUriBuilder {
      * 
      * @return the builder for method chaining
      */
-    public ResourceUriBuilder removeSchemeAndAuthority() {
+    public SlingUriBuilder removeSchemeAndAuthority() {
         setScheme(null);
         setUserInfo(null);
         setHost(null);
@@ -506,16 +511,16 @@ public class ResourceUriBuilder {
     }
 
     /**
-     * Will take over scheme and authority (user info, host and port) from provided resourceUri.
+     * Will take over scheme and authority (user info, host and port) from provided slingUri.
      * 
-     * @param resourceUri the resource URI
+     * @param slingUri the Sling URI
      * @return the builder for method chaining
      */
-    public ResourceUriBuilder useSchemeAndAuthority(@NotNull ResourceUri resourceUri) {
-        setScheme(resourceUri.getScheme());
-        setUserInfo(resourceUri.getUserInfo());
-        setHost(resourceUri.getHost());
-        setPort(resourceUri.getPort());
+    public SlingUriBuilder useSchemeAndAuthority(@NotNull SlingUri slingUri) {
+        setScheme(slingUri.getScheme());
+        setUserInfo(slingUri.getUserInfo());
+        setHost(slingUri.getHost());
+        setPort(slingUri.getPort());
         return this;
     }
 
@@ -525,7 +530,7 @@ public class ResourceUriBuilder {
      * @param uri the URI
      * @return the builder for method chaining
      */
-    public ResourceUriBuilder useSchemeAndAuthority(@NotNull URI uri) {
+    public SlingUriBuilder useSchemeAndAuthority(@NotNull URI uri) {
         useSchemeAndAuthority(createFrom(uri, resourceResolver).build());
         return this;
     }
@@ -536,20 +541,20 @@ public class ResourceUriBuilder {
      * @param resourceResolver the resource resolver
      * @return the builder for method chaining
      */
-    public ResourceUriBuilder setResourceResolver(ResourceResolver resourceResolver) {
+    public SlingUriBuilder setResourceResolver(ResourceResolver resourceResolver) {
         this.resourceResolver = resourceResolver;
         return this;
     }
 
-    /** Builds the immutable ResourceUri from this builder.
+    /** Builds the immutable SlingUri from this builder.
      * 
      * @return the builder for method chaining */
-    public ResourceUri build() {
+    public SlingUri build() {
         if (isBuilt) {
-            throw new IllegalStateException("ResourceUriBuilder.build() may only be called once per builder instance");
+            throw new IllegalStateException("SlingUriBuilder.build() may only be called once per builder instance");
         }
         isBuilt = true;
-        return new ImmutableResourceUri();
+        return new ImmutableSlingUri();
     }
 
     /**
@@ -579,7 +584,7 @@ public class ResourceUriBuilder {
      * @return true if the URI is an absolute path
      */
     public boolean isAbsolutePath() {
-        return isPath() && resourcePath.startsWith(ResourceUriBuilder.CHAR_SLASH);
+        return isPath() && resourcePath.startsWith(SlingUriBuilder.CHAR_SLASH);
     }
 
     /**
@@ -588,7 +593,7 @@ public class ResourceUriBuilder {
      * @return true if URI is a relative path
      */
     public boolean isRelativePath() {
-        return isPath() && !resourcePath.startsWith(ResourceUriBuilder.CHAR_SLASH);
+        return isPath() && !resourcePath.startsWith(SlingUriBuilder.CHAR_SLASH);
     }
 
     /**
@@ -722,7 +727,7 @@ public class ResourceUriBuilder {
 
 
     // read-only view on the builder data (to avoid another copy of the data into a new object)
-    private class ImmutableResourceUri implements ResourceUri {
+    private class ImmutableSlingUri implements SlingUri {
 
         @Override
         public String getResourcePath() {
@@ -849,8 +854,8 @@ public class ResourceUriBuilder {
             }
         }
 
-        private ResourceUriBuilder getBuilder() {
-            return ResourceUriBuilder.this;
+        private SlingUriBuilder getBuilder() {
+            return SlingUriBuilder.this;
         }
 
         // generated hashCode() and equals()
@@ -881,7 +886,7 @@ public class ResourceUriBuilder {
                 return false;
             if (getClass() != obj.getClass())
                 return false;
-            ImmutableResourceUri other = (ImmutableResourceUri) obj;
+            ImmutableSlingUri other = (ImmutableSlingUri) obj;
             if (extension == null) {
                 if (other.getBuilder().extension != null)
                     return false;

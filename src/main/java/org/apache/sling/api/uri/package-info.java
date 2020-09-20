@@ -17,7 +17,7 @@
  * under the License.
  */
 @Version("1.0.0")
-package org.apache.sling.api.resource.uri;
+package org.apache.sling.api.uri;
 
 import org.osgi.annotation.versioning.Version;
 

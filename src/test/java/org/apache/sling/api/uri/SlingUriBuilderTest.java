@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.sling.api.resource.uri;
+package org.apache.sling.api.uri;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -29,6 +29,8 @@ import java.net.URISyntaxException;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.request.RequestPathInfo;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.uri.SlingUri;
+import org.apache.sling.api.uri.SlingUriBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,7 +38,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ResourceUriBuilderTest {
+public class SlingUriBuilderTest {
 
     @Mock
     SlingHttpServletRequest request;
@@ -55,7 +57,7 @@ public class ResourceUriBuilderTest {
     @Test
     public void testBasicUsage() {
 
-        ResourceUri testUri = ResourceUriBuilder.create()
+        SlingUri testUri = SlingUriBuilder.create()
                 .setResourcePath("/test/to/path")
                 .setSelectors(new String[] { "sel1", "sel2" })
                 .setExtension("html")
@@ -66,24 +68,24 @@ public class ResourceUriBuilderTest {
         assertEquals("/test/to/path.sel1.sel2.html/suffix/path?par1=val1&par2=val2", testUri.toString());
     }
 
-    // the tests in ResourceUriTest extensively test the builder's parse method by using it for constructing
-    // all types of ResourceUris
+    // the tests in SlingUriTest extensively test the builder's parse method by using it for constructing
+    // all types of SlingUris
     @Test
     public void testParse() {
 
         String testUriStr = "https://example.com/test/to/path.sel1.sel2.html";
-        ResourceUri testUri = ResourceUriBuilder.parse(testUriStr, null).build();
+        SlingUri testUri = SlingUriBuilder.parse(testUriStr, null).build();
         assertEquals(testUriStr, testUri.toString());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testParseInvalidUri() {
-        ResourceUriBuilder.parse(":foo", null);
+        SlingUriBuilder.parse(":foo", null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testSetInvalidSuffix() {
-        ResourceUriBuilder.parse("/test/to/path.sel1.html", null).setSuffix("suffixWithoutSlash");
+        SlingUriBuilder.parse("/test/to/path.sel1.html", null).setSuffix("suffixWithoutSlash");
     }
 
     @Test
@@ -98,7 +100,7 @@ public class ResourceUriBuilderTest {
         when(requestPathInfo.getExtension()).thenReturn("html");
         when(requestPathInfo.getSuffix()).thenReturn("/suffix/path");
 
-        ResourceUri testUri = ResourceUriBuilder.createFrom(request).build();
+        SlingUri testUri = SlingUriBuilder.createFrom(request).build();
 
         assertEquals("https://example.com/test/to/path.sel1.sel2.html/suffix/path?par1=val1", testUri.toString());
     }
@@ -107,7 +109,7 @@ public class ResourceUriBuilderTest {
     public void testCreateFromResource() {
 
         when(resource.getPath()).thenReturn("/test/to/path");
-        ResourceUri testUri = ResourceUriBuilder.createFrom(resource).build();
+        SlingUri testUri = SlingUriBuilder.createFrom(resource).build();
 
         assertEquals("/test/to/path", testUri.getResourcePath());
         assertNull(testUri.getSelectorString());
@@ -119,7 +121,7 @@ public class ResourceUriBuilderTest {
     public void testCreateFromResourceWithDotInPath() {
 
         when(resource.getPath()).thenReturn("/test/to/image.jpg");
-        ResourceUri testUri = ResourceUriBuilder.createFrom(resource).build();
+        SlingUri testUri = SlingUriBuilder.createFrom(resource).build();
 
         assertEquals("/test/to/image.jpg", testUri.getResourcePath());
         assertNull(testUri.getSelectorString());
@@ -139,7 +141,7 @@ public class ResourceUriBuilderTest {
         when(requestPathInfo.getExtension()).thenReturn("html");
         when(requestPathInfo.getSuffix()).thenReturn("/suffix/path");
 
-        ResourceUri testUri = ResourceUriBuilder.createFrom(request).build();
+        SlingUri testUri = SlingUriBuilder.createFrom(request).build();
 
         assertEquals("https://example.com/test/to/path.sel1.sel2.html/suffix/path?par1=val1", testUri.toString());
     }
@@ -149,7 +151,7 @@ public class ResourceUriBuilderTest {
 
         URI testUriToUseSchemeAndAuthorityFrom = new URI("https://example.com:8080/test/to/path.sel1.sel2.html");
         String testPath = "/path/to/page.html";
-        ResourceUri testUri = ResourceUriBuilder.parse(testPath, null)
+        SlingUri testUri = SlingUriBuilder.parse(testPath, null)
                 .useSchemeAndAuthority(testUriToUseSchemeAndAuthorityFrom)
                 .build();
         assertEquals("https://example.com:8080/path/to/page.html", testUri.toString());
@@ -157,10 +159,16 @@ public class ResourceUriBuilderTest {
 
     @Test(expected = IllegalStateException.class)
     public void testBuilderMayOnlyBeUsedToBuildAnUri() {
-        ResourceUriBuilder builder = ResourceUriBuilder.parse("/path/to/page.html", null);
-        ResourceUri resourceUri = builder.build();
-        assertNotNull(resourceUri);
+        SlingUriBuilder builder = SlingUriBuilder.parse("/path/to/page.html", null);
+        SlingUri slingUri = builder.build();
+        assertNotNull(slingUri);
         // calling build twice is not allowed
         builder.build();
+    }
+
+    @Test
+    public void testEmpty() {
+        SlingUri testUriEmpty = SlingUriBuilder.create().build();
+        assertEquals("", testUriEmpty.toString());
     }
 }
