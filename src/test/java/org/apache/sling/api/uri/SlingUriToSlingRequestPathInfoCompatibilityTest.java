@@ -23,7 +23,6 @@ import static org.mockito.Mockito.when;
 import org.apache.sling.api.request.RequestPathInfo;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.uri.SlingUriBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;

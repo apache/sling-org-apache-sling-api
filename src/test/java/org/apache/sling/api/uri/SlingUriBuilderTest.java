@@ -29,8 +29,6 @@ import java.net.URISyntaxException;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.request.RequestPathInfo;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.uri.SlingUri;
-import org.apache.sling.api.uri.SlingUriBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -76,11 +74,6 @@ public class SlingUriBuilderTest {
         String testUriStr = "https://example.com/test/to/path.sel1.sel2.html";
         SlingUri testUri = SlingUriBuilder.parse(testUriStr, null).build();
         assertEquals(testUriStr, testUri.toString());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testParseInvalidUri() {
-        SlingUriBuilder.parse(":foo", null);
     }
 
     @Test(expected = IllegalArgumentException.class)

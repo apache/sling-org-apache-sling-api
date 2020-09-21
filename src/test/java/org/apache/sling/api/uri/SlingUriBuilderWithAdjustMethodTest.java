@@ -25,8 +25,6 @@ import static org.junit.Assert.assertNull;
 import java.util.function.Consumer;
 
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.uri.SlingUri;
-import org.apache.sling.api.uri.SlingUriBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -223,6 +221,7 @@ public class SlingUriBuilderWithAdjustMethodTest {
                     assertEquals("2.0", slingUri.getPathParameters().get("v"));
                 });
     }
+
 
     // -- helper methods
 

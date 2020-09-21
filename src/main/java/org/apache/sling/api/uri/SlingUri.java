@@ -29,8 +29,9 @@ import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
- * Represents an immutable URI that points to a resource or alternatively, can contain opaque URIs like {@code mailto:} or
- * {@code javascript:}. Use {@link SlingUri#adjust(Consumer)} or {@link SlingUriBuilder} to create new or modified instances.
+ * Represents an immutable URI in the same way as java.net.URI but is extended with Sling-specific URI parts (e.g. selectors). A SlingUri
+ * usually points to a resource but alternatively, can also contain an opaque URI like {@code mailto:} or {@code javascript:}. Use
+ * {@link SlingUri#adjust(Consumer)} or {@link SlingUriBuilder} to create new or modified Sling URIs.
  * 
  * @since 1.0.0 (Sling API Bundle 2.23.0)
  */

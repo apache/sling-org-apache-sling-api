@@ -26,8 +26,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.uri.SlingUri;
-import org.apache.sling.api.uri.SlingUriBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;

@@ -38,6 +38,8 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Builder for SlingUris.
@@ -59,6 +61,7 @@ import org.osgi.annotation.versioning.ProviderType;
  */
 @ProviderType
 public class SlingUriBuilder {
+    private static final Logger LOG = LoggerFactory.getLogger(SlingUriBuilder.class);
 
     private static final String HTTPS_SCHEME = "https";
     private static final int HTTPS_DEFAULT_PORT = 443;
@@ -68,10 +71,10 @@ public class SlingUriBuilder {
     static final char CHAR_HASH = '#';
     static final char CHAR_QM = '?';
     static final char CHAR_AT = '@';
-    static final char CHAR_COLON = ':';
     static final char CHAR_SEMICOLON = ';';
     static final char CHAR_EQUALS = '=';
     static final char CHAR_SINGLEQUOTE = '\'';
+    static final String CHAR_COLON = ":";
     static final String CHAR_DOT = ".";
     static final String CHAR_SLASH = "/";
     static final String SELECTOR_DOT_REGEX = "\\.(?!\\.?/)"; // (?!\\.?/) to avoid matching ./ and ../
@@ -192,7 +195,16 @@ public class SlingUriBuilder {
             uri = new URI(uriStr);
             return createFrom(uri, resourceResolver);
         } catch (URISyntaxException e) {
-            throw new IllegalArgumentException("Invalid URI " + uriStr + ": " + e.getMessage(), e);
+            LOG.debug("Invalid URI {}: {}", uriStr, e.getMessage(), e);
+            // best effort
+            String[] invalidUriParts = uriStr.split(CHAR_COLON, 2);
+            if (invalidUriParts.length == 1) {
+                return create().setSchemeSpecificPart(invalidUriParts[0]);
+            } else {
+                return create()
+                        .setScheme(invalidUriParts[0])
+                        .setSchemeSpecificPart(invalidUriParts[1]);
+            }
         }
     }
 
@@ -490,9 +502,6 @@ public class SlingUriBuilder {
      * @return the builder for method chaining
      */
     public SlingUriBuilder setSchemeSpecificPart(String schemeSpecificPart) {
-        if (schemeSpecificPart != null && schemeSpecificPart.isEmpty()) {
-            return this;
-        }
         this.schemeSpecificPart = schemeSpecificPart;
         return this;
     }
@@ -602,7 +611,7 @@ public class SlingUriBuilder {
      * @return true if the URI is an absolute URI containing a scheme.
      */
     public boolean isAbsolute() {
-        return isNotBlank(scheme);
+        return scheme != null;
     }
 
     /**
@@ -611,8 +620,7 @@ public class SlingUriBuilder {
      * @return true if the URI is an opaque URI
      */
     public boolean isOpaque() {
-        return isNotBlank(scheme)
-                && isNotBlank(schemeSpecificPart);
+        return scheme != null && schemeSpecificPart != null;
     }
 
     private String toStringInternal(boolean includeScheme, boolean includeFragment) {
@@ -622,9 +630,7 @@ public class SlingUriBuilder {
             if (includeScheme) {
                 requestUri.append(scheme + CHAR_COLON);
             }
-            if (schemeSpecificPart != null) {
-                requestUri.append(schemeSpecificPart);
-            } else {
+            if (schemeSpecificPart == null) {
                 requestUri.append(CHAR_SLASH + CHAR_SLASH);
                 if (isNotBlank(userInfo)) {
                     requestUri.append(userInfo + CHAR_AT);
@@ -637,6 +643,9 @@ public class SlingUriBuilder {
                     requestUri.append(port);
                 }
             }
+        }
+        if (schemeSpecificPart != null) {
+            requestUri.append(schemeSpecificPart);
         }
         if (resourcePath != null) {
             requestUri.append(assemblePath(true));
