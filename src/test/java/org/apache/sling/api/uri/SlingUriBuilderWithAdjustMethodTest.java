@@ -21,6 +21,7 @@ package org.apache.sling.api.uri;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.function.Consumer;
 
@@ -222,6 +223,73 @@ public class SlingUriBuilderWithAdjustMethodTest {
                 });
     }
 
+    @Test
+    public void testAdjustRemovePath() {
+
+        testAdjustUri(
+                "http://example.com/test/to/path;key='val'.sel1.html/suffix/path/to/file?queryPar=val",
+                slingUriBuilder -> {
+                    slingUriBuilder.setPath(null);
+                },
+                "http://example.com?queryPar=val",
+                slingUri -> {
+                    assertEquals(null, slingUri.getPath());
+                    assertEquals(null, slingUri.getResourcePath());
+                    assertEquals(null, slingUri.getSelectorString());
+                    assertEquals(null, slingUri.getExtension());
+                    assertEquals(null, slingUri.getSuffix());
+                    assertTrue(slingUri.getPathParameters().isEmpty());
+                    assertEquals("queryPar=val", slingUri.getQuery());
+                });
+    }
+
+    @Test
+    public void testAdjustReplacePathEffectivelyRemovingSelectors() {
+
+        testAdjustUri(
+                "http://example.com/test/to/path;key='val'.sel1.html/suffix/path/to/file?queryPar=val",
+                slingUriBuilder -> {
+                    slingUriBuilder.setPath("/simple/other/path");
+                },
+                "http://example.com/simple/other/path?queryPar=val",
+                slingUri -> {
+                    assertEquals("/simple/other/path", slingUri.getPath());
+                    assertEquals("/simple/other/path", slingUri.getResourcePath());
+                    assertEquals("setPath() (opposed to setResourcePath()) must also remove selectors if not present in path", null,
+                            slingUri.getSelectorString());
+                    assertEquals("setPath() (opposed to setResourcePath()) must also remove extension if not present in path", null,
+                            slingUri.getExtension());
+                    assertEquals("setPath() (opposed to setResourcePath()) must also remove suffix if not present in path", null,
+                            slingUri.getSuffix());
+                    assertTrue("setPath() (opposed to setResourcePath()) must also remove path parameters if not present in path",
+                            slingUri.getPathParameters().isEmpty());
+                    assertEquals("queryPar=val", slingUri.getQuery());
+                });
+    }
+
+    @Test
+    public void testAdjustReplacePathWithPathParametersRemovingSelector() {
+
+        testAdjustUri(
+                "http://example.com/test/to/path;key='val'.sel1.html/suffix/path/to/file?queryPar=val",
+                slingUriBuilder -> {
+                    slingUriBuilder.setPath("/simple/other/path;key='val'");
+                },
+                "http://example.com/simple/other/path;key='val'?queryPar=val",
+                slingUri -> {
+                    assertEquals("/simple/other/path;key='val'", slingUri.getPath());
+                    assertEquals("/simple/other/path", slingUri.getResourcePath());
+                    assertEquals("setPath() (opposed to setResourcePath()) must also remove selectors if not present in path", null,
+                            slingUri.getSelectorString());
+                    assertEquals("setPath() (opposed to setResourcePath()) must also remove extension if not present in path", null,
+                            slingUri.getExtension());
+                    assertEquals("setPath() (opposed to setResourcePath()) must also remove suffix if not present in path", null,
+                            slingUri.getSuffix());
+                    assertEquals(1, slingUri.getPathParameters().size());
+                    assertEquals("val", slingUri.getPathParameters().get("key"));
+                    assertEquals("queryPar=val", slingUri.getQuery());
+                });
+    }
 
     // -- helper methods
 

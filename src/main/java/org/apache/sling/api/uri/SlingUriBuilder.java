@@ -294,13 +294,14 @@ public class SlingUriBuilder {
     }
 
     /**
-     * Set the path of the URI that contains a resource path and optionally path parameters, selectors, an extension and a suffix.
+     * Set the path of the URI that contains a resource path and optionally path parameters, selectors, an extension and a suffix. To remove
+     * an existing path set path to {@code null}.
      * 
      * @param path the path
      * @return the builder for method chaining
      */
     @NotNull
-    public SlingUriBuilder setPath(String path) {
+    public SlingUriBuilder setPath(@Nullable String path) {
         if (schemeSpecificPart != null) {
             return this;
         }
@@ -317,6 +318,9 @@ public class SlingUriBuilder {
             int firstDotPosition = dotMatcher.start();
             setPathWithDefinedResourcePosition(path, firstDotPosition);
         } else {
+            setSelectors(new String[] {});
+            setSuffix(null);
+            setExtension(null);
             setResourcePath(path);
         }
 
@@ -405,7 +409,7 @@ public class SlingUriBuilder {
      * @return the builder for method chaining
      */
     @NotNull
-    public SlingUriBuilder addSelector(String selector) {
+    public SlingUriBuilder addSelector(@NotNull String selector) {
         if (schemeSpecificPart != null || resourcePath == null) {
             return this;
         }
@@ -702,7 +706,8 @@ public class SlingUriBuilder {
     }
 
     private String extractPathParameters(String path) {
-        Map<String, String> currentPathParameters = null;
+        // we rebuild the parameters from scratch as given in path (if path is set to null we also reset)
+        pathParameters.clear();
         if (path != null) {
             Pattern pathParameterRegex = Pattern.compile(PATH_PARAMETERS_REGEX);
 
@@ -712,18 +717,14 @@ public class SlingUriBuilder {
                 if (resultString == null) {
                     resultString = new StringBuffer();
                 }
-                if (currentPathParameters == null) {
-                    currentPathParameters = new LinkedHashMap<>();
-                }
                 regexMatcher.appendReplacement(resultString, "");
                 String key = regexMatcher.group(1);
                 String value = isNotBlank(regexMatcher.group(2)) ? regexMatcher.group(2) : regexMatcher.group(3);
-                currentPathParameters.put(key, value);
+                pathParameters.put(key, value);
             }
             if (resultString != null) {
                 regexMatcher.appendTail(resultString);
                 path = resultString.toString();
-                pathParameters.putAll(currentPathParameters);
             }
         }
         return path;
