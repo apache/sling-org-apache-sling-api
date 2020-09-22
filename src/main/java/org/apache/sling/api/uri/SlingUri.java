@@ -39,7 +39,7 @@ import org.osgi.annotation.versioning.ProviderType;
 public interface SlingUri extends RequestPathInfo {
 
     /**
-     * Returns the @{link URI}.
+     * Returns the {@link URI}.
      * 
      * @return the URI
      */
@@ -106,9 +106,10 @@ public interface SlingUri extends RequestPathInfo {
     /**
      * Returns the selectors array.
      * 
-     * @return the selectors array (empty if the URI does not contain selector(s))
+     * @return the selectors array (empty if the URI does not contain selector(s), never null)
      */
     @Override
+    @NotNull
     String[] getSelectors();
 
     /**
@@ -125,6 +126,7 @@ public interface SlingUri extends RequestPathInfo {
      * 
      * @return the path parameters or an empty Map if the URI does not contain any
      */
+    @NotNull
     Map<String, String> getPathParameters();
 
     /**
@@ -161,8 +163,7 @@ public interface SlingUri extends RequestPathInfo {
     String getFragment();
 
     /**
-     * Returns the scheme-specific part of the URI, compare with Javadoc of class
-     * <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/URI.html">URI</a>.
+     * Returns the scheme-specific part of the URI, compare with Javadoc of {@link URI}.
      * 
      * @return scheme specific part of the URI
      */

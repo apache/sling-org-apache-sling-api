@@ -85,6 +85,7 @@ public class SlingUriBuilder {
      * 
      * @return a SlingUriBuilder
      */
+    @NotNull
     public static SlingUriBuilder create() {
         return new SlingUriBuilder();
     }
@@ -95,6 +96,7 @@ public class SlingUriBuilder {
      * @param slingUri the Sling URI to clone
      * @return a SlingUriBuilder
      */
+    @NotNull
     public static SlingUriBuilder createFrom(@NotNull SlingUri slingUri) {
         return create()
                 .setScheme(slingUri.getScheme())
@@ -120,6 +122,7 @@ public class SlingUriBuilder {
      * @param resource the resource to take the resource path from
      * @return a SlingUriBuilder
      */
+    @NotNull
     public static SlingUriBuilder createFrom(@NotNull Resource resource) {
         return create()
                 .setResourcePath(resource.getPath())
@@ -132,6 +135,7 @@ public class SlingUriBuilder {
      * @param requestPathInfo the request path info to take resource path, selectors, extension and suffix from.
      * @return a SlingUriBuilder
      */
+    @NotNull
     public static SlingUriBuilder createFrom(@NotNull RequestPathInfo requestPathInfo) {
         Resource suffixResource = requestPathInfo.getSuffixResource();
         return create()
@@ -148,6 +152,7 @@ public class SlingUriBuilder {
      * @param request request to take the URI information from
      * @return a SlingUriBuilder
      */
+    @NotNull
     public static SlingUriBuilder createFrom(@NotNull SlingHttpServletRequest request) {
         return createFrom(request.getRequestPathInfo())
                 .setResourceResolver(request.getResourceResolver())
@@ -165,6 +170,7 @@ public class SlingUriBuilder {
      *        possible by checking against the underlying repository). If null is passed in, the shortest viable resource path is used.
      * @return a SlingUriBuilder
      */
+    @NotNull
     public static SlingUriBuilder createFrom(@NotNull URI uri, @Nullable ResourceResolver resourceResolver) {
         String path = uri.getPath();
         boolean pathExists = isNotBlank(path);
@@ -189,6 +195,7 @@ public class SlingUriBuilder {
      *        possible by checking against the underlying repository). If null is passed in, the shortest viable resource path is used.
      * @return a SlingUriBuilder
      */
+    @NotNull
     public static SlingUriBuilder parse(@NotNull String uriStr, @Nullable ResourceResolver resourceResolver) {
         URI uri;
         try {
@@ -247,6 +254,7 @@ public class SlingUriBuilder {
      * @param userInfo the user info
      * @return the builder for method chaining
      */
+    @NotNull
     public SlingUriBuilder setUserInfo(String userInfo) {
         if (schemeSpecificPart != null) {
             return this;
@@ -261,6 +269,7 @@ public class SlingUriBuilder {
      * @param host the host
      * @return the builder for method chaining
      */
+    @NotNull
     public SlingUriBuilder setHost(String host) {
         if (schemeSpecificPart != null) {
             return this;
@@ -275,6 +284,7 @@ public class SlingUriBuilder {
      * @param port the port
      * @return the builder for method chaining
      */
+    @NotNull
     public SlingUriBuilder setPort(int port) {
         if (schemeSpecificPart != null) {
             return this;
@@ -289,6 +299,7 @@ public class SlingUriBuilder {
      * @param path the path
      * @return the builder for method chaining
      */
+    @NotNull
     public SlingUriBuilder setPath(String path) {
         if (schemeSpecificPart != null) {
             return this;
@@ -320,6 +331,7 @@ public class SlingUriBuilder {
      * @throws IllegalStateException
      *             if no resource resolver is available
      */
+    @NotNull
     public SlingUriBuilder rebaseResourcePath() {
         if (schemeSpecificPart != null || resourcePath == null) {
             return this;
@@ -361,6 +373,7 @@ public class SlingUriBuilder {
      * @param resourcePath the resource path
      * @return the builder for method chaining
      */
+    @NotNull
     public SlingUriBuilder setResourcePath(String resourcePath) {
         if (schemeSpecificPart != null) {
             return this;
@@ -375,6 +388,7 @@ public class SlingUriBuilder {
      * @param selectors the selectors
      * @return the builder for method chaining
      */
+    @NotNull
     public SlingUriBuilder setSelectors(String[] selectors) {
         if (schemeSpecificPart != null || resourcePath == null) {
             return this;
@@ -390,6 +404,7 @@ public class SlingUriBuilder {
      * @param selector the selector to add
      * @return the builder for method chaining
      */
+    @NotNull
     public SlingUriBuilder addSelector(String selector) {
         if (schemeSpecificPart != null || resourcePath == null) {
             return this;
@@ -404,6 +419,7 @@ public class SlingUriBuilder {
      * @param extension the extension
      * @return the builder for method chaining
      */
+    @NotNull
     public SlingUriBuilder setExtension(String extension) {
         if (schemeSpecificPart != null || resourcePath == null) {
             return this;
@@ -419,6 +435,7 @@ public class SlingUriBuilder {
      * @param value the path parameter value
      * @return the builder for method chaining
      */
+    @NotNull
     public SlingUriBuilder setPathParameter(String key, String value) {
         if (schemeSpecificPart != null || resourcePath == null) {
             return this;
@@ -433,6 +450,7 @@ public class SlingUriBuilder {
      * @param pathParameters the path parameters
      * @return the builder for method chaining
      */
+    @NotNull
     public SlingUriBuilder setPathParameters(Map<String, String> pathParameters) {
         this.pathParameters.clear();
         this.pathParameters.putAll(pathParameters);
@@ -445,6 +463,7 @@ public class SlingUriBuilder {
      * @param suffix the suffix
      * @return the builder for method chaining
      */
+    @NotNull
     public SlingUriBuilder setSuffix(String suffix) {
         if (schemeSpecificPart != null || resourcePath == null) {
             return this;
@@ -462,6 +481,7 @@ public class SlingUriBuilder {
      * @param query the query
      * @return the builder for method chaining
      */
+    @NotNull
     public SlingUriBuilder setQuery(String query) {
         if (schemeSpecificPart != null) {
             return this;
@@ -476,6 +496,7 @@ public class SlingUriBuilder {
      * @param fragment the fragment
      * @return the builder for method chaining
      */
+    @NotNull
     public SlingUriBuilder setFragment(String fragment) {
         if (schemeSpecificPart != null) {
             return this;
@@ -490,6 +511,7 @@ public class SlingUriBuilder {
      * @param scheme the scheme
      * @return the builder for method chaining
      */
+    @NotNull
     public SlingUriBuilder setScheme(String scheme) {
         this.scheme = scheme;
         return this;
@@ -501,6 +523,7 @@ public class SlingUriBuilder {
      * @param schemeSpecificPart the scheme specific part
      * @return the builder for method chaining
      */
+    @NotNull
     public SlingUriBuilder setSchemeSpecificPart(String schemeSpecificPart) {
         this.schemeSpecificPart = schemeSpecificPart;
         return this;
@@ -511,6 +534,7 @@ public class SlingUriBuilder {
      * 
      * @return the builder for method chaining
      */
+    @NotNull
     public SlingUriBuilder removeSchemeAndAuthority() {
         setScheme(null);
         setUserInfo(null);
@@ -525,6 +549,7 @@ public class SlingUriBuilder {
      * @param slingUri the Sling URI
      * @return the builder for method chaining
      */
+    @NotNull
     public SlingUriBuilder useSchemeAndAuthority(@NotNull SlingUri slingUri) {
         setScheme(slingUri.getScheme());
         setUserInfo(slingUri.getUserInfo());
@@ -539,6 +564,7 @@ public class SlingUriBuilder {
      * @param uri the URI
      * @return the builder for method chaining
      */
+    @NotNull
     public SlingUriBuilder useSchemeAndAuthority(@NotNull URI uri) {
         useSchemeAndAuthority(createFrom(uri, resourceResolver).build());
         return this;
@@ -550,6 +576,7 @@ public class SlingUriBuilder {
      * @param resourceResolver the resource resolver
      * @return the builder for method chaining
      */
+    @NotNull
     public SlingUriBuilder setResourceResolver(ResourceResolver resourceResolver) {
         this.resourceResolver = resourceResolver;
         return this;
@@ -558,6 +585,7 @@ public class SlingUriBuilder {
     /** Builds the immutable SlingUri from this builder.
      * 
      * @return the builder for method chaining */
+    @NotNull
     public SlingUri build() {
         if (isBuilt) {
             throw new IllegalStateException("SlingUriBuilder.build() may only be called once per builder instance");

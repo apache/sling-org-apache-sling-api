@@ -19,6 +19,7 @@
 package org.apache.sling.api.uri;
 
 import static java.util.Arrays.asList;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import java.net.URI;
@@ -49,6 +50,7 @@ public class SlingUriTest {
             assertEquals(-1, slingUri.getPort());
             assertEquals("/test/to/path", slingUri.getResourcePath());
             assertEquals(null, slingUri.getSelectorString());
+            assertArrayEquals(new String[] {}, slingUri.getSelectors());
             assertEquals("html", slingUri.getExtension());
             assertEquals(null, slingUri.getSuffix());
             assertEquals(null, slingUri.getQuery());
@@ -69,6 +71,7 @@ public class SlingUriTest {
             assertEquals(888, slingUri.getPort());
             assertEquals("/test/to/path", slingUri.getResourcePath());
             assertEquals("sel1", slingUri.getSelectorString());
+            assertArrayEquals(new String[] { "sel1" }, slingUri.getSelectors());
             assertEquals("json", slingUri.getExtension());
             assertEquals("/suffix/path", slingUri.getSuffix());
             assertEquals("p1=2&p2=3", slingUri.getQuery());
@@ -125,6 +128,7 @@ public class SlingUriTest {
             assertEquals("/test/to/path", slingUri.getResourcePath());
             assertEquals(4, slingUri.getSelectors().length);
             assertEquals("sel1.sel2..sel4", slingUri.getSelectorString());
+            assertArrayEquals(new String[] { "sel1", "sel2", "", "sel4" }, slingUri.getSelectors());
             assertEquals("js", slingUri.getExtension());
             assertEquals(null, slingUri.getSuffix());
             assertEquals(null, slingUri.getQuery());
@@ -176,6 +180,7 @@ public class SlingUriTest {
             assertEquals(-1, slingUri.getPort());
             assertEquals("../path/./deep/path/../path", slingUri.getResourcePath());
             assertEquals("sel1.sel2", slingUri.getSelectorString());
+            assertArrayEquals(new String[] { "sel1", "sel2" }, slingUri.getSelectors());
             assertEquals("html", slingUri.getExtension());
             assertEquals(null, slingUri.getSuffix());
             assertEquals("test=1", slingUri.getQuery());
