@@ -255,7 +255,7 @@ public class SlingUriBuilder {
      * @return the builder for method chaining
      */
     @NotNull
-    public SlingUriBuilder setUserInfo(String userInfo) {
+    public SlingUriBuilder setUserInfo(@Nullable String userInfo) {
         if (schemeSpecificPart != null) {
             return this;
         }
@@ -270,7 +270,7 @@ public class SlingUriBuilder {
      * @return the builder for method chaining
      */
     @NotNull
-    public SlingUriBuilder setHost(String host) {
+    public SlingUriBuilder setHost(@Nullable String host) {
         if (schemeSpecificPart != null) {
             return this;
         }
@@ -378,7 +378,7 @@ public class SlingUriBuilder {
      * @return the builder for method chaining
      */
     @NotNull
-    public SlingUriBuilder setResourcePath(String resourcePath) {
+    public SlingUriBuilder setResourcePath(@Nullable String resourcePath) {
         if (schemeSpecificPart != null) {
             return this;
         }
@@ -393,7 +393,7 @@ public class SlingUriBuilder {
      * @return the builder for method chaining
      */
     @NotNull
-    public SlingUriBuilder setSelectors(String[] selectors) {
+    public SlingUriBuilder setSelectors(@NotNull String[] selectors) {
         if (schemeSpecificPart != null || resourcePath == null) {
             return this;
         }
@@ -424,7 +424,7 @@ public class SlingUriBuilder {
      * @return the builder for method chaining
      */
     @NotNull
-    public SlingUriBuilder setExtension(String extension) {
+    public SlingUriBuilder setExtension(@Nullable String extension) {
         if (schemeSpecificPart != null || resourcePath == null) {
             return this;
         }
@@ -440,7 +440,7 @@ public class SlingUriBuilder {
      * @return the builder for method chaining
      */
     @NotNull
-    public SlingUriBuilder setPathParameter(String key, String value) {
+    public SlingUriBuilder setPathParameter(@NotNull String key, @NotNull String value) {
         if (schemeSpecificPart != null || resourcePath == null) {
             return this;
         }
@@ -455,7 +455,7 @@ public class SlingUriBuilder {
      * @return the builder for method chaining
      */
     @NotNull
-    public SlingUriBuilder setPathParameters(Map<String, String> pathParameters) {
+    public SlingUriBuilder setPathParameters(@NotNull Map<String, String> pathParameters) {
         this.pathParameters.clear();
         this.pathParameters.putAll(pathParameters);
         return this;
@@ -468,7 +468,7 @@ public class SlingUriBuilder {
      * @return the builder for method chaining
      */
     @NotNull
-    public SlingUriBuilder setSuffix(String suffix) {
+    public SlingUriBuilder setSuffix(@Nullable String suffix) {
         if (schemeSpecificPart != null || resourcePath == null) {
             return this;
         }
@@ -486,7 +486,7 @@ public class SlingUriBuilder {
      * @return the builder for method chaining
      */
     @NotNull
-    public SlingUriBuilder setQuery(String query) {
+    public SlingUriBuilder setQuery(@Nullable String query) {
         if (schemeSpecificPart != null) {
             return this;
         }
@@ -501,7 +501,7 @@ public class SlingUriBuilder {
      * @return the builder for method chaining
      */
     @NotNull
-    public SlingUriBuilder setFragment(String fragment) {
+    public SlingUriBuilder setFragment(@Nullable String fragment) {
         if (schemeSpecificPart != null) {
             return this;
         }
@@ -516,7 +516,7 @@ public class SlingUriBuilder {
      * @return the builder for method chaining
      */
     @NotNull
-    public SlingUriBuilder setScheme(String scheme) {
+    public SlingUriBuilder setScheme(@Nullable String scheme) {
         this.scheme = scheme;
         return this;
     }
@@ -528,7 +528,7 @@ public class SlingUriBuilder {
      * @return the builder for method chaining
      */
     @NotNull
-    public SlingUriBuilder setSchemeSpecificPart(String schemeSpecificPart) {
+    public SlingUriBuilder setSchemeSpecificPart(@Nullable String schemeSpecificPart) {
         this.schemeSpecificPart = schemeSpecificPart;
         return this;
     }

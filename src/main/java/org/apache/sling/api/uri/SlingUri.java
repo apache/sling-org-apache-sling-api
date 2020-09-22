@@ -226,7 +226,7 @@ public interface SlingUri extends RequestPathInfo {
      * @return the adjusted SlingUri (new instance)
      */
     @NotNull
-    default SlingUri adjust(Consumer<SlingUriBuilder> builderConsumer) {
+    default SlingUri adjust(@NotNull Consumer<SlingUriBuilder> builderConsumer) {
         SlingUriBuilder builder = SlingUriBuilder.createFrom(this);
         builderConsumer.accept(builder);
         return builder.build();
