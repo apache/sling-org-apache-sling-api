@@ -81,6 +81,46 @@ public class SlingUriTest {
     }
 
     @Test
+    public void testFullUriWithoutSchemeSimple() {
+
+        String testUriStr = "//cdn.example.com/test/js_file.js";
+
+        testUri(testUriStr, false, false, false, false, false, slingUri -> {
+            assertEquals(null, slingUri.getScheme());
+            assertEquals("//cdn.example.com/test/js_file.js", slingUri.getSchemeSpecificPart());
+            assertEquals(null, slingUri.getUserInfo());
+            assertEquals("cdn.example.com", slingUri.getHost());
+            assertEquals(-1, slingUri.getPort());
+            assertEquals("/test/js_file", slingUri.getResourcePath());
+            assertEquals(null, slingUri.getSelectorString());
+            assertEquals("js", slingUri.getExtension());
+            assertEquals(null, slingUri.getSuffix());
+            assertEquals(null, slingUri.getQuery());
+        }, asList(resolver, null));
+
+    }
+
+    @Test
+    public void testFullUriWithoutSchemeComplex() {
+
+        String testUriStr = "//user:pw@cdn.example.com:3000/test/js_file.txt.js?par1=val1&par2=val2";
+
+        testUri(testUriStr, false, false, false, false, false, slingUri -> {
+            assertEquals(null, slingUri.getScheme());
+            assertEquals("//user:pw@cdn.example.com:3000/test/js_file.txt.js?par1=val1&par2=val2", slingUri.getSchemeSpecificPart());
+            assertEquals("user:pw", slingUri.getUserInfo());
+            assertEquals("cdn.example.com", slingUri.getHost());
+            assertEquals(3000, slingUri.getPort());
+            assertEquals("/test/js_file", slingUri.getResourcePath());
+            assertEquals("txt", slingUri.getSelectorString());
+            assertEquals("js", slingUri.getExtension());
+            assertEquals(null, slingUri.getSuffix());
+            assertEquals("par1=val1&par2=val2", slingUri.getQuery());
+        }, asList(resolver, null));
+
+    }
+    
+    @Test
     public void testAbsolutePathSlingUri() {
         String testUriStr = "/test/to/path.sel1.json/suffix/path?p1=2&p2=3#frag3939";
 

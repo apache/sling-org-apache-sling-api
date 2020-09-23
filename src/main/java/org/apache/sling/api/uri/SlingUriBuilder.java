@@ -657,23 +657,21 @@ public class SlingUriBuilder {
 
     private String toStringInternal(boolean includeScheme, boolean includeFragment) {
         StringBuilder requestUri = new StringBuilder();
-
-        if (isAbsolute()) {
-            if (includeScheme) {
-                requestUri.append(scheme + CHAR_COLON);
+        
+        if (includeScheme && isAbsolute()) {
+            requestUri.append(scheme + CHAR_COLON);
+        }
+        if (isNotBlank(host)) {
+            requestUri.append(CHAR_SLASH + CHAR_SLASH);
+            if (isNotBlank(userInfo)) {
+                requestUri.append(userInfo + CHAR_AT);
             }
-            if (schemeSpecificPart == null) {
-                requestUri.append(CHAR_SLASH + CHAR_SLASH);
-                if (isNotBlank(userInfo)) {
-                    requestUri.append(userInfo + CHAR_AT);
-                }
-                requestUri.append(host);
-                if (port > 0
-                        && !(scheme.equals(HTTP_SCHEME) && port == HTTP_DEFAULT_PORT)
-                        && !(scheme.equals(HTTPS_SCHEME) && port == HTTPS_DEFAULT_PORT)) {
-                    requestUri.append(CHAR_COLON);
-                    requestUri.append(port);
-                }
+            requestUri.append(host);
+            if (port > 0 
+                    && !(HTTP_SCHEME.equals(scheme) && port == HTTP_DEFAULT_PORT)
+                    && !(HTTPS_SCHEME.equals(scheme) && port == HTTPS_DEFAULT_PORT)) {
+                requestUri.append(CHAR_COLON);
+                requestUri.append(port);
             }
         }
         if (schemeSpecificPart != null) {
