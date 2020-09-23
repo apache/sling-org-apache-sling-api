@@ -21,6 +21,8 @@ package org.apache.sling.api.resource.external;
 
 import java.net.URI;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * This interface is normally used to extend an InputStream to indicate that it has a URI form that could
  * be used in place of the InputStream if desired. It is used in situations where the internal of a ResourceProvider
@@ -37,6 +39,6 @@ public interface ExternalizableInputStream {
      * directly and not this interface.
      * @return a URI intended for any network context.
      */
-    URI getURI();
+    @NotNull URI getURI();
 
 }

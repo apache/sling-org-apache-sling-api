@@ -19,10 +19,11 @@
 
 package org.apache.sling.api.resource.external;
 
-import org.apache.sling.api.resource.Resource;
-import org.osgi.annotation.versioning.ProviderType;
-
 import java.net.URI;
+
+import org.apache.sling.api.resource.Resource;
+import org.jetbrains.annotations.NotNull;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * Provides a URI in exchange for a Resource.
@@ -38,13 +39,13 @@ public interface URIProvider {
 
     /**
      * Return a URI appicable to the defined scope.
+     * @param resource the resource to convert from.
      * @param scope the required scope.
      * @param operation the required operation.
-     * @param resource the resource to convert from.
      * @return a URI if the resource has a URI suitable for the requested scope and operation, otherwise the implementation should throw an IlleagalArgumentException.
      * @throws IllegalArgumentException if a URI for the requested scope and operation cannot be provided to the caller.
      */
-    URI toURI(Resource resource, URIProvider.Scope scope, URIProvider.Operation operation);
+    @NotNull URI toURI(@NotNull Resource resource, @NotNull URIProvider.Scope scope, @NotNull URIProvider.Operation operation);
 
     /**
      * Defines which operatio the URI may be used to perform.
