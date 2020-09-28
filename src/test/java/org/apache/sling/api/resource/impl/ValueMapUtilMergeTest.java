@@ -157,6 +157,25 @@ public class ValueMapUtilMergeTest {
         typicalVM().clear();
     }
 
+    /**
+     * SLING-9774 - Test that a key=null value in the first map is used
+     * instead of the key=value entry in the second map
+     */
+    @Test
+    public void testNullValueForExistingKey() {
+        // value is null in the first map
+        ValueMap v1 = createValueMap("k1", null);
+
+        // value is not null in the second map
+        ValueMap v2 = createValueMap("k1", "11");
+
+        // expected to get null value since the first
+        //   map had a real key
+        ValueMap merge = merge(v1, v2);
+        assertTrue(merge.containsKey("k1"));
+        assertNull(merge.get("k1"));
+    }
+
     private static ValueMap createValueMap(Object... pairs) {
         ValueMap vm = new ValueMapDecorator(new HashMap<>());
         for (int i = 0; i < pairs.length; i += 2) {

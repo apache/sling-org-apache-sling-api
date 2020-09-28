@@ -18,10 +18,6 @@
  */
 package org.apache.sling.api.wrappers.impl;
 
-import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.api.wrappers.ValueMapUtil;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,9 +25,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.api.wrappers.ValueMapUtil;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Merge provided {@code ValueMaps} into a single view {@code ValueMap} that aggregates
@@ -108,10 +109,40 @@ public class MergingValueMap implements ValueMap {
     @Override
     public Object get(Object key) {
         return valueMaps.stream()
-                .map(vm -> vm.get(key))
+                .map(vm -> getOrEmpty(vm, key)) // SLING-9774
                 .filter(Objects::nonNull)
                 .findFirst()
+                .filter(Optional::isPresent)    // skip if Optional#empty
+                .map(Optional::get)             // dig the value out of the Optional
                 .orElse(null);
+    }
+
+    /**
+     * SLING-9774 - Returns an {@code Optional} describing the value in the map value for
+     * the supplied key.  Special handling is supplied for an existing key that
+     * resolves to a null value.
+     *
+     * @param vm the map to get the value from
+     * @param key the key to get the value for
+     * @return an {@code Optional} with a present value if the specified value
+     * is non-null, otherwise if the map contains the key then an empty {@code Optional},
+     * otherwise null
+     */
+    private Optional<Object> getOrEmpty(ValueMap vm, Object key) {
+        Optional<Object> opt = null;
+        Object value = vm.get(key);
+        if (value == null) {
+            // check if the null value is for a real entry
+            if (vm.containsKey(key)) {
+                // key exists so return the empty Optional
+                //   instead of null
+                opt = Optional.empty();
+            }
+        } else {
+            // not null so just wrap the value
+            opt = Optional.of(value);
+        }
+        return opt;
     }
 
     @NotNull
