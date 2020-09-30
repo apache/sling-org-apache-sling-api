@@ -18,8 +18,11 @@
  */
 package org.apache.sling.api.uri;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
@@ -42,7 +45,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Builder for SlingUris.
+ * Builder for SlingUris that allows to set any properties of a {@link SlingUri}.
  * <p>
  * Example:
  * 
@@ -67,9 +70,11 @@ public class SlingUriBuilder {
     private static final int HTTPS_DEFAULT_PORT = 443;
     private static final String HTTP_SCHEME = "http";
     private static final int HTTP_DEFAULT_PORT = 80;
+    private static final String FILE_SCHEME = "file";
 
-    static final char CHAR_HASH = '#';
-    static final char CHAR_QM = '?';
+    static final String CHAR_HASH = "#";
+    static final String CHAR_QM = "?";
+    static final char CHAR_AMP = '&';
     static final char CHAR_AT = '@';
     static final char CHAR_SEMICOLON = ';';
     static final char CHAR_EQUALS = '=';
@@ -79,6 +84,7 @@ public class SlingUriBuilder {
     static final String CHAR_SLASH = "/";
     static final String SELECTOR_DOT_REGEX = "\\.(?!\\.?/)"; // (?!\\.?/) to avoid matching ./ and ../
     static final String PATH_PARAMETERS_REGEX = ";([a-zA-z0-9]+)=(?:\\'([^']*)\\'|([^/]+))";
+    static final String BEST_EFFORT_INVALID_URI_MATCHER = "^(?:([^:#@]+):)?(?://(?:([^@#]+)@)?([^/#:]+)(?::([0-9]+))?)?(?:([^?#]+))?(?:\\?([^#]*))?(?:#(.*))?$";
 
     /**
      * Creates a builder without any URI parameters set.
@@ -112,7 +118,7 @@ public class SlingUriBuilder {
                 .setFragment(slingUri.getFragment())
                 .setSchemeSpecificPart(slingUri.isOpaque() ? slingUri.getSchemeSpecificPart() : null)
                 .setResourceResolver(slingUri instanceof ImmutableSlingUri
-                        ? ((ImmutableSlingUri) slingUri).getBuilder().resourceResolver
+                        ? ((ImmutableSlingUri) slingUri).getData().resourceResolver
                         : null);
     }
 
@@ -172,19 +178,24 @@ public class SlingUriBuilder {
      */
     @NotNull
     public static SlingUriBuilder createFrom(@NotNull URI uri, @Nullable ResourceResolver resourceResolver) {
-        String path = uri.getPath();
+        String path = uri.getRawPath();
         boolean pathExists = isNotBlank(path);
-        boolean schemeSpecificRelevant = !pathExists && uri.getQuery() == null;
+        String uriQuery = uri.getRawQuery();
+        boolean schemeSpecificRelevant = !pathExists && uriQuery == null;
+        String uriHost = uri.getHost();
+        if (FILE_SCHEME.equals(uri.getScheme()) && uriHost == null) {
+            uriHost = ""; // ensure three slashes in file URIs without host
+        }
         return create()
                 .setResourceResolver(resourceResolver)
                 .setScheme(uri.getScheme())
-                .setUserInfo(uri.getUserInfo())
-                .setHost(uri.getHost())
+                .setUserInfo(uri.getRawUserInfo())
+                .setHost(uriHost)
                 .setPort(uri.getPort())
                 .setPath(pathExists ? path : null)
-                .setQuery(uri.getQuery())
-                .setFragment(uri.getFragment())
-                .setSchemeSpecificPart(schemeSpecificRelevant ? uri.getSchemeSpecificPart() : null);
+                .setQuery(uriQuery)
+                .setFragment(uri.getRawFragment())
+                .setSchemeSpecificPart(schemeSpecificRelevant ? uri.getRawSchemeSpecificPart() : null);
     }
 
     /**
@@ -203,15 +214,43 @@ public class SlingUriBuilder {
             return createFrom(uri, resourceResolver);
         } catch (URISyntaxException e) {
             LOG.debug("Invalid URI {}: {}", uriStr, e.getMessage(), e);
-            // best effort
-            String[] invalidUriParts = uriStr.split(CHAR_COLON, 2);
-            if (invalidUriParts.length == 1) {
-                return create().setSchemeSpecificPart(invalidUriParts[0]);
-            } else {
-                return create()
-                        .setScheme(invalidUriParts[0])
-                        .setSchemeSpecificPart(invalidUriParts[1]);
-            }
+            // best effort to match input, see SlingUriInvalidUrisTest
+            return parseBestEffort(uriStr, resourceResolver);
+        }
+    }
+
+    private static SlingUriBuilder parseBestEffort(String uriStr, ResourceResolver resourceResolver) {
+        Matcher matcher = Pattern.compile(BEST_EFFORT_INVALID_URI_MATCHER).matcher(uriStr);
+        matcher.find();
+
+        String scheme = matcher.group(1);
+        String userInfo = matcher.group(2);
+        String host = matcher.group(3);
+        String port = matcher.groupCount() >= 4 ? matcher.group(4) : null;
+        String path = matcher.groupCount() >= 5 ? matcher.group(5) : null;
+        String query = matcher.groupCount() >= 6 ? matcher.group(6) : null;
+        String fragment = matcher.groupCount() >= 7 ? matcher.group(7) : null;
+        if (!isBlank(scheme) && isBlank(host)) {
+            // opaque case
+            return create()
+                    .setResourceResolver(resourceResolver)
+                    .setScheme(scheme)
+                    .setSchemeSpecificPart(path)
+                    .setFragment(fragment);
+        } else if (!isBlank(host) || !isBlank(path)) {
+            return create()
+                    .setResourceResolver(resourceResolver)
+                    .setScheme(scheme)
+                    .setUserInfo(userInfo)
+                    .setHost(host)
+                    .setPort(port != null ? Integer.parseInt(port) : -1)
+                    .setPath(path)
+                    .setQuery(query)
+                    .setFragment(fragment);
+        } else {
+            return create()
+                    .setResourceResolver(resourceResolver)
+                    .setSchemeSpecificPart(uriStr);
         }
     }
 
@@ -495,6 +534,51 @@ public class SlingUriBuilder {
     }
 
     /**
+     * Add a query parameter to the query of the URI. Key and value are URL-encoded before adding the parameter to the query string.
+     * 
+     * @param parameterName the parameter name
+     * @param value the parameter value
+     * @return the builder for method chaining
+     */
+    @NotNull
+    public SlingUriBuilder addQueryParameter(@NotNull String parameterName, @NotNull String value) {
+        if (schemeSpecificPart != null) {
+            return this;
+        }
+        try {
+            this.query = (this.query == null ? "" : this.query + CHAR_AMP)
+                    + URLEncoder.encode(parameterName, StandardCharsets.UTF_8.name())
+                    + "=" + URLEncoder.encode(value, StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalStateException("Encoding not supported: " + StandardCharsets.UTF_8, e);
+        }
+        return this;
+    }
+
+    /**
+     * <p>
+     * Replace all query parameters of the URL. Both keys and values are URL-encoded before adding them to the query string.
+     * </p>
+     * <p>
+     * For adding multiple query parameters with the same name prefer to use {@link #addQueryParameter(String, String)}.
+     * </p>
+     * 
+     * @param queryParameters the map with the query parameters
+     * @return the builder for method chaining
+     */
+    @NotNull
+    public SlingUriBuilder setQueryParameters(@NotNull Map<String, String> queryParameters) {
+        if (schemeSpecificPart != null) {
+            return this;
+        }
+        setQuery(null); // reset first
+        for (Map.Entry<String, String> parameter : queryParameters.entrySet()) {
+            addQueryParameter(parameter.getKey(), parameter.getValue());
+        }
+        return this;
+    }
+
+    /**
      * Set the fragment of the URI.
      * 
      * @param fragment the fragment
@@ -502,9 +586,6 @@ public class SlingUriBuilder {
      */
     @NotNull
     public SlingUriBuilder setFragment(@Nullable String fragment) {
-        if (schemeSpecificPart != null) {
-            return this;
-        }
         this.fragment = fragment;
         return this;
     }
@@ -563,6 +644,168 @@ public class SlingUriBuilder {
     }
 
     /**
+     * Returns the resource path.
+     * 
+     * @return returns the resource path or null if the URI does not contain a path.
+     */
+    @Nullable
+    public String getResourcePath() {
+        return resourcePath;
+    }
+
+    /**
+     * Returns the selector string
+     * 
+     * @return returns the selector string or null if the URI does not contain selector(s) (in line with {@link RequestPathInfo})
+     */
+    @Nullable
+    public String getSelectorString() {
+        return !selectors.isEmpty() ? String.join(CHAR_DOT, selectors) : null;
+    }
+
+    /**
+     * Returns the selectors array.
+     * 
+     * @return the selectors array (empty if the URI does not contain selector(s), never null)
+     */
+    @NotNull
+    public String[] getSelectors() {
+        return selectors.toArray(new String[selectors.size()]);
+    }
+
+    /**
+     * Returns the extension.
+     * 
+     * @return the extension or null if the URI does not contain an extension
+     */
+    @Nullable
+    public String getExtension() {
+        return extension;
+    }
+
+    /**
+     * Returns the path parameters.
+     * 
+     * @return the path parameters or an empty Map if the URI does not contain any
+     */
+    @Nullable
+    public Map<String, String> getPathParameters() {
+        return pathParameters;
+    }
+
+    /**
+     * Returns the suffix part of the URI
+     * 
+     * @return the suffix string or null if the URI does not contain a suffix
+     */
+    @Nullable
+    public String getSuffix() {
+        return suffix;
+    }
+
+    /**
+     * Returns the corresponding suffix resource or null if
+     * <ul>
+     * <li>no resource resolver is available (depends on the create method used in SlingUriBuilder)</li>
+     * <li>the URI does not contain a suffix</li>
+     * <li>if the suffix resource could not be found</li>
+     * </ul>
+     * 
+     * @return the suffix resource if available or null
+     */
+    @Nullable
+    public Resource getSuffixResource() {
+        if (isNotBlank(suffix) && resourceResolver != null) {
+            return resourceResolver.getResource(suffix);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Returns the joint path of resource path, selectors, extension and suffix.
+     * 
+     * @return the path or null if no path is set
+     */
+    @Nullable
+    public String getPath() {
+        return assemblePath(true);
+    }
+
+    /**
+     * Returns the scheme-specific part of the URI, compare with Javadoc of {@link URI}.
+     * 
+     * @return scheme specific part of the URI
+     */
+    @Nullable
+    public String getSchemeSpecificPart() {
+        if (isOpaque()) {
+            return schemeSpecificPart;
+        } else {
+            return toStringInternal(false, false);
+        }
+    }
+
+    /**
+     * Returns the query.
+     * 
+     * @return the query part of the URI or null if the URI does not contain a query
+     */
+    @Nullable
+    public String getQuery() {
+        return query;
+    }
+
+    /**
+     * Returns the fragment.
+     * 
+     * @return the fragment or null if the URI does not contain a fragment
+     */
+    @Nullable
+    public String getFragment() {
+        return fragment;
+    }
+
+    /**
+     * Returns the scheme.
+     * 
+     * @return the scheme or null if not set
+     */
+    @Nullable
+    public String getScheme() {
+        return scheme;
+    }
+
+    /**
+     * Returns the host.
+     * 
+     * @return returns the host of the SlingUri or null if not set
+     */
+    @Nullable
+    public String getHost() {
+        return host;
+    }
+
+    /**
+     * Returns the port.
+     * 
+     * @return returns the port of the SlingUri or -1 if not set
+     */
+    public int getPort() {
+        return port;
+    }
+
+    /**
+     * Returns the user info.
+     * 
+     * @return the user info of the SlingUri or null if not set
+     */
+    @Nullable
+    public String getUserInfo() {
+        return userInfo;
+    }
+
+    /**
      * Will take over scheme and authority (user info, host and port) from provided URI.
      * 
      * @param uri the URI
@@ -606,7 +849,6 @@ public class SlingUriBuilder {
     public String toString() {
         return toStringInternal(true, true);
     }
-
 
     /**
      * Returns true the URI is either a relative or absolute path (this is the case if scheme and host is empty and the URI path is set)
@@ -661,13 +903,13 @@ public class SlingUriBuilder {
         if (includeScheme && isAbsolute()) {
             requestUri.append(scheme + CHAR_COLON);
         }
-        if (isNotBlank(host)) {
+        if (host != null) {
             requestUri.append(CHAR_SLASH + CHAR_SLASH);
             if (isNotBlank(userInfo)) {
                 requestUri.append(userInfo + CHAR_AT);
             }
             requestUri.append(host);
-            if (port > 0 
+            if (port > 0
                     && !(HTTP_SCHEME.equals(scheme) && port == HTTP_DEFAULT_PORT)
                     && !(HTTPS_SCHEME.equals(scheme) && port == HTTPS_DEFAULT_PORT)) {
                 requestUri.append(CHAR_COLON);
@@ -767,117 +1009,107 @@ public class SlingUriBuilder {
 
         @Override
         public String getResourcePath() {
-            return resourcePath;
+            return getData().getResourcePath();
         }
 
-        // returns null in line with
-        // https://sling.apache.org/apidocs/sling11/org/apache/sling/api/request/RequestPathInfo.html#getSelectorString--
         @Override
         public String getSelectorString() {
-            return !selectors.isEmpty() ? String.join(CHAR_DOT, selectors) : null;
+            return getData().getSelectorString();
         }
 
         @Override
         public String[] getSelectors() {
-            return selectors.toArray(new String[selectors.size()]);
+            return getData().getSelectors();
         }
 
         @Override
         public String getExtension() {
-            return extension;
+            return getData().getExtension();
         }
 
         @Override
         public Map<String, String> getPathParameters() {
-            return Collections.unmodifiableMap(pathParameters);
+            return Collections.unmodifiableMap(getData().getPathParameters());
         }
 
         @Override
         public String getSuffix() {
-            return suffix;
+            return getData().getSuffix();
         }
 
         @Override
         public String getPath() {
-            return assemblePath(true);
+            return getData().getPath();
         }
 
         @Override
         public String getSchemeSpecificPart() {
-            if (isOpaque()) {
-                return schemeSpecificPart;
-            } else {
-                return toStringInternal(false, false);
-            }
+            return getData().getSchemeSpecificPart();
         }
 
         @Override
         public String getQuery() {
-            return query;
+            return getData().getQuery();
         }
 
         @Override
         public String getFragment() {
-            return fragment;
+            return getData().getFragment();
         }
 
         @Override
         public String getScheme() {
-            return scheme;
+            return getData().getScheme();
         }
 
         @Override
         public String getHost() {
-            return host;
+            return getData().getHost();
         }
 
         @Override
         public int getPort() {
-            return port;
+            return getData().getPort();
         }
 
         @Override
         public Resource getSuffixResource() {
-            if (isNotBlank(suffix) && resourceResolver != null) {
-                return resourceResolver.resolve(suffix);
-            } else {
-                return null;
-            }
+            return getData().getSuffixResource();
         }
 
         @Override
         public String getUserInfo() {
-            return userInfo;
+            return getData().getUserInfo();
         }
 
         @Override
         public boolean isOpaque() {
-            return getBuilder().isOpaque();
+            return getData().isOpaque();
         }
 
         @Override
         public boolean isPath() {
-            return getBuilder().isPath();
+            return getData().isPath();
         }
 
         @Override
         public boolean isAbsolutePath() {
-            return getBuilder().isAbsolutePath();
+            return getData().isAbsolutePath();
         }
 
         @Override
         public boolean isRelativePath() {
-            return getBuilder().isRelativePath();
+            return getData().isRelativePath();
         }
 
         @Override
         public boolean isAbsolute() {
-            return getBuilder().isAbsolute();
+            return getData().isAbsolute();
         }
 
         @Override
         public String toString() {
-            return toStringInternal(true, true);
+            return getData().toString();
         }
 
         @Override
@@ -890,7 +1122,7 @@ public class SlingUriBuilder {
             }
         }
 
-        private SlingUriBuilder getBuilder() {
+        private SlingUriBuilder getData() {
             return SlingUriBuilder.this;
         }
 
@@ -924,61 +1156,61 @@ public class SlingUriBuilder {
                 return false;
             ImmutableSlingUri other = (ImmutableSlingUri) obj;
             if (extension == null) {
-                if (other.getBuilder().extension != null)
+                if (other.getData().extension != null)
                     return false;
-            } else if (!extension.equals(other.getBuilder().extension))
+            } else if (!extension.equals(other.getData().extension))
                 return false;
             if (fragment == null) {
-                if (other.getBuilder().fragment != null)
+                if (other.getData().fragment != null)
                     return false;
-            } else if (!fragment.equals(other.getBuilder().fragment))
+            } else if (!fragment.equals(other.getData().fragment))
                 return false;
             if (host == null) {
-                if (other.getBuilder().host != null)
+                if (other.getData().host != null)
                     return false;
-            } else if (!host.equals(other.getBuilder().host))
+            } else if (!host.equals(other.getData().host))
                 return false;
             if (pathParameters == null) {
-                if (other.getBuilder().pathParameters != null)
+                if (other.getData().pathParameters != null)
                     return false;
-            } else if (!pathParameters.equals(other.getBuilder().pathParameters))
+            } else if (!pathParameters.equals(other.getData().pathParameters))
                 return false;
-            if (port != other.getBuilder().port)
+            if (port != other.getData().port)
                 return false;
             if (query == null) {
-                if (other.getBuilder().query != null)
+                if (other.getData().query != null)
                     return false;
-            } else if (!query.equals(other.getBuilder().query))
+            } else if (!query.equals(other.getData().query))
                 return false;
             if (resourcePath == null) {
-                if (other.getBuilder().resourcePath != null)
+                if (other.getData().resourcePath != null)
                     return false;
-            } else if (!resourcePath.equals(other.getBuilder().resourcePath))
+            } else if (!resourcePath.equals(other.getData().resourcePath))
                 return false;
             if (scheme == null) {
-                if (other.getBuilder().scheme != null)
+                if (other.getData().scheme != null)
                     return false;
-            } else if (!scheme.equals(other.getBuilder().scheme))
+            } else if (!scheme.equals(other.getData().scheme))
                 return false;
             if (schemeSpecificPart == null) {
-                if (other.getBuilder().schemeSpecificPart != null)
+                if (other.getData().schemeSpecificPart != null)
                     return false;
-            } else if (!schemeSpecificPart.equals(other.getBuilder().schemeSpecificPart))
+            } else if (!schemeSpecificPart.equals(other.getData().schemeSpecificPart))
                 return false;
             if (selectors == null) {
-                if (other.getBuilder().selectors != null)
+                if (other.getData().selectors != null)
                     return false;
-            } else if (!selectors.equals(other.getBuilder().selectors))
+            } else if (!selectors.equals(other.getData().selectors))
                 return false;
             if (suffix == null) {
-                if (other.getBuilder().suffix != null)
+                if (other.getData().suffix != null)
                     return false;
-            } else if (!suffix.equals(other.getBuilder().suffix))
+            } else if (!suffix.equals(other.getData().suffix))
                 return false;
             if (userInfo == null) {
-                if (other.getBuilder().userInfo != null)
+                if (other.getData().userInfo != null)
                     return false;
-            } else if (!userInfo.equals(other.getBuilder().userInfo))
+            } else if (!userInfo.equals(other.getData().userInfo))
                 return false;
             return true;
         }
