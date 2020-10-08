@@ -18,7 +18,7 @@
  */
 package org.apache.sling.api.resource.mapping;
 
-import java.util.Map;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -35,26 +35,6 @@ import org.osgi.annotation.versioning.ProviderType;
  */
 @ProviderType
 public interface PathToUriMappingService {
-
-    /** The result of a map or resolve operation */
-    @ProviderType
-    public interface Result {
-        /**
-         * The Sling URI as result of the resolve or map operation.
-         * 
-         * @return the Sling URI
-         */
-        @NotNull
-        SlingUri getUri();
-
-        /**
-         * Returns all intermediate mappings as produced by {@link org.apache.sling.spi.urimapping.SlingUriMapper} services
-         * 
-         * @return the intermediate mappings
-         */
-        @NotNull
-        Map<String, SlingUri> getIntermediateMappings();
-    }
 
     /**
      * Maps a path to a Sling URI.
@@ -74,4 +54,42 @@ public interface PathToUriMappingService {
      * @return a @{link PathToUriMappingService.Result}
      */
     Result resolve(@Nullable HttpServletRequest request, @Nullable String path);
+
+    /** The result of a map or resolve operation */
+    @ProviderType
+    public interface Result {
+        /**
+         * The Sling URI as result of the resolve or map operation.
+         * 
+         * @return the Sling URI
+         */
+        @NotNull
+        SlingUri getUri();
+
+        /**
+         * Returns all intermediate mappings as produced by {@link org.apache.sling.spi.urimapping.SlingUriMapper} services.
+         * 
+         * @return the intermediate mappings
+         */
+        @NotNull
+        List<IntermediateMapping> getIntermediateMappings();
+    }
+
+    /** Tuple of mapper name and its result as SlingUri. */
+    @ProviderType
+    public interface IntermediateMapping {
+
+        /**
+         * @return The name of the {@link org.apache.sling.spi.urimapping.SlingUriMapper} that produced the intermediate result
+         */
+        @NotNull
+        String getName();
+
+        /**
+         * @return The SlingUri as produced by the {@link org.apache.sling.spi.urimapping.SlingUriMapper}
+         */
+        @NotNull
+        SlingUri getUri();
+    }
+
 }
