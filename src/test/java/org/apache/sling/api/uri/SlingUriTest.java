@@ -21,11 +21,18 @@ package org.apache.sling.api.uri;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.net.URI;
 import java.util.List;
 import java.util.function.Consumer;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -78,6 +85,47 @@ public class SlingUriTest {
             assertEquals("frag3939", slingUri.getFragment());
         }, asList(resolver, null));
 
+    }
+
+    @Test
+    public void testSlingUriDomainIPv4() {
+
+        String testUriStr = "https://88.39.107.39:888/test/to/path.sel1.json/suffix/path?p1=2&p2=3#frag3939";
+        testUri(testUriStr, false, false, false, true, false, slingUri -> {
+            assertEquals("https", slingUri.getScheme());
+            assertEquals("//88.39.107.39:888/test/to/path.sel1.json/suffix/path?p1=2&p2=3", slingUri.getSchemeSpecificPart());
+            assertEquals(null, slingUri.getUserInfo());
+            assertEquals("88.39.107.39", slingUri.getHost());
+            assertEquals(888, slingUri.getPort());
+            assertEquals("/test/to/path", slingUri.getResourcePath());
+            assertEquals("sel1", slingUri.getSelectorString());
+            assertArrayEquals(new String[] { "sel1" }, slingUri.getSelectors());
+            assertEquals("json", slingUri.getExtension());
+            assertEquals("/suffix/path", slingUri.getSuffix());
+            assertEquals("p1=2&p2=3", slingUri.getQuery());
+            assertEquals("frag3939", slingUri.getFragment());
+        }, asList(resolver, null));
+    }
+
+    @Test
+    public void testSlingUriDomainIPv6() {
+
+        String testUriStr = "https://[FEDC:BA98:7654:3210:FEDC:BA98:7654:3210]:8080/index.sel1.json/suffix/path?p1=2&p2=3#frag3939";
+        testUri(testUriStr, false, false, false, true, false, slingUri -> {
+            assertEquals("https", slingUri.getScheme());
+            assertEquals("//[FEDC:BA98:7654:3210:FEDC:BA98:7654:3210]:8080/index.sel1.json/suffix/path?p1=2&p2=3",
+                    slingUri.getSchemeSpecificPart());
+            assertEquals(null, slingUri.getUserInfo());
+            assertEquals("[FEDC:BA98:7654:3210:FEDC:BA98:7654:3210]", slingUri.getHost());
+            assertEquals(8080, slingUri.getPort());
+            assertEquals("/index", slingUri.getResourcePath());
+            assertEquals("sel1", slingUri.getSelectorString());
+            assertArrayEquals(new String[] { "sel1" }, slingUri.getSelectors());
+            assertEquals("json", slingUri.getExtension());
+            assertEquals("/suffix/path", slingUri.getSuffix());
+            assertEquals("p1=2&p2=3", slingUri.getQuery());
+            assertEquals("frag3939", slingUri.getFragment());
+        }, asList(resolver, null));
     }
 
     @Test
@@ -313,9 +361,7 @@ public class SlingUriTest {
 
     @Test
     public void testJavascriptUri() {
-        String testUriStr = "javascript:void(0)";
-
-        testUri(testUriStr, false, false, false, true, true, slingUri -> {
+        testUri("javascript:void(0)", false, false, false, true, true, slingUri -> {
             assertEquals("javascript", slingUri.getScheme());
             assertEquals(null, slingUri.getUserInfo());
             assertEquals(null, slingUri.getHost());
@@ -330,6 +376,24 @@ public class SlingUriTest {
     }
 
     @Test
+    public void testJavascriptUriLong() {
+
+        testUri("javascript:console.log('long js'); return true;", false, false, false, true, true, slingUri -> {
+            assertEquals("javascript", slingUri.getScheme());
+            assertEquals(null, slingUri.getUserInfo());
+            assertEquals(null, slingUri.getHost());
+            assertEquals(-1, slingUri.getPort());
+            assertEquals(null, slingUri.getSelectorString());
+            assertEquals(null, slingUri.getExtension());
+            assertEquals(null, slingUri.getSuffix());
+            assertEquals("console.log('long js'); return true;", slingUri.getSchemeSpecificPart());
+            assertEquals(null, slingUri.getQuery());
+            assertEquals(null, slingUri.getFragment());
+        }, null, true);
+
+    }
+
+    @Test
     public void testMailtotUri() {
         String testUriStr = "mailto:jon.doe@example.com";
 
@@ -338,10 +402,166 @@ public class SlingUriTest {
             assertEquals(null, slingUri.getUserInfo());
             assertEquals(null, slingUri.getHost());
             assertEquals(-1, slingUri.getPort());
+            assertEquals(null, slingUri.getResourcePath());
             assertEquals(null, slingUri.getSelectorString());
             assertEquals(null, slingUri.getExtension());
             assertEquals(null, slingUri.getSuffix());
             assertEquals("jon.doe@example.com", slingUri.getSchemeSpecificPart());
+            assertEquals(null, slingUri.getQuery());
+            assertEquals(null, slingUri.getFragment());
+        }, asList(resolver, null));
+    }
+
+    @Test
+    public void testFileUriLocal() {
+        testUri("file:///path/to/test/file.txt", false, false, false, true, false, slingUri -> {
+            assertEquals("file", slingUri.getScheme());
+            assertEquals(null, slingUri.getUserInfo());
+            assertEquals("", slingUri.getHost());
+            assertEquals(-1, slingUri.getPort());
+            assertEquals("/path/to/test/file", slingUri.getResourcePath());
+            assertEquals(null, slingUri.getSelectorString());
+            assertEquals("txt", slingUri.getExtension());
+            assertEquals(null, slingUri.getSuffix());
+            assertEquals("///path/to/test/file.txt", slingUri.getSchemeSpecificPart());
+            assertEquals(null, slingUri.getQuery());
+            assertEquals(null, slingUri.getFragment());
+        }, asList(resolver, null));
+    }
+
+    @Test
+    public void testFileUriWithHost() {
+        testUri("file://example.com:80/path/to/test/file.txt", false, false, false, true, false, slingUri -> {
+            assertEquals("file", slingUri.getScheme());
+            assertEquals(null, slingUri.getUserInfo());
+            assertEquals("example.com", slingUri.getHost());
+            assertEquals(80, slingUri.getPort());
+            assertEquals("/path/to/test/file", slingUri.getResourcePath());
+            assertEquals(null, slingUri.getSelectorString());
+            assertEquals("txt", slingUri.getExtension());
+            assertEquals(null, slingUri.getSuffix());
+            assertEquals("//example.com:80/path/to/test/file.txt", slingUri.getSchemeSpecificPart());
+            assertEquals(null, slingUri.getQuery());
+            assertEquals(null, slingUri.getFragment());
+        }, asList(resolver, null));
+    }
+
+    @Test
+    public void testSpecialFileUris() {
+        testUri("file:/path/to/test/file.txt", false, false, false, true, false, slingUri -> {
+            assertEquals("file", slingUri.getScheme());
+            assertEquals(null, slingUri.getUserInfo());
+            assertEquals("", slingUri.getHost());
+            assertEquals(-1, slingUri.getPort());
+            assertEquals("/path/to/test/file", slingUri.getResourcePath());
+            assertEquals(null, slingUri.getSelectorString());
+            assertEquals("txt", slingUri.getExtension());
+            assertEquals(null, slingUri.getSuffix());
+            assertEquals("///path/to/test/file.txt", slingUri.getSchemeSpecificPart());
+            assertEquals(null, slingUri.getQuery());
+            assertEquals(null, slingUri.getFragment());
+            assertEquals("file:///path/to/test/file.txt", slingUri.toString());
+        }, null, true /* single slash is expanded to correct three slashes */);
+
+        testUri("file:///c:/WINDOWS/clock.avi", false, false, false, true, false, slingUri -> {
+            assertEquals("file", slingUri.getScheme());
+            assertEquals(null, slingUri.getUserInfo());
+            assertEquals("", slingUri.getHost());
+            assertEquals(-1, slingUri.getPort());
+            assertEquals("/c:/WINDOWS/clock", slingUri.getResourcePath());
+            assertEquals(null, slingUri.getSelectorString());
+            assertEquals("avi", slingUri.getExtension());
+            assertEquals(null, slingUri.getSuffix());
+            assertEquals("///c:/WINDOWS/clock.avi", slingUri.getSchemeSpecificPart());
+            assertEquals(null, slingUri.getQuery());
+            assertEquals(null, slingUri.getFragment());
+        }, asList(resolver, null));
+    }
+
+    @Test
+    public void testCalltoUri() {
+        testUri("callto:screenname", false, false, false, true, true, slingUri -> {
+            assertEquals("callto", slingUri.getScheme());
+            assertEquals(null, slingUri.getUserInfo());
+            assertEquals(null, slingUri.getHost());
+            assertEquals(-1, slingUri.getPort());
+            assertEquals(null, slingUri.getResourcePath());
+            assertEquals(null, slingUri.getSelectorString());
+            assertEquals(null, slingUri.getExtension());
+            assertEquals(null, slingUri.getSuffix());
+            assertEquals("screenname", slingUri.getSchemeSpecificPart());
+            assertEquals(null, slingUri.getQuery());
+            assertEquals(null, slingUri.getFragment());
+        }, asList(resolver, null));
+
+    }
+
+    @Test
+    public void testSmsUri() {
+
+        testUri("sms:+15105550101,+15105550102?body=hello%20there", false, false, false, true, true, slingUri -> {
+            assertEquals("sms", slingUri.getScheme());
+            assertEquals(null, slingUri.getUserInfo());
+            assertEquals(null, slingUri.getHost());
+            assertEquals(-1, slingUri.getPort());
+            assertEquals(null, slingUri.getResourcePath());
+            assertEquals(null, slingUri.getSelectorString());
+            assertEquals(null, slingUri.getExtension());
+            assertEquals(null, slingUri.getSuffix());
+            assertEquals("+15105550101,+15105550102?body=hello%20there", slingUri.getSchemeSpecificPart());
+            assertEquals(null, slingUri.getQuery());
+            assertEquals(null, slingUri.getFragment());
+        }, asList(resolver, null));
+    }
+
+    @Test
+    public void testRsyncUri() {
+
+        testUri("rsync://testhost:333/path", false, false, false, true, false, slingUri -> {
+            assertEquals("rsync", slingUri.getScheme());
+            assertEquals(null, slingUri.getUserInfo());
+            assertEquals("testhost", slingUri.getHost());
+            assertEquals(333, slingUri.getPort());
+            assertEquals("/path", slingUri.getResourcePath());
+            assertEquals(null, slingUri.getSelectorString());
+            assertEquals(null, slingUri.getExtension());
+            assertEquals(null, slingUri.getSuffix());
+            assertEquals("//testhost:333/path", slingUri.getSchemeSpecificPart());
+            assertEquals(null, slingUri.getQuery());
+            assertEquals(null, slingUri.getFragment());
+        }, asList(resolver, null));
+    }
+
+    @Test
+    public void testViewSourceUri() {
+        testUri("view-source:http://en.wikipedia.org/wiki/URI_scheme", false, false, false, true, true, slingUri -> {
+            assertEquals("view-source", slingUri.getScheme());
+            assertEquals(null, slingUri.getUserInfo());
+            assertEquals(null, slingUri.getHost());
+            assertEquals(-1, slingUri.getPort());
+            assertEquals(null, slingUri.getResourcePath());
+            assertEquals(null, slingUri.getSelectorString());
+            assertEquals(null, slingUri.getExtension());
+            assertEquals(null, slingUri.getSuffix());
+            assertEquals("http://en.wikipedia.org/wiki/URI_scheme", slingUri.getSchemeSpecificPart());
+            assertEquals(null, slingUri.getQuery());
+            assertEquals(null, slingUri.getFragment());
+        }, asList(resolver, null));
+    }
+
+    @Test
+    public void testGitUrl() {
+        testUri("git://github.com/user/project-name.git", false, false, false, true, false, slingUri -> {
+            assertEquals("git", slingUri.getScheme());
+            assertEquals(null, slingUri.getUserInfo());
+            assertEquals("github.com", slingUri.getHost());
+            assertEquals(-1, slingUri.getPort());
+            assertEquals("/user/project-name", slingUri.getResourcePath());
+
+            assertEquals(null, slingUri.getSelectorString());
+            assertEquals("git", slingUri.getExtension());
+            assertEquals(null, slingUri.getSuffix());
+            assertEquals("//github.com/user/project-name.git", slingUri.getSchemeSpecificPart());
             assertEquals(null, slingUri.getQuery());
             assertEquals(null, slingUri.getFragment());
         }, asList(resolver, null));
@@ -427,18 +647,48 @@ public class SlingUriTest {
         }, asList(resolver, null));
     }
 
+    @Test
+    public void testDataUrl() {
+
+        // data url according to https://tools.ietf.org/html/rfc2397
+        String dataUrl = "data:image/gif;base64,R0lGODdhMAAwAPAAAAAAAP///ywAAAAAMAAw" +
+                "AAAC8IyPqcvt3wCcDkiLc7C0qwyGHhSWpjQu5yqmCYsapyuvUUlvONmOZtfzgFz" +
+                "ByTB10QgxOR0TqBQejhRNzOfkVJ+5YiUqrXF5Y5lKh/DeuNcP5yLWGsEbtLiOSp" +
+                "a/TPg7JpJHxyendzWTBfX0cxOnKPjgBzi4diinWGdkF8kjdfnycQZXZeYGejmJl" +
+                "ZeGl9i2icVqaNVailT6F5iJ90m6mvuTS4OK05M0vDk0Q4XUtwvKOzrcd3iq9uis" +
+                "F81M1OIcR7lEewwcLp7tuNNkM3uNna3F2JQFo97Vriy/Xl4/f1cf5VWzXyym7PH" +
+                "hhx4dbgYKAAA7";
+
+        testUri(dataUrl, false, false, false, true, true, slingUri -> {
+            assertEquals("data", slingUri.getScheme());
+            assertEquals(StringUtils.substringAfter(dataUrl, ":"), slingUri.getSchemeSpecificPart());
+            assertEquals(null, slingUri.getQuery());
+            assertEquals(null, slingUri.getFragment());
+        }, asList(resolver, null));
+    }
+
+    @Test
+    public void testGetSuffixResource() {
+        Resource expectedSuffixResource = mock(Resource.class);
+        when(resolver.getResource("/suffix/path")).thenReturn(expectedSuffixResource);
+        SlingUri slingUri = SlingUriBuilder.parse("/test/to/path.sel1.json/suffix/path?p1=2&p2=3#frag3939", resolver).build();
+        Resource suffixResource = slingUri.getSuffixResource();
+        assertTrue("Suffix resource equal to mock", expectedSuffixResource == suffixResource);
+
+        SlingUri slingUriDifferentSuffix = slingUri.adjust(b -> b.setSuffix("/suffix/path/non-existing"));
+        assertNull("Suffix resource is null if resource does not exist", slingUriDifferentSuffix.getSuffixResource());
+
+        SlingUri slingUriNoSuffix = slingUri.adjust(b -> b.setSuffix(null));
+        assertNull("Suffix resource is null if suffix is null", slingUriNoSuffix.getSuffixResource());
+
+    }
+
     // -- helper methods
     public static void testUri(String testUri, boolean isPath, boolean isAbsolutePath, boolean isRelativePath, boolean isAbsolute,
             boolean isOpaque, Consumer<SlingUri> additionalAssertions, List<ResourceResolver> resourceResolvers) {
         for (ResourceResolver rr : resourceResolvers) {
             testUri(testUri, isPath, isAbsolutePath, isRelativePath, isAbsolute, isOpaque, additionalAssertions, rr);
         }
-    }
-
-    public static SlingUri testUri(String testUri, boolean isPath, boolean isAbsolutePath, boolean isRelativePath, boolean isAbsolute,
-            boolean isOpaque, Consumer<SlingUri> additionalAssertions) {
-        return testUri(testUri, isPath, isAbsolutePath, isRelativePath, isAbsolute, isOpaque, additionalAssertions,
-                (ResourceResolver) null);
     }
 
     public static SlingUri testUri(String testUri, boolean isPath, boolean isAbsolutePath, boolean isRelativePath, boolean isAbsolute,
@@ -452,8 +702,15 @@ public class SlingUriTest {
         SlingUri slingUri = SlingUriBuilder.parse(testUri, resourceResolver).build();
 
         if (!urlIsRestructured) {
+            URI javaUri = slingUri.toUri();
             assertEquals("Uri toString() same as input", testUri, slingUri.toString());
-            assertEquals("Uri toUri().toString() same as input", testUri, slingUri.toUri().toString());
+            assertEquals("Uri toUri().toString() same as input", testUri, javaUri.toString());
+            assertEquals("isOpaque() matches to java URI impl", javaUri.isOpaque(), slingUri.isOpaque());
+            assertEquals("getSchemeSpecificPart() matches to java URI impl", javaUri.getRawSchemeSpecificPart(),
+                    slingUri.getSchemeSpecificPart());
+            assertEquals("getFragment() matches to java URI impl", javaUri.getRawFragment(), slingUri.getFragment());
+            assertEquals("getQuery() matches to java URI impl", javaUri.getRawQuery(), slingUri.getQuery());
+            assertEquals("isAbsolute() matches to java URI impl", javaUri.isAbsolute(), slingUri.isAbsolute());
         }
 
         assertEquals("isPath()", isPath, slingUri.isPath());
@@ -462,18 +719,13 @@ public class SlingUriTest {
         assertEquals("isAbsolute()", isAbsolute, slingUri.isAbsolute());
         assertEquals("isOpaque()", isOpaque, slingUri.isOpaque());
 
-        URI javaUri = slingUri.toUri();
-        assertEquals("isOpaque() matches to java URI impl", javaUri.isOpaque(), slingUri.isOpaque());
-        assertEquals("getSchemeSpecificPart() matches to java URI impl", javaUri.getSchemeSpecificPart(),
-                slingUri.getSchemeSpecificPart());
-        assertEquals("getFragment() matches to java URI impl", javaUri.getFragment(), slingUri.getFragment());
-        assertEquals("getQuery() matches to java URI impl", javaUri.getQuery(), slingUri.getQuery());
-        assertEquals("isAbsolute() matches to java URI impl", javaUri.isAbsolute(), slingUri.isAbsolute());
-
         additionalAssertions.accept(slingUri);
 
         SlingUri slingUriParsedFromSameInput = SlingUriBuilder.parse(testUri, resourceResolver).build();
         assertEquals("uris parsed from same input are expected to be equal", slingUriParsedFromSameInput, slingUri);
+        assertNotEquals("not equal to different URI", SlingUriBuilder.parse("special://host:393/path.txt/suffix", resourceResolver).build(),
+                slingUri);
+        assertNotEquals("not equal to null", slingUri, null);
         assertEquals("uris parsed from same input are expected to have the same hash code", slingUriParsedFromSameInput.hashCode(),
                 slingUri.hashCode());
 

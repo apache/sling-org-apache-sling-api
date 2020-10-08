@@ -29,9 +29,14 @@ import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
+ * <p>
  * Represents an immutable URI in the same way as java.net.URI but is extended with Sling-specific URI parts (e.g. selectors). A SlingUri
  * usually points to a resource but alternatively, can also contain an opaque URI like {@code mailto:} or {@code javascript:}. Use
  * {@link SlingUri#adjust(Consumer)} or {@link SlingUriBuilder} to create new or modified Sling URIs.
+ * </p>
+ * <p>
+ * Opposed to {@link URI}, the regular getters of {@code SlingUri} will not return decoded values, rather the values for user info, path,
+ * query and fragment are returned exactly as set before.
  * 
  * @since 1.0.0 (Sling API Bundle 2.23.0)
  */
@@ -97,7 +102,7 @@ public interface SlingUri extends RequestPathInfo {
     /**
      * Returns the selector string.
      * 
-     * @return returns the selector string or null if the URI does not contain selector(s)
+     * @return returns the selector string or null if the URI does not contain selector(s) (in line with {@link RequestPathInfo})
      */
     @Override
     @Nullable

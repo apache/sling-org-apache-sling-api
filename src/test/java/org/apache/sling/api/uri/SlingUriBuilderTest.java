@@ -25,6 +25,8 @@ import static org.mockito.Mockito.when;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.request.RequestPathInfo;
@@ -148,6 +150,42 @@ public class SlingUriBuilderTest {
                 .useSchemeAndAuthority(testUriToUseSchemeAndAuthorityFrom)
                 .build();
         assertEquals("https://example.com:8080/path/to/page.html", testUri.toString());
+    }
+
+    @Test
+    public void testAddQueryParameter() throws URISyntaxException {
+        String testPath = "/path/to/page.html";
+        SlingUri testUri = SlingUriBuilder.parse(testPath, null)
+                .addQueryParameter("param1", "val1")
+                .build();
+        assertEquals("/path/to/page.html?param1=val1", testUri.toString());
+    }
+
+    @Test
+    public void testAddQueryParameterValueEncoded() throws URISyntaxException {
+        String testPath = "/path/to/page.html";
+        SlingUri testUri = SlingUriBuilder.parse(testPath, null)
+                .addQueryParameter("redirect", "http://www.example.com/path/to/file.txt?q=3&test=3#test")
+                .addQueryParameter("param2", "true")
+                .build();
+        assertEquals(
+                "/path/to/page.html?redirect=http%3A%2F%2Fwww.example.com%2Fpath%2Fto%2Ffile.txt%3Fq%3D3%26test%3D3%23test&param2=true",
+                testUri.toString());
+    }
+
+    @Test
+    public void testSetQueryParameterValueEncoded() throws URISyntaxException {
+        String testPath = "/path/to/page.html?param=value"; // existing query parameters are meant to be replaced
+
+        Map<String, String> queryParams = new LinkedHashMap<>();
+        queryParams.put("param1", "value1");
+        queryParams.put("param2[*]", "value2");
+        queryParams.put("param3", "value3%@");
+
+        SlingUri testUri = SlingUriBuilder.parse(testPath, null)
+                .setQueryParameters(queryParams)
+                .build();
+        assertEquals("/path/to/page.html?param1=value1&param2%5B*%5D=value2&param3=value3%25%40", testUri.toString());
     }
 
     @Test(expected = IllegalStateException.class)
