@@ -668,6 +668,22 @@ public class SlingUriTest {
     }
 
     @Test
+    public void testWellKnownUri() {
+
+        // well-known URIs as specified in https://tools.ietf.org/html/rfc8615
+        String dataUrl = "/.well-known/change-password";
+
+        testUri(dataUrl, true, true, false, false, false, slingUri -> {
+            assertEquals("/", slingUri.getResourcePath());
+            assertEquals(null, slingUri.getSelectorString());
+            assertEquals("well-known", slingUri.getExtension());
+            assertEquals("/change-password", slingUri.getSuffix());
+            assertEquals(null, slingUri.getQuery());
+            assertEquals(null, slingUri.getFragment());
+        }, asList(resolver, null));
+    }
+
+    @Test
     public void testGetSuffixResource() {
         Resource expectedSuffixResource = mock(Resource.class);
         when(resolver.getResource("/suffix/path")).thenReturn(expectedSuffixResource);
