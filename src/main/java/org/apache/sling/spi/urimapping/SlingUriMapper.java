@@ -58,9 +58,11 @@ public interface SlingUriMapper {
      * 
      * @param resourceUri the URI to be mapped
      * @param request the request to be taken as reference
+     * @param forceAbsoluteUri whether or not an absolute URI is required
      * @param context can be used to skip further processing of the chain or for sharing state between instances of SlingUriMapper services
      * @return the adjusted SlingUri or if no adjustments are necessary, just return resourceUri as passed in by first parameter
      */
-    SlingUri map(@NotNull SlingUri resourceUri, @Nullable HttpServletRequest request, @NotNull MappingChainContext context);
+    SlingUri map(@NotNull SlingUri resourceUri, @Nullable HttpServletRequest request, boolean forceAbsoluteUri,
+            @NotNull MappingChainContext context);
 
 }

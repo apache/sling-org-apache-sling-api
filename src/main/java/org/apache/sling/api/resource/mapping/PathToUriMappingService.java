@@ -42,9 +42,10 @@ public interface PathToUriMappingService {
      * @param referenceRequest the reference request with the same properties as the actual request that will have to resolve the produced
      *        URI.
      * @param unmappedPath the path that is not mapped yet (may or may not contain selector, extension and suffix)
+     * @param forceAbsoluteUri whether or not an absolute URI is required
      * @return a @{link PathToUriMappingService.Result}
      */
-    Result map(@Nullable HttpServletRequest referenceRequest, @NotNull String unmappedPath);
+    Result map(@Nullable HttpServletRequest referenceRequest, @NotNull String unmappedPath, boolean forceAbsoluteUri);
 
     /**
      * Resolves a path relative to the given request.
