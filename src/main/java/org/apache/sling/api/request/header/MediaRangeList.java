@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.sling.api.request;
+package org.apache.sling.api.request.header;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -24,6 +24,7 @@ import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.osgi.annotation.versioning.ConsumerType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +32,9 @@ import org.slf4j.LoggerFactory;
  * Facilitates parsing of the Accept HTTP request header.
  * See <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">RFC 2616 section 14.1</a>
  */
+@ConsumerType
 public class MediaRangeList extends TreeSet<MediaRangeList.MediaRange> {
+
     public static final String HEADER_ACCEPT = "Accept";
     public static final String PARAM_ACCEPT = ":http-equiv-accept";
     public static final String WILDCARD = "*";

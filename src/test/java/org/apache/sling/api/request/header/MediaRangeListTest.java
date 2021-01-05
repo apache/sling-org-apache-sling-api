@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.sling.api.request;
+package org.apache.sling.api.request.header;
 
 import junit.framework.TestCase;
 import org.apache.sling.commons.testing.sling.MockSlingHttpServletRequest;
