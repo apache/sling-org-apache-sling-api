@@ -95,6 +95,9 @@ public abstract class SlingAdaptable implements Adaptable {
     @SuppressWarnings("unchecked")
     public <AdapterType> AdapterType adaptTo(Class<AdapterType> type) {
         synchronized ( this ) {
+            if (ADAPTER_MANAGER == null) {
+                return null;
+            }
             if (adaptersCache == null) {
                 adaptersCache = new HashMap<Class<?>, Object>();
             }
