@@ -103,6 +103,15 @@ import org.osgi.annotation.versioning.ProviderType;
  * is more than one resource provider involved and one of them fails in persisting,
  * changes already committed to other providers are not reverted.
  * <p>
+ * <b>External changes</b>
+ * <p>
+ * Changes which happen outside of the Resource API provided by Sling are not required
+ * to be reflected immediately within an already opened ResourceResolver and its associated
+ * resources.
+ * For example, if the ResourceResolver is backed by a JCR implementation, any changes within
+ * the JCR session (which is an implementation detail of the respective ResourceResolver
+ * implementation) are not required to be reflected within its Resource Resolver.
+ * <p>
  * <b>Lifecycle</b>
  * <p>
  * A Resource Resolver has a life cycle which begins with the creation of the
