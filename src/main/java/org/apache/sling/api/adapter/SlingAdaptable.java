@@ -102,7 +102,7 @@ public abstract class SlingAdaptable implements Adaptable {
                 adaptersCache = new HashMap<Class<?>, Object>();
             }
             return (AdapterType) adaptersCache.computeIfAbsent(type,
-                    (klazz) -> ADAPTER_MANAGER.getAdapter(this, type));
+                    klazz -> ADAPTER_MANAGER.getAdapter(this, type));
         }
     }
 }
