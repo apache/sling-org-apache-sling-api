@@ -28,9 +28,8 @@ import static org.mockito.Mockito.*;
 
 public class SlingAdaptableTest {
 
-
-    SlingAdaptable sut;
-    AdapterManager adapterMgr;
+    private SlingAdaptable sut;
+    private AdapterManager adapterMgr;
 
     @Before
     public void setup() {
@@ -43,7 +42,6 @@ public class SlingAdaptableTest {
         assertNull(sut.adaptTo(AdapterType.class));
         SlingAdaptable.setAdapterManager(adapterMgr);
         assertNull(sut.adaptTo(AdapterType.class));
-
     }
 
     @Test
@@ -62,7 +60,6 @@ public class SlingAdaptableTest {
         assertNotNull(sut.adaptTo(AdapterType2.class));
         assertNotNull(sut.adaptTo(AdapterType.class));
     }
-
 
     // pseudo adaptable
     public class AdapterType {}
