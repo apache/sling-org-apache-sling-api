@@ -62,7 +62,7 @@ public class MediaRangeList extends TreeSet<MediaRangeList.MediaRange> {
 
     /**
      * Constructs a <code>MediaRangeList</code> using a list of media ranges specified in a <code>java.lang.String</code>.
-     * The string is a comma-separated list of media ranges, as specified by the RFC.<br />
+     * The string is a comma-separated list of media ranges, as specified by the RFC.<br>
      * Examples:
      * <ul>
      * <li><code>text/*;q=0.3, text/html;q=0.7, text/html;level=1, text/html;level=2;q=0.4, *&#47;*;q=0.5</code></li>
@@ -136,11 +136,11 @@ public class MediaRangeList extends TreeSet<MediaRangeList.MediaRange> {
     }
 
     /**
-     * Determines which of the <code>mediaRanges</code> specifiactions is prefered by this <code>MediaRangeList</code>.
+     * Determines which of the <code>mediaRanges</code> specifications is preferred by this <code>MediaRangeList</code>.
      * @param mediaRanges String representations of <code>MediaRange</code>s. The strings must be
      * on the form required by {@link MediaRange#MediaRange(String)}
      * @see #prefer(java.util.Set)
-     * @return the <code>toString</code> representation of the prefered <code>MediaRange</code>, or <code>null</code>
+     * @return the <code>toString()</code> representation of the preferred <code>MediaRange</code>, or <code>null</code>
      * if this <code>MediaRangeList</code> does not contain any of the <code>mediaRanges</code>
      */
     public String prefer(String... mediaRanges) {
@@ -165,12 +165,12 @@ public class MediaRangeList extends TreeSet<MediaRangeList.MediaRange> {
 
         /**
          * Constructs a <code>MediaRange</code> from a <code>String</code> expression.
-         * @param exp The <code>String</code> to constuct the <code>MediaRange</code> from. The string is
+         * @param exp The <code>String</code> to construct the <code>MediaRange</code> from. The string is
          * expected to be on the form ( "*&#47;*"
          *               | ( type "/" "*" )
          *               | ( type "/" subtype )
-         *               ) *( ";" parameter )<br/>
-         * as specified by RFC 2616, section 14.1. <br/>
+         *               ) *( ";" parameter )<br>
+         * as specified by RFC 2616, section 14.1. <p>
          * Examples:
          * <ul>
          * <li><code>text/html;q=0.8</code></li>
@@ -181,7 +181,7 @@ public class MediaRangeList extends TreeSet<MediaRangeList.MediaRange> {
          * <li><code>*&#47;*</code></li>
          * </ul>
          * Note that if the supertype component is wildcard (<code>*</code>), then the subtype component
-         * must also be wildcard.<br />
+         * must also be wildcard.<p>
          * The quality factor parameter must be between <code>0</code> and <code>1</code>, inclusive
          * (see <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.9">RFC 2616 section 3.9</a>).
          * If the expression does not contain a <code>q</code> parameter, the <code>MediaRange</code> is given
