@@ -22,7 +22,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 /**
  * The <code>SlingAdaptable</code> class is an (abstract) default implementation
@@ -77,7 +76,8 @@ public abstract class SlingAdaptable implements Adaptable {
      * are intended to be short-lived to not hold on to objects and classes for
      * too long.
      */
-    private volatile ConcurrentMap<Class<?>, Object> adaptersCache;
+    @SuppressWarnings("java:S3077")
+    private volatile Map<Class<?>, Object> adaptersCache;
 
     /**
      * Calls into the registered {@link AdapterManager} to adapt this object to
