@@ -18,8 +18,10 @@
  */
 package org.apache.sling.api.adapter;
 
-import java.util.HashMap;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The <code>SlingAdaptable</code> class is an (abstract) default implementation
@@ -74,7 +76,7 @@ public abstract class SlingAdaptable implements Adaptable {
      * are intended to be short-lived to not hold on to objects and classes for
      * too long.
      */
-    private Map<Class<?>, Object> adaptersCache;
+    private volatile Map<Class<?>, Object> adaptersCache;
 
     /**
      * Calls into the registered {@link AdapterManager} to adapt this object to
@@ -94,22 +96,23 @@ public abstract class SlingAdaptable implements Adaptable {
      */
     @SuppressWarnings("unchecked")
     public <AdapterType> AdapterType adaptTo(Class<AdapterType> type) {
-        AdapterType result = null;
-        synchronized ( this ) {
-            if ( adaptersCache != null ) {
-                result = (AdapterType) adaptersCache.get(type);
-            }
-            if ( result == null ) {
-                final AdapterManager mgr = ADAPTER_MANAGER;
-                result = (mgr == null ? null : mgr.getAdapter(this, type));
-                if ( result != null ) {
-                    if ( adaptersCache == null ) {
-                        adaptersCache = new HashMap<Class<?>, Object>();
-                    }
-                    adaptersCache.put(type, result);
+        final AdapterManager mgr = ADAPTER_MANAGER;
+        if (mgr == null) {
+            return null;
+        }
+        return (AdapterType) getAdaptersCache().computeIfAbsent(type, t -> mgr.getAdapter(this, t));
+    }
+
+    @NotNull
+    private Map<Class<?>, Object> getAdaptersCache() {
+        // correct use of double checked locking using volatile field
+        if (adaptersCache == null) {
+            synchronized (this) {
+                if (adaptersCache == null) {
+                    adaptersCache = new ConcurrentHashMap<>();
                 }
             }
         }
-        return result;
+        return adaptersCache;
     }
 }
