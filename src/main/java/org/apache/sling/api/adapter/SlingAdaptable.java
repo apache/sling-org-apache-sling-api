@@ -72,7 +72,7 @@ public abstract class SlingAdaptable implements Adaptable {
      * Cached adapters per type.
      * <p>
      * This map is created on demand by the {@link #adaptTo(Class)} method as a
-     * regular <code>HashMap</code>. This means, that extensions of this class
+     * regular {@code ConcurrentHashMap}. This means, that extensions of this class
      * are intended to be short-lived to not hold on to objects and classes for
      * too long.
      */
