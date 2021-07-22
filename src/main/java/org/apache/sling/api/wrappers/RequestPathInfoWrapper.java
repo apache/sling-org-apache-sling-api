@@ -30,10 +30,19 @@ import org.jetbrains.annotations.Nullable;
  */
 public class RequestPathInfoWrapper implements RequestPathInfo {
 
-    private final RequestPathInfo delegate;
+    private final @NotNull RequestPathInfo delegate;
     
-    public RequestPathInfoWrapper(RequestPathInfo delegate) {
+    public RequestPathInfoWrapper(@NotNull RequestPathInfo delegate) {
         this.delegate = delegate;
+    }
+
+    /**
+     * Returns the original {@link RequestPathInfo} object wrapped by
+     * this object.
+     * @return The wrapped request path info.
+     */
+    public @NotNull RequestPathInfo getRequestPathInfo() {
+        return delegate;
     }
 
     public @NotNull String getResourcePath() {
