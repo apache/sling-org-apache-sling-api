@@ -200,6 +200,8 @@ public class RequestDispatcherOptions extends HashMap<String, String> {
    /**
      * Sets the {@link #OPT_REPLACE_EXTENSION} option to the given
      * <code>replaceExtension</code> if not <code>null</code>.
+     * If this value contains an empty string, the original extension
+     * will be removed.
      * @param replaceExtension The replace extension
      */
     public void setReplaceExtension(String replaceExtension) {
