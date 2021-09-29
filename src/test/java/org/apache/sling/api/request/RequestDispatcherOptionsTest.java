@@ -18,22 +18,28 @@
  */
 package org.apache.sling.api.request;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
-public class RequestDispatcherOptionsTest extends TestCase {
+import org.junit.Test;
 
-    public void testNullString() {
+
+public class RequestDispatcherOptionsTest {
+
+    @Test public void testNullString() {
         final RequestDispatcherOptions result = new RequestDispatcherOptions(
             null);
         assertTrue(result.isEmpty());
     }
 
-    public void testEmptyString() {
+    @Test public void testEmptyString() {
         final RequestDispatcherOptions result = new RequestDispatcherOptions("");
         assertTrue(result.isEmpty());
     }
 
-    public void testSingleOption() {
+    @Test public void testSingleOption() {
         final RequestDispatcherOptions result = new RequestDispatcherOptions(
             "forceResourceType= widget");
         assertNotNull(result);
@@ -43,7 +49,7 @@ public class RequestDispatcherOptionsTest extends TestCase {
             result.getForceResourceType());
     }
 
-    public void testResourceTypeSlashShortcut() {
+    @Test public void testResourceTypeSlashShortcut() {
         // a single option with no comma or colon means "forceResourceType"
         final RequestDispatcherOptions result = new RequestDispatcherOptions(
             "\t components/widget  ");
@@ -55,7 +61,7 @@ public class RequestDispatcherOptionsTest extends TestCase {
             "components/widget", result.getForceResourceType());
     }
 
-    public void testResourceTypeColonShortcut() {
+    @Test public void testResourceTypeColonShortcut() {
         // a single option with no comma or colon means "forceResourceType"
         final RequestDispatcherOptions result = new RequestDispatcherOptions(
             "\t components:widget  ");
@@ -67,7 +73,7 @@ public class RequestDispatcherOptionsTest extends TestCase {
             "components:widget", result.getForceResourceType());
     }
 
-    public void testTwoOptions() {
+    @Test public void testTwoOptions() {
         final RequestDispatcherOptions result = new RequestDispatcherOptions(
             "forceResourceType= components:widget, replaceSelectors = xyz  ,");
         assertNotNull(result);
@@ -81,4 +87,18 @@ public class RequestDispatcherOptionsTest extends TestCase {
         assertEquals("Expected option found (" + result + ")", "xyz",
             result.getReplaceSelectors());
     }
+
+    @Test public void testReplaceExtensionSetterGetter() {
+        final RequestDispatcherOptions result = new RequestDispatcherOptions();
+        assertNull(result.getReplaceExtension());
+        result.setReplaceExtension("foo");
+        assertEquals("foo", result.getReplaceExtension());
+        result.setReplaceExtension(null);
+        assertEquals("foo", result.getReplaceExtension());
+    } 
+
+    @Test public void testReplaceExtensionConstructor() {
+        final RequestDispatcherOptions result = new RequestDispatcherOptions("replaceExtension=foo");
+        assertEquals("foo", result.getReplaceExtension());
+    } 
 }

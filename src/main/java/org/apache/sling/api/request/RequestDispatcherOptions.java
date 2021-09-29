@@ -34,8 +34,6 @@ import java.util.StringTokenizer;
  *          a "teaser" selector to the request that I'm including here</em>.
  * </li>
  * </ul>
- * This class currently only inherits from Map, and defines some constants for
- * well-known options.
  */
 public class RequestDispatcherOptions extends HashMap<String, String> {
 
@@ -66,6 +64,13 @@ public class RequestDispatcherOptions extends HashMap<String, String> {
      * provided by this option
      */
     public static final String OPT_REPLACE_SUFFIX = "replaceSuffix";
+
+    /**
+     * When dispatching, replace the {@link RequestPathInfo} extension by the value
+     * provided by this option
+     * @since 2.5.0
+     */
+    public static final String OPT_REPLACE_EXTENSION = "replaceExtension";
 
     /**
      * Creates an instance with no options set.
@@ -190,5 +195,25 @@ public class RequestDispatcherOptions extends HashMap<String, String> {
      */
     public String getReplaceSuffix() {
         return get(OPT_REPLACE_SUFFIX);
+    }
+
+   /**
+     * Sets the {@link #OPT_REPLACE_EXTENSION} option to the given
+     * <code>replaceExtension</code> if not <code>null</code>.
+     * @param replaceExtension The replace extension
+     */
+    public void setReplaceExtension(String replaceExtension) {
+        if (replaceExtension != null) {
+            put(OPT_REPLACE_EXTENSION, replaceExtension);
+        }
+    }
+
+    /**
+     * Returns the {@link #OPT_REPLACE_EXTENSION} option or <code>null</code> if
+     * not set.
+     * @return The replace extension
+     */
+    public String getReplaceExtension() {
+        return get(OPT_REPLACE_EXTENSION);
     }
 }
