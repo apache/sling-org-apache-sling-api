@@ -34,14 +34,6 @@ import org.osgi.annotation.versioning.ProviderType;
 public interface SlingHttpServletResponseResult extends SlingHttpServletResponse {
 
     /**
-     * Build the response.
-     * Once this method has been called, the builder must not be used anymore. A new builder
-     * needs to be created, to create a new response.
-     * @return A response object
-     */
-    @NotNull SlingHttpServletResponse build();
-
-    /**
      * Get the content length
      * @return The content length or {@code -1} if not set
      */
@@ -58,7 +50,7 @@ public interface SlingHttpServletResponseResult extends SlingHttpServletResponse
      * @param name The name of the cookie
      * @return The cookie or {@code null} if no cookie with that name exists.
      */
-    public Cookie getCookie(String name);
+    Cookie getCookie(String name);
 
     /**
      * Get all cookies
