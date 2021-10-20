@@ -45,7 +45,7 @@ public class HttpSessionImplTest {
     @Test
     public void testCreationTime() {
         HttpSessionImpl httpSession = new HttpSessionImpl(new ServletContextImpl());
-        assertNotNull(httpSession.getCreationTime());
+        assertTrue(httpSession.getCreationTime() > 0);
     }
 
     @Test
@@ -91,7 +91,7 @@ public class HttpSessionImplTest {
     @Test
     public void testGetLastAccessedTime() {
         HttpSessionImpl httpSession = new HttpSessionImpl(new ServletContextImpl());
-        assertNotNull(httpSession.getLastAccessedTime());
+        assertTrue(httpSession.getLastAccessedTime() > 0);
     }
 
     @Test
