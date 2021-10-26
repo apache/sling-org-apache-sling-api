@@ -672,7 +672,7 @@ public interface ResourceResolver extends Adaptable, Closeable {
     throws PersistenceException;
 
     /**
-     * Add a child resource to the given parent resource
+     * Add a child resource to the given parent resource.
      * The changes are transient and require a call to {@link #commit()} for persisting.
      *
      * @param parent The parent resource
@@ -682,9 +682,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      *
      * @throws NullPointerException if the resource parameter or name parameter is null
      * @throws IllegalArgumentException if the name contains a slash
-     * @throws UnsupportedOperationException If the resource provider does not allow to
-     *                                       create a resource at that location.
-     * @throws PersistenceException If the operation fails.
+     * @throws UnsupportedOperationException If the underlying resource provider does not support write operations.
+     * @throws PersistenceException If the operation fails in the underlying resource provide, e.g. in case a resource of that name does already exist.
      * @throws IllegalStateException if this resource resolver has already been
      *             {@link #close() closed}.
      * @since 2.2 (Sling API Bundle 2.2.0)
@@ -766,7 +765,7 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * @param resourceType The resource type to check this resource against.
      * @return <code>true</code> if the resource type or any of the resource's
      *         super type(s) equals the given resource type. <code>false</code>
-     *         is also returned if <code>resource</code> or<code>resourceType</code>
+     *         is also returned if <code>resource</code> or <code>resourceType</code>
      *         are <code>null</code>.
      * @throws IllegalStateException if this resource resolver has already been
      *             {@link #close() closed}.
