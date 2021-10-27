@@ -99,6 +99,15 @@ public interface ResourceAccessSecurity {
     boolean canCreate(@NotNull String absPathName, @NotNull ResourceResolver resourceResolver);
 
     /**
+     * Check whether child resources can be reordered.
+     * @param resource The resource to test.
+     * @return true if child resources can be reordered below the supplied resource
+     */
+    default boolean canReorderChildren(@NotNull Resource resource) {
+        return false;
+    }
+
+    /**
      * Check whether a resource can be updated at the path.
      * @param resource The resource to test.
      * @return true if supplied {@link Resource} can be updated

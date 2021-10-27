@@ -510,6 +510,28 @@ public abstract class ResourceProvider<T> {
     }
 
     /**
+     * Reorders the child resources returned by {@link #listChildren(ResolveContext, Resource)} so that a given resource is listed before the given sibling resource.
+     * 
+     * The changes are transient until {@link #commit(ResolveContext)} is called..
+     * 
+     * @param ctx The {@link ResolveContext}.
+     * @param parent the parent resource containing the child resources to reorder.
+     * @param name the name of the child resource in {@code parent} to reorder. Must be an existing child name.
+     * @param followingSiblingName the name of the resource child in {@code parent} which should come after the reordered resource. If {@code null} is given the resource is ordered as last among all sibling resources.
+     * @return {@code true} in case the order of the child resources in {@code parent} has changed, {@code false} otherwise.
+     * @throws UnsupportedOperationException in case the underlying resource provider does not support ordering or the child resources of {@code parent} are provided by different providers.
+     * @throws IllegalArgumentException if either {@code name} or {@code followingSiblingName} are not existing child names of {@code parent}.
+     * @throws PersistenceException If the operation fails in the underlying resource provider, e.g. in case the parent resource does not support orderable children.
+     * @since 2.13.0 (Sling API Bundle 2.24.0)
+     * @see #listChildren(Resource)
+     * @see #getChildren(Resource)
+     */
+    public boolean orderBefore(final @NotNull ResolveContext<T> ctx, final @NotNull Resource parent, final @NotNull String name, final @Nullable String followingSiblingName)
+            throws PersistenceException {
+        throw new PersistenceException("reorderBefore is not supported.");
+    }
+
+    /**
      * Delete the resource at the given path.
      * This change is kept in the transient space of this provider
      * until {@link #commit(ResolveContext)} is called.
