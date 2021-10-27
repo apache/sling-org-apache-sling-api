@@ -266,7 +266,10 @@ public class SlingHttpServletRequestImplTest {
         req.setCharacterEncoding("UTF-8");
         assertEquals("UTF-8", req.getCharacterEncoding());
         assertEquals("text/text;charset=UTF-8", req.getContentType());
-        req.withContentType(null);
+    }
+
+    @Test public void testNullContentType() {
+        req.withContentType(null).build();
         assertNull("null", req.getContentType());
     }
 

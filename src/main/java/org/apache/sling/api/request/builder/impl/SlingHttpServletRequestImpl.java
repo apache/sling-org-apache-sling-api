@@ -204,14 +204,12 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable
     @Override
     public @NotNull SlingHttpServletRequestBuilder withContentType(final String type) {
         this.checkLocked();
-        if (type != null) {
-            final int pos = type.indexOf(SlingHttpServletRequestImpl.CHARSET_SEPARATOR);
-            if (pos != -1) {
-                this.contentType = type.substring(0, pos);
-                this.characterEncoding = type.substring(pos + SlingHttpServletRequestImpl.CHARSET_SEPARATOR.length());
-            } else {
-                this.contentType = type;
-            }
+        final int pos = type == null ? -1 : type.indexOf(SlingHttpServletRequestImpl.CHARSET_SEPARATOR);
+        if (pos != -1) {
+            this.contentType = type.substring(0, pos);
+            this.characterEncoding = type.substring(pos + SlingHttpServletRequestImpl.CHARSET_SEPARATOR.length());
+        } else {
+            this.contentType = type;
         }
         return this;
     }
