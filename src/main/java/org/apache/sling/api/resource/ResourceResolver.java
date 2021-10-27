@@ -292,7 +292,7 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * be resolved via {@link #resolve(String)}. 
      *
      * @param resourcePath The path for which to return a mapped path.
-     * @return The mapped path.
+     * @return The mapped path or {@code resourcePath} in case no mapping is found.
      * @throws IllegalStateException if this resource resolver has already been
      *             {@link #close() closed}.
      * 
@@ -329,7 +329,7 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * @param request The http servlet request object which may be used to apply
      *            more mapping functionality.
      * @param resourcePath The path for which to return a mapped path.
-     * @return The mapped URL.
+     * @return The mapped URL or {@code resourcePath} in case no mapping is found.
      * @throws IllegalStateException if this resource resolver has already been
      *             {@link #close() closed}.
      * @since 2.0.4 (Sling API Bundle 2.0.4)
@@ -338,7 +338,7 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * @see <a href="https://tools.ietf.org/html/rfc3986#section-2.1">Percent-Encoding</a>
      * @see <a href="https://sling.apache.org/documentation/the-sling-engine/mappings-for-resource-resolution.html">Mappings for Resource Resolution</a>
      */
-    @Nullable String map(@NotNull HttpServletRequest request, @NotNull String resourcePath);
+    @NotNull String map(@NotNull HttpServletRequest request, @NotNull String resourcePath);
 
     /**
      * Returns a {@link Resource} object for data located at the given path.
