@@ -19,6 +19,8 @@ package org.apache.sling.api.wrappers;
 import java.util.Iterator;
 import java.util.Map;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.sling.api.resource.LoginException;
@@ -278,6 +280,13 @@ public class ResourceResolverWrapper implements ResourceResolver {
     @Override
     public Resource create(@NotNull Resource parent, @NotNull String name, Map<String, Object> properties) throws PersistenceException {
         return ResourceResolverResourceWrapper.wrap(this, wrapped.create(parent, name, properties));
+    }
+
+    
+    @Override
+    public boolean orderBefore(@NotNull Resource parent, @NotNull String name, @Nullable String followingSiblingName)
+            throws UnsupportedOperationException, PersistenceException, IllegalArgumentException {
+       return wrapped.orderBefore(parent, name, followingSiblingName);
     }
 
     @Override
