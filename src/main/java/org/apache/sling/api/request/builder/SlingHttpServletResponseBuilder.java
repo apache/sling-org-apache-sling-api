@@ -24,6 +24,7 @@ import org.osgi.annotation.versioning.ProviderType;
 /**
  * <p>Fluent helper for building a response.</p>
  * <p><strong>Note:</strong> instances of this interface are not thread-safe.</p>
+ * @since 1.0 (Sling API Bundle 2.24.0)
  */
 @ProviderType
 public interface SlingHttpServletResponseBuilder {

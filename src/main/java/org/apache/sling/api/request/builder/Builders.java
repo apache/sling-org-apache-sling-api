@@ -23,6 +23,11 @@ import org.apache.sling.api.request.builder.impl.SlingHttpServletResponseImpl;
 import org.apache.sling.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Creates builders.
+ * @since 1.0 (Sling API Bundle 2.24.0)
+ *
+ */
 public final class Builders {
 
     private Builders() {}

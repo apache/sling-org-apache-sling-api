@@ -31,6 +31,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * Fluent helper for building a request.
  * 
  * Instances of this interface are not thread-safe.
+ * @since 1.0 (Sling API Bundle 2.24.0)
  */
 @ProviderType
 public interface SlingHttpServletRequestBuilder {
@@ -58,14 +59,14 @@ public interface SlingHttpServletRequestBuilder {
     @NotNull SlingHttpServletRequestBuilder withBody(@Nullable String content);
 
     /**
-     * Sets the optional selectors of the internal request, which influence the Servlet/Script resolution.
+     * Sets the optional selectors of the internal request, which influence the servlet/script resolution.
      * @param selectors the selectors
      * @return this object
      */
     @NotNull SlingHttpServletRequestBuilder withSelectors(@Nullable String ... selectors);
 
     /** 
-     * Sets the optional extension of the internal request, which influences the Servlet/Script resolution.
+     * Sets the optional extension of the internal request, which influences the servlet/script resolution.
      * @param extension the extension
      * @return this object
      */
@@ -79,7 +80,7 @@ public interface SlingHttpServletRequestBuilder {
     @NotNull SlingHttpServletRequestBuilder withSuffix(@Nullable String suffix);
 
     /** 
-     * Sets a request parameter
+     * Sets a request parameter.
      * @param key the name of the parameter
      * @param value the value of the parameter
      * @return this object
@@ -88,7 +89,7 @@ public interface SlingHttpServletRequestBuilder {
     @NotNull SlingHttpServletRequestBuilder withParameter(@NotNull String key, @NotNull String value);
 
     /** 
-     * Sets a request parameter
+     * Sets a request parameter.
      * @param key the name of the parameter
      * @param values the values of the parameter
      * @return this object
@@ -128,7 +129,7 @@ public interface SlingHttpServletRequestBuilder {
     @NotNull SlingHttpServletRequestBuilder useAttributesFrom(@NotNull HttpServletRequest request);
 
     /** 
-     * Uses the servlet context from the provided request
+     * Uses the servlet context from the provided request.
      * @param request the request from which to use the servlet context
      * @return this object
      * @throws IllegalArgumentException if {@code request} is {@code null}
