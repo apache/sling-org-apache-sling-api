@@ -522,7 +522,7 @@ public abstract class ResourceProvider<T> {
      * @throws UnsupportedOperationException in case the underlying resource provider does not support ordering or the child resources of {@code parent} are provided by different providers.
      * @throws IllegalArgumentException if either {@code name} or {@code followingSiblingName} are not existing child names of {@code parent}.
      * @throws PersistenceException If the operation fails in the underlying resource provider, e.g. in case the parent resource does not support orderable children.
-     * @since 2.13.0 (Sling API Bundle 2.24.0)
+     * @since 1.3.0 (Sling API Bundle 2.24.0)
      * @see #listChildren(Resource)
      * @see #getChildren(Resource)
      */
