@@ -29,6 +29,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * <p>This is an extension of a {@link SlingHttpServletResponse} to get the result from a processing operation.</p>
  *
  * <p><strong>Note:</strong> instances of this interface are not thread-safe.</p>
+ * @since 1.0 (Sling API Bundle 2.24.0)
  */
 @ProviderType
 public interface SlingHttpServletResponseResult extends SlingHttpServletResponse {
