@@ -66,6 +66,7 @@ import org.apache.sling.api.request.RequestProgressTracker;
 import org.apache.sling.api.request.builder.SlingHttpServletRequestBuilder;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.uri.SlingUriBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -121,7 +122,7 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable
     private final Map<String, String[]> parameters = new LinkedHashMap<>();
 
     /** Request path info */
-    private RequestPathInfoImpl requestPathInfo;
+    private RequestPathInfo requestPathInfo;
     
     /** Optional query string */
     private String queryString;
@@ -306,7 +307,14 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable
         this.checkLocked();
         this.locked = true;
 
-        this.requestPathInfo = new RequestPathInfoImpl(this.resource, this.selectors, this.extension, this.suffix);
+        final SlingUriBuilder builder = SlingUriBuilder.createFrom(this.resource)
+            .setExtension(this.extension)
+            .setSuffix(this.suffix);
+        if ( this.selectors != null ) {
+            builder.setSelectors(this.selectors);
+        }
+        this.requestPathInfo = builder.build();
+        
         this.queryString = this.formatQueryString();
         this.pathInfo = this.buildPathInfo();
 
