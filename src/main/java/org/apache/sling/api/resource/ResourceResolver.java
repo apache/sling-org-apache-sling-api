@@ -683,7 +683,7 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * @throws NullPointerException if the resource parameter or name parameter is null
      * @throws IllegalArgumentException if the name contains a slash
      * @throws UnsupportedOperationException If the underlying resource provider does not support write operations.
-     * @throws PersistenceException If the operation fails in the underlying resource provide, e.g. in case a resource of that name does already exist.
+     * @throws PersistenceException If the operation fails in the underlying resource provider, e.g. in case a resource of that name does already exist.
      * @throws IllegalStateException if this resource resolver has already been
      *             {@link #close() closed}.
      * @since 2.2 (Sling API Bundle 2.2.0)
