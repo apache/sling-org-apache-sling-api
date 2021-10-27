@@ -23,12 +23,15 @@ import org.apache.sling.api.request.builder.impl.SlingHttpServletResponseImpl;
 import org.apache.sling.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
 
-public class Builders {
+public final class Builders {
+
+    private Builders() {}
 
     /**
-     * Create a new request builder
-     * @param resource The resource 
-     * @return A builder
+     * Creates a new request builder.
+     *
+     * @param resource the resource on which the request is based
+     * @return a request builder
      * @throws IllegalArgumentException If resource is {@code null}
      */
     public static @NotNull SlingHttpServletRequestBuilder newRequestBuilder(@NotNull final Resource resource) {
@@ -36,8 +39,9 @@ public class Builders {
     }
 
     /**
-     * Create a new response builder
-     * @return A builder
+     * Creates a new response builder.
+     *
+     * @return a response builder
      */
     public static @NotNull SlingHttpServletResponseBuilder newResponseBuilder() {
         return new SlingHttpServletResponseImpl();

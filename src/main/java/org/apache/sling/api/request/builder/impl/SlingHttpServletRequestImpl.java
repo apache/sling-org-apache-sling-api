@@ -67,6 +67,7 @@ import org.apache.sling.api.request.builder.SlingHttpServletRequestBuilder;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Internal {@link SlingHttpServletRequest} implementation.
@@ -89,6 +90,7 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable
             return new Object[0][0];
         }
     };
+    private static final String REQUEST = "request";
 
     /** Required resource */
     private final Resource resource;
@@ -200,7 +202,7 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable
     }
 
     @Override
-    public @NotNull SlingHttpServletRequestBuilder withContentType(final String type) {
+    public @NotNull SlingHttpServletRequestBuilder withContentType(final @Nullable String type) {
         this.checkLocked();
         final int pos = type == null ? -1 : type.indexOf(SlingHttpServletRequestImpl.CHARSET_SEPARATOR);
         if (pos != -1) {
@@ -213,7 +215,7 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable
     }
 
     @Override
-    public @NotNull SlingHttpServletRequestBuilder withBody(final String content) {
+    public @NotNull SlingHttpServletRequestBuilder withBody(final @Nullable String content) {
         this.checkLocked();
         this.body = content;
         return this;
@@ -259,7 +261,7 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable
     }
 
     @Override
-    public @NotNull SlingHttpServletRequestBuilder withParameters(final Map<String, String[]> parameters) {
+    public @NotNull SlingHttpServletRequestBuilder withParameters(final @Nullable Map<String, String[]> parameters) {
         this.checkLocked();
         if (parameters != null) {
             this.parameters.putAll(parameters);
@@ -270,7 +272,7 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable
     @Override
     public @NotNull SlingHttpServletRequestBuilder useAttributesFrom(@NotNull HttpServletRequest request) {
         this.checkLocked();
-        this.checkNotNull("request", request);
+        this.checkNotNull(REQUEST, request);
         this.attributesProvider = request;
         return this;
     }
@@ -278,7 +280,7 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable
     @Override
     public @NotNull SlingHttpServletRequestBuilder useServletContextFrom(@NotNull HttpServletRequest request) {
         this.checkLocked();
-        this.checkNotNull("request", request);
+        this.checkNotNull(REQUEST, request);
         this.servletContext = request.getServletContext();
         return this;
     }
@@ -286,7 +288,7 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable
     @Override
     public @NotNull SlingHttpServletRequestBuilder useSessionFrom(@NotNull HttpServletRequest request) {
         this.checkLocked();
-        this.checkNotNull("request", request);
+        this.checkNotNull(REQUEST, request);
         this.sessionProvider = request;
         return this;
     }
@@ -294,7 +296,7 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable
     @Override
     public @NotNull SlingHttpServletRequestBuilder useRequestDispatcherFrom(@NotNull SlingHttpServletRequest request) {
         this.checkLocked();
-        this.checkNotNull("request", request);
+        this.checkNotNull(REQUEST, request);
         this.requestDispatcherProvider = request;
         return this;
     }
@@ -480,7 +482,7 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable
 
     @Override
     public List<RequestParameter> getRequestParameterList() {
-        final List<RequestParameter> params = new ArrayList<RequestParameter>();
+        final List<RequestParameter> params = new ArrayList<>();
         for (final RequestParameter[] requestParameters : getRequestParameterMap().values()) {
             params.addAll(Arrays.asList(requestParameters));
         }
