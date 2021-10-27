@@ -22,6 +22,7 @@ import javax.servlet.http.Cookie;
 
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 
 /** 
@@ -43,20 +44,20 @@ public interface SlingHttpServletResponseResult extends SlingHttpServletResponse
      * Get the status message
      * @return The status message or {@code null}.
      */
-    String getStatusMessage();
+    @Nullable String getStatusMessage();
 
     /**
      * Get the named cookie
      * @param name The name of the cookie
      * @return The cookie or {@code null} if no cookie with that name exists.
      */
-    Cookie getCookie(String name);
+    @Nullable Cookie getCookie(String name);
 
     /**
      * Get all cookies
      * @return The array of cookies or {@code null} if no cookies are set.
      */
-    Cookie[] getCookies();
+    @Nullable Cookie[] getCookies();
 
     /**
      * Get the output as a byte array
@@ -66,5 +67,5 @@ public interface SlingHttpServletResponseResult extends SlingHttpServletResponse
     /**
      * Get the output as a string
      */
-    String getOutputAsString();
+    @NotNull String getOutputAsString();
 }

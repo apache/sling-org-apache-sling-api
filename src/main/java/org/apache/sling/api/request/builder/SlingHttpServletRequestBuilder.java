@@ -65,12 +65,19 @@ public interface SlingHttpServletRequestBuilder {
     @NotNull SlingHttpServletRequestBuilder withSelectors(String ... selectors);
 
     /** 
-     * Sets the optional extension of the internal request, which influence
+     * Sets the optional extension of the internal request, which influences
      * the Servlet/Script resolution.
      * @param extension The extension
      * @return this object
      */
     @NotNull SlingHttpServletRequestBuilder withExtension(String extension);
+
+    /**
+     * Sets the optional suffix of the internal request.
+     * @param suffix The suffix
+     * @return this object
+     */
+    @NotNull SlingHttpServletRequestBuilder withSuffix(String suffix);
 
     /** 
      * Set a request parameter
@@ -94,9 +101,8 @@ public interface SlingHttpServletRequestBuilder {
      * Add the supplied request parameters to the current ones.
      * @param parameters Additional parameters
      * @return this object
-     * @throws IllegalArgumentException If parameters is {@code null}
      */
-    @NotNull SlingHttpServletRequestBuilder withParameters(@NotNull Map<String, String[]> parameters);
+    @NotNull SlingHttpServletRequestBuilder withParameters(Map<String, String[]> parameters);
 
     /** 
      * Use the request dispatcher from the provided request.

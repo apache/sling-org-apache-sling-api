@@ -140,6 +140,7 @@ public class SlingHttpServletRequestImplTest {
         req.withParameter("a", "b");
         req.withParameter("c", new String[] {"d", "e"});
         req.withParameters(Collections.singletonMap("f", new String[] {"g"}));
+        req.withParameters(null);
         req.build();
 
         assertEquals("b", req.getParameter("a"));
@@ -265,6 +266,8 @@ public class SlingHttpServletRequestImplTest {
         req.setCharacterEncoding("UTF-8");
         assertEquals("UTF-8", req.getCharacterEncoding());
         assertEquals("text/text;charset=UTF-8", req.getContentType());
+        req.withContentType(null);
+        assertNull("null", req.getContentType());
     }
 
     @Test public void testContentTypeAndCharset() throws UnsupportedEncodingException {

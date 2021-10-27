@@ -120,12 +120,14 @@ public class SlingHttpServletResponseImpl
 
     @Override
     public void setContentType(final String type) {
-        final int pos = type.indexOf(SlingHttpServletRequestImpl.CHARSET_SEPARATOR);
-        if ( pos != -1 ) {
-           this.contentType = type.substring(0, pos);
-           this.characterEncoding = type.substring(pos + SlingHttpServletRequestImpl.CHARSET_SEPARATOR.length());
-        } else {
-            this.contentType = type;
+        if (this.printWriter == null) {
+            final int pos = type == null ? -1 : type.indexOf(SlingHttpServletRequestImpl.CHARSET_SEPARATOR);
+            if (pos != -1) {
+                this.contentType = type.substring(0, pos);
+                this.characterEncoding = type.substring(pos + SlingHttpServletRequestImpl.CHARSET_SEPARATOR.length());
+            } else {
+                this.contentType = type;
+            }
         }
     }
 
@@ -359,7 +361,7 @@ public class SlingHttpServletResponseImpl
     }
 
     @Override
-    public String getOutputAsString() {
+    public @NotNull String getOutputAsString() {
         this.isCommitted = true;
         return new String(getOutput(), this.getCharset());
     }
