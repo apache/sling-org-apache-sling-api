@@ -692,18 +692,20 @@ public interface ResourceResolver extends Adaptable, Closeable {
     throws PersistenceException;
 
     /**
-     * Reorders the given resource so that it is listed before the given sibling resource.
+     * Reorders the child resources returned by {@link #getChildren(Resource)} and {@link #listChildren(Resource)} so that a given resource is listed before the given sibling resource.
      * 
      * The changes are transient and require a call to {@link #commit()} for persisting.
      * 
-     * @param parent the parent resource containing the child resource to reorder.
-     * @param name the name of the resource child in {@code parent} to reorder. Must be an existing child name.
+     * @param parent the parent resource containing the child resources to reorder.
+     * @param name the name of the child resource in {@code parent} to reorder. Must be an existing child name.
      * @param followingSiblingName the name of the resource child in {@code parent} which should come after the reordered resource. If {@code null} is given the resource is ordered as last among all sibling resources.
-     * @return {@code true} in case the ordering of the child resources of {@code parent} have changed, {@code false} otherwise.
+     * @return {@code true} in case the order of the child resources in {@code parent} has changed, {@code false} otherwise.
      * @throws UnsupportedOperationException in case the underlying resource provider does not support ordering or the child resources of {@code parent} are provided by different providers.
      * @throws IllegalArgumentException if either {@code name} or {@code followingSiblingName} are not existing child names of {@code parent}.
      * @throws PersistenceException If the operation fails in the underlying resource provider, e.g. in case the parent resource does not support orderable children.
      * @since 2.13.0 (Sling API Bundle 2.24.0)
+     * @see #listChildren(Resource)
+     * @see #getChildren(Resource)
      */
     boolean orderBefore(@NotNull Resource parent, @NotNull String name, @Nullable String followingSiblingName) throws UnsupportedOperationException, PersistenceException, IllegalArgumentException;
 
