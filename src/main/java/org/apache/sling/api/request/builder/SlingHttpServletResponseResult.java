@@ -22,49 +22,57 @@ import javax.servlet.http.Cookie;
 
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 
-/** 
- * This is an extension of a {@link SlingHttpServletResponse} to get
- * the result from a processing.
- * 
- * Instances of this interface are not thread-safe.
+/**
+ * <p>This is an extension of a {@link SlingHttpServletResponse} to get the result from a processing operation.</p>
+ *
+ * <p><strong>Note:</strong> instances of this interface are not thread-safe.</p>
  */
 @ProviderType
 public interface SlingHttpServletResponseResult extends SlingHttpServletResponse {
 
     /**
-     * Get the content length
-     * @return The content length or {@code -1} if not set
+     * Gets the content length
+     *
+     * @return the content length or {@code -1} if not set
      */
     long getContentLength();
 
     /**
-     * Get the status message
-     * @return The status message or {@code null}.
+     * Gets the status message
+     *
+     * @return the status message or {@code null}.
      */
-    String getStatusMessage();
+    @Nullable String getStatusMessage();
 
     /**
-     * Get the named cookie
-     * @param name The name of the cookie
-     * @return The cookie or {@code null} if no cookie with that name exists.
+     * Gets the named cookie.
+     *
+     * @param name the name of the cookie
+     * @return the cookie or {@code null} if no cookie with that name exists
      */
-    Cookie getCookie(String name);
+    @Nullable Cookie getCookie(String name);
 
     /**
-     * Get all cookies
-     * @return The array of cookies or {@code null} if no cookies are set.
+     * Gets all cookies.
+     *
+     * @return the array of cookies or {@code null} if no cookies were set
      */
-    Cookie[] getCookies();
+    @Nullable Cookie[] getCookies();
 
     /**
-     * Get the output as a byte array
+     * Gets the output as a byte array.
+     *
+     * @return the output as a byte array
      */
-    byte [] getOutput();
+    byte[] getOutput();
 
     /**
-     * Get the output as a string
+     * Gets the output as a string.
+     *
+     * @return the output as a string
      */
-    String getOutputAsString();
+    @NotNull String getOutputAsString();
 }

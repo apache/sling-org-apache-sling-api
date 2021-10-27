@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 
 /** 
@@ -35,106 +36,109 @@ import org.osgi.annotation.versioning.ProviderType;
 public interface SlingHttpServletRequestBuilder {
 
     /** 
-     * Set the HTTP request method to use - defaults to GET
-     * @param method The HTTP method
+     * Sets the HTTP request method to use - defaults to {@code GET}.
+     * @param method the HTTP method
      * @return this object
      * @throws IllegalArgumentException If method is {@code null}
      */
     @NotNull SlingHttpServletRequestBuilder withRequestMethod(@NotNull String method);
 
     /** 
-     * Set the HTTP request's Content-Type
-     * @param content type
+     * Sets the HTTP request's {@code Content-Type} header.
+     * @param contentType the {@code Content-Type} value
      * @return this object
      */
-    @NotNull SlingHttpServletRequestBuilder withContentType(String contentType);
+    @NotNull SlingHttpServletRequestBuilder withContentType(@Nullable String contentType);
 
     /** 
-     * Use the supplied content as the request's body content
-     * @param content the content
+     * Uses the supplied content as the request's body content.
+     * @param content the request body content
      * @return this object
      */
-    @NotNull SlingHttpServletRequestBuilder withBody(String content);
+    @NotNull SlingHttpServletRequestBuilder withBody(@Nullable String content);
 
     /**
-     * Sets the optional selectors of the internal request, which influence
-     * the Servlet/Script resolution.
-     * @param selectors The selectors
+     * Sets the optional selectors of the internal request, which influence the Servlet/Script resolution.
+     * @param selectors the selectors
      * @return this object
      */
-    @NotNull SlingHttpServletRequestBuilder withSelectors(String ... selectors);
+    @NotNull SlingHttpServletRequestBuilder withSelectors(@Nullable String ... selectors);
 
     /** 
-     * Sets the optional extension of the internal request, which influence
-     * the Servlet/Script resolution.
-     * @param extension The extension
+     * Sets the optional extension of the internal request, which influences the Servlet/Script resolution.
+     * @param extension the extension
      * @return this object
      */
-    @NotNull SlingHttpServletRequestBuilder withExtension(String extension);
+    @NotNull SlingHttpServletRequestBuilder withExtension(@Nullable String extension);
+
+    /**
+     * Sets the optional suffix of the internal request.
+     * @param suffix the suffix
+     * @return this object
+     */
+    @NotNull SlingHttpServletRequestBuilder withSuffix(@Nullable String suffix);
 
     /** 
-     * Set a request parameter
-     * @param key The name of the parameter
-     * @param value The value of the parameter
+     * Sets a request parameter
+     * @param key the name of the parameter
+     * @param value the value of the parameter
      * @return this object
-     * @throws IllegalArgumentException If key or value is {@code null}
+     * @throws IllegalArgumentException if either {@code key} or {@code value} is {@code null}
      */
     @NotNull SlingHttpServletRequestBuilder withParameter(@NotNull String key, @NotNull String value);
 
     /** 
-     * Set a request parameter
-     * @param key The name of the parameter
-     * @param values The values of the parameter
+     * Sets a request parameter
+     * @param key the name of the parameter
+     * @param values the values of the parameter
      * @return this object
-     * @throws IllegalArgumentException If key or values is {@code null}
+     * @throws IllegalArgumentException if either {@code key} or {@code values} is {@code null}
      */
     @NotNull SlingHttpServletRequestBuilder withParameter(@NotNull String key, @NotNull String[] values);
 
     /** 
-     * Add the supplied request parameters to the current ones.
-     * @param parameters Additional parameters
+     * Adds the supplied request parameters to the current ones.
+     * @param parameters additional parameters
      * @return this object
-     * @throws IllegalArgumentException If parameters is {@code null}
      */
-    @NotNull SlingHttpServletRequestBuilder withParameters(@NotNull Map<String, String[]> parameters);
+    @NotNull SlingHttpServletRequestBuilder withParameters(@Nullable Map<String, String[]> parameters);
 
     /** 
-     * Use the request dispatcher from the provided request.
-     * @param request The request
+     * Uses the request dispatcher from the provided request.
+     * @param request the request from which to use the dispatcher
      * @return this object
-     * @throws IllegalArgumentException If request is {@code null}
+     * @throws IllegalArgumentException if {@code request} is {@code null}
      */
     @NotNull SlingHttpServletRequestBuilder useRequestDispatcherFrom(@NotNull SlingHttpServletRequest request);
 
     /** 
-     * If a session is used, use the session from the provided request
-     * @param request The request
+     * Uses the session from the provided request.
+     * @param request the request from which to use the session
      * @return this object
-     * @throws IllegalArgumentException If request is {@code null}
+     * @throws IllegalArgumentException if {@code request} is {@code null}
      */
     @NotNull SlingHttpServletRequestBuilder useSessionFrom(@NotNull HttpServletRequest request);
 
     /** 
-     * Use the attributes backed by the provided request
-     * @param request The request
+     * Uses the attributes backed by the provided request.
+     * @param request the request from which to use the attributes
      * @return this object
-     * @throws IllegalArgumentException If request is {@code null}
+     * @throws IllegalArgumentException if {@code request} is {@code null}
      */
     @NotNull SlingHttpServletRequestBuilder useAttributesFrom(@NotNull HttpServletRequest request);
 
     /** 
-     * Use the servlet context from the provided request
-     * @param request The request
+     * Uses the servlet context from the provided request
+     * @param request the request from which to use the servlet context
      * @return this object
-     * @throws IllegalArgumentException If request is {@code null}
+     * @throws IllegalArgumentException if {@code request} is {@code null}
      */
     @NotNull SlingHttpServletRequestBuilder useServletContextFrom(@NotNull HttpServletRequest request);
 
     /**
-     * Build the request.
-     * Once this method has been called, the builder must not be used anymore. A new builder
-     * needs to be created, to create a new request.
-     * @return A request object
+     * Builds the request. Once this method has been called, the builder must not be used anymore. In order to create a new request a new
+     * builder has to be used.
+     * @return a request object
      */
     @NotNull SlingHttpServletRequest build();
 }

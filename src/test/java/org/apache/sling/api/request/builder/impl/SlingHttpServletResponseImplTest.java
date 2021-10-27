@@ -76,6 +76,13 @@ public class SlingHttpServletResponseImplTest {
         res.setCharacterEncoding("UTF-8");
         assertEquals("UTF-8", res.getCharacterEncoding());
         assertEquals("text/text;charset=UTF-8", res.getContentType());
+
+        res.setContentType(null);
+        assertNull("null", res.getContentType());
+        res.getWriter();
+        // this should not be possible anymore, since a writer was created
+        res.setContentType("text/text");
+        assertNull("null", res.getContentType());
     }
 
     @Test public void testContentTypeAndCharset() throws UnsupportedEncodingException {

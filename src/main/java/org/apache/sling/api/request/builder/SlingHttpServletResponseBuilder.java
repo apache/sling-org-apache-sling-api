@@ -21,19 +21,18 @@ package org.apache.sling.api.request.builder;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ProviderType;
 
-/** 
- * Fluent helper for building a response.
- * 
- * Instances of this interface are not thread-safe.
+/**
+ * <p>Fluent helper for building a response.</p>
+ * <p><strong>Note:</strong> instances of this interface are not thread-safe.</p>
  */
 @ProviderType
 public interface SlingHttpServletResponseBuilder {
 
     /**
-     * Build the response.
-     * Once this method has been called, the builder must not be used anymore. A new builder
-     * needs to be created, to create a new response.
-     * @return A response object
+     * Builds the response. Once this method has been called, the builder must not be used anymore. In order to create a new response a new
+     * builder has to be used.
+     *
+     * @return a response object
      */
     @NotNull SlingHttpServletResponseResult build();
 }

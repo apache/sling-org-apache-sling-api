@@ -31,9 +31,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Dictionary;
 import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListResourceBundle;
@@ -68,6 +67,7 @@ import org.apache.sling.api.request.builder.SlingHttpServletRequestBuilder;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Internal {@link SlingHttpServletRequest} implementation.
@@ -90,6 +90,7 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable
             return new Object[0][0];
         }
     };
+    private static final String REQUEST = "request";
 
     /** Required resource */
     private final Resource resource;
@@ -99,6 +100,9 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable
 
     /** Optional extension */
     private String extension;
+
+    /** Optional suffix */
+    private String suffix;
 
     /** HTTP method */
     private String requestMethod = DEFAULT_METHOD;
@@ -126,7 +130,7 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable
     private String pathInfo;
 
     /** Attributes */
-    private final Dictionary<String, Object> attributeMap = new Hashtable<>();
+    private final Map<String, Object> attributeMap = new HashMap<>();
 
     /** On demand session */
     private HttpSession session;
@@ -198,21 +202,20 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable
     }
 
     @Override
-    public @NotNull SlingHttpServletRequestBuilder withContentType(final String type) {
+    public @NotNull SlingHttpServletRequestBuilder withContentType(final @Nullable String type) {
         this.checkLocked();
-        final int pos = type.indexOf(SlingHttpServletRequestImpl.CHARSET_SEPARATOR);
-        if ( pos != -1 ) {
-           this.contentType = type.substring(0, pos);
-           this.characterEncoding = type.substring(pos + SlingHttpServletRequestImpl.CHARSET_SEPARATOR.length());
+        final int pos = type == null ? -1 : type.indexOf(SlingHttpServletRequestImpl.CHARSET_SEPARATOR);
+        if (pos != -1) {
+            this.contentType = type.substring(0, pos);
+            this.characterEncoding = type.substring(pos + SlingHttpServletRequestImpl.CHARSET_SEPARATOR.length());
         } else {
             this.contentType = type;
         }
-
         return this;
     }
 
     @Override
-    public @NotNull SlingHttpServletRequestBuilder withBody(final String content) {
+    public @NotNull SlingHttpServletRequestBuilder withBody(final @Nullable String content) {
         this.checkLocked();
         this.body = content;
         return this;
@@ -229,6 +232,13 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable
     public @NotNull SlingHttpServletRequestBuilder withExtension(final String extension) {
         this.checkLocked();
         this.extension = extension;
+        return this;
+    }
+
+    @Override
+    public @NotNull SlingHttpServletRequestBuilder withSuffix(String suffix) {
+        this.checkLocked();
+        this.suffix = suffix;
         return this;
     }
 
@@ -251,17 +261,18 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable
     }
 
     @Override
-    public @NotNull SlingHttpServletRequestBuilder withParameters(final @NotNull  Map<String, String[]> parameters) {
+    public @NotNull SlingHttpServletRequestBuilder withParameters(final @Nullable Map<String, String[]> parameters) {
         this.checkLocked();
-        this.checkNotNull("parameters", parameters);
-        this.parameters.putAll(parameters);
+        if (parameters != null) {
+            this.parameters.putAll(parameters);
+        }
         return this;
     }
 
     @Override
     public @NotNull SlingHttpServletRequestBuilder useAttributesFrom(@NotNull HttpServletRequest request) {
         this.checkLocked();
-        this.checkNotNull("request", request);
+        this.checkNotNull(REQUEST, request);
         this.attributesProvider = request;
         return this;
     }
@@ -269,7 +280,7 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable
     @Override
     public @NotNull SlingHttpServletRequestBuilder useServletContextFrom(@NotNull HttpServletRequest request) {
         this.checkLocked();
-        this.checkNotNull("request", request);
+        this.checkNotNull(REQUEST, request);
         this.servletContext = request.getServletContext();
         return this;
     }
@@ -277,7 +288,7 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable
     @Override
     public @NotNull SlingHttpServletRequestBuilder useSessionFrom(@NotNull HttpServletRequest request) {
         this.checkLocked();
-        this.checkNotNull("request", request);
+        this.checkNotNull(REQUEST, request);
         this.sessionProvider = request;
         return this;
     }
@@ -285,7 +296,7 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable
     @Override
     public @NotNull SlingHttpServletRequestBuilder useRequestDispatcherFrom(@NotNull SlingHttpServletRequest request) {
         this.checkLocked();
-        this.checkNotNull("request", request);
+        this.checkNotNull(REQUEST, request);
         this.requestDispatcherProvider = request;
         return this;
     }
@@ -295,7 +306,7 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable
         this.checkLocked();
         this.locked = true;
 
-        this.requestPathInfo = new RequestPathInfoImpl(this.resource, this.selectors, this.extension, null);
+        this.requestPathInfo = new RequestPathInfoImpl(this.resource, this.selectors, this.extension, this.suffix);
         this.queryString = this.formatQueryString();
         this.pathInfo = this.buildPathInfo();
 
@@ -406,7 +417,7 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable
         if ( this.attributesProvider != null ) {
             return this.attributesProvider.getAttributeNames();
         }
-        return this.attributeMap.keys();
+        return Collections.enumeration(this.attributeMap.keySet());
     }
 
     @Override
@@ -471,7 +482,7 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable
 
     @Override
     public List<RequestParameter> getRequestParameterList() {
-        final List<RequestParameter> params = new ArrayList<RequestParameter>();
+        final List<RequestParameter> params = new ArrayList<>();
         for (final RequestParameter[] requestParameters : getRequestParameterMap().values()) {
             params.addAll(Arrays.asList(requestParameters));
         }
