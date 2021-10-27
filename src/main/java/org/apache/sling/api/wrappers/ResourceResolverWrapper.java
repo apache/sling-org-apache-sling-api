@@ -282,7 +282,6 @@ public class ResourceResolverWrapper implements ResourceResolver {
         return ResourceResolverResourceWrapper.wrap(this, wrapped.create(parent, name, properties));
     }
 
-    
     @Override
     public boolean orderBefore(@NotNull Resource parent, @NotNull String name, @Nullable String followingSiblingName)
             throws UnsupportedOperationException, PersistenceException, IllegalArgumentException {
