@@ -506,7 +506,29 @@ public abstract class ResourceProvider<T> {
      */
     public @NotNull Resource create(final @NotNull ResolveContext<T> ctx, final String path, final Map<String, Object> properties)
     throws PersistenceException {
-        throw new PersistenceException("create is not supported.");
+        throw new UnsupportedOperationException("create is not supported.");
+    }
+
+    /**
+     * Orders the child resources returned by {@link #listChildren(ResolveContext, Resource)} so that a given resource is listed before the given sibling resource.
+     * 
+     * The changes are transient until {@link #commit(ResolveContext)} is called..
+     * 
+     * @param ctx The {@link ResolveContext}.
+     * @param parent the parent resource containing the child resources to order.
+     * @param name the name of the child resource in {@code parent} to order. Must be an existing child name.
+     * @param followingSiblingName the name of the resource child in {@code parent} which should come after the reordered resource. If {@code null} is given the resource is ordered as last among all sibling resources.
+     * @return {@code true} in case the order of the child resources in {@code parent} has been changed, {@code false} if the given resource were already in the desired order.
+     * @throws UnsupportedOperationException in case the underlying resource provider does not support ordering or the child resources of {@code parent} are provided by different providers.
+     * @throws IllegalArgumentException if either {@code name} or {@code followingSiblingName} are not existing child resource names of {@code parent}.
+     * @throws PersistenceException If the operation fails in the underlying resource provider, e.g. in case the parent resource does not support orderable children.
+     * @since 1.3.0 (Sling API Bundle 2.24.0)
+     * @see #listChildren(Resource)
+     * @see #getChildren(Resource)
+     */
+    public boolean orderBefore(final @NotNull ResolveContext<T> ctx, final @NotNull Resource parent, final @NotNull String name, final @Nullable String followingSiblingName)
+            throws PersistenceException {
+        throw new UnsupportedOperationException("orderBefore is not supported.");
     }
 
     /**
@@ -524,7 +546,7 @@ public abstract class ResourceProvider<T> {
      */
     public void delete(final @NotNull ResolveContext<T> ctx, final @NotNull Resource resource)
     throws PersistenceException {
-        throw new PersistenceException("delete is not supported.");
+        throw new UnsupportedOperationException("delete is not supported.");
     }
 
     /**
