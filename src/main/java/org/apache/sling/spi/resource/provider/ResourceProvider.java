@@ -506,7 +506,7 @@ public abstract class ResourceProvider<T> {
      */
     public @NotNull Resource create(final @NotNull ResolveContext<T> ctx, final String path, final Map<String, Object> properties)
     throws PersistenceException {
-        throw new PersistenceException("create is not supported.");
+        throw new UnsupportedOperationException("create is not supported.");
     }
 
     /**
@@ -528,7 +528,7 @@ public abstract class ResourceProvider<T> {
      */
     public boolean orderBefore(final @NotNull ResolveContext<T> ctx, final @NotNull Resource parent, final @NotNull String name, final @Nullable String followingSiblingName)
             throws PersistenceException {
-        throw new PersistenceException("reorderBefore is not supported.");
+        throw new UnsupportedOperationException("reorderBefore is not supported.");
     }
 
     /**
@@ -546,7 +546,7 @@ public abstract class ResourceProvider<T> {
      */
     public void delete(final @NotNull ResolveContext<T> ctx, final @NotNull Resource resource)
     throws PersistenceException {
-        throw new PersistenceException("delete is not supported.");
+        throw new UnsupportedOperationException("delete is not supported.");
     }
 
     /**
