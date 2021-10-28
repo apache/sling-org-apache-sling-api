@@ -692,12 +692,12 @@ public interface ResourceResolver extends Adaptable, Closeable {
     throws PersistenceException;
 
     /**
-     * Reorders the child resources returned by {@link #getChildren(Resource)} and {@link #listChildren(Resource)} so that a given resource is listed before the given sibling resource.
+     * Orders the child resources returned by {@link #getChildren(Resource)} and {@link #listChildren(Resource)} so that a given resource is listed before the given sibling resource.
      * 
      * The changes are transient and require a call to {@link #commit()} for persisting.
      * 
-     * @param parent the parent resource containing the child resources to reorder.
-     * @param name the name of the child resource in {@code parent} to reorder. Must be an existing child name.
+     * @param parent the parent resource containing the child resources to order.
+     * @param name the name of the child resource in {@code parent} to order. Must be an existing child name.
      * @param followingSiblingName the name of the resource child in {@code parent} which should come after the reordered resource. If {@code null} is given the resource is ordered as last among all sibling resources.
      * @return {@code true} in case the order of the child resources in {@code parent} has been changed, {@code false} if the given resource were already in the desired order.
      * @throws UnsupportedOperationException in case the underlying resource provider does not support ordering or the child resources of {@code parent} are provided by different providers.

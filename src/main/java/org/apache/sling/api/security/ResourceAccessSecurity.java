@@ -99,12 +99,12 @@ public interface ResourceAccessSecurity {
     boolean canCreate(@NotNull String absPathName, @NotNull ResourceResolver resourceResolver);
 
     /**
-     * Check whether child resources can be reordered.
+     * Check whether child resources can be ordered.
      * @param resource The resource to test.
-     * @return true if child resources can be reordered below the supplied resource
+     * @return true if child resources can be ordered below the supplied resource
      * @since 1.1.0 (Sling API Bundle 2.24.0)
      */
-    default boolean canReorderChildren(@NotNull Resource resource) {
+    default boolean canOrderChildren(@NotNull Resource resource) {
         return false;
     }
 
