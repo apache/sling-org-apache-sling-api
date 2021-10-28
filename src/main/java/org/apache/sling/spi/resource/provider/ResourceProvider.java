@@ -528,7 +528,7 @@ public abstract class ResourceProvider<T> {
      */
     public boolean orderBefore(final @NotNull ResolveContext<T> ctx, final @NotNull Resource parent, final @NotNull String name, final @Nullable String followingSiblingName)
             throws PersistenceException {
-        throw new UnsupportedOperationException("reorderBefore is not supported.");
+        throw new UnsupportedOperationException("orderBefore is not supported.");
     }
 
     /**
