@@ -28,9 +28,8 @@ import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 
 /** 
- * Fluent helper for building a request.
- * 
- * Instances of this interface are not thread-safe.
+ * <p>Fluent helper for building a request.</p>
+ * <p><strong>Note:</strong> instances of this interface are not thread-safe.</p>
  * @since 1.0 (Sling API Bundle 2.24.0)
  */
 @ProviderType

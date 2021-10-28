@@ -18,6 +18,7 @@
  */
 package org.apache.sling.api.uri;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -201,5 +202,24 @@ public class SlingUriBuilderTest {
     public void testEmpty() {
         SlingUri testUriEmpty = SlingUriBuilder.create().build();
         assertEquals("", testUriEmpty.toString());
+    }
+
+    @Test
+    public void testSetSelectors() {
+        SlingUri u1 = SlingUriBuilder.parse("/content", null).build();
+        assertEquals(0, u1.getSelectors().length);
+        assertNull(u1.getSelectorString());
+
+        u1 = SlingUriBuilder.parse("/content", null).setSelectors(null).build();
+        assertEquals(0, u1.getSelectors().length);
+        assertNull(u1.getSelectorString());
+
+        u1 = SlingUriBuilder.parse("/content", null).setSelectors(new String[] {"a","b"}).build();
+        assertArrayEquals(new String[] {"a", "b"}, u1.getSelectors());
+        assertEquals("a.b", u1.getSelectorString());
+
+        u1 = SlingUriBuilder.parse("/content", null).setSelectors(new String[] {"a","b"}).setSelectors(null).build();
+        assertEquals(0, u1.getSelectors().length);
+        assertNull(u1.getSelectorString());
     }
 }

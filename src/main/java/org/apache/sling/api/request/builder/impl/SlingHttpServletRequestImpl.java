@@ -307,13 +307,11 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable
         this.checkLocked();
         this.locked = true;
 
-        final SlingUriBuilder builder = SlingUriBuilder.createFrom(this.resource)
+        this.requestPathInfo = SlingUriBuilder.createFrom(this.resource)
             .setExtension(this.extension)
-            .setSuffix(this.suffix);
-        if ( this.selectors != null ) {
-            builder.setSelectors(this.selectors);
-        }
-        this.requestPathInfo = builder.build();
+            .setSuffix(this.suffix)
+            .setSelectors(this.selectors)
+            .build();
         
         this.queryString = this.formatQueryString();
         this.pathInfo = this.buildPathInfo();

@@ -427,17 +427,19 @@ public class SlingUriBuilder {
 
     /**
      * Set the selectors of the URI.
-     * 
+     * Passing in {@code null} has the same effect as passing in an empty array.
      * @param selectors the selectors
      * @return the builder for method chaining
      */
     @NotNull
-    public SlingUriBuilder setSelectors(@NotNull String[] selectors) {
+    public SlingUriBuilder setSelectors(@Nullable String[] selectors) {
         if (schemeSpecificPart != null || resourcePath == null) {
             return this;
         }
         this.selectors.clear();
-        Arrays.stream(selectors).forEach(this.selectors::add);
+        if ( selectors != null ) {
+            Arrays.stream(selectors).forEach(this.selectors::add);
+        }
         return this;
     }
 
