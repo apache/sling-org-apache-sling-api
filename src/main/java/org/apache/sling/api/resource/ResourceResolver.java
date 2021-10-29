@@ -842,4 +842,20 @@ public interface ResourceResolver extends Adaptable, Closeable {
      */
     Resource move(final String srcAbsPath,
               final String destAbsPath) throws PersistenceException;
+
+    /**
+     * Returns a map to store temporary objects.
+     *
+     * This map is suited to store objects which share the same lifecycle as the
+     * resource resolver. The resource resolver itself does not use this map.
+     *
+     * The resource resolver will clear the map during {@link #close()}, so afterwards the map is empty.
+     * If a stored value implements the {@link #Closeable} interface, the ResourceResolver will invoke the
+     * <code>close()</code> of the value before clearing the map.
+     *
+     * @returns the property map
+     * @since 2.13.0
+     *
+     */
+    public @NotNull Map<String,Object> getPropertyMap();
 }
