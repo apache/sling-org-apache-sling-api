@@ -374,7 +374,10 @@ public class SlingConstants {
      * The event contains at least the {@link #PROPERTY_ADAPTABLE_CLASSES},
      * and {@link #PROPERTY_ADAPTER_CLASSES} poperties.
      * @since 2.0.6 (Sling API Bundle 2.0.6)
+     *
+     * @deprecated Use a service listener listening for service removed events for {@code org.apache.sling.adapter.Adaption}.
      */
+    @Deprecated
     public static final String TOPIC_ADAPTER_FACTORY_ADDED = "org/apache/sling/api/adapter/AdapterFactory/ADDED";
 
     /**
@@ -382,7 +385,10 @@ public class SlingConstants {
      * The event contains at least the {@link #PROPERTY_ADAPTABLE_CLASSES},
      * and {@link #PROPERTY_ADAPTER_CLASSES} poperties.
      * @since 2.0.6 (Sling API Bundle 2.0.6)
+     *
+     * @deprecated Use a service listener listening for service removed events for {@code org.apache.sling.adapter.Adaption}.
      */
+    @Deprecated
     public static final String TOPIC_ADAPTER_FACTORY_REMOVED = "org/apache/sling/api/adapter/AdapterFactory/REMOVED";
 
     /**
@@ -390,6 +396,8 @@ public class SlingConstants {
      * classes which can be adapted by this adapter factory (value is
      * "adaptables"). The type of the value is a string array.
      * @since 2.0.6 (Sling API Bundle 2.0.6)
+     *
+     * @deprecated Use a service listener listening for service removed events for {@code org.apache.sling.adapter.Adaption}.
      */
     public static final String PROPERTY_ADAPTABLE_CLASSES = "adaptables";
 
@@ -397,7 +405,8 @@ public class SlingConstants {
      * The event property listing the fully qualified names of
      * classes to which this factory can adapt adaptables (value is "adapters").
      * The type of the value is a string array.
-     * @since 2.0.6 (Sling API Bundle 2.0.6)
+     *
+     * @deprecated Use a service listener listening for service removed events for {@code org.apache.sling.adapter.Adaption}.
      */
     public static final String PROPERTY_ADAPTER_CLASSES = "adapters";
 
