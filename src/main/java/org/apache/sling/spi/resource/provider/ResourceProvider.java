@@ -523,8 +523,7 @@ public abstract class ResourceProvider<T> {
      * @throws IllegalArgumentException if either {@code name} or {@code followingSiblingName} are not existing child resource names of {@code parent}.
      * @throws PersistenceException If the operation fails in the underlying resource provider, e.g. in case the parent resource does not support orderable children.
      * @since 1.3.0 (Sling API Bundle 2.24.0)
-     * @see #listChildren(Resource)
-     * @see #getChildren(Resource)
+     * @see #listChildren(ResolveContext, Resource)
      */
     public boolean orderBefore(final @NotNull ResolveContext<T> ctx, final @NotNull Resource parent, final @NotNull String name, final @Nullable String followingSiblingName)
             throws PersistenceException {
