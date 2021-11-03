@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
 public class ResourceWrapper implements Resource {
 
     /** the wrapped resource */
-    private final Resource resource;
+    private final @NotNull Resource resource;
 
     /**
      * Creates a new wrapper instance delegating all method calls to the given
@@ -48,7 +48,7 @@ public class ResourceWrapper implements Resource {
      * this class use this method to get the resource object.
      * @return The resource wrapped by this instance.
      */
-    public Resource getResource() {
+    public @NotNull Resource getResource() {
         return resource;
     }
 
