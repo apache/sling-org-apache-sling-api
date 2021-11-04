@@ -607,8 +607,14 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * which was used to create this resolver is no longer active or
      * any of the used resource providers is no longer active.
      *
+     * All objects in the map maintained by {@link #getPropertyMap()} the map implementing
+     * the {@link #Closeable} interface, will be closed by calling {@code close()} on each of them.
+     * Any exception throwing by this call will be ignored. The order in which the objects are
+     * closed is not defined.
+     *
      * @since 2.1 (Sling API Bundle 2.1.0)
      * @see ResourceResolver Resource Resolver (section lifecycle)
+     * @see #getPropertyMap()
      */
     @Override
     void close();
@@ -854,8 +860,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * <code>close()</code> of the value before clearing the map.
      *
      * @returns the property map
+     * @see #close()
      * @since 2.13.0
-     *
      */
     public @NotNull Map<String,Object> getPropertyMap();
 }
