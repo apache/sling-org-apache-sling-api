@@ -348,6 +348,11 @@ public class ResourceResolverWrapper implements ResourceResolver {
     public Resource move(String srcAbsPath, String destAbsPath) throws PersistenceException {
         return ResourceResolverResourceWrapper.wrap(this, wrapped.move(srcAbsPath, destAbsPath));
     }
+    
+    @Override
+    public Map<String,Object> getPropertyMap() {
+        return wrapped.getPropertyMap();
+    }
 
     @Override
     public <AdapterType> AdapterType adaptTo(@NotNull Class<AdapterType> type) {
