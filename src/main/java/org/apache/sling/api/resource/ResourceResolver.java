@@ -861,7 +861,7 @@ public interface ResourceResolver extends Adaptable, Closeable {
      *
      * @returns the property map
      * @see #close()
-     * @since 2.13.0
+     * @since 2.13.0 (Sling API Bundle 2.24.0)
      */
     public @NotNull Map<String,Object> getPropertyMap();
 }
