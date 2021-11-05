@@ -609,7 +609,7 @@ public interface ResourceResolver extends Adaptable, Closeable {
      *
      * All objects in the map maintained by {@link #getPropertyMap()} implementing
      * the {@link #Closeable} interface, will be closed by calling {@code close()} on each of them.
-     * Any exception throwing by this call will be ignored. The order in which the objects are
+     * Any exception thrown by this call will be ignored. The order in which the objects are
      * closed is not defined.
      *
      * @since 2.1 (Sling API Bundle 2.1.0)
