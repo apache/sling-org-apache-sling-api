@@ -38,7 +38,7 @@ import org.osgi.annotation.versioning.ProviderType;
 public interface URIProvider {
 
     /**
-     * Return a URI appicable to the defined scope.
+     * Return a URI applicable to the defined scope.
      * @param resource the resource to convert from.
      * @param scope the required scope.
      * @param operation the required operation.
@@ -48,7 +48,7 @@ public interface URIProvider {
     @NotNull URI toURI(@NotNull Resource resource, @NotNull URIProvider.Scope scope, @NotNull URIProvider.Operation operation);
 
     /**
-     * Defines which operatio the URI may be used to perform.
+     * Defines which operation the URI may be used to perform.
      */
     enum Operation {
         /**
