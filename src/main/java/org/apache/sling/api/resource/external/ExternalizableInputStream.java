@@ -22,7 +22,7 @@ package org.apache.sling.api.resource.external;
 import java.net.URI;
 
 import org.jetbrains.annotations.NotNull;
-import org.osgi.annotation.versioning.ProviderType;
+import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * This interface is normally used to extend an InputStream to indicate that it has a URI form that could
@@ -33,7 +33,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * Every implementation implementing {@code ExternalizableInputStream} should rely on {@link URIProviders} for getting the URI.
  * @since 1.0.0 (Sling API Bundle 2.16.4)
  */
-@ProviderType
+@ConsumerType
 public interface ExternalizableInputStream {
 
     /**
