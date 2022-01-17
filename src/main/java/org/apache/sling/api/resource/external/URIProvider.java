@@ -20,32 +20,26 @@
 package org.apache.sling.api.resource.external;
 
 import java.net.URI;
+import java.util.Optional;
 
 import org.apache.sling.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ProviderType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Provides a URI in exchange for a Resource.
- * Typically the Resource will represent something where is a URI is valiable and usefull.
- * Implementations of this interface must ensure that the any underlying security model is delegated
+ * Provides a URI representing the given Resource.
+ * Implementations of this interface must ensure that the underlying security model is delegated
  * securely and not circumvented. Typically resource provider bundles should implement this provider as in most cases
  * internal implementation details of the resource will be required to achieve the implementation. Ideally
  * implementations should be carefully reviewed by peers.
- *
+ * @since 1.0.0 (Sling API Bundle 2.16.4)
  */
 @ProviderType
 public interface URIProvider {
 
-    /**
-     * Return a URI applicable to the defined scope.
-     * @param resource the resource to convert from.
-     * @param scope the required scope.
-     * @param operation the required operation.
-     * @return a URI if the resource has a URI suitable for the requested scope and operation, otherwise the implementation should throw an IlleagalArgumentException.
-     * @throws IllegalArgumentException if a URI for the requested scope and operation cannot be provided to the caller.
-     */
-    @NotNull URI toURI(@NotNull Resource resource, @NotNull URIProvider.Scope scope, @NotNull URIProvider.Operation operation);
+    static final Logger LOG = LoggerFactory.getLogger(URIProvider.class);
 
     /**
      * Defines which operation the URI may be used to perform.
@@ -91,4 +85,34 @@ public interface URIProvider {
          */
         PUBLIC
     }
+
+    /**
+     * Return a URI applicable to the defined scope.
+     * @param resource the resource to convert from.
+     * @param scope the required scope.
+     * @param operation the required operation.
+     * @return a URI if the resource has a URI suitable for the requested scope and operation, otherwise the implementation should throw an {@link IllegalArgumentException}.
+     * @throws IllegalArgumentException if a URI for the requested scope and operation cannot be provided to the caller.
+     * @deprecated Use {@link #getOptionalUriForResource(Resource, Scope, Operation)} instead.
+     */
+    @Deprecated
+    @NotNull URI toURI(@NotNull Resource resource, @NotNull Scope scope, @NotNull Operation operation);
+
+    /**
+     * Return a URI applicable to the defined scope.
+     * @param resource the resource to convert from.
+     * @param scope the required scope.
+     * @param operation the required operation.
+     * @return a URI if the resource has a URI suitable for the requested scope and operation, otherwise {@link Optional#empty()}.
+     * @since 1.1.0 (Sling API Bundle 2.25.0)
+     */
+    default @NotNull Optional<URI> getOptionalUriForResource(@NotNull Resource resource, @NotNull Scope scope, @NotNull Operation operation) {
+        try {
+            return Optional.of(toURI(resource, scope, operation));
+        } catch (IllegalArgumentException e) {
+            LOG.debug("{} declined toURI() for resource '{}' (scope {}, operation {})", this.getClass(), resource.getPath(), scope, operation, e);
+            return Optional.empty();
+        }
+    }
+
 }

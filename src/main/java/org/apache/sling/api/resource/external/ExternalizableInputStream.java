@@ -22,23 +22,25 @@ package org.apache.sling.api.resource.external;
 import java.net.URI;
 
 import org.jetbrains.annotations.NotNull;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * This interface is normally used to extend an InputStream to indicate that it has a URI form that could
  * be used in place of the InputStream if desired. It is used in situations where the internal of a ResourceProvider
- * wants to offload IO to channels that do not pass through the JVM. The URI that is returned may have restrictions
+ * wants to offload I/O to channels that do not pass through the JVM. The URI that is returned may have restrictions
  * imposed on it requiring it to be used immediately. Do not store the URI for later usage as it will, in most cases,
  * have expired.
- *
+ * Every implementation implementing {@code ExternalizableInputStream} should rely on {@link URIProviders} for getting the URI.
+ * @since 1.0.0 (Sling API Bundle 2.16.4)
  */
+@ProviderType
 public interface ExternalizableInputStream {
 
     /**
      * Get a URI that is specific to the current session, and may be used in any context internal or external. The URI must not
-     * be stored and must not be shared between clients. For a wider range of URIs the caller should use the URIProvider class
+     * be stored and must not be shared between clients. For a wider range of URIs the caller should use the {@link URIProvider} class
      * directly and not this interface.
      * @return a URI intended for any network context.
      */
     @NotNull URI getURI();
-
 }
