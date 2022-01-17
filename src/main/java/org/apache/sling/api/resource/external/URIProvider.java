@@ -93,7 +93,7 @@ public interface URIProvider {
      * @param operation the required operation.
      * @return a URI if the resource has a URI suitable for the requested scope and operation, otherwise the implementation should throw an {@link IllegalArgumentException}.
      * @throws IllegalArgumentException if a URI for the requested scope and operation cannot be provided to the caller.
-     * @deprecated Use {@link #getOptionalUriForResource(Resource, Scope, Operation)} instead.
+     * @deprecated Use {@link #toOptionalUri(Resource, Scope, Operation)} instead.
      */
     @Deprecated
     @NotNull URI toURI(@NotNull Resource resource, @NotNull Scope scope, @NotNull Operation operation);
@@ -106,7 +106,7 @@ public interface URIProvider {
      * @return a URI if the resource has a URI suitable for the requested scope and operation, otherwise {@link Optional#empty()}.
      * @since 1.1.0 (Sling API Bundle 2.25.0)
      */
-    default @NotNull Optional<URI> getOptionalUriForResource(@NotNull Resource resource, @NotNull Scope scope, @NotNull Operation operation) {
+    default @NotNull Optional<URI> toOptionalUri(@NotNull Resource resource, @NotNull Scope scope, @NotNull Operation operation) {
         try {
             return Optional.of(toURI(resource, scope, operation));
         } catch (IllegalArgumentException e) {
