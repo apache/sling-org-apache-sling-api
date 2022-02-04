@@ -74,11 +74,13 @@ public class LazyBindings extends HashMap<String, Object> implements Bindings {
 
     @Override
     public Object put(String key, Object value) {
-        Object previous = super.get(key);
+        Object previous = this.get(key);
         if (value instanceof LazyBindings.Supplier) {
             suppliers.put(key, (LazyBindings.Supplier) value);
+            super.remove(key);
         } else {
             super.put(key, value);
+            suppliers.remove(key);
         }
         return previous;
     }

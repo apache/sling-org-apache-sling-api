@@ -84,7 +84,7 @@ public class LazyBindingsTest {
     public void testPut() {
         assertFalse(usedSuppliers.contains(THE_QUESTION));
         Object supplierProvidedValueReplacement = lazyBindings.put(THE_QUESTION, 43);
-        assertNull(supplierProvidedValueReplacement);
+        assertEquals(42, supplierProvidedValueReplacement);
         assertEquals(43, lazyBindings.get(THE_QUESTION));
 
         lazyBindings.put("putSupplier", (LazyBindings.Supplier) () -> {
@@ -204,6 +204,20 @@ public class LazyBindingsTest {
         lazyBindings.put(supplierName, regularSupplier);
         assertEquals(regularSupplier, lazyBindings.get(supplierName));
         assertFalse(usedSuppliers.contains(supplierName));
+    }
+
+    @Test
+    public void testMultiplePuts() {
+        final LazyBindings bindings = new LazyBindings();
+        bindings.put("foo", "bar");
+        bindings.put("foo", new LazyBindings.Supplier() {
+
+            @Override
+            public Object get() {
+                return "lazybar";
+            }
+        });
+        assertEquals("lazybar", bindings.get("foo"));
     }
 
     private class TestSupplier implements LazyBindings.Supplier {
