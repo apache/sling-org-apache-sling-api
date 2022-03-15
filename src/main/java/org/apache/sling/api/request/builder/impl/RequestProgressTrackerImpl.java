@@ -25,8 +25,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.sling.api.request.RequestProgressTracker;
 
 /**
@@ -113,7 +111,7 @@ public class RequestProgressTrackerImpl implements RequestProgressTracker {
     /**
      * The system time at creation of this instance or the last {@link #reset()}.
      */
-    private long processingStart;
+    private final long processingStart;
 
     /**
      * The system time when {@link #done()} was called or -1 while processing is in progress.
@@ -136,40 +134,14 @@ public class RequestProgressTrackerImpl implements RequestProgressTracker {
      * Creates a new request progress tracker.
      */
     public RequestProgressTrackerImpl() {
-        this(null);
-    }
-
-    /**
-     * Creates a new request progress tracker and logs initial messages about the supplied request.
-     *
-     * @param request the request
-     */
-    public RequestProgressTrackerImpl(final HttpServletRequest request) {
-        reset();
-        if (request != null) {
-            log("Method={0}, PathInfo={1}", request.getMethod(), request.getPathInfo());
-        }
-    }
-
-    /**
-     * Resets this timer by removing all current entries and timers and adds an
-     * initial timer entry
-     */
-    public void reset() {
-        // remove all entries
-        entries.clear();
-        namedTimerEntries.clear();
-
         // enter initial messages
-        processingStart = startTimerInternal(REQUEST_PROCESSING_TIMER);
-        processingEnd = -1;
+        this.processingStart = startTimerInternal(REQUEST_PROCESSING_TIMER);
+        this.processingEnd = -1;
 
-        entries.add(new TrackingEntry(COMMENT_PREFIX + "timer_end format is " + TIMER_END_FORMAT));
+        this.entries.add(new TrackingEntry(COMMENT_PREFIX + "timer_end format is " + TIMER_END_FORMAT));
     }
 
-    /**
-     * @see org.apache.sling.api.request.RequestProgressTracker#getMessages()
-     */
+    @Override
     public Iterator<String> getMessages() {
         return new Iterator<String>() {
             private final Iterator<TrackingEntry> entryIter = entries.iterator();
@@ -191,7 +163,7 @@ public class RequestProgressTrackerImpl implements RequestProgressTracker {
         };
     }
 
-    private String formatMessage(long offset, String message) {
+    private String formatMessage(final long offset, final String message) {
         // Set exact length to avoid array copies within StringBuilder
         final StringBuilder sb = new StringBuilder(PADDING_WIDTH + 1 +  message.length() + 1);
         final String offsetStr = Long.toString(offset / 1000);
@@ -202,10 +174,7 @@ public class RequestProgressTrackerImpl implements RequestProgressTracker {
         return sb.toString();
     }
 
-    /**
-     * Dumps the process timer entries to the given writer, one entry per line.
-     * See the class comments for the rough format of each message line.
-     */
+    @Override
     public void dump(final PrintWriter writer) {
         logTimer(REQUEST_PROCESSING_TIMER,
             "Dumping SlingRequestProgressTracker Entries");
@@ -218,22 +187,19 @@ public class RequestProgressTrackerImpl implements RequestProgressTracker {
         writer.print(sb.toString());
     }
 
-    /** Creates an entry with the given message. */
-    public void log(String message) {
+    @Override
+    public void log(final String message) {
         entries.add(new TrackingEntry(LOG_PREFIX + message));
     }
 
-    /** Creates an entry with the given entry tag and message */
-    public void log(String format, Object... args) {
+    @Override
+    public void log(final String format, final Object... args) {
         String message = messageFormat.format(format, args);
         entries.add(new TrackingEntry(LOG_PREFIX + message));
     }
 
-    /**
-     * Starts a named timer. If a timer of the same name already exists, it is
-     * reset to the current time.
-     */
-    public void startTimer(String name) {
+    @Override
+    public void startTimer(final String name) {
         startTimerInternal(name);
     }
 
@@ -244,26 +210,22 @@ public class RequestProgressTrackerImpl implements RequestProgressTracker {
      * TIMER_START{<name>} <optional message>
      * </pre>
      */
-    private long startTimerInternal(String name) {
+    private long startTimerInternal(final String name) {
         long timer = System.nanoTime();
         namedTimerEntries.put(name, timer);
         entries.add(new TrackingEntry(timer, "TIMER_START{" + name + "}"));
         return timer;
     }
 
-    /**
-     * Log a timer entry, including start, end and elapsed time.
-     */
-    public void logTimer(String name) {
+    @Override
+    public void logTimer(final String name) {
         if (namedTimerEntries.containsKey(name)) {
             logTimerInternal(name, null, namedTimerEntries.get(name));
         }
     }
 
-    /**
-     * Log a timer entry, including start, end and elapsed time.
-     */
-    public void logTimer(String name, String format, Object... args) {
+    @Override
+    public void logTimer(final String name, final String format, final Object... args) {
         if (namedTimerEntries.containsKey(name)) {
             logTimerInternal(name, messageFormat.format(format, args), namedTimerEntries.get(name));
         }
@@ -272,7 +234,7 @@ public class RequestProgressTrackerImpl implements RequestProgressTracker {
     /**
      * Log a timer entry, including start, end and elapsed time using TIMER_END_FORMAT
      */
-    private void logTimerInternal(String name, String msg, long startTime) {
+    private void logTimerInternal(final String name, final String msg, final long startTime) {
         final StringBuilder sb = new StringBuilder();
         sb.append("TIMER_END{");
         sb.append((System.nanoTime() - startTime) / 1000);
@@ -286,6 +248,7 @@ public class RequestProgressTrackerImpl implements RequestProgressTracker {
         entries.add(new TrackingEntry(sb.toString()));
     }
 
+    @Override
     public void done() {
         if(processingEnd != -1) return;
         logTimer(REQUEST_PROCESSING_TIMER, REQUEST_PROCESSING_TIMER);
@@ -296,6 +259,7 @@ public class RequestProgressTrackerImpl implements RequestProgressTracker {
         return processingStart;
     }
 
+    @Override
     public long getDuration() {
         if (processingEnd != -1) {
             return processingEnd - processingStart;
@@ -312,12 +276,11 @@ public class RequestProgressTrackerImpl implements RequestProgressTracker {
         // tracking message
         private final String message;
 
-        TrackingEntry(String message) {
-            this.timeStamp = System.nanoTime();
-            this.message = message;
+        TrackingEntry(final String message) {
+            this(System.nanoTime(), message);
         }
 
-        TrackingEntry(long timeStamp, String message) {
+        TrackingEntry(final long timeStamp, final String message) {
             this.timeStamp = timeStamp;
             this.message = message;
         }

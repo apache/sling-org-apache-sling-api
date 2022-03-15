@@ -142,4 +142,10 @@ public interface RequestProgressTracker {
      *  method is processed, all further calls to this method are ignored.
      */
     void done();
+
+    /**
+     * Get the duration in nano seconds.
+     * @since 2.6.0 (Sling API Bundle 2.25.0)
+     */
+    long getDuration();
 }
