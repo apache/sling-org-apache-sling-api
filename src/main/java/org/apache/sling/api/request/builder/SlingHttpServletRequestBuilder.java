@@ -23,6 +23,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.request.RequestProgressTracker;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
@@ -134,6 +135,14 @@ public interface SlingHttpServletRequestBuilder {
      * @throws IllegalArgumentException if {@code request} is {@code null}
      */
     @NotNull SlingHttpServletRequestBuilder useServletContextFrom(@NotNull HttpServletRequest request);
+
+    /**
+     * Uses the provided request progress tracker
+     * @param tracker The tracker
+     * @return this object
+     * @since 1.1 (Sling API Bundle 2.25.0)
+     */
+    @NotNull SlingHttpServletRequestBuilder withRequestProgressTracker(@NotNull RequestProgressTracker tracker);
 
     /**
      * Builds the request. Once this method has been called, the builder must not be used anymore. In order to create a new request a new

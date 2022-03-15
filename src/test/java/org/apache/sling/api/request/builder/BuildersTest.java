@@ -55,6 +55,8 @@ public class BuildersTest {
         assertArrayEquals(new String[] {"tidy", "json"}, req.getRequestPathInfo().getSelectors());
         assertNull(req.getRequestPathInfo().getSuffix());
         assertNull(req.getRequestPathInfo().getSuffixResource());
+
+        assertNotNull(req.getRequestProgressTracker());
     }
 
     @Test
@@ -62,5 +64,10 @@ public class BuildersTest {
         final SlingHttpServletResponseBuilder builder = Builders.newResponseBuilder();
         final SlingHttpServletResponseResult result = builder.build();
         assertNotNull(result);        
+    }
+
+    @Test
+    public void createRequestProgressTracker() {
+        assertNotNull(Builders.newRequestProgressTracker());
     }
 }

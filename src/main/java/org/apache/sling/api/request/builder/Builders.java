@@ -18,6 +18,8 @@
  */
 package org.apache.sling.api.request.builder;
 
+import org.apache.sling.api.request.RequestProgressTracker;
+import org.apache.sling.api.request.builder.impl.RequestProgressTrackerImpl;
 import org.apache.sling.api.request.builder.impl.SlingHttpServletRequestImpl;
 import org.apache.sling.api.request.builder.impl.SlingHttpServletResponseImpl;
 import org.apache.sling.api.resource.Resource;
@@ -50,5 +52,15 @@ public final class Builders {
      */
     public static @NotNull SlingHttpServletResponseBuilder newResponseBuilder() {
         return new SlingHttpServletResponseImpl();
+    }
+
+    /**
+     * Creates a new request progress tracker
+     *
+     * @return a request progress tracker
+     * @since 1.1 (Sling API Bundle 2.25.0)
+     */
+    public static @NotNull RequestProgressTracker newRequestProgressTracker() {
+        return new RequestProgressTrackerImpl();
     }
 }

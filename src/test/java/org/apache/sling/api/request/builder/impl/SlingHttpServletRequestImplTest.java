@@ -43,6 +43,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.request.RequestDispatcherOptions;
 import org.apache.sling.api.request.RequestParameter;
+import org.apache.sling.api.request.RequestProgressTracker;
+import org.apache.sling.api.request.builder.Builders;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.junit.Before;
@@ -404,9 +406,25 @@ public class SlingHttpServletRequestImplTest {
         assertEquals(Collections.singletonList(null), Collections.list(req.getResponseContentTypes()));
     }
 
-    @Test public void testGetRequestProgressTracker() {
+    @Test public void testNewGetRequestProgressTracker() {
         req.build();
         assertNotNull(req.getRequestProgressTracker());
+    }
+
+    @Test public void testProvidedGetRequestProgressTracker() {
+        final RequestProgressTracker t = Builders.newRequestProgressTracker();
+        req.withRequestProgressTracker(t).build();
+        assertSame(t, req.getRequestProgressTracker());
+    }
+
+    @Test public void testProvidedByAttributesGetRequestProgressTracker() {
+        // build a request with a tracker set in an attribute first
+        final SlingHttpServletRequest orig = new SlingHttpServletRequestImpl(this.resource);
+        final RequestProgressTracker t = Builders.newRequestProgressTracker();
+        orig.setAttribute(RequestProgressTracker.class.getName(), t);
+
+        req.useAttributesFrom(orig).build();
+        assertSame(t, req.getRequestProgressTracker());
     }
 
     @Test public void testDefaultServletContext() {

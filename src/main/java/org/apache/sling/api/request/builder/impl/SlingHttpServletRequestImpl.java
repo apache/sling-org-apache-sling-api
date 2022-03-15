@@ -63,6 +63,7 @@ import org.apache.sling.api.request.RequestParameter;
 import org.apache.sling.api.request.RequestParameterMap;
 import org.apache.sling.api.request.RequestPathInfo;
 import org.apache.sling.api.request.RequestProgressTracker;
+import org.apache.sling.api.request.builder.Builders;
 import org.apache.sling.api.request.builder.SlingHttpServletRequestBuilder;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -146,7 +147,7 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable
     private final Map<String, Cookie> cookies = new LinkedHashMap<>();
 
     /** Request progress tracker */
-    private final RequestProgressTracker progressTracker = new RequestProgressTrackerImpl();
+    private RequestProgressTracker progressTracker;
 
     private HttpServletRequest sessionProvider;
 
@@ -303,6 +304,12 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable
     }
 
     @Override
+    public @NotNull SlingHttpServletRequestBuilder withRequestProgressTracker(@NotNull RequestProgressTracker tracker) {
+        this.progressTracker = tracker;
+        return this;
+    }
+
+    @Override
     public @NotNull SlingHttpServletRequest build() {
         this.checkLocked();
         this.locked = true;
@@ -321,6 +328,15 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable
         }
         if (this.body == null ) {
             this.body = "";
+        }
+        if (this.progressTracker == null) {
+            // if attributes are shared with a Sling request, then the progress tracker is available from there
+            final Object attrTracker = this.getAttribute(RequestProgressTracker.class.getName());
+            if ( attrTracker instanceof RequestProgressTracker) {
+                this.progressTracker = (RequestProgressTracker)attrTracker;
+            } else {
+                this.progressTracker = Builders.newRequestProgressTracker();
+            }
         }
         return this;
     }
