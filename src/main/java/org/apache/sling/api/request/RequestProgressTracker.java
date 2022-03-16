@@ -145,6 +145,7 @@ public interface RequestProgressTracker {
 
     /**
      * Get the duration in nano seconds.
+     * @return The duration in nano seconds
      * @since 2.6.0 (Sling API Bundle 2.25.0)
      */
     default long getDuration() {
