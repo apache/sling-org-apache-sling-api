@@ -459,6 +459,22 @@ public class SlingUriBuilder {
     }
 
     /**
+     * Remove a selector from the URI.
+     *
+     * @param selector the selector to remove
+     * @return the builder for method chaining
+     * @since 1.3 (Sling API Bundle 2.25.0)
+     */
+    @NotNull
+    public SlingUriBuilder removeSelector(@NotNull String selector) {
+        if (schemeSpecificPart != null || resourcePath == null) {
+            return this;
+        }
+        this.selectors.remove(selector);
+        return this;
+    }
+
+    /**
      * Set the extension of the URI.
      * 
      * @param extension the extension

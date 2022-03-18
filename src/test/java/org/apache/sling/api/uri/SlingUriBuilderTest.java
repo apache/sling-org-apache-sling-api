@@ -222,4 +222,18 @@ public class SlingUriBuilderTest {
         assertEquals(0, u1.getSelectors().length);
         assertNull(u1.getSelectorString());
     }
+
+    @Test
+    public void testRemoveSelector() {
+        SlingUri u1 = SlingUriBuilder.parse("/content", null).setSelectors(new String[] {"a","b"}).removeSelector("b").removeSelector("c").build();
+        assertArrayEquals(new String[] {"a"}, u1.getSelectors());
+        assertEquals("a", u1.getSelectorString());
+    }
+
+    @Test
+    public void testAddSelector() {
+        SlingUri u1 = SlingUriBuilder.parse("/content", null).setSelectors(new String[] {"a","b"}).addSelector("c").build();
+        assertArrayEquals(new String[] {"a", "b", "c"}, u1.getSelectors());
+        assertEquals("a.b.c", u1.getSelectorString());
+    }
 }

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-@Version("1.2.0")
+@Version("1.3.0")
 package org.apache.sling.api.uri;
 
 import org.osgi.annotation.versioning.Version;
