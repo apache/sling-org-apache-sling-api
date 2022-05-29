@@ -160,12 +160,30 @@ public class SlingUriBuilder {
      */
     @NotNull
     public static SlingUriBuilder createFrom(@NotNull SlingHttpServletRequest request) {
-        return createFrom(request.getRequestPathInfo())
-                .setResourceResolver(request.getResourceResolver())
+        @NotNull
+        ResourceResolver resourceResolver = request.getResourceResolver();
+        @NotNull
+        SlingUriBuilder uriBuilder = createFrom(request.getRequestPathInfo())
+                .setResourceResolver(resourceResolver)
                 .setScheme(request.getScheme())
                 .setHost(request.getServerName())
                 .setPort(request.getServerPort())
                 .setQuery(request.getQueryString());
+
+        // SLING-11347 - check if the original request was using a mapped path
+        @Nullable
+        String resourcePath = uriBuilder.getResourcePath();
+        if (resourcePath != null) {
+            @NotNull
+            String mappedResourcePath = resourceResolver.map(request, resourcePath);
+            if (!resourcePath.equals(mappedResourcePath) &&
+                    request.getPathInfo().startsWith(mappedResourcePath)) {
+                // mapped path is different from the resource path and
+                // the request path was the mapped path, so switch to it
+                uriBuilder.setResourcePath(mappedResourcePath);
+            }
+        }
+        return uriBuilder;
     }
 
     /**
