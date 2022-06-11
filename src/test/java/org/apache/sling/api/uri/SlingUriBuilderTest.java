@@ -32,6 +32,7 @@ import java.util.Map;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.request.RequestPathInfo;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,6 +50,9 @@ public class SlingUriBuilderTest {
 
     @Mock
     Resource resource;
+
+    @Mock
+    ResourceResolver resourceResolver;
 
     @Before
     public void before() {
@@ -87,6 +91,10 @@ public class SlingUriBuilderTest {
     @Test
     public void testCreateFromRequest() {
 
+        // to satisfy that the return of this call is @NotNull
+        when(request.getResourceResolver()).thenReturn(resourceResolver);
+        when(resourceResolver.map(request, "/test/to/path")).thenReturn("/test/to/path");
+
         when(request.getScheme()).thenReturn("https");
         when(request.getServerName()).thenReturn("example.com");
         when(request.getServerPort()).thenReturn(443);
@@ -99,6 +107,59 @@ public class SlingUriBuilderTest {
         SlingUri testUri = SlingUriBuilder.createFrom(request).build();
 
         assertEquals("https://example.com/test/to/path.sel1.sel2.html/suffix/path?par1=val1", testUri.toString());
+    }
+
+    /**
+     * SLING-11347 verify that mapped path remains mapped in the new SlingUri
+     */
+    @Test
+    public void testCreateFromRequestWithMappedPath() {
+
+        when(request.getResourceResolver()).thenReturn(resourceResolver);
+        // simulate the resourcePath not already under /content so ResourceResolver#resolve would
+        //   change the result
+        when(request.getPathInfo()).thenReturn("/test/to/path");
+        when(resourceResolver.map(request, "/content/test/to/path")).thenReturn("/test/to/path");
+
+        when(request.getScheme()).thenReturn("https");
+        when(request.getServerName()).thenReturn("example.com");
+        when(request.getServerPort()).thenReturn(443);
+        when(request.getQueryString()).thenReturn("par1=val1");
+        // simulate the ResourceResolver#resolve switching to a resource under /content
+        when(requestPathInfo.getResourcePath()).thenReturn("/content/test/to/path");
+        when(requestPathInfo.getSelectors()).thenReturn(new String[] { "sel1", "sel2" });
+        when(requestPathInfo.getExtension()).thenReturn("html");
+        when(requestPathInfo.getSuffix()).thenReturn("/suffix/path");
+
+        SlingUri testUri = SlingUriBuilder.createFrom(request).build();
+
+        assertEquals("https://example.com/test/to/path.sel1.sel2.html/suffix/path?par1=val1", testUri.toString());
+    }
+
+    /**
+     * SLING-11347 verify that not-mapped path remains not-mapped in the new SlingUri
+     */
+    @Test
+    public void testCreateFromRequestWithNotMappedPath() {
+
+        when(request.getResourceResolver()).thenReturn(resourceResolver);
+        // simulate the resourcePath already under /content so ResourceResolver#resolve would
+        //   not change the result
+        when(request.getPathInfo()).thenReturn("/content/test/to/path");
+        when(resourceResolver.map(request, "/content/test/to/path")).thenReturn("/test/to/path");
+
+        when(request.getScheme()).thenReturn("https");
+        when(request.getServerName()).thenReturn("example.com");
+        when(request.getServerPort()).thenReturn(443);
+        when(request.getQueryString()).thenReturn("par1=val1");
+        when(requestPathInfo.getResourcePath()).thenReturn("/content/test/to/path");
+        when(requestPathInfo.getSelectors()).thenReturn(new String[] { "sel1", "sel2" });
+        when(requestPathInfo.getExtension()).thenReturn("html");
+        when(requestPathInfo.getSuffix()).thenReturn("/suffix/path");
+
+        SlingUri testUri = SlingUriBuilder.createFrom(request).build();
+
+        assertEquals("https://example.com/content/test/to/path.sel1.sel2.html/suffix/path?par1=val1", testUri.toString());
     }
 
     @Test
@@ -127,6 +188,10 @@ public class SlingUriBuilderTest {
 
     @Test
     public void testCreateFromPath() {
+
+        // to satisfy that the return of this call is @NotNull
+        when(request.getResourceResolver()).thenReturn(resourceResolver);
+        when(resourceResolver.map(request, "/test/to/path")).thenReturn("/test/to/path");
 
         when(request.getScheme()).thenReturn("https");
         when(request.getServerName()).thenReturn("example.com");
