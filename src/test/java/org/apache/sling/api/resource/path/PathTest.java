@@ -188,6 +188,7 @@ public class PathTest {
         assertFalse(new Path("/libs/foo").isPattern());
     }
 
+    @SuppressWarnings({ "java:S5785", "unlikely-arg-type" })
     @Test public void testEquals() {
         final Path path = new Path("/foo/bar");
         assertTrue(path.equals(path));
