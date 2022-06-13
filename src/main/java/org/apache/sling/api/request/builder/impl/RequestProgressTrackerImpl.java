@@ -170,7 +170,9 @@ public class RequestProgressTrackerImpl implements RequestProgressTracker {
         for (int i = PADDING_WIDTH - offsetStr.length(); i > 0; i--) {
             sb.append(' ');
         }
-        sb.append(offsetStr).append(' ').append(message).append('\n');
+        sb.append(offsetStr).append(' ')
+          .append(message.replace('\n', '_').replace('\r', '_'))
+          .append('\n');
         return sb.toString();
     }
 
@@ -179,12 +181,10 @@ public class RequestProgressTrackerImpl implements RequestProgressTracker {
         logTimer(REQUEST_PROCESSING_TIMER,
             "Dumping SlingRequestProgressTracker Entries");
 
-        final StringBuilder sb = new StringBuilder();
         final Iterator<String> messages = getMessages();
         while (messages.hasNext()) {
-            sb.append(messages.next());
+            writer.print(messages.next());
         }
-        writer.print(sb.toString());
     }
 
     @Override

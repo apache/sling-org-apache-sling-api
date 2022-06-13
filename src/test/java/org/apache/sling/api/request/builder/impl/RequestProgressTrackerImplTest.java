@@ -129,6 +129,15 @@ public class RequestProgressTrackerImplTest {
         tracker.getMessages().remove();
     }
 
+    @Test
+    public void testMessageEscape() {
+        tracker.log("foo\n\rbar");
+        final StringWriter w = new StringWriter();
+        tracker.dump(new PrintWriter(w));
+        w.flush();
+        final String result = w.toString();
+        assertTrue(result.contains("LOG foo__bar"));
+    }
     private String substringAfter(String string, char ch) {
         final int pos = string.indexOf(ch);
         return string.substring(pos);
