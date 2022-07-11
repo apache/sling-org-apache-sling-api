@@ -232,9 +232,13 @@ public abstract class ResourceProvider<T> {
     /** 
      * Mode for the resource provide
      * The value is either {@link #MODE_OVERLAY} (default) or {@link #MODE_PASSTHROUGH}.
-     * When a provider specifies the passthrough mode, the resource resolver will fall back
-     * to the parent resource provider including allowing all events and queries from the parent
-     * provider.
+     * The overlay mode is the default. With this mode a resource provider is completely overlaying a
+     * potential parent provider. Events and query results from a parent provider are filtered based on
+     * the child providers.
+     * When a provider specifies the passthrough mode, the resoource provider specifying this mode
+     * will be used to get resources. However, for modifications, the parent provider is queried. Similar
+     * events and query results from the parent are not filtered. This allows a child resource provider
+     * to decorate resources from a parent provider without needing to reimplement all the other functionality.
      * @since 1.4
      */
     public static final String PROPERTY_MODE = "provider.mode";
