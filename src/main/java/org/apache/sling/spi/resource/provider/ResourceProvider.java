@@ -229,6 +229,30 @@ public abstract class ResourceProvider<T> {
      */
     public static final String RESOURCE_TYPE_SYNTHETIC = "sling:syntheticResourceProviderResource";
 
+    /** 
+     * Mode for the resource provide
+     * The value is either {@link #MODE_OVERLAY} (default) or {@link #MODE_PASSTHROUGH}.
+     * When a provider specifies the passthrough mode, the resource resolver will fall back
+     * to the parent resource provider including allowing all events and queries from the parent
+     * provider.
+     * @since 1.4
+     */
+    public static final String PROPERTY_MODE = "provider.mode";
+
+    /** 
+     * Default mode.
+     * The resource provider overlays everything from the parent provider.
+     * @since 1.4
+     */
+    public static final String MODE_OVERLAY = "overlay";
+
+    /** 
+     * Passthrough mode.
+     * The implementation passes certain functionality through to the parent resource provider.
+     * @since 1.4
+     */
+    public static final String MODE_PASSTHROUGH = "passthrough";
+
     /** The context for this provider. */
     private volatile ProviderContext ctx;
 
