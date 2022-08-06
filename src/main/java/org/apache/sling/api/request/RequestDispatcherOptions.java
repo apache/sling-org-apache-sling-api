@@ -73,6 +73,13 @@ public class RequestDispatcherOptions extends HashMap<String, String> {
     public static final String OPT_REPLACE_EXTENSION = "replaceExtension";
 
     /**
+     * When dispatching with the include method, any headers set by the included
+     * resource are ignored. This defaults to "false".
+     * @since 2.7.0
+     */
+    public static final String OPT_PROTECT_HEADERS_ON_INCLUDE = "protectHeadersOnInclude";
+
+    /**
      * Creates an instance with no options set.
      */
     public RequestDispatcherOptions() {
@@ -219,5 +226,25 @@ public class RequestDispatcherOptions extends HashMap<String, String> {
      */
     public String getReplaceExtension() {
         return get(OPT_REPLACE_EXTENSION);
+    }
+
+   /**
+     * Sets the {@link #OPT_PROTECT_HEADERS_ON_INCLUDE} option to the given
+     * value.
+     * @param flag The value to set
+     * @since 2.7.0
+     */
+    public void setProtectHeadersOnInclude(final boolean flag) {
+        put(OPT_PROTECT_HEADERS_ON_INCLUDE, String.valueOf(flag));
+    }
+
+    /**
+     * Returns the {@link #OPT_PROTECT_HEADERS_ON_INCLUDE} option or <code>false</code> if
+     * not set.
+     * @return Are headers protected on include?
+     * @since 2.7.0
+     */
+    public boolean isProtectHeadersOnInclude() {
+        return Boolean.valueOf(this.getOrDefault(OPT_PROTECT_HEADERS_ON_INCLUDE, "false"));
     }
 }

@@ -19,6 +19,7 @@
 package org.apache.sling.api.request;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -100,5 +101,19 @@ public class RequestDispatcherOptionsTest {
     @Test public void testReplaceExtensionConstructor() {
         final RequestDispatcherOptions result = new RequestDispatcherOptions("replaceExtension=foo");
         assertEquals("foo", result.getReplaceExtension());
-    } 
+    }
+
+    @Test public void testProtectHeadersOnInclude() {
+        final RequestDispatcherOptions options = new RequestDispatcherOptions();
+        assertNull(options.get(RequestDispatcherOptions.OPT_PROTECT_HEADERS_ON_INCLUDE));
+        assertFalse(options.isProtectHeadersOnInclude());
+
+        options.setProtectHeadersOnInclude(true);
+        assertEquals("true", options.get(RequestDispatcherOptions.OPT_PROTECT_HEADERS_ON_INCLUDE));
+        assertTrue(options.isProtectHeadersOnInclude());
+
+        options.setProtectHeadersOnInclude(false);
+        assertEquals("false", options.get(RequestDispatcherOptions.OPT_PROTECT_HEADERS_ON_INCLUDE));
+        assertFalse(options.isProtectHeadersOnInclude());
+    }
 }
