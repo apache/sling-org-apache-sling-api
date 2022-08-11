@@ -21,6 +21,7 @@ package org.apache.sling.api.request.builder.impl;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.sling.api.request.RequestParameter;
@@ -34,10 +35,16 @@ public class RequestParameterImpl implements RequestParameter {
 
     private final String name;
     private final String value;
+    private final Charset encoding;
 
     public RequestParameterImpl(final String name, final String value) {
+        this(name, value, StandardCharsets.UTF_8);
+    }
+
+    public RequestParameterImpl(final String name, final String value, final Charset encoding) {
         this.name = name;
         this.value = value;
+        this.encoding = encoding;
     }
 
     @Override
@@ -47,7 +54,7 @@ public class RequestParameterImpl implements RequestParameter {
 
     @Override
     public byte[] get() {
-        return this.value.getBytes(StandardCharsets.UTF_8);
+        return this.value.getBytes(encoding);
     }
 
     @Override

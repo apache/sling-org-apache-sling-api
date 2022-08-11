@@ -18,7 +18,11 @@
  */
 package org.apache.sling.api.request.builder;
 
+import java.nio.charset.Charset;
+
+import org.apache.sling.api.request.RequestParameter;
 import org.apache.sling.api.request.RequestProgressTracker;
+import org.apache.sling.api.request.builder.impl.RequestParameterImpl;
 import org.apache.sling.api.request.builder.impl.RequestProgressTrackerImpl;
 import org.apache.sling.api.request.builder.impl.SlingHttpServletRequestImpl;
 import org.apache.sling.api.request.builder.impl.SlingHttpServletResponseImpl;
@@ -62,5 +66,30 @@ public final class Builders {
      */
     public static @NotNull RequestProgressTracker newRequestProgressTracker() {
         return new RequestProgressTrackerImpl();
+    }
+
+    /**
+     * Creates a new request parameter
+     *
+     * @param name the parameter name
+     * @param value the parameter value
+     * @return a request parameter
+     * @since 1.2 (Sling API Bundle 2.26.2)
+     */
+    public static @NotNull RequestParameter newRequestParameter(String name, String value) {
+        return new RequestParameterImpl(name, value);
+    }
+
+    /**
+     * Creates a new request parameter
+     *
+     * @param name the parameter name
+     * @param value the parameter value
+     * @param encoding the charset of the value
+     * @return a request parameter
+     * @since 1.2 (Sling API Bundle 2.26.2)
+     */
+    public static @NotNull RequestParameter newRequestParameter(String name, String value, Charset encoding) {
+        return new RequestParameterImpl(name, value, encoding);
     }
 }
