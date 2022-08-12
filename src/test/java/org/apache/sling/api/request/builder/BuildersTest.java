@@ -23,9 +23,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.request.RequestParameter;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -70,4 +75,25 @@ public class BuildersTest {
     public void createRequestProgressTracker() {
         assertNotNull(Builders.newRequestProgressTracker());
     }
+
+    @Test
+    public void createRequestParameter() throws UnsupportedEncodingException {
+        @NotNull
+        RequestParameter rp = Builders.newRequestParameter("key", "value");
+        assertNotNull(rp);
+        assertEquals("key", rp.getName());
+        assertEquals("value", rp.getString());
+        assertEquals("value", rp.getString(StandardCharsets.UTF_8.name()));
+    }
+
+    @Test
+    public void createRequestParameterWithCharset() throws UnsupportedEncodingException {
+        @NotNull
+        RequestParameter rp = Builders.newRequestParameter("key", new String("value".getBytes(StandardCharsets.UTF_16), StandardCharsets.UTF_16), StandardCharsets.UTF_16);
+        assertNotNull(rp);
+        assertEquals("key", rp.getName());
+        assertEquals("value", rp.getString());
+        assertEquals("value", rp.getString(StandardCharsets.UTF_16.name()));
+    }
+
 }
