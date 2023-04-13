@@ -775,7 +775,7 @@ public interface ResourceResolver extends Adaptable, Closeable {
      *             {@link #close() closed}.
      * @since 2.3 (Sling API Bundle 2.4.0)
      */
-    public @Nullable String getParentResourceType(final String resourceType);
+    @Nullable String getParentResourceType(final String resourceType);
 
     /**
      * Returns <code>true</code> if the resource type or any of the resource's
@@ -880,5 +880,5 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * @see #close()
      * @since 2.13.0 (Sling API Bundle 2.24.0)
      */
-    public @NotNull Map<String,Object> getPropertyMap();
+    @NotNull Map<String,Object> getPropertyMap();
 }
