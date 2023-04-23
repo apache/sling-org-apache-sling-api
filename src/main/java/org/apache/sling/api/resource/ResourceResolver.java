@@ -400,7 +400,7 @@ public interface ResourceResolver extends Adaptable, Closeable {
     /**
      * Returns the search path used by the {@link #getResource(String)} method
      * to search for resources by relative path. If no search path is set an
-     * empty array is returned.
+     * array with the single value "/" is returned.
      * <p>
      * The returned array of strings is a copy of the internal value, so
      * modifications to this array have no influence on the operation of the
