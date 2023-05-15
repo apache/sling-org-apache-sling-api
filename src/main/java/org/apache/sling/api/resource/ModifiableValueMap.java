@@ -37,6 +37,13 @@ import org.osgi.annotation.versioning.ConsumerType;
  *  <li>{@link #put(Object, Object)}</li>
  *  <li>{@link #putAll(java.util.Map)}</li>
  *  <li>{@link #remove(Object)}</li>
+ *  <li>{@link #replace(Object, Object)}</li>
+ *  <li>{@link #replace(Object, Object, Object)}</li>
+ *  <li>{@link #replaceAll(java.util.function.BiFunction)}</li>
+ *  <li>{@link #compute(Object, java.util.function.BiFunction)}</li>
+ *  <li>{@link #computeIfAbsent(Object, java.util.function.Function)}</li>
+ *  <li>{@link #computeIfPresent(Object, java.util.function.BiFunction)}</li>
+ *  <li>{@link #merge(Object, Object, java.util.function.BiFunction)}</li>
  * </ul>
  * <p>
  * The map is not modifiable through the collections provided
