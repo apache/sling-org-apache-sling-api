@@ -80,7 +80,7 @@ public final class ObjectConverter {
     }
 
     private static String toString(Calendar cal) {
-        return cal.toInstant().toString();
+        return ZonedDateTime.ofInstant(Instant.ofEpochMilli(cal.getTimeInMillis()), cal.getTimeZone().toZoneId()).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
     }
 
     private static String toString(Date cal) {
