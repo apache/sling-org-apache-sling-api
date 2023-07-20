@@ -144,11 +144,10 @@
                 <artifactId>bnd-baseline-maven-plugin</artifactId>
                 <configuration>
                     <diffpackages>
-                        <!-- Temporarily don't baseline due to https://issues.apache.org/jira/browse/SLING-9555:
-                             Although it might be incompatible with consumers, baseline only suggests a minor version increase.
-                             We decided to go for a micro increase only as it is very unlikely that any consumer nor any providers will be broken.
+                        <!-- Temporarily don't baseline due to https://issues.apache.org/jira/browse/SLING-11974:
+                             We decided to go for a micro increase only as it is only javadoc change.
                           -->
-                        <diffpackage>!org.apache.sling.api.resource.observation</diffpackage>
+                        <diffpackage>!org.apache.sling.api</diffpackage>
                         <diffpackage>*</diffpackage>
                     </diffpackages>
                 </configuration>

@@ -386,7 +386,7 @@ public class SlingUriBuilder {
 
     /**
      * Will rebase the URI based on the underlying resource structure. Rebasing will potentially adjust the
-     * {@link #path}, {@link #selectors}, {@link extension} and {@code suffix} in a way that the path resolves to an existing resource.
+     * {@link #resourcePath}, {@link #selectors}, {@link extension} and {@code suffix} in a way that the path resolves to an existing resource.
      * <p>
      * A resource resolver is necessary for this operation, hence
      * {@link #setResourceResolver(ResourceResolver)} needs to be called before {@link #rebaseResourcePath()} or a create method that implicitly sets this has to be used.

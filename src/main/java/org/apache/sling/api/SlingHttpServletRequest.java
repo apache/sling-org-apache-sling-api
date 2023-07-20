@@ -274,4 +274,45 @@ public interface SlingHttpServletRequest extends HttpServletRequest, Adaptable {
      * @return The request progress tracker.
      */
     @NotNull RequestProgressTracker getRequestProgressTracker();
+
+
+    /**
+     * Returns a {@code java.security.Principal} object containing
+     * the name of the current authenticated user.
+     *
+     * <p><strong>Note: </strong> This method deviates from the parent
+     * interface and might return a prinicpal even for anonymous users.
+     * Therefore it cannot be used to determine whether the user is
+     * authenticated.
+     *
+     * @return	a {@code java.security.Principal} or {@code null}.
+     * @see #getAuthType()
+     * @see #getRemoteUser()
+     */
+     @Nullable java.security.Principal getUserPrincipal();
+
+     /**
+      * Returns the name of the authentication scheme used to protect
+      * the servlet. All servlet containers support basic, form and client
+      * certificate authentication, and may additionally support digest
+      * authentication.
+      * If the request is not authenticated {@code null} is returned.
+      *
+      * @return the authentication scheme or {code null}
+      * @see getRemoteUser()
+      * @see HttpServletRequest#getAuthType()
+      */
+     @Nullable String getAuthType();
+
+     /**
+      * Returns the login of the user making this request, if the
+      * user has been authenticated, or {@code null} if the user
+      * has not been authenticated.
+      *
+      * @return	a {@code String} specifying the login of the user making
+      *         this request, or {@code null}
+      * @see getAuthType()
+      * @see HttpServletRequest#getRemoteUser()
+      */
+     @Nullable String getRemoteUser();
 }
