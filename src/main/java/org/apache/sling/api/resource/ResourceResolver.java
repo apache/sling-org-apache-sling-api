@@ -867,14 +867,19 @@ public interface ResourceResolver extends Adaptable, Closeable {
               final String destAbsPath) throws PersistenceException;
 
     /**
-     * Returns a map to store temporary objects.
+     * Returns a mutable map to store temporary objects.
      *
      * This map is suited to store objects which share the same lifecycle as the
      * resource resolver. The resource resolver itself does not use this map.
      *
      * The resource resolver will clear the map during {@link #close()}, so afterwards the map is empty.
      * If a stored value implements the {@link Closeable} interface, the ResourceResolver will invoke the
-     * <code>close()</code> of the value before clearing the map.
+     * {@code close} method} of the value before clearing the map.
+     *
+     * Clients should not use this map to store objects which have a lifecycle beyond the resource resolver. Any
+     * object stored into this map after the resource resolver has been closed will not be closed.
+     *
+     * The returned map is not thread-safe.
      *
      * @return the property map
      * @see #close()
