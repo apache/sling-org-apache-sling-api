@@ -27,6 +27,8 @@ import static org.mockito.Mockito.when;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -57,11 +59,11 @@ public class ObjectConverterTest {
     private static final double DOUBLE_2 = -45.67d;
     private static final BigDecimal BIGDECIMAL_1 = new BigDecimal("12345.67");
     private static final BigDecimal BIGDECIMAL_2 = new BigDecimal("-23456.78");
-    private static final Calendar CALENDAR_1 = Calendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.US);
-    private static final Calendar CALENDAR_2 = Calendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.US);
+    private static final Calendar CALENDAR_1 = Calendar.getInstance(TimeZone.getTimeZone("GMT+2"), Locale.US);
+    private static final Calendar CALENDAR_2 = Calendar.getInstance(TimeZone.getTimeZone("GMT+3"), Locale.US);
     {
-        CALENDAR_1.set(2016, 10, 15, 8, 20, 30);
-        CALENDAR_2.set(2015, 6, 31, 19, 10, 20);
+        CALENDAR_1.set(2016, Calendar.NOVEMBER, 15, 8, 20, 30);
+        CALENDAR_2.set(2015, Calendar.JULY, 31, 19, 10, 20);
     }
     private static final Date DATE_1 = CALENDAR_1.getTime();
     private static final Date DATE_2 = CALENDAR_2.getTime();
@@ -93,7 +95,7 @@ public class ObjectConverterTest {
     }
 
     private Calendar toCalendar(Date date1) {
-        Calendar response = Calendar.getInstance();
+        Calendar response = Calendar.getInstance(TimeZone.getTimeZone("GMT+2"));
         response.setTime(date1);
         return response;
     }
@@ -304,11 +306,46 @@ public class ObjectConverterTest {
     }
 
     @Test
+    public void testJcrDateValueWithTimeZone() throws Exception {
+        Value dateValue = mock(Value.class);
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT+2"));
+        when(dateValue.getDate()).thenReturn(calendar);
+        assertEquals(calendar, ObjectConverter.convert(dateValue, Calendar.class));
+    }
+
+    @Test
     public void testBooleanValue() throws Exception {
         Value value = mock(Value.class);
         when(value.getBoolean()).thenReturn(true);
         when(value.getString()).thenReturn("true");
         assertTrue(ObjectConverter.convert(value, Boolean.class));
         assertEquals("true", ObjectConverter.convert(value, String.class));
+    }
+
+    @Test
+    public void testCalendarWithTimeZone() {
+        final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT+2"));
+        calendar.set(2022, Calendar.AUGUST, 19, 11, 46, 0);
+        calendar.set(Calendar.MILLISECOND, 1);
+        assertEquals("2022-08-19T11:46:00.001+02:00", ObjectConverter.convert(calendar, String.class));
+    }
+
+    @Test
+    public void testZonedDateTimeToString() {
+        ZoneId zoneId = ZoneId.of("UTC+1");
+        ZonedDateTime zdt = ZonedDateTime.of(2015, 11, 30, 23, 45, 59,999999999, zoneId);
+        assertEquals("2015-11-30T23:45:59.999999999+01:00", ObjectConverter.convert(zdt, String.class));
+        assertEquals(String.class, ObjectConverter.convert(zdt, String.class).getClass());
+    }
+
+    @Test
+    public void testToZonedDateTime() {
+        ZoneId zoneId = ZoneId.of("GMT+2").normalized();
+        ZonedDateTime zdt = ZonedDateTime.of(2022, 8, 19, 11, 46, 0, 1000000, zoneId);
+        final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT+2"));
+        calendar.set(2022, Calendar.AUGUST, 19, 11, 46, 0);
+        calendar.set(Calendar.MILLISECOND, 1);
+        assertEquals(ZonedDateTime.class, ObjectConverter.convert(calendar, ZonedDateTime.class).getClass());
+        assertEquals(zdt, ObjectConverter.convert(calendar, ZonedDateTime.class));
     }
 }
