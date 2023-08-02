@@ -26,55 +26,55 @@ package org.apache.sling.api.resource.runtime.dto;
 public class ResourceProviderDTO {
 
     /**
-	 * The name of the resource provider.
-	 * Optional might be {@code null}.
-	 */
-	public String name;
+     * The name of the resource provider.
+     * Optional might be {@code null}.
+     */
+    public String name; //NOSONAR
 
     /**
      * The path of the resource provider.
      * This is never {@code null}.
      */
-    public String path;
+    public String path; //NOSONAR
 
     /**
      * Whether resource access security should be used.
      */
-    public boolean useResourceAccessSecurity;
+    public boolean useResourceAccessSecurity; //NOSONAR
 
     /**
      * The auth handling for this provider.
      * This is never {@code null}.
      */
-    public AuthType authType;
+    public AuthType authType; //NOSONAR
 
     /**
      * Whether the resource provider supports modifications.
      */
-    public boolean modifiable;
+    public boolean modifiable; //NOSONAR
 
     /**
      * Whether the resource provider supports adaptable.
      */
-    public boolean adaptable;
+    public boolean adaptable; //NOSONAR
 
     /**
      * Whether the resource provider supports refreshing.
      */
-    public boolean refreshable;
+    public boolean refreshable; //NOSONAR
 
     /**
      * Whether the resource provider supports attributes.
      */
-    public boolean attributable;
+    public boolean attributable; //NOSONAR
 
     /**
      * Whether the resource provider supports query languages.
      */
-    public boolean supportsQueryLanguage;
+    public boolean supportsQueryLanguage; //NOSONAR
 
     /**
      * The service id from the service registry.
      */
-    public long serviceId;
+    public long serviceId; //NOSONAR
 }

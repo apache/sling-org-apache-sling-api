@@ -31,5 +31,5 @@ public class ResourceProviderFailureDTO extends ResourceProviderDTO {
     /**
      * The reason for the failure.
      */
-	public FailureReason reason;
+    public FailureReason reason; //NOSONAR
 }
