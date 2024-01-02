@@ -39,9 +39,10 @@ import org.jetbrains.annotations.Nullable;
 public class ResourceUtil {
 
     /**
-     * Resolves relative path segments '.' and '..' in the absolute path.
-     * Returns {@code null} if not possible (.. points above root) or if path is not
-     * absolute.
+     * Resolves relative path segments '.' and '..' in the path.
+     * The path can either be relative or absolute. Relative paths are treated
+     * the same as an absolute path.
+     * Returns {@code null} if not possible (for example .. points above root).
      *
      * @param path The path to normalize
      * @return The normalized path or {@code null}.
@@ -132,6 +133,7 @@ public class ResourceUtil {
         }
         return true;
     }
+
     /**
      * Utility method returns the parent path of the given <code>path</code>,
      * which is normalized by {@link #normalize(String)} before resolving the
