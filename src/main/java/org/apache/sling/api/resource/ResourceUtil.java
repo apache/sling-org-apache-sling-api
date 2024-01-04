@@ -48,90 +48,90 @@ public class ResourceUtil {
      * @return The normalized path or {@code null}.
      */
     public static @Nullable String normalize(@NotNull String path) {
-
-        // don't care for empty paths
-        if (path.length() == 0) {
+        // remove trailing slashes
+        path = removeTrailingSlashes(path);
+        // don't care for empty paths or just slash
+        if (path.isEmpty() || "/".equals(path)) {
             return path;
         }
 
-        // prepare the path buffer with trailing slash (simplifies impl)
-        int absOffset = (path.charAt(0) == '/') ? 0 : 1;
-        char[] buf = new char[path.length() + 1 + absOffset];
-        if (absOffset == 1) {
-            buf[0] = '/';
+        // ignore leading slashes
+        int startPos = 0;
+        while ( startPos < path.length() && path.charAt(startPos) == '/' ) {
+            startPos++;
         }
-        path.getChars(0, path.length(), buf, absOffset);
-        buf[buf.length - 1] = '/';
-
-        int lastSlash = 0; // last slash in path
-        int numDots = 0; // number of consecutive dots after last slash
-
-        int bufPos = 0;
-        for (int bufIdx = lastSlash; bufIdx < buf.length; bufIdx++) {
-            char c = buf[bufIdx];
-            if (c == '/') {
-                if (numDots == 2) {
-                    if (bufPos == 0) {
-                        return null;
-                    }
-
-                    do {
-                        bufPos--;
-                    } while (bufPos > 0 && buf[bufPos] != '/');
+    
+        // split into segments
+        final String[] parts = path.substring(startPos).split("/");
+        String[] newParts = new String[parts.length];
+        int newPartsPos = 0;
+        for (final String part : parts) {
+            // check each segment for empty and dots
+            final int dotCount = countDotsSegment(part);
+            if (part.isEmpty() || dotCount == 1) {
+                // ignore
+            } else if (dotCount == 2) {
+                if (newPartsPos == 0) {
+                    // can't go above root
+                    return null;
                 }
-
-                lastSlash = bufIdx;
-                numDots = 0;
-            } else if (c == '.' && useDot(buf, bufIdx) && numDots < 2) {
-                numDots++;
+                newPartsPos--;
+            } else if (dotCount > 2) {
+                // invalid
+                return null;
             } else {
-                // find the next slash
-                int nextSlash = bufIdx + 1;
-                while (nextSlash < buf.length && buf[nextSlash] != '/') {
-                    nextSlash++;
-                }
-
-                // append up to the next slash (or end of path)
-                if (bufPos < lastSlash) {
-                    int segLen = nextSlash - bufIdx + 1;
-                    System.arraycopy(buf, lastSlash, buf, bufPos, segLen);
-                    bufPos += segLen;
-                } else {
-                    bufPos = nextSlash;
-                }
-
-                numDots = 0;
-                lastSlash = nextSlash;
-                bufIdx = nextSlash;
+                newParts[newPartsPos++] = part;
             }
         }
-
-        String resolved;
-        if (bufPos == 0 && numDots == 0) {
-            resolved = (absOffset == 0) ? "/" : "";
-        } else if ((bufPos - absOffset) == path.length()) {
-            resolved = path;
-        } else {
-            resolved = new String(buf, absOffset, bufPos - absOffset);
+        // nothing changed ?
+        if (newPartsPos == newParts.length && startPos < 2) {
+            return path;
         }
-
-        return resolved;
+        // only slash
+        if (newPartsPos == 0 && startPos > 0) {
+            return "/";
+        }
+        // reconstruct (we don't use String.join as array elements might be null)
+        final StringBuilder sb = new StringBuilder();
+        for(int i=0;i<newPartsPos;i++) {
+            if (i > 0 || startPos > 0) {
+                sb.append('/');
+            }
+            sb.append(newParts[i]);
+        }
+        return sb.toString();
     }
 
-    // use this dot only if followed by /
-    // don't use if followed by neither . nor /
-    // keep checking till a non-dot is found
-    private static boolean useDot(char[] buf, int bufIdx) {
-        while(bufIdx < buf.length -1) {
-            if(buf[bufIdx] == '/') {
-                return true;
-            }
-            else if(buf[bufIdx] != '.') {
-                return false;
-            }
-            bufIdx++;
+    /**
+     * Remove all trailing slashes except for the root
+     */
+    private static String removeTrailingSlashes(@NotNull final String path) {
+        int endPos = path.length() - 1;
+        while ( endPos >= 0 && path.charAt(endPos) == '/' ) {
+            endPos--;
         }
-        return true;
+        if (endPos == path.length() - 1) {
+            return path;
+        }
+        // only slashes, just return one
+        if ( endPos == -1 ) {
+            return "/";
+        }
+        return path.substring(0, endPos + 1);
+    }
+
+    /**
+     * Return the number of dots in the segment, if the segment only contains dots
+     * @param segment The segment
+     * @return The number of dots or 0 if the segment contains no dot or other characters.
+     */
+    private static int countDotsSegment(final String segment) {
+        for(int i=0;i<segment.length();i++) {
+            if ( segment.charAt(i) != '.' ) {
+                return 0;
+            }
+        }
+        return segment.length();
     }
 
     /**

@@ -36,10 +36,7 @@ import java.util.NoSuchElementException;
 
 import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
 public class ResourceUtilTest {
 
     @Test public void testResolveRelativeSegments() {
@@ -107,12 +104,12 @@ public class ResourceUtilTest {
         assertEquals("/cz", ResourceUtil.normalize("/az/bz/../../cz"));
         assertNull(ResourceUtil.normalize("/az/bz/../../../cz"));
 
-        assertEquals("/...", ResourceUtil.normalize("/..."));
-        assertEquals("/a/...", ResourceUtil.normalize("/a/..."));
-        assertEquals("/a/b/...", ResourceUtil.normalize("/a/b/..."));
+        assertNull(ResourceUtil.normalize("/..."));
+        assertNull(ResourceUtil.normalize("/a/..."));
+        assertNull(ResourceUtil.normalize("/a/b/..."));
 
-        assertEquals("/az/...", ResourceUtil.normalize("/az/..."));
-        assertEquals("/az/bz/...", ResourceUtil.normalize("/az/bz/..."));
+        assertNull(ResourceUtil.normalize("/az/..."));
+        assertNull(ResourceUtil.normalize("/az/bz/..."));
 
         assertEquals("/content/dam/jpg_folder/.jpg/jcr:content/metadata/dc:title",
                 ResourceUtil.normalize("/content/dam/./jpg_folder/.jpg/jcr:content/metadata/dc:title"));
@@ -120,6 +117,8 @@ public class ResourceUtilTest {
         assertEquals("/content/dam/jpg_folder/....jpg/jcr:content/metadata/dc:title",
                 ResourceUtil.normalize("/content/dam/./jpg_folder/....jpg/jcr:content/metadata/dc:title"));
 
+        assertNull(ResourceUtil.normalize("/apps/.../content/foo"));
+        assertNull(ResourceUtil.normalize("/apps/./..../content/foo"));
         try {
             ResourceUtil.normalize(null);
             fail("Resolving null expects NullPointerException");
