@@ -70,14 +70,14 @@ public interface ResourceChangeListener {
      * </ul>
      *
      * <p>
-     * In general, it can't be guaranteed that the underlying implementation of the resources will send a remove
-     * event for each removed resource. For example if the root of a tree, like {@code /foo} is removed, the underlying
+     * In general, it can't be guaranteed that the underlying implementation of the resources will send a remove/add
+     * event for each removed/added resource. For example if the root of a tree, like {@code /foo} is removed, the underlying
      * implementation might only send a single remove event for {@code /foo} but not for any child resources.
-     * Therefore if a listener is interested in resource remove events, it might get remove events for resources
-     * that not directly match the specified pattern/filters. For example if a listener is registered for {@code /foo/bar}
-     * and {@code /foo} is removed, the listener will get a remove event for {@code /foo}. The same is true if any pattern is used
-     * and any parent of a matching resource is removed. If a listener is interested in
-     * remove events, it will get a remove of any parent resource from the specified paths or patterns. The listener
+     * Similarly for renaming a subtree from {@code /foo} to {@code /bar} the add event may only be sent for {@code /bar}
+     * but not for any child resources.
+     * Therefore a listener might get remove/add events for resources that not directly match the specified paths/path patterns. 
+     * For example if a listener is registered for path {@code /foo/bar} and {@code /foo} is removed, the listener will get a remove event for {@code /foo}.
+     * The same is true if any pattern is used and any parent of a matching resource is removed/added. The listener
      * must handle these events accordingly.
      *
      * <p>If one of the paths is a sub resource of another specified path, the sub path is ignored.</p>
@@ -143,6 +143,11 @@ public interface ResourceChangeListener {
 
     /**
      * Report resource changes based on the filter properties of this listener.
+     * <p>
+     * Note that resource changes for paths which are <strong>ancestors</strong> of the paths this
+     * listener was registered to may be reported through this method. This is due to limitations of 
+     * certain resource providers to provide events on a more granular level
+     * (e.g. for deletion or movement of resources containing (potentially nested) child resources).
      * <p>
      * Starting with version 1.2 of this API, an instance of {@code ResoureChangeList} is passed
      * as the parameter to allow passing additional information.
