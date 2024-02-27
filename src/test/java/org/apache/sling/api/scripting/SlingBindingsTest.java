@@ -136,11 +136,5 @@ public class SlingBindingsTest {
         bindings.put(SlingBindings.RESPONSE, request);
         // incorrect type, so a null is expected
         assertNull(bindings.getResponse());
-        
-        
-        
-        
     }
-    
-    
 }
