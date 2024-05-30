@@ -182,7 +182,7 @@ public class SlingBindings extends LazyBindings {
      */
     protected void safePut(final String key, final Object value) {
         if ( value != null ) {
-            this.put(key, value);
+            this.putOnly(key, value);
         }
     }
 
@@ -191,7 +191,7 @@ public class SlingBindings extends LazyBindings {
      * @param flush Whether to flush or not
      */
     public void setFlush(boolean flush) {
-        put(FLUSH, flush);
+        putOnly(FLUSH, flush);
     }
 
     /**

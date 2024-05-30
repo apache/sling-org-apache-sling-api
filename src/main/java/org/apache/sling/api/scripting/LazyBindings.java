@@ -75,6 +75,20 @@ public class LazyBindings extends HashMap<String, Object> implements Bindings {
     @Override
     public Object put(String key, Object value) {
         Object previous = this.get(key);
+        putOnly(key, value);
+        return previous;
+    }
+
+    /**
+     * Set a named value; identical with {@link #put(String, Object)} but does not return (and evaluate)
+     * any previous value set.
+     * This is an extension of the LazyBindings implementation and can be beneficial if the supplied value is a Supplier, for which the 
+     * evaluation can be costly.
+     * 
+     * @param key the name associated with the value
+     * @param value the value associated with the name
+     */
+    public void putOnly(String key, Object value) {
         if (value instanceof LazyBindings.Supplier) {
             suppliers.put(key, (LazyBindings.Supplier) value);
             super.remove(key);
@@ -82,13 +96,12 @@ public class LazyBindings extends HashMap<String, Object> implements Bindings {
             super.put(key, value);
             suppliers.remove(key);
         }
-        return previous;
     }
 
     @Override
     public void putAll(Map<? extends String, ?> toMerge) {
         for (Entry<? extends String, ?> entry : toMerge.entrySet()) {
-            put(entry.getKey(), entry.getValue());
+            putOnly(entry.getKey(), entry.getValue());
         }
     }
 
