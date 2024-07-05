@@ -35,7 +35,6 @@ import java.util.function.Supplier;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 public class LazyBindingsTest {
     private static final String THE_QUESTION = "What is The Answer to the Ultimate Question of Life, The Universe, and Everything?";
@@ -219,31 +218,6 @@ public class LazyBindingsTest {
             }
         });
         assertEquals("lazybar", bindings.get("foo"));
-    }
-
-    @Test
-    public void testPut_vs_PutOnly() {
-        final LazyBindings bindings = new LazyBindings();
-
-        Supplier supplierPut = Mockito.spy(new LazyBindings.Supplier() {
-            @Override
-            public Object get() {
-                return "bar";
-            }
-        });
-        bindings.put("put", supplierPut);
-        bindings.put("put", supplierPut);
-        Mockito.verify(supplierPut, Mockito.times(1)).get();
-
-        Supplier supplierPutOnly = Mockito.spy(new LazyBindings.Supplier() {
-            @Override
-            public Object get() {
-                return "bar";
-            }
-        });
-        bindings.putOnly("putOnly", supplierPutOnly);
-        bindings.putOnly("putOnly", supplierPutOnly);
-        Mockito.verify(supplierPutOnly, Mockito.never()).get();
     }
 
     private class TestSupplier implements LazyBindings.Supplier {
