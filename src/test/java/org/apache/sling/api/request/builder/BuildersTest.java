@@ -23,9 +23,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.request.RequestParameter;
 import org.apache.sling.api.resource.Resource;
@@ -89,11 +92,25 @@ public class BuildersTest {
     @Test
     public void createRequestParameterWithCharset() throws UnsupportedEncodingException {
         @NotNull
-        RequestParameter rp = Builders.newRequestParameter("key", new String("value".getBytes(StandardCharsets.UTF_16), StandardCharsets.UTF_16), StandardCharsets.UTF_16);
+        RequestParameter rp = Builders.newRequestParameter("key", "value", StandardCharsets.UTF_16);
         assertNotNull(rp);
         assertEquals("key", rp.getName());
         assertEquals("value", rp.getString());
         assertEquals("value", rp.getString(StandardCharsets.UTF_16.name()));
     }
 
+    @Test
+    public void createBinaryRequestParameter() throws IOException {
+        byte[] value = new byte[] {1, 2, 3};
+        RequestParameter rp = Builders.newRequestParameter("key", value, "filename", "application/octet-stream");
+        assertNotNull(rp);
+        assertEquals("key", rp.getName());
+        try (InputStream is = rp.getInputStream()) {
+            byte[] actualValue = IOUtils.toByteArray(is);
+            assertArrayEquals(value, actualValue);
+        }
+        assertEquals(value.length, rp.getSize());
+        assertEquals("filename", rp.getFileName());
+        assertEquals("application/octet-stream", rp.getContentType());
+    }
 }
