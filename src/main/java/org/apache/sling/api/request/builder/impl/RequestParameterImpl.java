@@ -25,41 +25,54 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.sling.api.request.RequestParameter;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Implementation of {@link RequestParameter}.
  */
 public class RequestParameterImpl implements RequestParameter {
 
-    private static final String CONTENT_TYPE = "text/plain";
+    private final @NotNull String name;
+    private final byte @NotNull[] value;
+    private final @NotNull Charset encoding;
+    private final String contentType;
+    private final String fileName;
+    private final boolean isFormField;
 
-    private final String name;
-    private final String value;
-    private final Charset encoding;
-
-    public RequestParameterImpl(final String name, final String value) {
+    public RequestParameterImpl(@NotNull final String name, @NotNull final String value) {
         this(name, value, StandardCharsets.UTF_8);
     }
 
-    public RequestParameterImpl(final String name, final String value, final Charset encoding) {
+    public RequestParameterImpl(@NotNull final String name, @NotNull final String value, @NotNull final Charset encoding) {
+        this(name, value.getBytes(encoding), encoding, null, null, true); // by default application/x-www-form-urlencoded is returning null for content type in Sling Engine
+    }
+
+    public RequestParameterImpl(@NotNull final String name, byte @NotNull[] value, String fileName, String contentType) {
+        this(name, value, StandardCharsets.UTF_8, fileName, contentType, false);
+    }
+
+    private RequestParameterImpl(@NotNull final String name, byte @NotNull [] value, @NotNull final Charset encoding, String fileName, final String contentType, boolean isFormField) {
         this.name = name;
         this.value = value;
+        this.contentType = contentType;
         this.encoding = encoding;
+        this.fileName = fileName;
+        this.isFormField = isFormField;
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return this.name;
     }
 
     @Override
     public byte[] get() {
-        return this.value.getBytes(encoding);
+        return this.value;
     }
 
     @Override
     public String getContentType() {
-        return CONTENT_TYPE;
+        return contentType;
     }
 
     @Override
@@ -69,7 +82,7 @@ public class RequestParameterImpl implements RequestParameter {
 
     @Override
     public String getFileName() {
-        return null;
+        return fileName;
     }
 
     @Override
@@ -78,18 +91,18 @@ public class RequestParameterImpl implements RequestParameter {
     }
 
     @Override
-    public String getString() {
-        return this.value;
+    public @NotNull String getString() {
+        return new String(this.value, encoding);
     }
 
     @Override
-    public String getString(final String encoding) throws UnsupportedEncodingException {
-        return new String(this.get(), encoding);
+    public @NotNull String getString(final @NotNull String encoding) throws UnsupportedEncodingException {
+        return new String(this.value, encoding);
     }
 
     @Override
     public boolean isFormField() {
-        return true;
+        return isFormField;
     }
 
     @Override
