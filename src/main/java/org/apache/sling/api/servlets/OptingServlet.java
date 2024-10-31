@@ -19,7 +19,7 @@
 package org.apache.sling.api.servlets;
 
 import org.jetbrains.annotations.NotNull;
-import javax.servlet.Servlet;
+import jakarta.servlet.Servlet;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 

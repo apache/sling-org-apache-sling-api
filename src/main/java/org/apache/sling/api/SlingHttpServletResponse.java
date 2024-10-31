@@ -18,7 +18,7 @@
  */
 package org.apache.sling.api;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.apache.sling.api.adapter.Adaptable;
 import org.osgi.annotation.versioning.ProviderType;

@@ -20,7 +20,7 @@ package org.apache.sling.api.resource.mapping;
 
 import java.util.Collection;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.sling.api.resource.ResourceResolver;
 import org.jetbrains.annotations.NotNull;

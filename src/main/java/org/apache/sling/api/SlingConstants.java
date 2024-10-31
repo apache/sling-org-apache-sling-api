@@ -60,7 +60,7 @@ public class SlingConstants {
      * the serlvet or script is included via
      * <code>RequestDispatcher.include</code> from another servlet or script.
      * <p>
-     * The type of the attribute value is <code>javax.servlet.Servlet</code>.
+     * The type of the attribute value is <code>jakarta.servlet.Servlet</code>.
      */
     public static final String ATTR_REQUEST_SERVLET = "org.apache.sling.api.include.servlet";
 
@@ -94,7 +94,7 @@ public class SlingConstants {
      * <code>HttpServletRequest.getRequestURI()</code> of the request which
      * included the servlet currently being active underlying the
      * <code>Servlet</code> which included the servlet currently being active
-     * (value is "javax.servlet.include.request_uri"). This attribute is only
+     * (value is "jakarta.servlet.include.request_uri"). This attribute is only
      * set if the serlvet or script is included via
      * <code>RequestDispatcher.include</code> from another servlet or script.
      * <p>
@@ -107,14 +107,14 @@ public class SlingConstants {
      * script. This request attribute is set for compatibility with the Servlet
      * API specification.
      */
-    public static final String ATTR_INCLUDE_REQUEST_URI = "javax.servlet.include.request_uri";
+    public static final String ATTR_INCLUDE_REQUEST_URI = "jakarta.servlet.include.request_uri";
 
     /**
      * The name of the request attribute containing the
      * <code>HttpServletRequest.getContextPath()</code> of the request which
      * included the servlet currently being active underlying the
      * <code>Servlet</code> which included the servlet currently being active
-     * (value is "javax.servlet.include.context_path"). This attribute is only
+     * (value is "jakarta.servlet.include.context_path"). This attribute is only
      * set if the serlvet or script is included via
      * <code>RequestDispatcher.include</code> from another servlet or script.
      * <p>
@@ -127,14 +127,14 @@ public class SlingConstants {
      * script. This request attribute is set for compatibility with the Servlet
      * API specification.
      */
-    public static final String ATTR_INCLUDE_CONTEXT_PATH = "javax.servlet.include.context_path";
+    public static final String ATTR_INCLUDE_CONTEXT_PATH = "jakarta.servlet.include.context_path";
 
     /**
      * The name of the request attribute containing the
      * <code>HttpServletRequest.getServletPath()</code> of the request which
      * included the servlet currently being active underlying the
      * <code>Servlet</code> which included the servlet currently being active
-     * (value is "javax.servlet.include.servlet_path"). This attribute is only
+     * (value is "jakarta.servlet.include.servlet_path"). This attribute is only
      * set if the serlvet or script is included via
      * <code>RequestDispatcher.include</code> from another servlet or script.
      * <p>
@@ -147,14 +147,14 @@ public class SlingConstants {
      * script. This request attribute is set for compatibility with the Servlet
      * API specification.
      */
-    public static final String ATTR_INCLUDE_SERVLET_PATH = "javax.servlet.include.servlet_path";
+    public static final String ATTR_INCLUDE_SERVLET_PATH = "jakarta.servlet.include.servlet_path";
 
     /**
      * The name of the request attribute containing the
      * <code>HttpServletRequest.getPathInfo()</code> of the request which
      * included the servlet currently being active underlying the
      * <code>Servlet</code> which included the servlet currently being active
-     * (value is "javax.servlet.include.path_info"). This attribute is only set
+     * (value is "jakarta.servlet.include.path_info"). This attribute is only set
      * if the serlvet or script is included via
      * <code>RequestDispatcher.include</code> from another servlet or script.
      * <p>
@@ -166,14 +166,14 @@ public class SlingConstants {
      * included servlet or script. This request attribute is set for
      * compatibility with the Servlet API specification.
      */
-    public static final String ATTR_INCLUDE_PATH_INFO = "javax.servlet.include.path_info";
+    public static final String ATTR_INCLUDE_PATH_INFO = "jakarta.servlet.include.path_info";
 
     /**
      * The name of the request attribute containing the
      * <code>HttpServletRequest.getQueryString()</code> of the request which
      * included the servlet currently being active underlying the
      * <code>Servlet</code> which included the servlet currently being active
-     * (value is "javax.servlet.include.query_string"). This attribute is only
+     * (value is "jakarta.servlet.include.query_string"). This attribute is only
      * set if the serlvet or script is included via
      * <code>RequestDispatcher.include</code> from another servlet or script.
      * <p>
@@ -186,25 +186,25 @@ public class SlingConstants {
      * script. This request attribute is set for compatibility with the Servlet
      * API specification.
      */
-    public static final String ATTR_INCLUDE_QUERY_STRING = "javax.servlet.include.query_string";
+    public static final String ATTR_INCLUDE_QUERY_STRING = "jakarta.servlet.include.query_string";
 
     // ---------- Error handling -----------------------------------------------
 
     /**
      * The name of the request attribute containing the exception thrown causing
      * the error handler to be called (value is
-     * "javax.servlet.error.exception"). This attribute is only available to
+     * "jakarta.servlet.error.exception"). This attribute is only available to
      * error handling servlets and only if an exception has been thrown causing
      * error handling.
      * <p>
      * The type of the attribute value is <code>java.lang.Throwable</code>.
      */
-    public static final String ERROR_EXCEPTION = "javax.servlet.error.exception";
+    public static final String ERROR_EXCEPTION = "jakarta.servlet.error.exception";
 
     /**
      * The name of the request attribute containing the fully qualified class
      * name of the exception thrown causing the error handler to be called
-     * (value is "javax.servlet.error.exception_type"). This attribute is only
+     * (value is "jakarta.servlet.error.exception_type"). This attribute is only
      * available to error handling servlets and only if an exception has been
      * thrown causing error handling. This attribute is present for backwards
      * compatibility only. Error handling servlet implementors are advised to
@@ -212,11 +212,11 @@ public class SlingConstants {
      * <p>
      * The type of the attribute value is <code>java.lang.String</code>.
      */
-    public static final String ERROR_EXCEPTION_TYPE = "javax.servlet.error.exception_type";
+    public static final String ERROR_EXCEPTION_TYPE = "jakarta.servlet.error.exception_type";
 
     /**
      * The name of the request attribute containing the message of the error
-     * situation (value is "javax.servlet.error.message"). If an exception
+     * situation (value is "jakarta.servlet.error.message"). If an exception
      * caused error handling, this is the exceptions message from
      * <code>Throwable.getMessage()</code>. If error handling is caused by a
      * call to one of the <code>SlingHttpServletResponse.sendError</code>
@@ -224,30 +224,30 @@ public class SlingConstants {
      * <p>
      * The type of the attribute value is <code>java.lang.String</code>.
      */
-    public static final String ERROR_MESSAGE = "javax.servlet.error.message";
+    public static final String ERROR_MESSAGE = "jakarta.servlet.error.message";
 
     /**
      * The name of the request attribute containing the URL requested by the
      * client during whose processing the error handling was caused (value is
-     * "javax.servlet.error.request_uri"). This property is retrieved calling
+     * "jakarta.servlet.error.request_uri"). This property is retrieved calling
      * the <code>SlingHttpServletRequest.getRequestURI()</code> method.
      * <p>
      * The type of the attribute value is <code>java.lang.String</code>.
      */
-    public static final String ERROR_REQUEST_URI = "javax.servlet.error.request_uri";
+    public static final String ERROR_REQUEST_URI = "jakarta.servlet.error.request_uri";
 
     /**
      * The name of the request attribute containing the name of the servlet
      * which caused the error handling (value is
-     * "javax.servlet.error.servlet_name").
+     * "jakarta.servlet.error.servlet_name").
      * <p>
      * The type of the attribute value is <code>java.lang.String</code>.
      */
-    public static final String ERROR_SERVLET_NAME = "javax.servlet.error.servlet_name";
+    public static final String ERROR_SERVLET_NAME = "jakarta.servlet.error.servlet_name";
 
     /**
      * The name of the request attribute containing the status code sent to the
-     * client (value is "javax.servlet.error.status_code"). Error handling
+     * client (value is "jakarta.servlet.error.status_code"). Error handling
      * servlets may set this status code on their response to the client or they
      * may choose to set another status code. For example a handler for
      * NOT_FOUND status (404) may opt to redirect to a new location and thus not
@@ -258,7 +258,7 @@ public class SlingConstants {
      * <p>
      * The type of the attribute value is <code>java.lang.Integer</code>.
      */
-    public static final String ERROR_STATUS = "javax.servlet.error.status_code";
+    public static final String ERROR_STATUS = "jakarta.servlet.error.status_code";
 
     /**
      * The topic for the OSGi event which is sent when a resource has been added

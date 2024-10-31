@@ -19,8 +19,8 @@
 
 package org.apache.sling.api.request;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletRequest;
 
 /**
  * represents an event published by the Sling engine while

@@ -22,7 +22,7 @@ import java.util.Iterator;
 
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.osgi.annotation.versioning.ConsumerType;
 

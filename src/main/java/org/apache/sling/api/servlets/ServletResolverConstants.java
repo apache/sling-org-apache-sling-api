@@ -145,7 +145,7 @@ public final class ServletResolverConstants {
      * <code>component.name</code> property or the <code>service.pid</code>
      * is used. If none of the three properties is defined, the Servlet is
      * ignored.
-     * @see javax.servlet.ServletConfig#getServletName()
+     * @see jakarta.servlet.ServletConfig#getServletName()
      */
     public static final String SLING_SERVLET_NAME = "sling.core.servletName";
 

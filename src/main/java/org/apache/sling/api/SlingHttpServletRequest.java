@@ -25,9 +25,9 @@ import java.util.ResourceBundle;
 
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.sling.api.adapter.Adaptable;
 import org.apache.sling.api.request.RequestDispatcherOptions;

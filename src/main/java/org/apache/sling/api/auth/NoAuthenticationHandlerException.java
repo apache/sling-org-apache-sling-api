@@ -23,11 +23,11 @@ import org.apache.sling.api.SlingException;
 /**
  * The <code>NoAuthenticationHandlerException</code> is thrown to indicate that
  * the
- * {@link Authenticator#login(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)}
+ * {@link Authenticator#login(jakarta.servlet.http.HttpServletRequest, jakarta.servlet.http.HttpServletResponse)}
  * method could not find a way to authenticate the request user.
  * <p>
  * This exception is thrown without a message. The caller of the
- * {@link Authenticator#login(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)}
+ * {@link Authenticator#login(jakarta.servlet.http.HttpServletRequest, jakarta.servlet.http.HttpServletResponse)}
  * method called is expected to immediately handle this exception and not to
  * forward it up the call chain.
  * <p>

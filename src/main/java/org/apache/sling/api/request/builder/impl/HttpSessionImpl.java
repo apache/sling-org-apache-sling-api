@@ -24,8 +24,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpSession;
 
 /**
  * Internal {@link HttpSession} implementation.
@@ -148,7 +148,7 @@ public class HttpSessionImpl implements HttpSession {
     // --- unsupported operations ---
     @Override
     @SuppressWarnings("deprecation")
-    public javax.servlet.http.HttpSessionContext getSessionContext() {
+    public jakarta.servlet.http.HttpSessionContext getSessionContext() {
         throw new UnsupportedOperationException();
     }
 }

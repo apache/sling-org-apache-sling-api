@@ -23,9 +23,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequestWrapper;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.request.RequestDispatcherOptions;

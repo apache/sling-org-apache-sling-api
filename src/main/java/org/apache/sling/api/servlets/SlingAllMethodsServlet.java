@@ -21,7 +21,7 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
-import javax.servlet.ServletException;
+import jakarta.servlet.ServletException;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;

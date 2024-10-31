@@ -24,9 +24,9 @@ import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
-import javax.servlet.Servlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.Servlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.servlets.HttpConstants;

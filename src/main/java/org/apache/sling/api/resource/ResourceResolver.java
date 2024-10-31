@@ -24,7 +24,7 @@ import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.sling.api.adapter.Adaptable;
 import org.apache.sling.api.resource.mapping.ResourceMapper;

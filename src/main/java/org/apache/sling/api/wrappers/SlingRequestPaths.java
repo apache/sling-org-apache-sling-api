@@ -18,12 +18,12 @@
  */
 package org.apache.sling.api.wrappers;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * This class is not a "wrapper" per se, but computes the correct path info,
  * request URI, etc. for included requests. When including a request via
- * {@link javax.servlet.RequestDispatcher}, the Servlet API specifies that
+ * {@link jakarta.servlet.RequestDispatcher}, the Servlet API specifies that
  * target paths of the included request are available as request attributes.
  * {@code Request.getPathInfo()}, for example will return the value for the
  * including request, *not* for the included one.
@@ -37,31 +37,31 @@ public class SlingRequestPaths {
      * Attribute name used by the RequestDispatcher to indicate the context path
      * of the included request, as a String.
      */
-    public static final String INCLUDE_CONTEXT_PATH = "javax.servlet.include.context_path";
+    public static final String INCLUDE_CONTEXT_PATH = "jakarta.servlet.include.context_path";
 
     /**
      * Attribute name used by the RequestDispatcher to indicate the path info of
      * the included request, as a String.
      */
-    public static final String INCLUDE_PATH_INFO = "javax.servlet.include.path_info";
+    public static final String INCLUDE_PATH_INFO = "jakarta.servlet.include.path_info";
 
     /**
      * Attribute name used by the RequestDispatcher to indicate the query string
      * of the included request, as a String.
      */
-    public static final String INCLUDE_QUERY_STRING = "javax.servlet.include.query_string";
+    public static final String INCLUDE_QUERY_STRING = "jakarta.servlet.include.query_string";
 
     /**
      * Attribute name used by the RequestDispatcher to indicate the request URI
      * of the included request, as a String.
      */
-    public static final String INCLUDE_REQUEST_URI = "javax.servlet.include.request_uri";
+    public static final String INCLUDE_REQUEST_URI = "jakarta.servlet.include.request_uri";
 
     /**
      * Attribute name used by the RequestDispatcher to indicate the servlet path
      * of the included request, as a String.
      */
-    public static final String INCLUDE_SERVLET_PATH = "javax.servlet.include.servlet_path";
+    public static final String INCLUDE_SERVLET_PATH = "jakarta.servlet.include.servlet_path";
 
     /**
      * Return the context path for r, using the appropriate request attribute if

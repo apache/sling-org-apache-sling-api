@@ -18,7 +18,7 @@
  */
 package org.apache.sling.api;
 
-import javax.servlet.ServletException;
+import jakarta.servlet.ServletException;
 
 /**
  * The <code>SlingServletException</code> is a runtime exception wrapper for

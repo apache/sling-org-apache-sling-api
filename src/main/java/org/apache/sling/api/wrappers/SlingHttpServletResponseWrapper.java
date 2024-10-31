@@ -18,7 +18,7 @@
  */
 package org.apache.sling.api.wrappers;
 
-import javax.servlet.http.HttpServletResponseWrapper;
+import jakarta.servlet.http.HttpServletResponseWrapper;
 
 import org.apache.sling.api.SlingHttpServletResponse;
 
