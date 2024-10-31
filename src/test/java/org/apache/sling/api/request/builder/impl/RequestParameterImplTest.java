@@ -28,8 +28,8 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
-import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
 public class RequestParameterImplTest {
@@ -42,7 +42,10 @@ public class RequestParameterImplTest {
         assertArrayEquals("bar".getBytes(StandardCharsets.UTF_8), param.get());
         assertNull(param.getContentType());  // compare with https://github.com/apache/sling-org-apache-sling-engine/blob/8b6b5b273f667b7e156b37a791493b00b87cc733/src/main/java/org/apache/sling/engine/impl/parameters/ContainerRequestParameter.java#L73
         try (InputStream is = param.getInputStream()) {
-            byte[] actualValue = IOUtils.toByteArray(is);
+            byte[] actualValue = new byte[30];
+            int length = is.read(actualValue);
+            assertEquals(3, length);
+            actualValue = Arrays.copyOfRange(actualValue, 0, length);
             assertArrayEquals("bar".getBytes(StandardCharsets.UTF_8), actualValue);
         }
         assertNotNull(param.getInputStream());
@@ -61,7 +64,10 @@ public class RequestParameterImplTest {
         assertArrayEquals(value, param.get());
         assertNull(param.getContentType());
         try (InputStream is = param.getInputStream()) {
-            byte[] actualValue = IOUtils.toByteArray(is);
+            byte[] actualValue = new byte[30];
+            int length = is.read(actualValue);
+            assertEquals(3, length);
+            actualValue = Arrays.copyOfRange(actualValue, 0, length);
             assertArrayEquals(value, actualValue);
         }
         assertEquals("filename", param.getFileName());

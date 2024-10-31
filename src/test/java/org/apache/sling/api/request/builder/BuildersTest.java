@@ -27,8 +27,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.request.RequestParameter;
 import org.apache.sling.api.resource.Resource;
@@ -106,7 +106,10 @@ public class BuildersTest {
         assertNotNull(rp);
         assertEquals("key", rp.getName());
         try (InputStream is = rp.getInputStream()) {
-            byte[] actualValue = IOUtils.toByteArray(is);
+            byte[] actualValue = new byte[30];
+            int length = is.read(actualValue);
+            assertEquals(value.length, length);
+            actualValue = Arrays.copyOfRange(actualValue, 0, length);
             assertArrayEquals(value, actualValue);
         }
         assertEquals(value.length, rp.getSize());

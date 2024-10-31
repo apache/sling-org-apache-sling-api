@@ -28,13 +28,13 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.commons.testing.sling.MockResource;
-import org.apache.sling.commons.testing.sling.MockSlingHttpServletRequest;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceMetadata;
+import org.mockito.Mockito;
 
 import junit.framework.TestCase;
 
 public class RequestUtilTest extends TestCase {
-
 
     public void testHandleIfModifiedSince(){
         assertTrue(RequestUtil.handleIfModifiedSince(getMockRequest(1309268989938L,1309269042730L),getMockResponse()));
@@ -44,18 +44,15 @@ public class RequestUtilTest extends TestCase {
     }
 
     protected SlingHttpServletRequest getMockRequest(final long modificationTime, final long ifModifiedSince) {
-        final String resourcePath = "foo";
-        final MockSlingHttpServletRequest r = new MockSlingHttpServletRequest(resourcePath, null, null, null, null) {
-            @Override
-            public long getDateHeader(String name) {
-                return ifModifiedSince;
-            }
-
-        };
+        SlingHttpServletRequest r = Mockito.mock(SlingHttpServletRequest.class);
+        Mockito.when(r.getDateHeader(Mockito.anyString())).thenReturn(ifModifiedSince);
         final String path = "/foo/node";
-        final MockResource mr = new MockResource(null, path, null) {};
-        mr.getResourceMetadata().setModificationTime(modificationTime);
-        r.setResource(mr);
+        final Resource mr = Mockito.mock(Resource.class);
+        Mockito.when(mr.getPath()).thenReturn(path);
+        final ResourceMetadata metadata = new ResourceMetadata();
+        metadata.setModificationTime(modificationTime);
+        Mockito.when(mr.getResourceMetadata()).thenReturn(metadata);
+        Mockito.when(r.getResource()).thenReturn(mr);
         return r;
     }
 
@@ -67,7 +64,6 @@ public class RequestUtilTest extends TestCase {
 
         assertNull(RequestUtil.parserAcceptHeader("compress;q=0.5, gzip;q=1.0").get("compres"));
     }
-
 
     protected HttpServletResponse getMockResponse() {
 
