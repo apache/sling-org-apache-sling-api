@@ -35,7 +35,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * A very simple login script (using ESP here) could be implemented like this:
  *
  * <pre>
- * var auth = sling.getService(org.apache.sling.commons.auth.Authenticator);
+ * var auth = sling.getService(org.apache.sling.api.auth.Authenticator);
  * if (auth != null) {
  *     try {
  *         auth.login(request, response);
@@ -54,7 +54,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * if (request.authType) {
  *     // not logged in at all, no need to logout
  * } else {
- *     var auth = sling.getService(org.apache.sling.commons.auth.Authenticator);
+ *     var auth = sling.getService(org.apache.sling.api.auth.Authenticator);
  *     if (auth != null) {
  *         auth.logout(request, response);
  *     } else {
