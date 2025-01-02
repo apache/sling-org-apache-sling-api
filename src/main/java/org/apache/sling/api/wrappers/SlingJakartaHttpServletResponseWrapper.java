@@ -18,39 +18,38 @@
  */
 package org.apache.sling.api.wrappers;
 
-import javax.servlet.http.HttpServletResponseWrapper;
+import jakarta.servlet.http.HttpServletResponseWrapper;
 
-import org.apache.sling.api.SlingHttpServletResponse;
+import org.apache.sling.api.SlingJakartaHttpServletResponse;
 
 /**
- * The <code>SlingHttpServletResponseWrapper</code> class is a default wrapper
- * class around a {@link SlingHttpServletResponse} which may be extended to
+ * The <code>SlingJakartaHttpServletResponseWrapper</code> class is a default wrapper
+ * class around a {@link SlingJakartaHttpServletResponse} which may be extended to
  * amend the functionality of the original response object.
  *
- * There's nothing interesting to wrap currently, as the SlingHttpServletResponse
+ * There's nothing interesting to wrap currently, as the SlingJakartaHttpServletResponse
  * interface is empty.
- * So this exists only for symmetry with {@link SlingHttpServletRequestWrapper}
- * @deprecated Use {@link SlingJakartaHttpServletResponseWrapper}
+ * So this exists only for symmetry with {@link SlingJakartaHttpServletRequestWrapper}
+ * @since 2.9.0
  */
-@Deprecated
-public class SlingHttpServletResponseWrapper extends HttpServletResponseWrapper
-        implements SlingHttpServletResponse {
+public class SlingJakartaHttpServletResponseWrapper extends HttpServletResponseWrapper
+        implements SlingJakartaHttpServletResponse {
 
     /**
      * Create a wrapper for the supplied wrappedRequest
      * @param wrappedResponse The response
      */
-    public SlingHttpServletResponseWrapper(SlingHttpServletResponse wrappedResponse) {
+    public SlingJakartaHttpServletResponseWrapper(SlingJakartaHttpServletResponse wrappedResponse) {
         super(wrappedResponse);
     }
 
     /**
-     * Return the original {@link SlingHttpServletResponse} object wrapped by
+     * Return the original {@link SlingJakartaHttpServletResponse} object wrapped by
      * this.
      * @return The wrapped response.
      */
-    public SlingHttpServletResponse getSlingResponse() {
-        return (SlingHttpServletResponse) getResponse();
+    public SlingJakartaHttpServletResponse getSlingResponse() {
+        return (SlingJakartaHttpServletResponse) getResponse();
     }
 
     @Override

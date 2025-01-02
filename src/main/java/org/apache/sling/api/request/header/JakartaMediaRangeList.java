@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Facilitates parsing of the Accept HTTP request header.
  * See <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">RFC 2616 section 14.1</a>
+ * @since 1.1.0
  */
 @ConsumerType
 public class JakartaMediaRangeList extends TreeSet<JakartaMediaRangeList.MediaRange> {

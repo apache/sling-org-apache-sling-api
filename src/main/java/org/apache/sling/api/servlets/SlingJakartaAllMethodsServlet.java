@@ -21,14 +21,14 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
-import javax.servlet.ServletException;
+import jakarta.servlet.ServletException;
 
-import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.SlingHttpServletResponse;
+import org.apache.sling.api.SlingJakartaHttpServletRequest;
+import org.apache.sling.api.SlingJakartaHttpServletResponse;
 
 /**
  * Helper base class for data modifying Servlets used in Sling. This class
- * extends the {@link SlingSafeMethodsServlet} by support for the <em>POST</em>,
+ * extends the {@link SlingJakartaSafeMethodsServlet} by support for the <em>POST</em>,
  * <em>PUT</em> and <em>DELETE</em> methods.
  * <p>
  * Implementors note: The methods in this class are all declared to throw the
@@ -36,18 +36,17 @@ import org.apache.sling.api.SlingHttpServletResponse;
  * throwing their Sling RuntimeException counter parts. This is done to easy the
  * integration with traditional servlets.
  *
- * @see SlingSafeMethodsServlet for more information on supporting more HTTP
+ * @since 2.5.0
+ * @see SlingJakartaSafeMethodsServlet for more information on supporting more HTTP
  *      methods
- * @deprecated Use {@link SlingJakartaAllMethodsServlet} instead
  */
-@Deprecated
-public class SlingAllMethodsServlet extends SlingSafeMethodsServlet {
+public class SlingJakartaAllMethodsServlet extends SlingJakartaSafeMethodsServlet {
 
     private static final long serialVersionUID = -7960975481323952419L;
 
     /**
      * Called by the
-     * {@link #mayService(SlingHttpServletRequest, SlingHttpServletResponse)} method to
+     * {@link #mayService(SlingJakartaHttpServletRequest, SlingJakartaHttpServletResponse)} method to
      * handle an HTTP <em>POST</em> request.
      * <p>
      * This default implementation reports back to the client that the method is
@@ -62,15 +61,15 @@ public class SlingAllMethodsServlet extends SlingSafeMethodsServlet {
      * @throws IOException If the error status cannot be reported back to the
      *             client.
      */
-    protected void doPost(@NotNull SlingHttpServletRequest request,
-            @NotNull SlingHttpServletResponse response) throws ServletException,
+    protected void doPost(@NotNull SlingJakartaHttpServletRequest request,
+            @NotNull SlingJakartaHttpServletResponse response) throws ServletException,
             IOException {
         handleMethodNotImplemented(request, response);
     }
 
     /**
      * Called by the
-     * {@link #mayService(SlingHttpServletRequest, SlingHttpServletResponse)} method to
+     * {@link #mayService(SlingJakartaHttpServletRequest, SlingJakartaHttpServletResponse)} method to
      * handle an HTTP <em>PUT</em> request.
      * <p>
      * This default implementation reports back to the client that the method is
@@ -85,15 +84,15 @@ public class SlingAllMethodsServlet extends SlingSafeMethodsServlet {
      * @throws IOException If the error status cannot be reported back to the
      *             client.
      */
-    protected void doPut(@NotNull SlingHttpServletRequest request,
-            @NotNull SlingHttpServletResponse response) throws ServletException,
+    protected void doPut(@NotNull SlingJakartaHttpServletRequest request,
+            @NotNull SlingJakartaHttpServletResponse response) throws ServletException,
             IOException {
         handleMethodNotImplemented(request, response);
     }
 
     /**
      * Called by the
-     * {@link #mayService(SlingHttpServletRequest, SlingHttpServletResponse)} method to
+     * {@link #mayService(SlingJakartaHttpServletRequest, SlingJakartaHttpServletResponse)} method to
      * handle an HTTP <em>DELETE</em> request.
      * <p>
      * This default implementation reports back to the client that the method is
@@ -108,8 +107,8 @@ public class SlingAllMethodsServlet extends SlingSafeMethodsServlet {
      * @throws IOException If the error status cannot be reported back to the
      *             client.
      */
-    protected void doDelete(@NotNull SlingHttpServletRequest request,
-            @NotNull SlingHttpServletResponse response) throws ServletException,
+    protected void doDelete(@NotNull SlingJakartaHttpServletRequest request,
+            @NotNull SlingJakartaHttpServletResponse response) throws ServletException,
             IOException {
         handleMethodNotImplemented(request, response);
     }
@@ -131,8 +130,8 @@ public class SlingAllMethodsServlet extends SlingSafeMethodsServlet {
      * @throws ServletException Forwarded from any of the dispatched methods
      * @throws IOException Forwarded from any of the dispatched methods
      */
-    protected boolean mayService(@NotNull SlingHttpServletRequest request,
-            @NotNull SlingHttpServletResponse response) throws ServletException,
+    protected boolean mayService(@NotNull SlingJakartaHttpServletRequest request,
+            @NotNull SlingJakartaHttpServletResponse response) throws ServletException,
             IOException {
 
         // assume the method is known for now
@@ -161,7 +160,7 @@ public class SlingAllMethodsServlet extends SlingSafeMethodsServlet {
 
     /**
      * Helper method called by
-     * {@link #doOptions(SlingHttpServletRequest, SlingHttpServletResponse)} to calculate
+     * {@link #doOptions(SlingJakartaHttpServletRequest, SlingJakartaHttpServletResponse)} to calculate
      * the value of the <em>Allow</em> header sent as the response to the HTTP
      * <em>OPTIONS</em> request.
      * <p>
@@ -180,7 +179,7 @@ public class SlingAllMethodsServlet extends SlingSafeMethodsServlet {
         StringBuffer allowBuf = super.getAllowedRequestMethods(declaredMethods);
 
         // add more method names depending on the methods found
-        String className = SlingAllMethodsServlet.class.getName();
+        String className = SlingJakartaAllMethodsServlet.class.getName();
         if (isMethodValid(declaredMethods.get("doPost"), className)) {
             allowBuf.append(", ").append(HttpConstants.METHOD_POST);
 

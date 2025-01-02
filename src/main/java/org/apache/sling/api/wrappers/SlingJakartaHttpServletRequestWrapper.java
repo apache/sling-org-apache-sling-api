@@ -23,11 +23,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequestWrapper;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequestWrapper;
 
-import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingJakartaHttpServletRequest;
 import org.apache.sling.api.request.RequestDispatcherOptions;
 import org.apache.sling.api.request.RequestParameter;
@@ -38,30 +37,29 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 
 /**
- * The <code>SlingHttpServletRequestWrapper</code> class is a default wrapper
- * class around a {@link SlingHttpServletRequest} which may be extended to amend
+ * The <code>SlingJakartaHttpServletRequestWrapper</code> class is a default wrapper
+ * class around a {@link SlingJakartaHttpServletRequest} which may be extended to amend
  * the functionality of the original request object.
- * @deprecated Use {@link SlingJakartaHttpServletRequest}
+ * @since 2.9.0
  */
-@Deprecated
-public class SlingHttpServletRequestWrapper extends HttpServletRequestWrapper
-        implements SlingHttpServletRequest {
+public class SlingJakartaHttpServletRequestWrapper extends HttpServletRequestWrapper
+        implements SlingJakartaHttpServletRequest {
 
     /**
      * Create a wrapper for the supplied wrappedRequest
      * @param wrappedRequest The request.
      */
-    public SlingHttpServletRequestWrapper(SlingHttpServletRequest wrappedRequest) {
+    public SlingJakartaHttpServletRequestWrapper(SlingJakartaHttpServletRequest wrappedRequest) {
         super(wrappedRequest);
     }
 
     /**
-     * Return the original {@link SlingHttpServletRequest} object wrapped by
+     * Return the original {@link SlingJakartaHttpServletRequest} object wrapped by
      * this.
      * @return The wrapped request.
      */
-    public SlingHttpServletRequest getSlingRequest() {
-        return (SlingHttpServletRequest) getRequest();
+    public SlingJakartaHttpServletRequest getSlingRequest() {
+        return (SlingJakartaHttpServletRequest) getRequest();
     }
 
     @Override

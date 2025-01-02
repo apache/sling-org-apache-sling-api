@@ -1,13 +1,6 @@
 Open questions:
 - org/apache/sling/api/SlingConstants.java: Deprecate as jakarta servlet api provides them (Dispatcher)?
-- org/apache/sling/api/scripting/SlingBindings.java: Needs new methods, name?
-- org/apache/sling/api/scripting/SlingScriptHelper.java: Needs new interface, name?
 - org/apache/sling/api/servlets/OptingServlet.java: Should we deprecate this?
-- org/apache/sling/api/servlets/ErrorHandler.java: needs new interface, name?
-- org/apache/sling/api/servlets/SlingAllMethodsServlet.java: needs new class, name?
-- org/apache/sling/api/servlets/SlingSafeMethodsServlet.java: needs new class, name?
-- org/apache/sling/api/wrappers/SlingHttpServletResponseWrapper.java: needs new class, name?
-- org/apache/sling/api/wrappers/SlingHttpServletRequestWrapper.java: needs new class, name?
 - org/apache/sling/api/wrappers/SlingRequestPaths.java: Constants can be deprecated, methods copied?
 
 These files have been changed/copied:
@@ -24,9 +17,17 @@ These files have been changed/copied:
 - org/apache/sling/api/request/header/MediaRangeList.java: new class org/apache/sling/api/http/MediaRangeList.java (Class)
 - org/apache/sling/api/resource/ResourceResolver.java: added new methods: resolve, map (Provider Type)
 - org/apache/sling/api/resource/mapping/ResourceMapper.java: added new methods: getMapping, getAllMappings (Provider Type)
+- org/apache/sling/api/scripting/SlingBindings.java: New class SlingJakartaBindings
+- org/apache/sling/api/scripting/SlingScript.java: New class SlingJakartaScript
+- org/apache/sling/api/scripting/SlingScriptHelper.java: New class SlingJakartaScriptHelper
+- org/apache/sling/api/servlets/ErrorHandler.java: added new interface JakartaErrorHandler (Consumer Type)
 - org/apache/sling/api/servlets/ServletResolver.java: added new methods (Provider Type)
+- org/apache/sling/api/servlets/SlingAllMethodsServlet.java: added new class SlingJakartaAllMethodsServlet
+- org/apache/sling/api/servlets/SlingSafeMethodsServlet.java: added new class SlingJakartaSafeMethodsServlet
 - org/apache/sling/api/uri/SlingUriBuilder.java: added new method: createFrom (Class)
 - org/apache/sling/api/wrappers/ResourceResolverWrapper.java: added new methods from ResourceResolver (Class)
+- org/apache/sling/api/wrappers/SlingHttpServletRequestWrapper.java: new class SlingJakartaHttpServletRequestWrapper
+- org/apache/sling/api/wrappers/SlingHttpServletResponseWrapper.java: new class SlingJakartaHttpServletResponseWrapper
 
 These files contain references to javax.servlet, but do not require an alternative:
 - org/apache/sling/api/auth/NoAuthenticationHandlerException.java: only used in javadoc

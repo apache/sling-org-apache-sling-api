@@ -20,19 +20,18 @@ package org.apache.sling.api.servlets;
 
 import java.io.IOException;
 
-import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.SlingHttpServletResponse;
+import org.apache.sling.api.SlingJakartaHttpServletRequest;
+import org.apache.sling.api.SlingJakartaHttpServletResponse;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
- * The <code>ErrorHandler</code> defines the interface of the service used by
- * the Sling to handle calls to <code>HttpServletResponse.sendError</code> and
+ * The <code>JakartaErrorHandler</code> defines the interface of the service used by
+ * the Sling to handle calls to <code>jakarta.servlet.http.HttpServletResponse.sendError</code> and
  * to handle uncaught <code>Throwable</code>s.
- * @deprecated Use {@link JakartaErrorHandler} instead.
+ * @since 2.5
  */
-@Deprecated
 @ConsumerType
-public interface ErrorHandler {
+public interface JakartaErrorHandler {
 
     /**
      * Called to render a response for a HTTP status code. This method should
@@ -51,7 +50,7 @@ public interface ErrorHandler {
      *             response.
      */
     void handleError(int status, String message,
-            SlingHttpServletRequest request, SlingHttpServletResponse response)
+        SlingJakartaHttpServletRequest request, SlingJakartaHttpServletResponse response)
             throws IOException;
 
     /**
@@ -68,7 +67,7 @@ public interface ErrorHandler {
      * @throws IOException May be thrown if an error occurrs sending the
      *             response.
      */
-    void handleError(Throwable throwable, SlingHttpServletRequest request,
-            SlingHttpServletResponse response) throws IOException;
+    void handleError(Throwable throwable, SlingJakartaHttpServletResponse request,
+        SlingJakartaHttpServletRequest response) throws IOException;
 
 }

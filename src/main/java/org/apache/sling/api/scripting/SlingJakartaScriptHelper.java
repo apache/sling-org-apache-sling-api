@@ -20,43 +20,41 @@ package org.apache.sling.api.scripting;
 
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
-
-import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.SlingHttpServletResponse;
+import org.apache.sling.api.SlingJakartaHttpServletRequest;
+import org.apache.sling.api.SlingJakartaHttpServletResponse;
 import org.apache.sling.api.request.RequestDispatcherOptions;
 import org.apache.sling.api.resource.Resource;
 
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
- * The <code>SlingScriptHelper</code> interface defines the API of a helper
+ * The <code>SlingJakartaScriptHelper</code> interface defines the API of a helper
  * class which is provided to the scripts called from sling through the global
- * <code>{@link SlingBindings#SLING sling}</code> variable.
- * @deprecated Use {@link SlingJakartaBindings} instead.
+ * <code>{@link SlingJakartaBindings#SLING sling}</code> variable.
+ * @since 2.6.0
  */
-@Deprecated
 @ProviderType
-public interface SlingScriptHelper {
+public interface SlingJakartaScriptHelper {
 
     /**
-     * Returns the {@link SlingHttpServletRequest} representing the input of the
+     * Returns the {@link SlingJakartaHttpServletRequest} representing the input of the
      * request.
      * @return The request
      */
-    @NotNull SlingHttpServletRequest getRequest();
+    @NotNull SlingJakartaHttpServletRequest getRequest();
 
     /**
-     * Returns the {@link SlingHttpServletResponse} representing the output of
+     * Returns the {@link SlingJakartaHttpServletResponse} representing the output of
      * the request.
      * @return The response
      */
-    @NotNull SlingHttpServletResponse getResponse();
+    @NotNull SlingJakartaHttpServletResponse getResponse();
 
     /**
-     * Returns the {@link SlingScript} being called to handle the request.
+     * Returns the {@link SlingJakartaScriptHelper} being called to handle the request.
      * @return The script
      */
-    @NotNull SlingScript getScript();
+    @NotNull SlingJakartaScript getScript();
 
     /**
      * Same as {@link #include(String,RequestDispatcherOptions)}, but using

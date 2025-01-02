@@ -21,31 +21,28 @@ package org.apache.sling.api.scripting;
 import java.io.PrintWriter;
 import java.io.Reader;
 
-import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.SlingHttpServletResponse;
+import org.apache.sling.api.SlingJakartaHttpServletRequest;
+import org.apache.sling.api.SlingJakartaHttpServletResponse;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 /**
- * The <code>SlingBindings</code> class is used to prepare global variables
+ * The <code>SlingJakartaBindings</code> class is used to prepare global variables
  * for script execution. The constants in this class define names of variables
  * which <em>MUST</em> or <em>MAY</em> be provided for the script execution.
  * Other variables may be define as callers see fit.
- * @deprecated Use {@link SlingJakartaBindings} instead.
+ * @since 2.6.0
  */
-@Deprecated
-public class SlingBindings extends LazyBindings {
+public class SlingJakartaBindings extends LazyBindings {
 
-    private static final long serialVersionUID = 209505693646323450L;
-
-    /**
+   /**
      * The name of the global scripting variable providing the
-     * {@link org.apache.sling.api.SlingHttpServletRequest} object (value is
+     * {@link org.apache.sling.api.SlingJakartaHttpServletRequest} object (value is
      * "request"). The value of the scripting variable is the same as that
      * returned by the
-     * {@link org.apache.sling.api.scripting.SlingScriptHelper#getRequest()}
+     * {@link org.apache.sling.api.scripting.SlingJakartaScriptHelper#getRequest()}
      * method.
      * <p>
      * This bound variable is required in the bindings given the script.
@@ -54,10 +51,10 @@ public class SlingBindings extends LazyBindings {
 
     /**
      * The name of the global scripting variable providing the
-     * {@link org.apache.sling.api.SlingHttpServletResponse} object (value is
+     * {@link org.apache.sling.api.SlingJakartaHttpServletResponse} object (value is
      * "response"). The value of the scripting variable is the same as that
      * returned by the
-     * {@link org.apache.sling.api.scripting.SlingScriptHelper#getResponse()}
+     * {@link org.apache.sling.api.scripting.SlingJakartaScriptHelper#getResponse()}
      * method.
      * <p>
      * This bound variable is required in the bindings given the script.
@@ -74,7 +71,7 @@ public class SlingBindings extends LazyBindings {
 
     /**
      * The name of the global scripting variable providing the
-     * {@link org.apache.sling.api.scripting.SlingScriptHelper} for the request
+     * {@link org.apache.sling.api.scripting.SlingJakartaScriptHelper} for the request
      * (value is "sling").
      * <p>
      * This bound variable is optional. If existing, the script helper instance
@@ -89,12 +86,12 @@ public class SlingBindings extends LazyBindings {
      * The name of the global scripting variable providing the
      * {@link org.apache.sling.api.resource.Resource} object (value is
      * "resource"). The value of the scripting variable is the same as that
-     * returned by the <code>SlingScriptHelper.getRequest().getResource()</code>
+     * returned by the <code>SlingJakartaScriptHelper.getRequest().getResource()</code>
      * method.
      * <p>
      * This bound variable is optional. If existing, the resource must be bound
      * to the same resource as returned by the
-     * <code>SlingHttpServletRequest.getResource()</code> method. If this
+     * <code>SlingJakartaHttpServletRequest.getResource()</code> method. If this
      * variable is not bound, the script implementation will bind it before
      * actually evaluating the script.
      */
@@ -105,13 +102,13 @@ public class SlingBindings extends LazyBindings {
      * The name of the global scripting variable providing the
      * {@link org.apache.sling.api.resource.ResourceResolver} object (value is
      * "resolver"). The value of the scripting variable is the same as that
-     * returned by the {@code SlingScriptHelper.getRequest().getResourceResolver()}
+     * returned by the {@code SlingJakartaScriptHelper.getRequest().getResourceResolver()}
      * method.
      * </p>
      * <p>
      * This bound variable is optional. If existing, the resource resolver must be
      * bound to the same resolver as returned by the {@code
-     * SlingHttpServletRequest.getResource().getResourceResolver} method. If this
+     * SlingJakartaHttpServletRequest.getResource().getResourceResolver} method. If this
      * variable is not bound, the script implementation will bind it before actually
      * evaluating the script.
      * </p>
@@ -122,7 +119,7 @@ public class SlingBindings extends LazyBindings {
      * The name of the global scripting variable providing the
      * <code>java.io.PrintWriter</code> object to return the response content
      * (value is "out"). The value of the scripting variable is the same as that
-     * returned by the <code>SlingScriptHelper.getResponse().getWriter()</code>
+     * returned by the <code>SlingJakartaScriptHelper.getResponse().getWriter()</code>
      * method.
      * <p>
      * Note, that it may be advisable to implement a lazy acquiring writer for
@@ -131,7 +128,7 @@ public class SlingBindings extends LazyBindings {
      * <p>
      * This bound variable is optional. If existing, the resource must be bound
      * to the same writer as returned by the
-     * <code>SlingHttpServletResponse.getWriter()</code> method of the
+     * <code>SlingJakartaHttpServletResponse.getWriter()</code> method of the
      * response object bound to the {@link #RESPONSE} variable. If this variable
      * is not bound, the script implementation will bind it before actually
      * evaluating the script.
@@ -253,18 +250,18 @@ public class SlingBindings extends LazyBindings {
      * <code>null</code>.
      * @param request The request object.
      */
-    public void setRequest(SlingHttpServletRequest request) {
+    public void setRequest(SlingJakartaHttpServletRequest request) {
         this.safePut(REQUEST, request);
     }
 
     /**
      * Returns the {@link #REQUEST} property if not <code>null</code> and a
-     * <code>SlingHttpServletRequest</code> instance. Otherwise
+     * <code>SlingJakartaHttpServletRequest</code> instance. Otherwise
      * <code>null</code> is returned.
      * @return The request object or {@code null}
      */
-    public @Nullable SlingHttpServletRequest getRequest() {
-        return this.get(REQUEST, SlingHttpServletRequest.class);
+    public @Nullable SlingJakartaHttpServletRequest getRequest() {
+        return this.get(REQUEST, SlingJakartaHttpServletRequest.class);
     }
 
     /**
@@ -328,18 +325,18 @@ public class SlingBindings extends LazyBindings {
      * <code>null</code>.
      * @param response The response
      */
-    public void setResponse(SlingHttpServletResponse response) {
+    public void setResponse(SlingJakartaHttpServletResponse response) {
         this.safePut(RESPONSE, response);
     }
 
     /**
      * Returns the {@link #RESPONSE} property if not <code>null</code> and a
-     * <code>SlingHttpServletResponse</code> instance. Otherwise
+     * <code>SlingJakartaHttpServletResponse</code> instance. Otherwise
      * <code>null</code> is returned.
      * @return The response or {@code null}.
      */
-    public @Nullable SlingHttpServletResponse getResponse() {
-        return this.get(RESPONSE, SlingHttpServletResponse.class);
+    public @Nullable SlingJakartaHttpServletResponse getResponse() {
+        return this.get(RESPONSE, SlingJakartaHttpServletResponse.class);
     }
 
     /**
@@ -347,17 +344,17 @@ public class SlingBindings extends LazyBindings {
      * <code>null</code>.
      * @param sling The script helper
      */
-    public void setSling(SlingScriptHelper sling) {
+    public void setSling(SlingJakartaScriptHelper sling) {
         this.safePut(SLING, sling);
     }
 
     /**
      * Returns the {@link #SLING} property if not <code>null</code> and a
-     * <code>SlingScriptHelper</code> instance. Otherwise <code>null</code>
+     * <code>SlingJakartaScriptHelper</code> instance. Otherwise <code>null</code>
      * is returned.
      * @return The script helper or {@code null}.
      */
-    public @Nullable SlingScriptHelper getSling() {
-        return this.get(SLING, SlingScriptHelper.class);
+    public @Nullable SlingJakartaScriptHelper getSling() {
+        return this.get(SLING, SlingJakartaScriptHelper.class);
     }
 }

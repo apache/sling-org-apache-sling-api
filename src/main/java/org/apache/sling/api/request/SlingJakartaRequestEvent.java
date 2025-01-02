@@ -28,6 +28,7 @@ import jakarta.servlet.ServletRequest;
  * <p>
  * This class is not intended to be extended or instantiated by clients.
  *
+ * @since 2.8.0
  * @see org.apache.sling.api.request.SlingJakartaRequestListener
 */
 public class SlingJakartaRequestEvent {
