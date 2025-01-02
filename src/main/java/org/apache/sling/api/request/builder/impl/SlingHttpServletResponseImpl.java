@@ -36,6 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.adapter.SlingAdaptable;
+import org.apache.sling.api.request.builder.ResponseResult;
 import org.apache.sling.api.request.builder.SlingHttpServletResponseBuilder;
 import org.apache.sling.api.request.builder.SlingHttpServletResponseResult;
 import org.jetbrains.annotations.NotNull;
@@ -43,13 +44,13 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Internal {@link SlingHttpServletResponse} implementation.
  */
-public class SlingHttpServletResponseImpl 
-    extends SlingAdaptable 
+public class SlingHttpServletResponseImpl
+    extends SlingAdaptable
     implements SlingHttpServletResponseResult, SlingHttpServletResponseBuilder {
 
     /** Headers */
     private final HeaderSupport headerSupport = new HeaderSupport();
-    
+
     /** Cookies */
     private final Map<String, Cookie> cookies = new LinkedHashMap<>();
 
@@ -70,11 +71,11 @@ public class SlingHttpServletResponseImpl
     private int bufferSize = 8192;
 
     private ByteArrayOutputStream outputStream;
-    
+
     private ServletOutputStream servletOutputStream;
-    
+
     private PrintWriter printWriter;
-    
+
     /** Is the builder locked? */
     private boolean locked = false;
 
@@ -90,6 +91,14 @@ public class SlingHttpServletResponseImpl
         this.locked = true;
         this.reset();
         return this;
+    }
+
+    @Override
+    public @NotNull ResponseResult buildResponseResult() {
+        this.checkLocked();
+        this.locked = true;
+        this.reset();
+        return null; // TODO
     }
 
     private void checkCommitted() {
@@ -257,7 +266,7 @@ public class SlingHttpServletResponseImpl
                 public boolean isReady() {
                     return true;
                 }
-                
+
                 @Override
                 public void setWriteListener(final WriteListener writeListener) {
                     throw new UnsupportedOperationException();
@@ -324,7 +333,7 @@ public class SlingHttpServletResponseImpl
     @Override
     public long getContentLength() {
         return this.contentLength;
-    }    
+    }
 
     @Override
     public String getStatusMessage() {

@@ -16,25 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.sling.api;
+package org.apache.sling.api.http;
 
-import javax.servlet.ServletException;
+import jakarta.servlet.http.HttpServletResponse;
+
+import org.apache.sling.api.adapter.Adaptable;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
- * The <code>SlingServletException</code> is a runtime exception wrapper for
- * the Servlet API <code>ServletException</code>. This exception is used to
- * catch a <code>ServletException</code> and forward it as a runtime exception
- * to be handled at the outermost level.
+ * The <code>SlingHttpServletResponse</code> defines the interface to assist a
+ * servlet in creating and sending a response to the client.
+ * <p>
+ * This interface is currently empty and merely exists to parallel the
+ * {@link SlingHttpServletRequest} interface.
+ * <p>
+ * Starting with Sling API 2.0.6, this interface also extends the
+ * {@link Adaptable} interface.
  */
-public class SlingServletException extends SlingException {
+@ProviderType
+public interface SlingHttpServletResponse extends HttpServletResponse,
+        Adaptable {
 
-    private static final long serialVersionUID = 8666411662509951915L;
-
-    public SlingServletException(ServletException cause) {
-        super(cause);
-    }
-
-    public SlingServletException(jakarta.servlet.ServletException cause) {
-        super(cause);
-    }
 }

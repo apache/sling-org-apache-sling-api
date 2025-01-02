@@ -28,19 +28,19 @@ import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * Allows access to resource mappings
- * 
+ *
  * <p>This interface superceeds the resource mapping functionality present
  * in the {@link ResourceResolver}. Although the methods present in that
  * interface will continue to work, the resource mapper will provide better
  * APIs to access the resource mappings.</p>
- * 
+ *
  * <p>Implementations of this class are obtained by adapting a {@link ResourceResolver}
  * instance. As such, the mappings returned by its methods reflect the repository
- * permissions of the underyling resolver instance.</p> 
+ * permissions of the underyling resolver instance.</p>
  */
 @ProviderType
 public interface ResourceMapper {
-    
+
     /**
      * Returns a path mapped from the (resource) path applying the reverse
      * mapping used by the {@link ResourceResolver#resolve(String)} such that when the path is
@@ -94,17 +94,18 @@ public interface ResourceMapper {
      * @since 1.0.0 (Sling API Bundle 2.19.0)
      */
     @NotNull String getMapping(@NotNull String resourcePath, @NotNull HttpServletRequest request);
-    
+    @NotNull String getMapping(@NotNull String resourcePath, @NotNull jakarta.servlet.http.HttpServletRequest request);
+
     /**
      * Returns all possible mappings for a given {@code resourcePath} as paths.
-     * 
+     *
      * <p>
      * This method differs from the {@link #getMapping(String)} variant
      * by guaranteeing that all possible mappings are returned for a specified path.
-     * 
+     *
      * <p>
      * The mappings are not returned in any particular order.
-     * 
+     *
      * @param resourcePath The path for which to return a mapped path.
      * @return a collection of mapped URLs, in no particular order. May not be null or empty.
      * @throws IllegalStateException if the underlying resource resolver has already been
@@ -115,14 +116,14 @@ public interface ResourceMapper {
 
     /**
      * Returns all possible mappings for a given {@code resourcePath} as URLs.
-     * 
+     *
      * <p>
      * This method differs from the {@link #getMapping(String, HttpServletRequest)} variant
      * by guaranteeing that all possible mappings are returned for a specified path.
-     * 
+     *
      * <p>
      * The mappings are not returned in any particular order.
-     * 
+     *
      * @param resourcePath The path for which to return a mapped path.
      * @param request The http servlet request object which may be used to apply
      *            more mapping functionality.
@@ -133,4 +134,5 @@ public interface ResourceMapper {
      * @since 1.0.0 (Sling API Bundle 2.19.0)
      */
     Collection<String> getAllMappings(@NotNull String resourcePath, @NotNull HttpServletRequest request);
+    Collection<String> getAllMappings(@NotNull String resourcePath, @NotNull jakarta.servlet.http.HttpServletRequest request);
 }

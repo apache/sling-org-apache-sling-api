@@ -117,6 +117,7 @@ public interface Authenticator {
      * @throws IllegalStateException If the response has already been committed.
      */
     void login(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response);
+    void login(@NotNull jakarta.servlet.http.HttpServletRequest request, @NotNull jakarta.servlet.http.HttpServletResponse response);
 
     /**
      * Logs out if the current request is authenticated.
@@ -134,4 +135,5 @@ public interface Authenticator {
      * @throws IllegalStateException If the response has already been committed.
      */
     void logout(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response);
+    void logout(@NotNull jakarta.servlet.http.HttpServletRequest request, @NotNull jakarta.servlet.http.HttpServletResponse response);
 }

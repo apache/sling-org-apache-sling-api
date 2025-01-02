@@ -16,25 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.sling.api;
 
-import javax.servlet.ServletException;
+@Version("1.0.0")
+package org.apache.sling.api.http;
 
-/**
- * The <code>SlingServletException</code> is a runtime exception wrapper for
- * the Servlet API <code>ServletException</code>. This exception is used to
- * catch a <code>ServletException</code> and forward it as a runtime exception
- * to be handled at the outermost level.
- */
-public class SlingServletException extends SlingException {
+import org.osgi.annotation.versioning.Version;
 
-    private static final long serialVersionUID = 8666411662509951915L;
-
-    public SlingServletException(ServletException cause) {
-        super(cause);
-    }
-
-    public SlingServletException(jakarta.servlet.ServletException cause) {
-        super(cause);
-    }
-}

@@ -154,6 +154,36 @@ public class RequestUtil {
     }
 
     /**
+     * Utility method to return a name for the given servlet. This method
+     * applies the following algorithm to find a non-<code>null</code>,
+     * non-empty name:
+     * <ol>
+     * <li>If the servlet has a servlet config, the servlet name from the
+     * servlet config is taken.
+     * <li>Otherwise check the servlet info
+     * <li>Otherwise use the fully qualified name of the servlet class
+     * </ol>
+     *
+     * @param servlet The servlet
+     * @return The name of the servlet.
+     */
+    public static @NotNull String getServletName(@NotNull jakarta.servlet.Servlet servlet) {
+        String name = null;
+
+        if (servlet.getServletConfig() != null) {
+            name = servlet.getServletConfig().getServletName();
+        }
+        if (name == null || name.length() == 0) {
+            name = servlet.getServletInfo();
+        }
+        if (name == null || name.length() == 0) {
+            name = servlet.getClass().getName();
+        }
+
+        return name;
+    }
+
+    /**
      * Sets the named request attribute to the new value and returns the
      * previous value.
      *
@@ -165,6 +195,28 @@ public class RequestUtil {
      *         <code>null</code> if it was not set.
      */
     public static @Nullable Object setRequestAttribute(@NotNull HttpServletRequest request,
+            @NotNull String name, Object value) {
+        Object oldValue = request.getAttribute(name);
+        if (value == null) {
+            request.removeAttribute(name);
+        } else {
+            request.setAttribute(name, value);
+        }
+        return oldValue;
+    }
+
+    /**
+     * Sets the named request attribute to the new value and returns the
+     * previous value.
+     *
+     * @param request The request object whose attribute is to be set.
+     * @param name The name of the attribute to be set.
+     * @param value The new value of the attribute. If this is <code>null</code>
+     *            the attribte is actually removed from the request.
+     * @return The previous value of the named request attribute or
+     *         <code>null</code> if it was not set.
+     */
+    public static @Nullable Object setRequestAttribute(@NotNull jakarta.servlet.http.HttpServletRequest request,
             @NotNull String name, Object value) {
         Object oldValue = request.getAttribute(name);
         if (value == null) {
@@ -198,4 +250,26 @@ public class RequestUtil {
         return responseSet;
     }
 
+    /**
+     * Checks if the request contains a if-last-modified-since header and if the the
+	 * request's underlying resource has a jcr:lastModified property. if the properties were modified
+     * before the header a 304 is sent otherwise the response last modified header is set.
+     * @param req the request
+     * @param resp the response
+     * @return <code>true</code> if the response was set
+     */
+    public static boolean handleIfModifiedSince(@NotNull org.apache.sling.api.http.SlingHttpServletRequest req, @NotNull jakarta.servlet.http.HttpServletResponse resp){
+        boolean responseSet=false;
+        long lastModified=req.getResource().getResourceMetadata().getModificationTime();
+        if (lastModified!=-1){
+            long modifiedTime = lastModified/1000; //seconds
+            long ims = req.getDateHeader(HttpConstants.HEADER_IF_MODIFIED_SINCE)/1000; //seconds
+            if (modifiedTime <= ims) {
+                resp.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+                responseSet=true;
+            }
+            resp.setDateHeader(HttpConstants.HEADER_LAST_MODIFIED, lastModified);
+        }
+        return responseSet;
+    }
 }

@@ -36,4 +36,12 @@ public interface SlingHttpServletResponseBuilder {
      * @return a response object
      */
     @NotNull SlingHttpServletResponseResult build();
+
+    /**
+     * Builds the response. Once this method has been called, the builder must not be used anymore. In order to create a new response a new
+     * builder has to be used.
+     *
+     * @return a response object
+     */
+    @NotNull ResponseResult buildResponseResult();
 }

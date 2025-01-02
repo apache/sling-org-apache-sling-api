@@ -67,6 +67,9 @@ public class ResourceResolverWrapper implements ResourceResolver {
     public Resource resolve(@NotNull HttpServletRequest request, @NotNull String absPath) {
         return ResourceResolverResourceWrapper.wrap(this, wrapped.resolve(request, absPath));
     }
+    public Resource resolve(@NotNull jakarta.servlet.http.HttpServletRequest request, @NotNull String absPath) {
+        return ResourceResolverResourceWrapper.wrap(this, wrapped.resolve(request, absPath));
+    }
 
     /**
      * Wraps and returns the {@code Resource} obtained by calling {@code resolve} on the wrapped resource resolver.
@@ -106,6 +109,9 @@ public class ResourceResolverWrapper implements ResourceResolver {
 
     @Override
     public String map(@NotNull HttpServletRequest request, @NotNull String resourcePath) {
+        return wrapped.map(request, resourcePath);
+    }
+    public String map(@NotNull jakarta.servlet.http.HttpServletRequest request, @NotNull String resourcePath) {
         return wrapped.map(request, resourcePath);
     }
 
@@ -348,7 +354,7 @@ public class ResourceResolverWrapper implements ResourceResolver {
     public Resource move(String srcAbsPath, String destAbsPath) throws PersistenceException {
         return ResourceResolverResourceWrapper.wrap(this, wrapped.move(srcAbsPath, destAbsPath));
     }
-    
+
     @Override
     public Map<String,Object> getPropertyMap() {
         return wrapped.getPropertyMap();

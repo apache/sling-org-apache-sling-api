@@ -211,6 +211,7 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * @see <a href="https://sling.apache.org/documentation/the-sling-engine/mappings-for-resource-resolution.html">Mappings for Resource Resolution</a>
      */
     @NotNull Resource resolve(@NotNull HttpServletRequest request, @NotNull String absPath);
+    @NotNull Resource resolve(@NotNull jakarta.servlet.http.HttpServletRequest request, @NotNull String absPath);
 
     /**
      * Resolves the resource from the given absolute path. Returns a
@@ -287,15 +288,15 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * {@link #resolve(String)} method.
      * <p>
      * This method also does percent-encoding before returning the (request) path
-     * (with charset UTF-8). Due to this calling this method multiple times in a nested 
+     * (with charset UTF-8). Due to this calling this method multiple times in a nested
      * fashion might lead to an invalid (request) path which can subsequently not
-     * be resolved via {@link #resolve(String)}. 
+     * be resolved via {@link #resolve(String)}.
      *
      * @param resourcePath The path for which to return a mapped path.
      * @return The mapped path or {@code resourcePath} in case no mapping is found.
      * @throws IllegalStateException if this resource resolver has already been
      *             {@link #close() closed}.
-     * 
+     *
      * @see ResourceMapper#getMapping(String, HttpServletRequest)
      * @see <a href="https://tools.ietf.org/html/rfc3986#section-2.1">Percent-Encoding</a>
      * @see <a href="https://sling.apache.org/documentation/the-sling-engine/mappings-for-resource-resolution.html">Mappings for Resource Resolution</a>
@@ -322,9 +323,9 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * servlet context path and the actual path used to resolve the resource.
      * <p>
      * This method also does percent-encoding before returning the URL
-     * (with charset UTF-8). Due to this calling this method multiple times in a nested 
+     * (with charset UTF-8). Due to this calling this method multiple times in a nested
      * fashion might lead to an invalid URL which can subsequently not
-     * be resolved via {@link #resolve(String)}. 
+     * be resolved via {@link #resolve(String)}.
      *
      * @param request The http servlet request object which may be used to apply
      *            more mapping functionality.
@@ -333,12 +334,13 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * @throws IllegalStateException if this resource resolver has already been
      *             {@link #close() closed}.
      * @since 2.0.4 (Sling API Bundle 2.0.4)
-     * 
+     *
      * @see ResourceMapper#getMapping(String, HttpServletRequest)
      * @see <a href="https://tools.ietf.org/html/rfc3986#section-2.1">Percent-Encoding</a>
      * @see <a href="https://sling.apache.org/documentation/the-sling-engine/mappings-for-resource-resolution.html">Mappings for Resource Resolution</a>
      */
     @NotNull String map(@NotNull HttpServletRequest request, @NotNull String resourcePath);
+    @NotNull String map(@NotNull jakarta.servlet.http.HttpServletRequest request, @NotNull String resourcePath);
 
     /**
      * Returns a {@link Resource} object for data located at the given path.
@@ -699,9 +701,9 @@ public interface ResourceResolver extends Adaptable, Closeable {
 
     /**
      * Orders the child resources returned by {@link #getChildren(Resource)} and {@link #listChildren(Resource)} so that a given resource is listed before the given sibling resource.
-     * 
+     *
      * The changes are transient and require a call to {@link #commit()} for persisting.
-     * 
+     *
      * @param parent the parent resource containing the child resources to order.
      * @param name the name of the child resource in {@code parent} to order. Must be an existing child name.
      * @param followingSiblingName the name of the resource child in {@code parent} which should come after the reordered resource. If {@code null} is given the resource is ordered as last among all sibling resources.
