@@ -23,12 +23,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
-import javax.servlet.Servlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import org.apache.sling.api.SlingHttpServletRequest;
+import jakarta.servlet.Servlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import org.jetbrains.annotations.NotNull;
+import org.apache.sling.api.http.SlingHttpServletRequest;
 import org.apache.sling.api.servlets.HttpConstants;
 
 /**
@@ -136,6 +137,7 @@ public class RequestUtil {
      *
      * @param servlet The servlet
      * @return The name of the servlet.
+     * @since 2.8.0
      */
     public static @NotNull String getServletName(@NotNull Servlet servlet) {
         String name = null;
@@ -166,8 +168,10 @@ public class RequestUtil {
      *
      * @param servlet The servlet
      * @return The name of the servlet.
+     * @deprecated
      */
-    public static @NotNull String getServletName(@NotNull jakarta.servlet.Servlet servlet) {
+    @Deprecated
+    public static @NotNull String getServletName(@NotNull javax.servlet.Servlet servlet) {
         String name = null;
 
         if (servlet.getServletConfig() != null) {
@@ -193,6 +197,7 @@ public class RequestUtil {
      *            the attribte is actually removed from the request.
      * @return The previous value of the named request attribute or
      *         <code>null</code> if it was not set.
+     * @since 2.8.0
      */
     public static @Nullable Object setRequestAttribute(@NotNull HttpServletRequest request,
             @NotNull String name, Object value) {
@@ -215,8 +220,10 @@ public class RequestUtil {
      *            the attribte is actually removed from the request.
      * @return The previous value of the named request attribute or
      *         <code>null</code> if it was not set.
+     * @deprecated
      */
-    public static @Nullable Object setRequestAttribute(@NotNull jakarta.servlet.http.HttpServletRequest request,
+    @Deprecated
+    public static @Nullable Object setRequestAttribute(@NotNull javax.servlet.http.HttpServletRequest request,
             @NotNull String name, Object value) {
         Object oldValue = request.getAttribute(name);
         if (value == null) {
@@ -234,6 +241,7 @@ public class RequestUtil {
      * @param req the request
      * @param resp the response
      * @return <code>true</code> if the response was set
+     * @since 2.8.0
      */
     public static boolean handleIfModifiedSince(@NotNull SlingHttpServletRequest req, @NotNull HttpServletResponse resp){
         boolean responseSet=false;
@@ -257,8 +265,10 @@ public class RequestUtil {
      * @param req the request
      * @param resp the response
      * @return <code>true</code> if the response was set
+     * @deprecated Use {@link #handleIfModifiedSince(SlingHttpServletRequest, HttpServletResponse)} instead.
      */
-    public static boolean handleIfModifiedSince(@NotNull org.apache.sling.api.http.SlingHttpServletRequest req, @NotNull jakarta.servlet.http.HttpServletResponse resp){
+    @Deprecated
+    public static boolean handleIfModifiedSince(@NotNull org.apache.sling.api.SlingHttpServletRequest req, @NotNull javax.servlet.http.HttpServletResponse resp){
         boolean responseSet=false;
         long lastModified=req.getResource().getResourceMetadata().getModificationTime();
         if (lastModified!=-1){

@@ -19,8 +19,8 @@
 package org.apache.sling.api.auth;
 
 import org.jetbrains.annotations.NotNull;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.osgi.annotation.versioning.ProviderType;
 
@@ -115,9 +115,22 @@ public interface Authenticator {
      * @throws NoAuthenticationHandlerException If the service cannot find a way
      *             to authenticate a request user.
      * @throws IllegalStateException If the response has already been committed.
+     * @since 1.1.0
      */
     void login(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response);
-    void login(@NotNull jakarta.servlet.http.HttpServletRequest request, @NotNull jakarta.servlet.http.HttpServletResponse response);
+
+    /**
+     * Tries to login a request user for the current request.
+     *
+     * @param request The object representing the client request.
+     * @param response The object representing the response to the client.
+     * @throws NoAuthenticationHandlerException If the service cannot find a way
+     *             to authenticate a request user.
+     * @throws IllegalStateException If the response has already been committed.
+     * @deprecated Use {@link #login(HttpServletRequest, HttpServletResponse)} instead.
+     */
+    @Deprecated
+    void login(@NotNull javax.servlet.http.HttpServletRequest request, @NotNull javax.servlet.http.HttpServletResponse response);
 
     /**
      * Logs out if the current request is authenticated.
@@ -133,7 +146,18 @@ public interface Authenticator {
      * @param request The object representing the client request.
      * @param response The object representing the response to the client.
      * @throws IllegalStateException If the response has already been committed.
+     * @since 1.1.0
      */
     void logout(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response);
-    void logout(@NotNull jakarta.servlet.http.HttpServletRequest request, @NotNull jakarta.servlet.http.HttpServletResponse response);
+
+    /**
+     * Logs out if the current request is authenticated.
+     *
+     * @param request The object representing the client request.
+     * @param response The object representing the response to the client.
+     * @throws IllegalStateException If the response has already been committed.
+     * @deprecated Use {@link #logout(HttpServletRequest, HttpServletResponse)} instead.
+     */
+    @Deprecated
+    void logout(@NotNull javax.servlet.http.HttpServletRequest request, @NotNull javax.servlet.http.HttpServletResponse response);
 }

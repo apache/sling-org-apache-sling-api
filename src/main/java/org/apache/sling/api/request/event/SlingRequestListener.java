@@ -26,7 +26,7 @@ import org.osgi.annotation.versioning.ConsumerType;
  * changes to Sling request of the Sling application they are part of.
  * To receive notification events, the implementation class must be
  * registered as an OSGi service with the service name
- * org.apache.sling.api.request.SlingRequestListener.
+ * org.apache.sling.api.request.event.SlingRequestListener.
  */
 @ConsumerType
 public interface SlingRequestListener {

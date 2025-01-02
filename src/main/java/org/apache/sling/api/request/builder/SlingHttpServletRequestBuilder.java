@@ -180,13 +180,16 @@ public interface SlingHttpServletRequestBuilder {
      * Builds the request. Once this method has been called, the builder must not be used anymore. In order to create a new request a new
      * builder has to be used.
      * @return a request object
+     * @deprecated Use {@link #buildRequest()} instead
      */
+    @Deprecated
     @NotNull SlingHttpServletRequest build();
 
     /**
      * Builds the request. Once this method has been called, the builder must not be used anymore. In order to create a new request a new
      * builder has to be used.
      * @return a request object
+     * @since 1.4
      */
     @NotNull org.apache.sling.api.http.SlingHttpServletRequest buildRequest();
 }

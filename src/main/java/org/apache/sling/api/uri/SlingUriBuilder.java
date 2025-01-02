@@ -157,7 +157,9 @@ public class SlingUriBuilder {
      *
      * @param request request to take the URI information from
      * @return a SlingUriBuilder
+     * @deprecated Use {@link #createFrom(org.apache.sling.api.http.SlingHttpServletRequest)} instead.
      */
+    @Deprecated
     @NotNull
     public static SlingUriBuilder createFrom(@NotNull SlingHttpServletRequest request) {
         @NotNull
@@ -191,6 +193,7 @@ public class SlingUriBuilder {
      *
      * @param request request to take the URI information from
      * @return a SlingUriBuilder
+     * @since 1.4.0
      */
     @NotNull
     public static SlingUriBuilder createFrom(@NotNull org.apache.sling.api.http.SlingHttpServletRequest request) {
