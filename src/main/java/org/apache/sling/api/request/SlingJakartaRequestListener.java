@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.sling.api.request.event;
+package org.apache.sling.api.request;
 
 import org.osgi.annotation.versioning.ConsumerType;
 
@@ -29,7 +29,7 @@ import org.osgi.annotation.versioning.ConsumerType;
  * org.apache.sling.api.request.event.SlingRequestListener.
  */
 @ConsumerType
-public interface SlingRequestListener {
+public interface SlingJakartaRequestListener {
 
 	String SERVICE_NAME = "org.apache.sling.api.request.event.SlingRequestListener";
 
@@ -40,7 +40,7 @@ public interface SlingRequestListener {
 	 *
 	 * @param sre the object representing the event
 	 *
-	 * @see org.apache.sling.api.request.event.SlingRequestEvent.EventType
+	 * @see org.apache.sling.api.request.SlingJakartaRequestEvent.EventType
 	 */
-	void onEvent( SlingRequestEvent sre );
+	void onEvent( SlingJakartaRequestEvent sre );
 }

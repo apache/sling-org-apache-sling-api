@@ -29,7 +29,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import org.jetbrains.annotations.NotNull;
-import org.apache.sling.api.http.SlingHttpServletRequest;
+import org.apache.sling.api.SlingJakartaHttpServletRequest;
 import org.apache.sling.api.servlets.HttpConstants;
 
 /**
@@ -243,7 +243,7 @@ public class RequestUtil {
      * @return <code>true</code> if the response was set
      * @since 2.8.0
      */
-    public static boolean handleIfModifiedSince(@NotNull SlingHttpServletRequest req, @NotNull HttpServletResponse resp){
+    public static boolean handleIfModifiedSince(@NotNull SlingJakartaHttpServletRequest req, @NotNull HttpServletResponse resp){
         boolean responseSet=false;
         long lastModified=req.getResource().getResourceMetadata().getModificationTime();
         if (lastModified!=-1){
@@ -265,7 +265,7 @@ public class RequestUtil {
      * @param req the request
      * @param resp the response
      * @return <code>true</code> if the response was set
-     * @deprecated Use {@link #handleIfModifiedSince(SlingHttpServletRequest, HttpServletResponse)} instead.
+     * @deprecated Use {@link #handleIfModifiedSince(SlingJakartaHttpServletRequest, HttpServletResponse)} instead.
      */
     @Deprecated
     public static boolean handleIfModifiedSince(@NotNull org.apache.sling.api.SlingHttpServletRequest req, @NotNull javax.servlet.http.HttpServletResponse resp){

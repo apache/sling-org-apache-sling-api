@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.sling.api.http;
+package org.apache.sling.api;
 
 import java.util.Enumeration;
 import java.util.List;
@@ -63,7 +63,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * {@link Adaptable} interface.
  */
 @ProviderType
-public interface SlingHttpServletRequest extends HttpServletRequest, Adaptable {
+public interface SlingJakartaHttpServletRequest extends HttpServletRequest, Adaptable {
 
     /**
      * Returns the {@link Resource} object on whose behalf the servlet acts.

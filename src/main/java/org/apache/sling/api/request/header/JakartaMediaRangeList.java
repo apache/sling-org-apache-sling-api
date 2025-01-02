@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.sling.api.http;
+package org.apache.sling.api.request.header;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,14 +33,14 @@ import org.slf4j.LoggerFactory;
  * See <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">RFC 2616 section 14.1</a>
  */
 @ConsumerType
-public class MediaRangeList extends TreeSet<MediaRangeList.MediaRange> {
+public class JakartaMediaRangeList extends TreeSet<JakartaMediaRangeList.MediaRange> {
 
     public static final String HEADER_ACCEPT = "Accept";
     public static final String PARAM_ACCEPT = ":http-equiv-accept";
     public static final String WILDCARD = "*";
     boolean matchesAll = false;
 
-    private static final Logger log = LoggerFactory.getLogger(MediaRangeList.class);
+    private static final Logger log = LoggerFactory.getLogger(JakartaMediaRangeList.class);
 
     /**
      * Constructs a <code>MediaRangeList</code> using information from the supplied <code>HttpServletRequest</code>.
@@ -48,10 +48,10 @@ public class MediaRangeList extends TreeSet<MediaRangeList.MediaRange> {
      * {@link #HEADER_ACCEPT} header value.
      * If the request contains no {@link #PARAM_ACCEPT} parameter, or the parameter value is empty, the value of the
      * {@link #HEADER_ACCEPT} is used. If both values are missing, it is assumed that the client accepts all media types,
-     * as per the RFC. See also {@link MediaRangeList#MediaRangeList(java.lang.String)}
+     * as per the RFC. See also {@link #JakartaMediaRangeList(java.lang.String)}
      * @param request The <code>HttpServletRequest</code> to extract a <code>MediaRangeList</code> from
      */
-    public MediaRangeList(HttpServletRequest request) {
+    public JakartaMediaRangeList(HttpServletRequest request) {
         String queryParam = request.getParameter(PARAM_ACCEPT);
         if (queryParam != null && queryParam.trim().length() != 0) {
             init(queryParam);
@@ -71,7 +71,7 @@ public class MediaRangeList extends TreeSet<MediaRangeList.MediaRange> {
      *
      * @param listStr The list of media range specifications
      */
-    public MediaRangeList(String listStr) {
+    public JakartaMediaRangeList(String listStr) {
         try {
             init(listStr);
         } catch (Throwable t) {
@@ -119,7 +119,7 @@ public class MediaRangeList extends TreeSet<MediaRangeList.MediaRange> {
 
     /**
      * Given a list of media types, returns the one is preferred by this <code>MediaRangeList</code>.
-     * @param mediaRanges An array of possible {@link MediaRangeList.MediaRange}s
+     * @param mediaRanges An array of possible {@link JakartaMediaRangeList.MediaRange}s
      * @return One of the <code>mediaRanges</code> that this <code>MediaRangeList</code> prefers;
      * or <code>null</code> if this <code>MediaRangeList</code> does not contain any of the <code>mediaRanges</code>
      * @throws NullPointerException if <code>mediaRanges</code> is <code>null</code> or contains a <code>null</code> value

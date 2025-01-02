@@ -328,7 +328,7 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable
     }
 
     @Override
-    public @NotNull SlingHttpServletRequestBuilder useRequestDispatcherFrom(@NotNull org.apache.sling.api.http.SlingHttpServletRequest request) {
+    public @NotNull SlingHttpServletRequestBuilder useRequestDispatcherFrom(@NotNull org.apache.sling.api.SlingJakartaHttpServletRequest request) {
         this.checkLocked();
         this.checkNotNull(REQUEST, request);
 // TODO        this.requestDispatcherProvider = request;
@@ -374,7 +374,7 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable
     }
 
     @Override
-    public @NotNull org.apache.sling.api.http.SlingHttpServletRequest buildRequest() {
+    public @NotNull org.apache.sling.api.SlingJakartaHttpServletRequest buildJakartaRequest() {
         return null; // TODO
     }
 

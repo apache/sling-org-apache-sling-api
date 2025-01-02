@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.adapter.SlingAdaptable;
-import org.apache.sling.api.request.builder.ResponseResult;
+import org.apache.sling.api.request.builder.SlingJakartaHttpServletResponseResult;
 import org.apache.sling.api.request.builder.SlingHttpServletResponseBuilder;
 import org.apache.sling.api.request.builder.SlingHttpServletResponseResult;
 import org.jetbrains.annotations.NotNull;
@@ -94,7 +94,7 @@ public class SlingHttpServletResponseImpl
     }
 
     @Override
-    public @NotNull ResponseResult buildResponseResult() {
+    public @NotNull SlingJakartaHttpServletResponseResult buildJakartaResponseResult() {
         this.checkLocked();
         this.locked = true;
         this.reset();

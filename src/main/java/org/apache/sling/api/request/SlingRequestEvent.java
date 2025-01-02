@@ -30,7 +30,7 @@ import javax.servlet.ServletRequest;
  *
  * @see org.apache.sling.api.request.SlingRequestListener
  * @since 2.1.0 (Sling API Bundle 2.1.0)
- * @deprecated Use {@link org.apache.sling.api.request.event.SlingRequestEvent} instead.
+ * @deprecated Use {@link org.apache.sling.api.request.SlingJakartaRequestEvent} instead.
 */
 @Deprecated
 public class SlingRequestEvent {

@@ -11,16 +11,16 @@ Open questions:
 - org/apache/sling/api/wrappers/SlingRequestPaths.java: Constants can be deprecated, methods copied?
 
 These files have been changed/copied:
-- org/apache/sling/api/SlingHttpServletRequest.java: new interface org/apache/sling/api/http/SlingHttpServletRequest.java (Provider Type)
-- org/apache/sling/api/SlingHttpServletResponse.java: new interface org/apache/sling/api/http/SlingHttpServletResponse.java (Provider Type)
+- org/apache/sling/api/SlingHttpServletRequest.java: new interface org/apache/sling/api/SlingJakartaHttpServletRequest.java (Provider Type)
+- org/apache/sling/api/SlingHttpServletResponse.java: new interface org/apache/sling/api/SlingJakartaHttpServletResponse.java (Provider Type)
 - org/apache/sling/api/SlingServletException.java: added new constructor (Class)
 - org/apache/sling/api/auth/Authenticator.java: added new methods: login, logout (Provider Type)
 - org/apache/sling/api/request/RequestUtil.java: added new methods (Class)
-- org/apache/sling/api/request/SlingRequestEvent.java: new interface org/apache/sling/api/request/event/SlingRequestEvent.java (marked as Consumer Type, but should be Provider Type)
-- org/apache/sling/api/request/SlingRequestListener.java: new interface org/apache/sling/api/request/event/SlingRequestListener.java (Consumer Type)
+- org/apache/sling/api/request/SlingRequestEvent.java: new interface org/apache/sling/api/request/SlingJakartaRequestEvent.java (marked as Consumer Type, but should be Provider Type)
+- org/apache/sling/api/request/SlingRequestListener.java: new interface org/apache/sling/api/request/SlingJakartaRequestListener.java (Consumer Type)
 - org/apache/sling/api/request/builder/SlingHttpServletRequestBuilder.java: added new methods (Class)
 - org/apache/sling/api/request/builder/SlingHttpServletResponseBuilder.java: added new methods (Class)
-- org/apache/sling/api/request/builder/SlingHttpServletResponseResult.java: new interface org/apache/sling/api/request/builder/ResponseResult.java (Provider Type)
+- org/apache/sling/api/request/builder/SlingHttpServletResponseResult.java: new interface org/apache/sling/api/request/builder/SlingJakartaHttpServletResponseResult.java (Provider Type)
 - org/apache/sling/api/request/header/MediaRangeList.java: new class org/apache/sling/api/http/MediaRangeList.java (Class)
 - org/apache/sling/api/resource/ResourceResolver.java: added new methods: resolve, map (Provider Type)
 - org/apache/sling/api/resource/mapping/ResourceMapper.java: added new methods: getMapping, getAllMappings (Provider Type)

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.sling.api.http;
+package org.apache.sling.api;
 
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -28,13 +28,13 @@ import org.osgi.annotation.versioning.ProviderType;
  * servlet in creating and sending a response to the client.
  * <p>
  * This interface is currently empty and merely exists to parallel the
- * {@link SlingHttpServletRequest} interface.
+ * {@link SlingJakartaHttpServletRequest} interface.
  * <p>
  * Starting with Sling API 2.0.6, this interface also extends the
  * {@link Adaptable} interface.
  */
 @ProviderType
-public interface SlingHttpServletResponse extends HttpServletResponse,
+public interface SlingJakartaHttpServletResponse extends HttpServletResponse,
         Adaptable {
 
 }

@@ -23,6 +23,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.SlingJakartaHttpServletRequest;
 import org.apache.sling.api.request.RequestProgressTracker;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -118,7 +119,7 @@ public interface SlingHttpServletRequestBuilder {
      * @return this object
      * @throws IllegalArgumentException if {@code request} is {@code null}
      */
-    @NotNull SlingHttpServletRequestBuilder useRequestDispatcherFrom(@NotNull org.apache.sling.api.http.SlingHttpServletRequest request);
+    @NotNull SlingHttpServletRequestBuilder useRequestDispatcherFrom(@NotNull org.apache.sling.api.SlingJakartaHttpServletRequest request);
 
     /**
      * Uses the session from the provided request.
@@ -180,16 +181,16 @@ public interface SlingHttpServletRequestBuilder {
      * Builds the request. Once this method has been called, the builder must not be used anymore. In order to create a new request a new
      * builder has to be used.
      * @return a request object
-     * @deprecated Use {@link #buildRequest()} instead
+     * @since 1.4
      */
-    @Deprecated
-    @NotNull SlingHttpServletRequest build();
+    @NotNull SlingJakartaHttpServletRequest buildJakartaRequest();
 
     /**
      * Builds the request. Once this method has been called, the builder must not be used anymore. In order to create a new request a new
      * builder has to be used.
      * @return a request object
-     * @since 1.4
+     * @deprecated Use {@link #buildJakartaRequest()} instead
      */
-    @NotNull org.apache.sling.api.http.SlingHttpServletRequest buildRequest();
+    @Deprecated
+    @NotNull SlingHttpServletRequest build();
 }

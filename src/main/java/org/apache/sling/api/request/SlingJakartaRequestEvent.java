@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.sling.api.request.event;
+package org.apache.sling.api.request;
 
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletRequest;
@@ -28,9 +28,9 @@ import jakarta.servlet.ServletRequest;
  * <p>
  * This class is not intended to be extended or instantiated by clients.
  *
- * @see org.apache.sling.api.request.event.SlingRequestListener
+ * @see org.apache.sling.api.request.SlingJakartaRequestListener
 */
-public class SlingRequestEvent {
+public class SlingJakartaRequestEvent {
 
 	private final ServletContext sc;
 	private final ServletRequest request;
@@ -41,7 +41,7 @@ public class SlingRequestEvent {
 	 */
 	public enum EventType { EVENT_INIT, EVENT_DESTROY };
 
-	public SlingRequestEvent (ServletContext sc, ServletRequest request, EventType type ) {
+	public SlingJakartaRequestEvent (ServletContext sc, ServletRequest request, EventType type ) {
 		this.sc = sc;
 		this.request = request;
 		this.type = type;

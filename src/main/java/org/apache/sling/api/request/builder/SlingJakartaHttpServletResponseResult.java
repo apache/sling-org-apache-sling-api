@@ -20,19 +20,19 @@ package org.apache.sling.api.request.builder;
 
 import javax.servlet.http.Cookie;
 
-import org.apache.sling.api.http.SlingHttpServletResponse;
+import org.apache.sling.api.SlingJakartaHttpServletResponse;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
- * <p>This is an extension of a {@link SlingHttpServletResponse} to get the result from a processing operation.</p>
+ * <p>This is an extension of a {@link SlingJakartaHttpServletResponse} to get the result from a processing operation.</p>
  *
  * <p><strong>Note:</strong> instances of this interface are not thread-safe.</p>
  * @since 1.4
  */
 @ProviderType
-public interface ResponseResult extends SlingHttpServletResponse {
+public interface SlingJakartaHttpServletResponseResult extends SlingJakartaHttpServletResponse {
 
     /**
      * Gets the content length

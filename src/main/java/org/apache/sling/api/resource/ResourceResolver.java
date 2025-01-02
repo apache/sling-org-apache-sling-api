@@ -147,8 +147,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
 
     /**
      * A request attribute containing the workspace to use for
-     * {@link #resolve(HttpServletRequest)} and
-     * {@link #resolve(HttpServletRequest, String)} if not the default workspace
+     * {@link #resolve(javax.servlet.http.HttpServletRequest)} and
+     * {@link #resolve(javax.servlet.http.HttpServletRequest, String)} if not the default workspace
      * should be used to resolve the resource.
      *
      * @since 2.1 (Sling API Bundle 2.1.0)
@@ -252,7 +252,7 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * and accessible resource.
      * <p>
      * This method is intended to apply the same algorithm to the absolute path
-     * as is used by the {@link #resolve(HttpServletRequest)} method except for
+     * as is used by the {@link #resolve(HttpServletRequest, String)} method except for
      * cases where the latter uses request property such as request headers or
      * request parameters to resolve a resource.
      * <p>
