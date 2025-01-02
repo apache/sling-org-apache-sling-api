@@ -16,18 +16,17 @@
  */
 package org.apache.sling.api.request.header;
 
-import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.SlingJakartaHttpServletRequest;
 import org.mockito.Mockito;
 
 import junit.framework.TestCase;
 
-@SuppressWarnings("deprecation")
-public class MediaRangeListTest extends TestCase {
-    protected MediaRangeList rangeList;
+public class JakartaMediaRangeListTest extends TestCase {
+    protected JakartaMediaRangeList rangeList;
 
     public void setUp() throws Exception {
         super.setUp();
-        rangeList = new MediaRangeList("text/*;q=0.3, text/html;q=0.7, text/html;level=1,\n" +
+        rangeList = new JakartaMediaRangeList("text/*;q=0.3, text/html;q=0.7, text/html;level=1,\n" +
                 "               text/html;level=2;q=0.4, */*;q=0.5");
     }
 
@@ -42,15 +41,15 @@ public class MediaRangeListTest extends TestCase {
     }
 
     public void testPreferJson() {
-        MediaRangeList rangeList = new MediaRangeList("text/html;q=0.8, application/json");
+        JakartaMediaRangeList rangeList = new JakartaMediaRangeList("text/html;q=0.8, application/json");
         assertEquals("application/json", rangeList.prefer("text/html", "application/json"));
     }
 
     public void testHttpEquivParam() {
-        SlingHttpServletRequest req = Mockito.mock(SlingHttpServletRequest.class);
-        Mockito.when(req.getHeader(MediaRangeList.HEADER_ACCEPT)).thenReturn("text/plain");
-        Mockito.when(req.getParameter(MediaRangeList.PARAM_ACCEPT)).thenReturn("text/html");
-        MediaRangeList rangeList = new MediaRangeList(req);
+        SlingJakartaHttpServletRequest req = Mockito.mock(SlingJakartaHttpServletRequest.class);
+        Mockito.when(req.getHeader(JakartaMediaRangeList.HEADER_ACCEPT)).thenReturn("text/plain");
+        Mockito.when(req.getParameter(JakartaMediaRangeList.PARAM_ACCEPT)).thenReturn("text/html");
+        JakartaMediaRangeList rangeList = new JakartaMediaRangeList(req);
         assertTrue("Did not contain media type from query param", rangeList.contains("text/html"));
         assertFalse("Contained media type from overridden Accept header", rangeList.contains("text/plain"));
     }
@@ -60,9 +59,9 @@ public class MediaRangeListTest extends TestCase {
         //See acceptHeader at http://hg.openjdk.java.net/jdk6/jdk6-gate/jdk/file/tip/src/share/classes/sun/net/www/protocol/http/HttpURLConnection.java
         //To support such case the MediaRange parser has to be made bit linient
         final String invalidHeader = "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2";
-        SlingHttpServletRequest req = Mockito.mock(SlingHttpServletRequest.class);
-        Mockito.when(req.getHeader(MediaRangeList.HEADER_ACCEPT)).thenReturn(invalidHeader);
-        MediaRangeList rangeList = new MediaRangeList(req);
+        SlingJakartaHttpServletRequest req = Mockito.mock(SlingJakartaHttpServletRequest.class);
+        Mockito.when(req.getHeader(JakartaMediaRangeList.HEADER_ACCEPT)).thenReturn(invalidHeader);
+        JakartaMediaRangeList rangeList = new JakartaMediaRangeList(req);
         assertTrue("Did not contain media type from query param", rangeList.contains("text/html"));
     }
 }

@@ -24,15 +24,15 @@ import static org.junit.Assert.fail;
 import java.io.IOException;
 import java.util.EventListener;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServlet;
-
 import org.junit.Test;
+
+import jakarta.servlet.Filter;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.FilterConfig;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServlet;
 
 public class ServletContextImplTest {
 
@@ -101,19 +101,7 @@ public class ServletContextImplTest {
             fail();
         } catch ( final UnsupportedOperationException expected) {}
         try {
-            context.getServlet("path");
-            fail();
-        } catch ( final UnsupportedOperationException expected) {}
-        try {
             context.getServletContextName();
-            fail();
-        } catch ( final UnsupportedOperationException expected) {}
-        try {
-            context.getServletNames();
-            fail();
-        } catch ( final UnsupportedOperationException expected) {}
-        try {
-            context.getServlets();
             fail();
         } catch ( final UnsupportedOperationException expected) {}
         try {
@@ -122,10 +110,6 @@ public class ServletContextImplTest {
         } catch ( final UnsupportedOperationException expected) {}
         try {
             context.log("msg", new Exception());
-            fail();
-        } catch ( final UnsupportedOperationException expected) {}
-        try {
-            context.log(new Exception(), "msg");
             fail();
         } catch ( final UnsupportedOperationException expected) {}
         try {
@@ -154,7 +138,7 @@ public class ServletContextImplTest {
         } catch ( final UnsupportedOperationException expected) {}
         try {
             context.addServlet("name", new HttpServlet(){
-                
+
             });
             fail();
         } catch ( final UnsupportedOperationException expected) {}
@@ -181,7 +165,7 @@ public class ServletContextImplTest {
                 @Override
                 public void destroy() {
                 }
-                
+
             });
             fail();
         } catch ( final UnsupportedOperationException expected) {}
@@ -231,7 +215,7 @@ public class ServletContextImplTest {
         } catch ( final UnsupportedOperationException expected) {}
         try {
             context.addListener(new EventListener(){
-                
+
             });
             fail();
         } catch ( final UnsupportedOperationException expected) {}

@@ -29,7 +29,7 @@ import java.net.URISyntaxException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.SlingJakartaHttpServletRequest;
 import org.apache.sling.api.request.RequestPathInfo;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -43,7 +43,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 public class SlingUriBuilderTest {
 
     @Mock
-    SlingHttpServletRequest request;
+    SlingJakartaHttpServletRequest request;
 
     @Mock
     RequestPathInfo requestPathInfo;

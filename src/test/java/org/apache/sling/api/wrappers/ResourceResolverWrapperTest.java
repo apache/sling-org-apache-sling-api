@@ -30,7 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -59,18 +59,29 @@ public class ResourceResolverWrapperTest {
         underTest = new ResourceResolverWrapper(wrappedResolver);
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testResolve() throws Exception {
-        final HttpServletRequest request = mock(HttpServletRequest.class);
+        final HttpServletRequest r1 = mock(HttpServletRequest.class);
+        final javax.servlet.http.HttpServletRequest r2 = mock(javax.servlet.http.HttpServletRequest.class);
         final Resource resource = mock(Resource.class);
         when(resource.getPath()).thenReturn(PATH);
-        when(wrappedResolver.resolve(request, PATH)).thenReturn(resource);
-        final Resource result = underTest.resolve(request, PATH);
+        when(wrappedResolver.resolve(r1, PATH)).thenReturn(resource);
+        when(wrappedResolver.resolve(r2, PATH)).thenReturn(resource);
 
-        assertTrue(result instanceof ResourceWrapper);
-        assertEquals(underTest, result.getResourceResolver());
-        assertEquals(resource.getPath(), result.getPath());
-        verify(wrappedResolver).resolve(request, PATH);
+        final Resource result1 = underTest.resolve(r1, PATH);
+
+        assertTrue(result1 instanceof ResourceWrapper);
+        assertEquals(underTest, result1.getResourceResolver());
+        assertEquals(resource.getPath(), result1.getPath());
+        verify(wrappedResolver).resolve(r1, PATH);
+
+        final Resource result2 = underTest.resolve(r2, PATH);
+
+        assertTrue(result2 instanceof ResourceWrapper);
+        assertEquals(underTest, result2.getResourceResolver());
+        assertEquals(resource.getPath(), result2.getPath());
+        verify(wrappedResolver).resolve(r2, PATH);
     }
 
     @Test
@@ -86,19 +97,19 @@ public class ResourceResolverWrapperTest {
         verify(wrappedResolver).resolve(PATH);
     }
 
-    @SuppressWarnings("deprecation")
     @Test
+    @SuppressWarnings("deprecation")
     public void testResolve2() throws Exception {
-        final HttpServletRequest request = mock(HttpServletRequest.class);
+        final javax.servlet.http.HttpServletRequest r1 = mock(javax.servlet.http.HttpServletRequest.class);
         final Resource resource = mock(Resource.class);
         when(resource.getPath()).thenReturn(PATH);
-        when(wrappedResolver.resolve(request)).thenReturn(resource);
-        final Resource result = underTest.resolve(request);
+        when(wrappedResolver.resolve(r1)).thenReturn(resource);
+        final Resource result = underTest.resolve(r1);
 
         assertTrue(result instanceof ResourceWrapper);
         assertEquals(underTest, result.getResourceResolver());
         assertEquals(resource.getPath(), result.getPath());
-        verify(wrappedResolver).resolve(request);
+        verify(wrappedResolver).resolve(r1);
     }
 
     @Test
@@ -110,12 +121,17 @@ public class ResourceResolverWrapperTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     public void testMap1() throws Exception {
-        final HttpServletRequest request = mock(HttpServletRequest.class);
-        when(wrappedResolver.map(request, PATH)).thenReturn(MAPPED_PATH);
+        final HttpServletRequest r1 = mock(HttpServletRequest.class);
+        final javax.servlet.http.HttpServletRequest r2 = mock(javax.servlet.http.HttpServletRequest.class);
+        when(wrappedResolver.map(r1, PATH)).thenReturn(MAPPED_PATH);
+        when(wrappedResolver.map(r2, PATH)).thenReturn(MAPPED_PATH);
 
-        assertEquals(MAPPED_PATH, underTest.map(request, PATH));
-        verify(wrappedResolver).map(request, PATH);
+        assertEquals(MAPPED_PATH, underTest.map(r1, PATH));
+        verify(wrappedResolver).map(r1, PATH);
+        assertEquals(MAPPED_PATH, underTest.map(r2, PATH));
+        verify(wrappedResolver).map(r2, PATH);
     }
 
     @Test

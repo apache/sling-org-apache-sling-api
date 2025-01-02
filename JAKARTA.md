@@ -35,7 +35,7 @@ These files contain references to javax.servlet, but do not require an alternati
 - org/apache/sling/api/servlets/HtmlResponse.java: Class is deprecated, no change needed
 - org/apache/sling/api/servlets/ServletResolverConstants.java: only used in javadoc
 
-These are private classes and can be neglected for now:
+These are private classes and are refactored to support javax.servlet as well as jakarta.servlet:
 - org/apache/sling/api/request/builder/impl/HttpSessionImpl.java
 - org/apache/sling/api/request/builder/impl/ServletContextImpl.java
 - org/apache/sling/api/request/builder/impl/SlingHttpServletRequestImpl.java

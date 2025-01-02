@@ -27,7 +27,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.SlingJakartaHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceMetadata;
 import org.mockito.Mockito;
@@ -36,6 +36,7 @@ import junit.framework.TestCase;
 
 public class RequestUtilTest extends TestCase {
 
+    @SuppressWarnings("deprecation")
     public void testHandleIfModifiedSince(){
         assertTrue(RequestUtil.handleIfModifiedSince(getMockRequest(1309268989938L,1309269042730L),getMockResponse()));
 
@@ -43,8 +44,29 @@ public class RequestUtilTest extends TestCase {
         assertFalse(RequestUtil.handleIfModifiedSince(getMockRequest(-1,1309268989938L),getMockResponse()));
     }
 
-    protected SlingHttpServletRequest getMockRequest(final long modificationTime, final long ifModifiedSince) {
-        SlingHttpServletRequest r = Mockito.mock(SlingHttpServletRequest.class);
+    public void testHandleIfModifiedSinceJakarta(){
+        assertTrue(RequestUtil.handleIfModifiedSince(getMockRequestJakarta(1309268989938L,1309269042730L), getMockResponseJakarta()));
+
+        assertFalse(RequestUtil.handleIfModifiedSince(getMockRequestJakarta(1309269042730L,1309268989938L),getMockResponseJakarta()));
+        assertFalse(RequestUtil.handleIfModifiedSince(getMockRequestJakarta(-1,1309268989938L),getMockResponseJakarta()));
+    }
+
+    protected SlingJakartaHttpServletRequest getMockRequestJakarta(final long modificationTime, final long ifModifiedSince) {
+        SlingJakartaHttpServletRequest r = Mockito.mock(SlingJakartaHttpServletRequest.class);
+        Mockito.when(r.getDateHeader(Mockito.anyString())).thenReturn(ifModifiedSince);
+        final String path = "/foo/node";
+        final Resource mr = Mockito.mock(Resource.class);
+        Mockito.when(mr.getPath()).thenReturn(path);
+        final ResourceMetadata metadata = new ResourceMetadata();
+        metadata.setModificationTime(modificationTime);
+        Mockito.when(mr.getResourceMetadata()).thenReturn(metadata);
+        Mockito.when(r.getResource()).thenReturn(mr);
+        return r;
+    }
+
+    @SuppressWarnings("deprecation")
+    protected org.apache.sling.api.SlingHttpServletRequest getMockRequest(final long modificationTime, final long ifModifiedSince) {
+        org.apache.sling.api.SlingHttpServletRequest r = Mockito.mock(org.apache.sling.api.SlingHttpServletRequest.class);
         Mockito.when(r.getDateHeader(Mockito.anyString())).thenReturn(ifModifiedSince);
         final String path = "/foo/node";
         final Resource mr = Mockito.mock(Resource.class);
@@ -66,154 +88,11 @@ public class RequestUtilTest extends TestCase {
     }
 
     protected HttpServletResponse getMockResponse() {
-
-        return new HttpServletResponse() {
-
-            @Override
-            public void setLocale(Locale loc) {}
-
-            @Override
-            public void setContentType(String type) {}
-
-            @Override
-            public void setContentLength(int len) {}
-
-            @Override
-            public void setCharacterEncoding(String charset) {}
-
-            @Override
-            public void setBufferSize(int size) {}
-
-            @Override
-            public void resetBuffer() {}
-
-            @Override
-            public void reset() {}
-
-            @Override
-            public boolean isCommitted() {
-                return false;
-            }
-
-            @Override
-            public PrintWriter getWriter() throws IOException {
-                return null;
-            }
-
-            @Override
-            public ServletOutputStream getOutputStream() throws IOException {
-                return null;
-            }
-
-            @Override
-            public Locale getLocale() {
-                return null;
-            }
-
-            @Override
-            public String getContentType() {
-                return null;
-            }
-
-            @Override
-            public String getCharacterEncoding() {
-                return null;
-            }
-
-            @Override
-            public int getBufferSize() {
-                return 0;
-            }
-
-            @Override
-            public void flushBuffer() throws IOException {}
-
-            @Override
-            public void setStatus(int sc, String sm) {}
-
-            @Override
-            public void setStatus(int sc) {}
-
-            @Override
-            public void setIntHeader(String name, int value) {}
-
-            @Override
-            public void setHeader(String name, String value) {}
-
-            @Override
-            public void setDateHeader(String name, long date) {}
-
-            @Override
-            public void sendRedirect(String location) throws IOException {}
-
-            @Override
-            public void sendError(int sc, String msg) throws IOException {}
-
-            @Override
-            public void sendError(int sc) throws IOException {}
-
-            @Override
-            public String encodeUrl(String url) {
-                return null;
-            }
-
-            @Override
-            public String encodeURL(String url) {
-                return null;
-            }
-
-            @Override
-            public String encodeRedirectUrl(String url) {
-                return null;
-            }
-
-            @Override
-            public String encodeRedirectURL(String url) {
-                return null;
-            }
-
-            @Override
-            public boolean containsHeader(String name) {
-                return false;
-            }
-
-            @Override
-            public void addIntHeader(String name, int value) {}
-
-            @Override
-            public void addHeader(String name, String value) {}
-
-            @Override
-            public void addDateHeader(String name, long date) {}
-
-            @Override
-            public void addCookie(Cookie cookie) {}
-
-            @Override
-            public void setContentLengthLong(long len) {}
-
-            @Override
-            public int getStatus() {
-                return 0;
-            }
-
-            @Override
-            public String getHeader(String name) {
-                return null;
-            }
-
-            @Override
-            public Collection<String> getHeaders(String name) {
-                return null;
-            }
-
-            @Override
-            public Collection<String> getHeaderNames() {
-                return null;
-            }
-        };
-
+        return Mockito.mock(HttpServletResponse.class);
     }
 
-
+    protected jakarta.servlet.http.HttpServletResponse getMockResponseJakarta() {
+        final jakarta.servlet.http.HttpServletResponse res = Mockito.mock(jakarta.servlet.http.HttpServletResponse.class);
+        return res;
+    }
 }

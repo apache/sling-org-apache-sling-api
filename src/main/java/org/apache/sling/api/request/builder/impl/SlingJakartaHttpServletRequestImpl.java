@@ -36,26 +36,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import javax.servlet.AsyncContext;
-import javax.servlet.DispatcherType;
-import javax.servlet.ReadListener;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletInputStream;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpUpgradeHandler;
-import javax.servlet.http.Part;
-
-import org.apache.felix.http.javaxwrappers.RequestDispatcherWrapper;
-import org.apache.felix.http.javaxwrappers.ServletContextWrapper;
-import org.apache.felix.http.javaxwrappers.CookieWrapper;
-import org.apache.felix.http.javaxwrappers.HttpSessionWrapper;
-import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.SlingJakartaHttpServletRequest;
 import org.apache.sling.api.adapter.SlingAdaptable;
 import org.apache.sling.api.request.RequestDispatcherOptions;
 import org.apache.sling.api.request.RequestParameter;
@@ -64,17 +45,30 @@ import org.apache.sling.api.request.RequestPathInfo;
 import org.apache.sling.api.request.RequestProgressTracker;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import jakarta.servlet.AsyncContext;
+import jakarta.servlet.DispatcherType;
+import jakarta.servlet.ReadListener;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletConnection;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletInputStream;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpUpgradeHandler;
+import jakarta.servlet.http.Part;
 
 /**
- * Internal {@link SlingHttpServletRequest} implementation.
- * @deprecated
+ * Internal {@link SlingJakartaHttpServletRequest} implementation.
  */
-@Deprecated
-public class SlingHttpServletRequestImpl extends SlingAdaptable implements SlingHttpServletRequest {
+public class SlingJakartaHttpServletRequestImpl extends SlingAdaptable implements SlingJakartaHttpServletRequest {
 
     private final SlingHttpServletRequestBuilderImpl builder;
 
-    public SlingHttpServletRequestImpl(final SlingHttpServletRequestBuilderImpl builder) {
+    public SlingJakartaHttpServletRequestImpl(final SlingHttpServletRequestBuilderImpl builder) {
         this.builder = builder;
     }
 
@@ -102,10 +96,7 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable implements Sling
                 this.builder.session = new HttpSessionImpl(this.builder.servletContext);
            }
         }
-        if (this.builder.session == null) {
-            return null;
-        }
-        return new HttpSessionWrapper(this.builder.session);
+        return this.builder.session;
     }
 
     @Override
@@ -280,11 +271,7 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable implements Sling
 
     @Override
     public Cookie getCookie(final String name) {
-        final jakarta.servlet.http.Cookie cookie = this.builder.cookies.get(name);
-        if (cookie != null) {
-            return new CookieWrapper(cookie);
-        }
-        return null;
+        return this.builder.cookies.get(name);
     }
 
     @Override
@@ -292,7 +279,7 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable implements Sling
         if ( this.builder.cookies.isEmpty() ) {
             return null;
         }
-        return CookieWrapper.wrap(this.builder.cookies.values().toArray(new jakarta.servlet.http.Cookie[this.builder.cookies.size()]));
+        return this.builder.cookies.values().toArray(new Cookie[this.builder.cookies.size()]);
     }
 
     @Override
@@ -378,11 +365,7 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable implements Sling
     @Override
     public RequestDispatcher getRequestDispatcher(final String path) {
         if ( this.builder.requestDispatcherProvider != null ) {
-            jakarta.servlet.RequestDispatcher dispatcher = this.builder.requestDispatcherProvider.getRequestDispatcher(path);
-            if (dispatcher != null) {
-                return new RequestDispatcherWrapper(dispatcher);
-            }
-            return null;
+            return this.builder.requestDispatcherProvider.getRequestDispatcher(path);
         }
         throw new UnsupportedOperationException();
     }
@@ -390,11 +373,7 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable implements Sling
     @Override
     public RequestDispatcher getRequestDispatcher(final String path, final RequestDispatcherOptions options) {
         if ( this.builder.requestDispatcherProvider != null ) {
-            jakarta.servlet.RequestDispatcher dispatcher = this.builder.requestDispatcherProvider.getRequestDispatcher(path, options);
-            if (dispatcher != null) {
-                return new RequestDispatcherWrapper(dispatcher);
-            }
-            return null;
+            return this.builder.requestDispatcherProvider.getRequestDispatcher(path, options);
         }
         throw new UnsupportedOperationException();
     }
@@ -402,11 +381,7 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable implements Sling
     @Override
     public RequestDispatcher getRequestDispatcher(final Resource resource) {
         if ( this.builder.requestDispatcherProvider != null ) {
-            jakarta.servlet.RequestDispatcher dispatcher = this.builder.requestDispatcherProvider.getRequestDispatcher(resource);
-            if (dispatcher != null) {
-                return new RequestDispatcherWrapper(dispatcher);
-            }
-            return null;
+            return this.builder.requestDispatcherProvider.getRequestDispatcher(resource);
         }
         throw new UnsupportedOperationException();
     }
@@ -414,11 +389,7 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable implements Sling
     @Override
     public RequestDispatcher getRequestDispatcher(final Resource resource, final RequestDispatcherOptions options) {
         if ( this.builder.requestDispatcherProvider != null ) {
-            jakarta.servlet.RequestDispatcher dispatcher = this.builder.requestDispatcherProvider.getRequestDispatcher(resource, options);
-            if (dispatcher != null) {
-                return new RequestDispatcherWrapper(dispatcher);
-            }
-            return null;
+            return this.builder.requestDispatcherProvider.getRequestDispatcher(resource, options);
         }
         throw new UnsupportedOperationException();
     }
@@ -505,7 +476,7 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable implements Sling
 
     @Override
     public ServletContext getServletContext() {
-        return new ServletContextWrapper(this.builder.servletContext);
+        return this.builder.servletContext;
     }
 
     // --- unsupported operations ---
@@ -536,11 +507,6 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable implements Sling
     }
 
     @Override
-    public boolean isRequestedSessionIdFromUrl() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public boolean isRequestedSessionIdValid() {
         throw new UnsupportedOperationException();
     }
@@ -567,11 +533,6 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable implements Sling
 
     @Override
     public String getProtocol() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public String getRealPath(String path) {
         throw new UnsupportedOperationException();
     }
 
@@ -627,6 +588,21 @@ public class SlingHttpServletRequestImpl extends SlingAdaptable implements Sling
 
     @Override
     public <T extends HttpUpgradeHandler> T upgrade(Class<T> handlerClass) throws IOException, ServletException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public String getProtocolRequestId() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public String getRequestId() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public ServletConnection getServletConnection() {
         throw new UnsupportedOperationException();
     }
 }

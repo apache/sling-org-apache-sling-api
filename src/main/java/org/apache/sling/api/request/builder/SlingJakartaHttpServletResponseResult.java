@@ -18,7 +18,7 @@
  */
 package org.apache.sling.api.request.builder;
 
-import javax.servlet.http.Cookie;
+import jakarta.servlet.http.Cookie;
 
 import org.apache.sling.api.SlingJakartaHttpServletResponse;
 import org.jetbrains.annotations.NotNull;

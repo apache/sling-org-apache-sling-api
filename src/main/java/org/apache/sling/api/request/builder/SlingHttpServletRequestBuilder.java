@@ -20,14 +20,13 @@ package org.apache.sling.api.request.builder;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingJakartaHttpServletRequest;
 import org.apache.sling.api.request.RequestProgressTracker;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * <p>Fluent helper for building a request.</p>
@@ -110,8 +109,10 @@ public interface SlingHttpServletRequestBuilder {
      * @param request the request from which to use the dispatcher
      * @return this object
      * @throws IllegalArgumentException if {@code request} is {@code null}
+     * @deprecated Use {@link #useRequestDispatcherFrom(SlingJakartaHttpServletRequest)} instead
      */
-    @NotNull SlingHttpServletRequestBuilder useRequestDispatcherFrom(@NotNull SlingHttpServletRequest request);
+    @Deprecated
+    @NotNull SlingHttpServletRequestBuilder useRequestDispatcherFrom(@NotNull org.apache.sling.api.SlingHttpServletRequest request);
 
     /**
      * Uses the request dispatcher from the provided request.
@@ -120,6 +121,36 @@ public interface SlingHttpServletRequestBuilder {
      * @throws IllegalArgumentException if {@code request} is {@code null}
      */
     @NotNull SlingHttpServletRequestBuilder useRequestDispatcherFrom(@NotNull org.apache.sling.api.SlingJakartaHttpServletRequest request);
+
+    /**
+     * Uses the session from the provided request.
+     * @param request the request from which to use the session
+     * @return this object
+     * @throws IllegalArgumentException if {@code request} is {@code null}
+     * @deprecated Use {@link #useSessionFrom(HttpServletRequest)} instead
+     */
+    @Deprecated
+    @NotNull SlingHttpServletRequestBuilder useSessionFrom(@NotNull javax.servlet.http.HttpServletRequest request);
+
+    /**
+     * Uses the attributes backed by the provided request.
+     * @param request the request from which to use the attributes
+     * @return this object
+     * @throws IllegalArgumentException if {@code request} is {@code null}
+     * @deprecated Use {@link #useAttributesFrom(HttpServletRequest)} instead
+     */
+    @Deprecated
+    @NotNull SlingHttpServletRequestBuilder useAttributesFrom(@NotNull javax.servlet.http.HttpServletRequest request);
+
+    /**
+     * Uses the servlet context from the provided request.
+     * @param request the request from which to use the servlet context
+     * @return this object
+     * @throws IllegalArgumentException if {@code request} is {@code null}
+     * @deprecated Use {@link #useServletContextFrom(HttpServletRequest)} instead
+     */
+    @Deprecated
+    @NotNull SlingHttpServletRequestBuilder useServletContextFrom(@NotNull javax.servlet.http.HttpServletRequest request);
 
     /**
      * Uses the session from the provided request.
@@ -146,30 +177,6 @@ public interface SlingHttpServletRequestBuilder {
     @NotNull SlingHttpServletRequestBuilder useServletContextFrom(@NotNull HttpServletRequest request);
 
     /**
-     * Uses the session from the provided request.
-     * @param request the request from which to use the session
-     * @return this object
-     * @throws IllegalArgumentException if {@code request} is {@code null}
-     */
-    @NotNull SlingHttpServletRequestBuilder useSessionFrom(@NotNull jakarta.servlet.http.HttpServletRequest request);
-
-    /**
-     * Uses the attributes backed by the provided request.
-     * @param request the request from which to use the attributes
-     * @return this object
-     * @throws IllegalArgumentException if {@code request} is {@code null}
-     */
-    @NotNull SlingHttpServletRequestBuilder useAttributesFrom(@NotNull jakarta.servlet.http.HttpServletRequest request);
-
-    /**
-     * Uses the servlet context from the provided request.
-     * @param request the request from which to use the servlet context
-     * @return this object
-     * @throws IllegalArgumentException if {@code request} is {@code null}
-     */
-    @NotNull SlingHttpServletRequestBuilder useServletContextFrom(@NotNull jakarta.servlet.http.HttpServletRequest request);
-
-    /**
      * Uses the provided request progress tracker
      * @param tracker The tracker
      * @return this object
@@ -192,5 +199,5 @@ public interface SlingHttpServletRequestBuilder {
      * @deprecated Use {@link #buildJakartaRequest()} instead
      */
     @Deprecated
-    @NotNull SlingHttpServletRequest build();
+    @NotNull org.apache.sling.api.SlingHttpServletRequest build();
 }

@@ -22,7 +22,6 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
 import jakarta.servlet.Servlet;
 
-import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingJakartaHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -51,9 +50,9 @@ public interface ServletResolver {
      * must <em>NOT</em> be called on the returned servlet.
      * <p>
      * This method must not return a <code>Servlet</code> instance
-     * implementing the {@link OptingServlet} interface and returning
+     * implementing the {@link JakartaOptingServlet} interface and returning
      * <code>false</code> when the
-     * {@link OptingServlet#accepts(SlingHttpServletRequest)} method is called.
+     * {@link JakartaOptingServlet#accepts(SlingJakartaHttpServletRequest)} method is called.
      *
      * @param request The {@link SlingJakartaHttpServletRequest} object used to drive
      *            selection of the servlet.
@@ -138,9 +137,9 @@ public interface ServletResolver {
      * This method must not return a <code>Servlet</code> instance
      * implementing the {@link OptingServlet} interface and returning
      * <code>false</code> when the
-     * {@link OptingServlet#accepts(SlingHttpServletRequest)} method is called.
+     * {@link OptingServlet#accepts(org.apache.sling.api.SlingHttpServletRequest)} method is called.
      *
-     * @param request The {@link SlingHttpServletRequest} object used to drive
+     * @param request The {@link org.apache.sling.api.SlingHttpServletRequest} object used to drive
      *            selection of the servlet.
      * @return The servlet whose <code>service</code> method may be called to
      *         handle the request. Might be {@code null}.
@@ -151,7 +150,7 @@ public interface ServletResolver {
      * @deprecated Use {@link #resolve(SlingJakartaHttpServletRequest)} instead.
      */
     @Deprecated
-    @Nullable javax.servlet.Servlet resolveServlet(@NotNull SlingHttpServletRequest request);
+    @Nullable javax.servlet.Servlet resolveServlet(@NotNull org.apache.sling.api.SlingHttpServletRequest request);
 
     /**
      * Resolves a <code>javax.servlet.Servlet</code> whose

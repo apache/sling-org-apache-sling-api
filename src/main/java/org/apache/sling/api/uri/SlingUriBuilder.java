@@ -34,7 +34,7 @@ import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.SlingJakartaHttpServletRequest;
 import org.apache.sling.api.request.RequestPathInfo;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -157,11 +157,11 @@ public class SlingUriBuilder {
      *
      * @param request request to take the URI information from
      * @return a SlingUriBuilder
-     * @deprecated Use {@link #createFrom(org.apache.sling.api.SlingJakartaHttpServletRequest)} instead.
+     * @deprecated Use {@link #createFrom(SlingJakartaHttpServletRequest)} instead.
      */
     @Deprecated
     @NotNull
-    public static SlingUriBuilder createFrom(@NotNull SlingHttpServletRequest request) {
+    public static SlingUriBuilder createFrom(@NotNull org.apache.sling.api.SlingHttpServletRequest request) {
         @NotNull
         ResourceResolver resourceResolver = request.getResourceResolver();
         @NotNull
@@ -196,7 +196,7 @@ public class SlingUriBuilder {
      * @since 1.4.0
      */
     @NotNull
-    public static SlingUriBuilder createFrom(@NotNull org.apache.sling.api.SlingJakartaHttpServletRequest request) {
+    public static SlingUriBuilder createFrom(@NotNull SlingJakartaHttpServletRequest request) {
         @NotNull
         ResourceResolver resourceResolver = request.getResourceResolver();
         @NotNull
