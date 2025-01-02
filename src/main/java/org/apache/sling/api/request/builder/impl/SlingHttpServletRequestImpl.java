@@ -73,7 +73,9 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Internal {@link SlingHttpServletRequest} implementation.
+ * @deprecated
  */
+@Deprecated
 public class SlingHttpServletRequestImpl extends SlingAdaptable
     implements SlingHttpServletRequest, SlingHttpServletRequestBuilder {
 

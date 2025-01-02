@@ -43,7 +43,9 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Internal {@link SlingHttpServletResponse} implementation.
+ * @deprecated
  */
+@Deprecated
 public class SlingHttpServletResponseImpl
     extends SlingAdaptable
     implements SlingHttpServletResponseResult, SlingHttpServletResponseBuilder {

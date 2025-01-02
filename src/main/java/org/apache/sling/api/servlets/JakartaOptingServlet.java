@@ -18,16 +18,15 @@
  */
 package org.apache.sling.api.servlets;
 
+import org.apache.sling.api.SlingJakartaHttpServletRequest;
 import org.jetbrains.annotations.NotNull;
-import javax.servlet.Servlet;
-
-import org.apache.sling.api.SlingHttpServletRequest;
+import jakarta.servlet.Servlet;
 
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
- * The <code>OptingServlet</code> interface may be implemented by
- * <code>Servlets</code> used by Sling which may choose to not handle all
+ * The <code>JakartaOptingServlet</code> interface may be implemented by
+ * <code>Servlet</code>s used by Sling which may choose to not handle all
  * requests for which they would be selected based on their registration
  * properties.
  *
@@ -35,11 +34,9 @@ import org.osgi.annotation.versioning.ConsumerType;
  * on system performance, as their resolution cannot be cached: the
  * resolver has no insight into which parts of the request cause
  * {@link #accepts} to return true.
- * @deprecated Use {@link JakartaOptingServlet} instead
  */
-@Deprecated
 @ConsumerType
-public interface OptingServlet extends Servlet {
+public interface JakartaOptingServlet extends Servlet {
 
     /**
      * Examines the request, and return <code>true</code> if this servlet is
@@ -51,6 +48,6 @@ public interface OptingServlet extends Servlet {
      * @return <code>true</code> if this servlet will handle the request,
      *         <code>false</code> otherwise
      */
-    boolean accepts(@NotNull SlingHttpServletRequest request);
+    boolean accepts(@NotNull SlingJakartaHttpServletRequest request);
 
 }
