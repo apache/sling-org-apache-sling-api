@@ -50,19 +50,19 @@ Comments/javadocs have not been adjusted!
 
 - New methods in ResourceResolver (resourceresolver)
 - New methods in ResourceMapper (resourceresolver)
+- New methods in Authenticator (Auth Core)
+- New methods in Servlet Resolver (servlets.resolver) (first version, based on javax.servlet)
 
 ### Open
 
 - Support for SlingConstants.ATTR_REQUEST_JAKARTA_SERVLET (next to ATTR_REQUEST_SERVLET)
 - Request attributes for include/forward (mapping should be handled by Apache Felix Http Wrappers)
 - Request attributes for error handling (mapping should be handled by Apache Felix Http Wrappers)
-- New methods in Authenticator (Auth Core)
 - Support for SlingJakartaRequestListener and SlingJakartaRequestEvent (next to existing ones) (Sling Engine)
 - Support for SlingJakartaBindings (next to SlingBindings)
 - Support for SlingJakartaScript (next to SlingScript)
 - Support for SlingJakartaScriptHelper (next to SlingScriptHelper)
 - Support for JakartaErrorHandler (next to ErrorHandler) (Sling Engine)
 - Support for JakartaOptingServlet (next to OptingServlet)
-- New methods in Servlet Resolver (servlets.resolver)
 - Support for using Jakarta Servlet API for Sling Servlets
 - Support for using Jakarta Servlet API for Sling Filters

@@ -40,6 +40,7 @@ import org.jetbrains.annotations.Nullable;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Wrapper for {@link SlingHttpServletRequest} to adapt it to the Jakarta Servlet API.
@@ -49,6 +50,16 @@ import jakarta.servlet.http.Cookie;
 public class JavaxToJakartaRequestWrapper
     extends HttpServletRequestWrapper
     implements SlingJakartaHttpServletRequest {
+
+    public static HttpServletRequest toJakartaRequest(final javax.servlet.http.HttpServletRequest request) {
+        if (request instanceof JakartaToJavaxRequestWrapper) {
+            return (HttpServletRequest)((JakartaToJavaxRequestWrapper)request).getRequest();
+        }
+        if (request instanceof SlingHttpServletRequest) {
+            return new JavaxToJakartaRequestWrapper((SlingHttpServletRequest)request);
+        }
+        return new HttpServletRequestWrapper(request);
+    }
 
     private final SlingHttpServletRequest wrappedRequest;
 

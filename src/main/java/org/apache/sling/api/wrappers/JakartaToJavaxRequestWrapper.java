@@ -38,6 +38,8 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.Cookie;
 
@@ -49,6 +51,16 @@ import javax.servlet.http.Cookie;
 public class JakartaToJavaxRequestWrapper
     extends HttpServletRequestWrapper
     implements SlingHttpServletRequest {
+
+    public static javax.servlet.http.HttpServletRequest toJavaxRequest(final HttpServletRequest request) {
+        if (request instanceof JavaxToJakartaRequestWrapper) {
+            return (javax.servlet.http.HttpServletRequest)((JavaxToJakartaRequestWrapper)request).getRequest();
+        }
+        if (request instanceof SlingJakartaHttpServletRequest) {
+            return new JakartaToJavaxRequestWrapper((SlingJakartaHttpServletRequest)request);
+        }
+        return new HttpServletRequestWrapper(request);
+    }
 
     private final SlingJakartaHttpServletRequest wrappedRequest;
 

@@ -24,6 +24,8 @@ import org.apache.sling.api.SlingJakartaHttpServletResponse;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 /**
  * Wrapper for {@link SlingJakartaHttpServletResponse} to adapt it to the Jacax Servlet API.
  * @since 2.9.0
@@ -32,6 +34,16 @@ import org.jetbrains.annotations.Nullable;
 public class JakartaToJavaxResponseWrapper
     extends HttpServletResponseWrapper
     implements SlingHttpServletResponse {
+
+    public static javax.servlet.http.HttpServletResponse toJavaxResponse(final HttpServletResponse response) {
+        if (response instanceof JakartaToJavaxResponseWrapper) {
+            return (javax.servlet.http.HttpServletResponse)((JakartaToJavaxResponseWrapper)response).getResponse();
+        }
+        if (response instanceof SlingJakartaHttpServletResponse) {
+            return new JakartaToJavaxResponseWrapper((SlingJakartaHttpServletResponse)response);
+        }
+        return new HttpServletResponseWrapper(response);
+    }
 
     private final SlingJakartaHttpServletResponse wrappedResponse;
 
