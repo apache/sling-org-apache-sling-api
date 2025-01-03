@@ -67,7 +67,7 @@ public interface JakartaErrorHandler {
      * @throws IOException May be thrown if an error occurrs sending the
      *             response.
      */
-    void handleError(Throwable throwable, SlingJakartaHttpServletResponse request,
-        SlingJakartaHttpServletRequest response) throws IOException;
+    void handleError(Throwable throwable, SlingJakartaHttpServletRequest request,
+        SlingJakartaHttpServletResponse response) throws IOException;
 
 }
