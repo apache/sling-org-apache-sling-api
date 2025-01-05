@@ -19,11 +19,13 @@
 package org.apache.sling.api.wrappers;
 
 import org.apache.felix.http.jakartawrappers.HttpServletResponseWrapper;
+import org.apache.felix.http.jakartawrappers.ServletResponseWrapper;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.SlingJakartaHttpServletResponse;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletResponse;
 
 /**
@@ -35,14 +37,25 @@ public class JavaxToJakartaResponseWrapper
     extends HttpServletResponseWrapper
     implements SlingJakartaHttpServletResponse {
 
-    public static HttpServletResponse toJakartaResponse(final javax.servlet.http.HttpServletResponse response) {
+    public static ServletResponse toJakartaResponse(final javax.servlet.ServletResponse response) {
         if (response instanceof JakartaToJavaxResponseWrapper) {
-            return (HttpServletResponse)((JakartaToJavaxResponseWrapper)response).getResponse();
+            return ((JakartaToJavaxResponseWrapper)response).getResponse();
         }
         if (response instanceof SlingHttpServletResponse) {
             return new JavaxToJakartaResponseWrapper((SlingHttpServletResponse)response);
         }
-        return new HttpServletResponseWrapper(response);
+        if (response instanceof javax.servlet.http.HttpServletResponse) {
+            return new HttpServletResponseWrapper((javax.servlet.http.HttpServletResponse)response);
+        }
+        return new ServletResponseWrapper(response);
+    }
+
+    public static HttpServletResponse toJakartaResponse(final javax.servlet.http.HttpServletResponse response) {
+        return (HttpServletResponse)toJakartaResponse((javax.servlet.ServletResponse)response);
+    }
+
+    public static SlingJakartaHttpServletResponse toJakartaResponse(final SlingHttpServletResponse response) {
+        return (SlingJakartaHttpServletResponse)toJakartaResponse((javax.servlet.ServletResponse)response);
     }
 
     private final SlingHttpServletResponse wrappedResponse;

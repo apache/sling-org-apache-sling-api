@@ -26,6 +26,7 @@ import java.util.ResourceBundle;
 import org.apache.felix.http.javaxwrappers.CookieWrapper;
 import org.apache.felix.http.javaxwrappers.HttpServletRequestWrapper;
 import org.apache.felix.http.javaxwrappers.RequestDispatcherWrapper;
+import org.apache.felix.http.javaxwrappers.ServletRequestWrapper;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingJakartaHttpServletRequest;
 import org.apache.sling.api.request.RequestDispatcherOptions;
@@ -38,6 +39,7 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import jakarta.servlet.ServletRequest;
 import jakarta.servlet.http.HttpServletRequest;
 
 import javax.servlet.RequestDispatcher;
@@ -52,14 +54,25 @@ public class JakartaToJavaxRequestWrapper
     extends HttpServletRequestWrapper
     implements SlingHttpServletRequest {
 
-    public static javax.servlet.http.HttpServletRequest toJavaxRequest(final HttpServletRequest request) {
+    public static javax.servlet.ServletRequest toJavaxRequest(final ServletRequest request) {
         if (request instanceof JavaxToJakartaRequestWrapper) {
-            return (javax.servlet.http.HttpServletRequest)((JavaxToJakartaRequestWrapper)request).getRequest();
+            return ((JavaxToJakartaRequestWrapper)request).getRequest();
         }
         if (request instanceof SlingJakartaHttpServletRequest) {
             return new JakartaToJavaxRequestWrapper((SlingJakartaHttpServletRequest)request);
         }
-        return new HttpServletRequestWrapper(request);
+        if (request instanceof HttpServletRequest) {
+            return new HttpServletRequestWrapper((HttpServletRequest)request);
+        }
+        return new ServletRequestWrapper(request);
+    }
+
+    public static javax.servlet.http.HttpServletRequest toJavaxRequest(final HttpServletRequest request) {
+        return (javax.servlet.http.HttpServletRequest)toJavaxRequest((ServletRequest)request);
+    }
+
+    public static SlingHttpServletRequest toJavaxRequest(final SlingJakartaHttpServletRequest request) {
+        return (SlingHttpServletRequest)toJavaxRequest((ServletRequest)request);
     }
 
     private final SlingJakartaHttpServletRequest wrappedRequest;
