@@ -40,7 +40,7 @@ public class JakartaToJavaxServletWrapper implements Servlet {
     public static @Nullable Servlet toJavaxServlet(final @Nullable jakarta.servlet.Servlet servlet) {
         if (servlet != null) {
             if (servlet instanceof JakartaOptingServlet) {
-                return new JavaxToJakartaOptingServletWrapper((JakartaOptingServlet) servlet);
+                return new JakartaToJavaxOptingServletWrapper((JakartaOptingServlet) servlet);
             }
             return new JakartaToJavaxServletWrapper(servlet);
         }
@@ -86,11 +86,11 @@ public class JakartaToJavaxServletWrapper implements Servlet {
         return servlet.getServletInfo();
     }
 
-    public static class JavaxToJakartaOptingServletWrapper extends JakartaToJavaxServletWrapper implements OptingServlet {
+    public static class JakartaToJavaxOptingServletWrapper extends JakartaToJavaxServletWrapper implements OptingServlet {
 
         private final JakartaOptingServlet servlet;
 
-        public JavaxToJakartaOptingServletWrapper(final JakartaOptingServlet servlet) {
+        public JakartaToJavaxOptingServletWrapper(final JakartaOptingServlet servlet) {
             super(servlet);
             this.servlet = servlet;
         }
