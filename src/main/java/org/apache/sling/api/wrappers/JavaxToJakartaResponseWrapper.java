@@ -37,6 +37,11 @@ public class JavaxToJakartaResponseWrapper
     extends HttpServletResponseWrapper
     implements SlingJakartaHttpServletResponse {
 
+    /**
+     * Create a new wrapper
+     * @param response The response object
+     * @return The wrapped response object
+     */
     public static ServletResponse toJakartaResponse(final javax.servlet.ServletResponse response) {
         if (response instanceof JakartaToJavaxResponseWrapper) {
             return ((JakartaToJavaxResponseWrapper)response).getResponse();

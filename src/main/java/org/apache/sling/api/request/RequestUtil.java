@@ -104,7 +104,7 @@ public class RequestUtil {
         for (int i = 0; i < tokens.length; i++) {
             String[] parameters = tokens[i].split(";");
             String name = parameters[0];
-            Double qVal = new Double(1.0);
+            Double qVal = 1.0;
             if (parameters.length > 1) {
                 for (int j = 1; j < parameters.length; j++) {
                     String[] content = parameters[j].split("=", 2);
@@ -168,7 +168,7 @@ public class RequestUtil {
      *
      * @param servlet The servlet
      * @return The name of the servlet.
-     * @deprecated
+     * @deprecated Use {@link #getServletName(Servlet)}
      */
     @Deprecated
     public static @NotNull String getServletName(@NotNull javax.servlet.Servlet servlet) {
@@ -220,7 +220,7 @@ public class RequestUtil {
      *            the attribte is actually removed from the request.
      * @return The previous value of the named request attribute or
      *         <code>null</code> if it was not set.
-     * @deprecated
+     * @deprecated Use {@link #setRequestAttribute(HttpServletRequest, String, Object)}
      */
     @Deprecated
     public static @Nullable Object setRequestAttribute(@NotNull javax.servlet.http.HttpServletRequest request,

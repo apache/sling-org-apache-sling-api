@@ -272,7 +272,7 @@ public class ResourceUtilTest {
         final Resource c = mock(Resource.class, "c");
         final List<Resource> l = new ArrayList<Resource>();
         l.add(a); l.add(b); l.add(c);
-        
+
         when(a.adaptTo(List.class)).thenReturn(new ArrayList<Object>());
         when(b.adaptTo(List.class)).thenReturn(new ArrayList<Object>());
         when(c.adaptTo(List.class)).thenReturn(null);
@@ -280,11 +280,11 @@ public class ResourceUtilTest {
         when(b.adaptTo(Map.class)).thenReturn(new HashMap<Object, Object>());
         when(c.adaptTo(Map.class)).thenReturn(new HashMap<Object, Object>());
         when(a.adaptTo(Long.class)).thenReturn(null);
-        when(b.adaptTo(Long.class)).thenReturn(new Long(1));
-        when(c.adaptTo(Long.class)).thenReturn(new Long(2));
-        when(a.adaptTo(Boolean.class)).thenReturn(new Boolean(true));
+        when(b.adaptTo(Long.class)).thenReturn(1L);
+        when(c.adaptTo(Long.class)).thenReturn(2L);
+        when(a.adaptTo(Boolean.class)).thenReturn(true);
         when(b.adaptTo(Boolean.class)).thenReturn(null);
-        when(c.adaptTo(Boolean.class)).thenReturn(new Boolean(false));
+        when(c.adaptTo(Boolean.class)).thenReturn(false);
         when(a.adaptTo(String.class)).thenReturn(null);
         when(b.adaptTo(String.class)).thenReturn(null);
         when(c.adaptTo(String.class)).thenReturn(null);

@@ -46,7 +46,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.Cookie;
 
 /**
- * Wrapper for {@link SlingJakartaHttpServletRequest} to adapt it to the Jacax Servlet API.
+ * Wrapper for {@link SlingJakartaHttpServletRequest} to adapt it to the Javax Servlet API.
  * @since 2.9.0
  */
 @SuppressWarnings("deprecation")
@@ -54,6 +54,11 @@ public class JakartaToJavaxRequestWrapper
     extends HttpServletRequestWrapper
     implements SlingHttpServletRequest {
 
+    /**
+     * Create a new wrapper
+     * @param request Jakarta Servlet API based request object
+     * @return The wrapped request
+     */
     public static javax.servlet.ServletRequest toJavaxRequest(final ServletRequest request) {
         if (request instanceof JavaxToJakartaRequestWrapper) {
             return ((JavaxToJakartaRequestWrapper)request).getRequest();

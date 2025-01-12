@@ -58,7 +58,6 @@ import org.slf4j.LoggerFactory;
  *         .setQuery("par1=val1&amp;par2=val2")
  *         .build();
  * </pre>
- * <p>
  *
  * @since 1.0.0 (Sling API Bundle 2.23.0)
  */

@@ -34,9 +34,19 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+/**
+ * This class wraps a servlet based on the Jakarta Servlet API
+ * to implement Servlet API 3.
+ * @since 2.9.0
+ */
 @SuppressWarnings("deprecation")
 public class JakartaToJavaxServletWrapper implements Servlet {
 
+    /**
+     * Create a new wrapper
+     * @param servlet The servlet to wrap
+     * @return The wrapped servlet
+     */
     public static @Nullable Servlet toJavaxServlet(final @Nullable jakarta.servlet.Servlet servlet) {
         if (servlet != null) {
             if (servlet instanceof JakartaOptingServlet) {

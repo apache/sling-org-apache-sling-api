@@ -32,8 +32,18 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+/**
+ * This class wraps a filter based on the Jakarta Servlet API
+ * to implement Servlet API 3.
+ * @since 2.9.0
+ */
 public class JakartaToJavaxFilterWrapper implements Filter {
 
+    /**
+     * Create a wrapper
+     * @param filter The filter to wrap
+     * @return The wrapped filter
+     */
     public static @Nullable Filter toJavaxFilter(final @Nullable jakarta.servlet.Filter filter) {
         if (filter != null) {
             return new JakartaToJavaxFilterWrapper(filter);

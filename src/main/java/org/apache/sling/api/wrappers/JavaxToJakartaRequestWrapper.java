@@ -53,6 +53,11 @@ public class JavaxToJakartaRequestWrapper
     extends HttpServletRequestWrapper
     implements SlingJakartaHttpServletRequest {
 
+    /**
+     * Create a new wrapper
+     * @param request The request object
+     * @return The wrapped request object
+     */
     public static ServletRequest toJakartaRequest(final javax.servlet.ServletRequest request) {
         if (request instanceof JakartaToJavaxRequestWrapper) {
             return ((JakartaToJavaxRequestWrapper)request).getRequest();

@@ -30,7 +30,7 @@ import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * The <code>ServletResolver</code> defines the API for a service capable of
- * resolving <code>javax.servlet.Servlet</code> instances to handle the
+ * resolving <code>jakarta.servlet.Servlet</code> instances to handle the
  * processing of a request or resource.
  * <p>
  * Applications of the Sling Framework generally do not need the servlet
@@ -41,7 +41,7 @@ import org.osgi.annotation.versioning.ProviderType;
 public interface ServletResolver {
 
     /**
-     * Resolves a <code>javax.servlet.Servlet</code> whose
+     * Resolves a <code>jakarta.servlet.Servlet</code> whose
      * <code>service</code> method may be used to handle the given
      * <code>request</code>.
      * <p>
@@ -68,7 +68,7 @@ public interface ServletResolver {
 
 
     /**
-     * Resolves a <code>javax.servlet.Servlet</code> whose
+     * Resolves a <code>jakarta.servlet.Servlet</code> whose
      * <code>service</code> method may be used to handle a request.
      * <p>
      * The returned servlet must be assumed to be initialized and ready to run.
@@ -99,7 +99,7 @@ public interface ServletResolver {
     @Nullable Servlet resolve(@NotNull Resource resource, @NotNull String scriptName);
 
     /**
-     * Resolves a <code>javax.servlet.Servlet</code> whose
+     * Resolves a <code>jakarta.servlet.Servlet</code> whose
      * <code>service</code> method may be used to handle a request.
      * <p>
      * The returned servlet must be assumed to be initialized and ready to run.

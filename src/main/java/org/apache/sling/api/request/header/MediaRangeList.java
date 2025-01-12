@@ -34,7 +34,6 @@ import org.slf4j.LoggerFactory;
  * @deprecated Use {@link org.apache.sling.api.request.header.JakartaMediaRangeList} instead.
  */
 @ConsumerType
-
 public class MediaRangeList extends TreeSet<MediaRangeList.MediaRange> {
 
     public static final String HEADER_ACCEPT = "Accept";

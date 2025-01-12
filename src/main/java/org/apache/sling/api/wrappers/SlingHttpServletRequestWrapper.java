@@ -28,7 +28,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.SlingJakartaHttpServletRequest;
 import org.apache.sling.api.request.RequestDispatcherOptions;
 import org.apache.sling.api.request.RequestParameter;
 import org.apache.sling.api.request.RequestParameterMap;
@@ -41,7 +40,7 @@ import org.apache.sling.api.resource.ResourceResolver;
  * The <code>SlingHttpServletRequestWrapper</code> class is a default wrapper
  * class around a {@link SlingHttpServletRequest} which may be extended to amend
  * the functionality of the original request object.
- * @deprecated Use {@link SlingJakartaHttpServletRequest}
+ * @deprecated Use {@link SlingJakartaHttpServletRequestWrapper}
  */
 @Deprecated
 public class SlingHttpServletRequestWrapper extends HttpServletRequestWrapper

@@ -39,6 +39,11 @@ public class SlingServletException extends SlingException {
         super(cause);
     }
 
+    /**
+     * Create a new exception
+     * @param cause The cause
+     * @deprecated Use {@link #SlingServletException(ServletException)}
+     */
     @Deprecated
     public SlingServletException(javax.servlet.ServletException cause) {
         super(cause);
