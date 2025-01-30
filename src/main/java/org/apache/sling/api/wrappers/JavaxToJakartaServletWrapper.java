@@ -88,6 +88,9 @@ public class JavaxToJakartaServletWrapper implements Servlet {
 
     @Override
     public ServletConfig getServletConfig() {
+        if (this.servlet.getServletConfig() == null) {
+            return null;
+        }
         return new org.apache.felix.http.jakartawrappers.ServletConfigWrapper(this.servlet.getServletConfig());
     }
 
