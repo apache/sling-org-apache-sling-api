@@ -57,7 +57,7 @@ public class SlingConstants {
      * The name of the request attribute containing the <code>jakarta.servlet.Servlet</code>
      * which included the servlet currently being active (value is
      * "org.apache.sling.api.include.jakarta.servlet"). This attribute is only set if
-     * the serlvet or script is included via
+     * the servlet or script is included via
      * <code>RequestDispatcher.include</code> from another servlet or script.
      * <p>
      * The type of the attribute value is <code>jakarta.servlet.Servlet</code>.
