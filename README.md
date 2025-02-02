@@ -32,7 +32,7 @@ As the Jakarta Servlet API requires Java 17, the Sling API now requires Java 17 
 
 ### Source Code Incompatibilties
 
-For some methods where a Javax Servlet Type is used in the signature, an alternative method has been added with the same name but different signature. This can lead to compilation errors due to disambigutie *if* the actual argument is `null`. However, all of these methods to not allow `null` as an argument, therefore this should not create a problem in reality.
+For some methods where a Javax Servlet Type is used in the signature, an alternative method has been added with the same name but different signature. This can lead to compilation errors due to disambigutie *if* the actual argument is `null`. However, all of these methods do not allow `null` as an argument, therefore this should not create a problem in reality.
 
 If such compilation error occurs nevertheless, a quick (but wrong) fix is to cast `null` to the Jakarta Servlet API type. However, the correct fix is to not call this method with a `null` argument at all and change the code accordingly.
 
