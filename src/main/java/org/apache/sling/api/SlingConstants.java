@@ -54,14 +54,27 @@ public class SlingConstants {
     public static final String NAMESPACE_URI_ROOT = "http://sling.apache.org/";
 
     /**
-     * The name of the request attribute containing the <code>Servlet</code>
+     * The name of the request attribute containing the <code>jakarta.servlet.Servlet</code>
+     * which included the servlet currently being active (value is
+     * "org.apache.sling.api.include.jakarta.servlet"). This attribute is only set if
+     * the servlet or script is included via
+     * <code>RequestDispatcher.include</code> from another servlet or script.
+     * <p>
+     * The type of the attribute value is <code>jakarta.servlet.Servlet</code>.
+     */
+    public static final String ATTR_REQUEST_JAKARTA_SERVLET = "org.apache.sling.api.include.jakarta.servlet";
+
+    /**
+     * The name of the request attribute containing the <code>javax.servlet.Servlet</code>
      * which included the servlet currently being active (value is
      * "org.apache.sling.api.include.servlet"). This attribute is only set if
      * the serlvet or script is included via
      * <code>RequestDispatcher.include</code> from another servlet or script.
      * <p>
      * The type of the attribute value is <code>javax.servlet.Servlet</code>.
+     * @deprecated Use {@link #ATTR_REQUEST_JAKARTA_SERVLET} instead
      */
+    @Deprecated
     public static final String ATTR_REQUEST_SERVLET = "org.apache.sling.api.include.servlet";
 
     /**
@@ -96,7 +109,8 @@ public class SlingConstants {
      * <code>Servlet</code> which included the servlet currently being active
      * (value is "javax.servlet.include.request_uri"). This attribute is only
      * set if the serlvet or script is included via
-     * <code>RequestDispatcher.include</code> from another servlet or script.
+     * <code>RequestDispatcher.include</code> from another servlet or script
+     * and the current servlet is of type <code>javax.servlet.Servlet</code>.
      * <p>
      * The type of the attribute value is <code>String</code>.
      * <p>
@@ -106,7 +120,9 @@ public class SlingConstants {
      * request processing servlet or script or from an included servlet or
      * script. This request attribute is set for compatibility with the Servlet
      * API specification.
+     * @deprecated Use {@link javax.servlet.RequestDispatcher#INCLUDE_REQUEST_URI} instead
      */
+    @Deprecated
     public static final String ATTR_INCLUDE_REQUEST_URI = "javax.servlet.include.request_uri";
 
     /**
@@ -116,7 +132,8 @@ public class SlingConstants {
      * <code>Servlet</code> which included the servlet currently being active
      * (value is "javax.servlet.include.context_path"). This attribute is only
      * set if the serlvet or script is included via
-     * <code>RequestDispatcher.include</code> from another servlet or script.
+     * <code>RequestDispatcher.include</code> from another servlet or script
+     * and the current servlet is of type <code>javax.servlet.Servlet</code>.
      * <p>
      * The type of the attribute value is <code>String</code>.
      * <p>
@@ -126,7 +143,9 @@ public class SlingConstants {
      * request processing servlet or script or from an included servlet or
      * script. This request attribute is set for compatibility with the Servlet
      * API specification.
+     * @deprecated Use {@link javax.servlet.RequestDispatcher#INCLUDE_CONTEXT_PATH} instead
      */
+    @Deprecated
     public static final String ATTR_INCLUDE_CONTEXT_PATH = "javax.servlet.include.context_path";
 
     /**
@@ -136,7 +155,8 @@ public class SlingConstants {
      * <code>Servlet</code> which included the servlet currently being active
      * (value is "javax.servlet.include.servlet_path"). This attribute is only
      * set if the serlvet or script is included via
-     * <code>RequestDispatcher.include</code> from another servlet or script.
+     * <code>RequestDispatcher.include</code> from another servlet or script
+     * and the current servlet is of type <code>javax.servlet.Servlet</code>.
      * <p>
      * The type of the attribute value is <code>String</code>.
      * <p>
@@ -146,7 +166,9 @@ public class SlingConstants {
      * request processing servlet or script or from an included servlet or
      * script. This request attribute is set for compatibility with the Servlet
      * API specification.
+     * @deprecated Use {@link javax.servlet.RequestDispatcher#INCLUDE_SERVLET_PATH} instead
      */
+    @Deprecated
     public static final String ATTR_INCLUDE_SERVLET_PATH = "javax.servlet.include.servlet_path";
 
     /**
@@ -156,7 +178,8 @@ public class SlingConstants {
      * <code>Servlet</code> which included the servlet currently being active
      * (value is "javax.servlet.include.path_info"). This attribute is only set
      * if the serlvet or script is included via
-     * <code>RequestDispatcher.include</code> from another servlet or script.
+     * <code>RequestDispatcher.include</code> from another servlet or script
+     * and the current servlet is of type <code>javax.servlet.Servlet</code>.
      * <p>
      * The type of the attribute value is <code>String</code>.
      * <p>
@@ -165,7 +188,9 @@ public class SlingConstants {
      * called from the client request processing servlet or script or from an
      * included servlet or script. This request attribute is set for
      * compatibility with the Servlet API specification.
+     * @deprecated Use {@link javax.servlet.RequestDispatcher#INCLUDE_PATH_INFO} instead
      */
+    @Deprecated
     public static final String ATTR_INCLUDE_PATH_INFO = "javax.servlet.include.path_info";
 
     /**
@@ -175,7 +200,8 @@ public class SlingConstants {
      * <code>Servlet</code> which included the servlet currently being active
      * (value is "javax.servlet.include.query_string"). This attribute is only
      * set if the serlvet or script is included via
-     * <code>RequestDispatcher.include</code> from another servlet or script.
+     * <code>RequestDispatcher.include</code> from another servlet or script
+     * and the current servlet is of type <code>javax.servlet.Servlet</code>.
      * <p>
      * The type of the attribute value is <code>String</code>.
      * <p>
@@ -185,7 +211,9 @@ public class SlingConstants {
      * request processing servlet or script or from an included servlet or
      * script. This request attribute is set for compatibility with the Servlet
      * API specification.
+     * @deprecated Use {@link javax.servlet.RequestDispatcher#INCLUDE_QUERY_STRING} instead
      */
+    @Deprecated
     public static final String ATTR_INCLUDE_QUERY_STRING = "javax.servlet.include.query_string";
 
     // ---------- Error handling -----------------------------------------------
@@ -194,24 +222,29 @@ public class SlingConstants {
      * The name of the request attribute containing the exception thrown causing
      * the error handler to be called (value is
      * "javax.servlet.error.exception"). This attribute is only available to
-     * error handling servlets and only if an exception has been thrown causing
-     * error handling.
+     * error handling servlets based on <code>javax.servlet.Servlet</code> and
+     * only if an exception has been thrown causing error handling.
      * <p>
      * The type of the attribute value is <code>java.lang.Throwable</code>.
+     * @deprecated Use {@link javax.servlet.RequestDispatcher#ERROR_EXCEPTION} instead
      */
+    @Deprecated
     public static final String ERROR_EXCEPTION = "javax.servlet.error.exception";
 
     /**
      * The name of the request attribute containing the fully qualified class
      * name of the exception thrown causing the error handler to be called
      * (value is "javax.servlet.error.exception_type"). This attribute is only
-     * available to error handling servlets and only if an exception has been
-     * thrown causing error handling. This attribute is present for backwards
+     * available to error handling servlets based on <code>javax.servlet.Servlet</code>
+     * and only if an exception has been thrown causing error handling.
+     * This attribute is present for backwards
      * compatibility only. Error handling servlet implementors are advised to
      * use the {@link #ERROR_EXCEPTION Throwable} itself.
      * <p>
      * The type of the attribute value is <code>java.lang.String</code>.
+     * @deprecated Use {@link javax.servlet.RequestDispatcher#ERROR_EXCEPTION_TYPE} instead
      */
+    @Deprecated
     public static final String ERROR_EXCEPTION_TYPE = "javax.servlet.error.exception_type";
 
     /**
@@ -223,7 +256,9 @@ public class SlingConstants {
      * methods, this attribute contains the optional message.
      * <p>
      * The type of the attribute value is <code>java.lang.String</code>.
+     * @deprecated Use {@link javax.servlet.RequestDispatcher#ERROR_MESSAGE} instead
      */
+    @Deprecated
     public static final String ERROR_MESSAGE = "javax.servlet.error.message";
 
     /**
@@ -233,7 +268,9 @@ public class SlingConstants {
      * the <code>SlingHttpServletRequest.getRequestURI()</code> method.
      * <p>
      * The type of the attribute value is <code>java.lang.String</code>.
+     * @deprecated Use {@link javax.servlet.RequestDispatcher#ERROR_REQUEST_URI} instead
      */
+    @Deprecated
     public static final String ERROR_REQUEST_URI = "javax.servlet.error.request_uri";
 
     /**
@@ -242,7 +279,9 @@ public class SlingConstants {
      * "javax.servlet.error.servlet_name").
      * <p>
      * The type of the attribute value is <code>java.lang.String</code>.
+     * @deprecated Use {@link javax.servlet.RequestDispatcher#ERROR_SERVLET_NAME} instead
      */
+    @Deprecated
     public static final String ERROR_SERVLET_NAME = "javax.servlet.error.servlet_name";
 
     /**
@@ -257,7 +296,9 @@ public class SlingConstants {
      * should be sent.
      * <p>
      * The type of the attribute value is <code>java.lang.Integer</code>.
+     * @deprecated Use {@link javax.servlet.RequestDispatcher#ERROR_STATUS_CODE} instead
      */
+    @Deprecated
     public static final String ERROR_STATUS = "javax.servlet.error.status_code";
 
     /**

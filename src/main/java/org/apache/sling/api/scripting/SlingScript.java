@@ -34,7 +34,9 @@ import org.osgi.annotation.versioning.ConsumerType;
  * {@link org.apache.sling.api.resource.ResourceResolver#resolve(String)}
  * and then trying to adapt the resource to a script by
  * calling {@link Resource#adaptTo(Class)}.
+ * @deprecated Use {@link SlingJakartaScript} instead
  */
+@Deprecated
 @ConsumerType
 public interface SlingScript {
 

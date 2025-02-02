@@ -24,8 +24,8 @@ import org.apache.sling.api.request.RequestParameter;
 import org.apache.sling.api.request.RequestProgressTracker;
 import org.apache.sling.api.request.builder.impl.RequestParameterImpl;
 import org.apache.sling.api.request.builder.impl.RequestProgressTrackerImpl;
-import org.apache.sling.api.request.builder.impl.SlingHttpServletRequestImpl;
-import org.apache.sling.api.request.builder.impl.SlingHttpServletResponseImpl;
+import org.apache.sling.api.request.builder.impl.SlingHttpServletRequestBuilderImpl;
+import org.apache.sling.api.request.builder.impl.SlingHttpServletResponseBuilderImpl;
 import org.apache.sling.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
 
@@ -46,7 +46,7 @@ public final class Builders {
      * @throws IllegalArgumentException If resource is {@code null}
      */
     public static @NotNull SlingHttpServletRequestBuilder newRequestBuilder(@NotNull final Resource resource) {
-        return new SlingHttpServletRequestImpl(resource);
+        return new SlingHttpServletRequestBuilderImpl(resource);
     }
 
     /**
@@ -55,7 +55,7 @@ public final class Builders {
      * @return a response builder
      */
     public static @NotNull SlingHttpServletResponseBuilder newResponseBuilder() {
-        return new SlingHttpServletResponseImpl();
+        return new SlingHttpServletResponseBuilderImpl();
     }
 
     /**

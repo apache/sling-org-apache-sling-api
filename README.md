@@ -6,10 +6,61 @@
 
 This module is part of the [Apache Sling](https://sling.apache.org) project.
 
-The Sling API defines an extension to the Servlet API 3.0 to
+The Sling API defines an extension to the Jakarta Serlvet API 6.0 to
 provide access to content and unified access to request
 parameters hiding the differences between the different methods
 of transferring parameters from client to server. Note that the
 Sling API bundle does not include the Servlet API but instead
 requires the API to be provided by the Servlet container in
 which the Sling framework is running or by another bundle.
+
+## Updating to Sling API 3
+
+Sling API 3 adds support for Jakarta Servlet API. Updating to the latest API version should just be a drop-in replacement. However, there are some points to considers.
+
+### Dependency to Jakarta Servlet API
+
+As the API references the Jakarta Servlet API in several signatures, it is very likely that you need to add the Jakarta Servlet API to the dependency list of your project. And that is in addition to the already existing dependency to the Javax Servlet API.
+
+Add a dependency like `jakarta.servlet:jakarta.servlet-api:6.0.0` to your project.
+
+At runtime, you need a container implementing the Jakarta Servlet API. For example, you can use Apache Felix Http Jetty 12.
+
+### Minimum Java Runtime
+
+As the Jakarta Servlet API requires Java 17, the Sling API now requires Java 17 as a minimum Java version at runtime as well.
+
+### Source Code Incompatibilties
+
+For some methods where a Javax Servlet Type is used in the signature, an alternative method has been added with the same name but different signature. This can lead to compilation errors due to disambigutie *if* the actual argument is `null`. However, all of these methods do not allow `null` as an argument, therefore this should not create a problem in reality.
+
+If such compilation error occurs nevertheless, a quick (but wrong) fix is to cast `null` to the Jakarta Servlet API type. However, the correct fix is to not call this method with a `null` argument at all and change the code accordingly.
+
+## Migrating from Servlet API 3 to Jakarta Servlet API 6
+
+With the release of Sling API Version 3, the Jakarta Servlet API is used as the base. Previous releases are based on the Javax Servlet API 3. While the API based on Servlet 3 is still available and functional, it is mainly there for compatiblity. All new code should leverage Jakarta Servelt API and it is advised to migrate existing code.
+
+In most cases, the migration is as simply as a series of search and replace operations. For Sling API based on Servlet 3 there is an alternative with the same functionality based on Jakarta Servlet API. However, for API that has been deprecated already, there is no alternative. Therefore, all usage of deprecated Sling API needs to be replaced first.
+
+The following table lists the replacements:
+
+| Feature | Servlet API 3 | Jakarta Servlet API 6 |
+| ------- | -------------- | --------------------- |
+| Package Prefix | `javax.servlet` | `jakarta.servlet` |
+| Request Interface | SlingHttpServletRequest | SlingJakartaHttpServletRequest |
+| Response Interface | SlingHttpServletResponse | SlingJakartaHttpServletResponse |
+| Event Interface | SlingRequestEvent | SlingJakartaRequestEvent |
+| Event Listener | SlingRequestListener | SlingJakartaRequestListener |
+| Builders | SlingHttpServletRequestBuilder.build() | SlingHttpServletRequestBuilder.buildJakartaRequest() |
+| Builders | SlingHttpServletResponseBuilder.build() | SlingHttpServletResponseBuilder.buildJakartaResponse() |
+| Builders | SlingHttpServletResponseResult | SlingJakartaHttpServletResponseResult |
+| Media Range | MediaRangeList | JakartaMediaRangeList |
+| Scripting | SlingBindings | SlingJakartaBindings |
+| Scripting | SlingScript | SlingJakartaScript |
+| Scripting | SlingScriptHelper | SlingJakartaScriptHelper |
+| Error Handling | ErrorHandler | JakartaErrorHandler |
+| Scripting | OptingServlet | JakartaOptinServlet |
+| Scripting | SlingAllMethodsServlet | SlingJakartaAllMethodsServlet |
+| Scripting | SlingSafeMethodsServlet | SlingJakartaSafeMethodsServlet |
+| Wrapper | SlingHttpServletRequestWrapper | SlingJakartaHttpServletRequestWrapper |
+| Wrapper | SlingHttpServletResponseWrapper | SlingJakartaHttpServletResponseWrapper |

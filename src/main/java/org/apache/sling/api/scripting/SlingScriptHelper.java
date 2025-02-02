@@ -32,7 +32,9 @@ import org.osgi.annotation.versioning.ProviderType;
  * The <code>SlingScriptHelper</code> interface defines the API of a helper
  * class which is provided to the scripts called from sling through the global
  * <code>{@link SlingBindings#SLING sling}</code> variable.
+ * @deprecated Use {@link SlingJakartaBindings} instead.
  */
+@Deprecated
 @ProviderType
 public interface SlingScriptHelper {
 

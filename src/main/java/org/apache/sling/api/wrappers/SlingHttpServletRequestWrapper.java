@@ -40,7 +40,9 @@ import org.apache.sling.api.resource.ResourceResolver;
  * The <code>SlingHttpServletRequestWrapper</code> class is a default wrapper
  * class around a {@link SlingHttpServletRequest} which may be extended to amend
  * the functionality of the original request object.
+ * @deprecated Use {@link SlingJakartaHttpServletRequestWrapper}
  */
+@Deprecated
 public class SlingHttpServletRequestWrapper extends HttpServletRequestWrapper
         implements SlingHttpServletRequest {
 

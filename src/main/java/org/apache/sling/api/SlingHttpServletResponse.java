@@ -32,8 +32,11 @@ import org.osgi.annotation.versioning.ProviderType;
  * <p>
  * Starting with Sling API 2.0.6, this interface also extends the
  * {@link Adaptable} interface.
+ *
+ * @deprecated Use {@link SlingJakartaHttpServletResponse} instead.
  */
 @ProviderType
+@Deprecated
 public interface SlingHttpServletResponse extends HttpServletResponse,
         Adaptable {
 

@@ -30,7 +30,9 @@ import org.apache.sling.api.SlingHttpServletResponse;
  * There's nothing interesting to wrap currently, as the SlingHttpServletResponse
  * interface is empty.
  * So this exists only for symmetry with {@link SlingHttpServletRequestWrapper}
+ * @deprecated Use {@link SlingJakartaHttpServletResponseWrapper}
  */
+@Deprecated
 public class SlingHttpServletResponseWrapper extends HttpServletResponseWrapper
         implements SlingHttpServletResponse {
 

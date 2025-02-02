@@ -57,7 +57,7 @@ public interface Resource extends Adaptable {
      *
      * @see #getResourceType()
      * @see ResourceUtil#isNonExistingResource(Resource)
-     * @see ResourceResolver#resolve(javax.servlet.http.HttpServletRequest,
+     * @see ResourceResolver#resolve(jakarta.servlet.http.HttpServletRequest,
      *      String)
      */
     String RESOURCE_TYPE_NON_EXISTING = "sling:nonexisting";

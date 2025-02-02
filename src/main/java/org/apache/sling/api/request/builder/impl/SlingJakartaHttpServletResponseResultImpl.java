@@ -29,27 +29,25 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.WriteListener;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.adapter.SlingAdaptable;
-import org.apache.sling.api.request.builder.SlingHttpServletResponseBuilder;
-import org.apache.sling.api.request.builder.SlingHttpServletResponseResult;
+import org.apache.sling.api.request.builder.SlingJakartaHttpServletResponseResult;
 import org.jetbrains.annotations.NotNull;
 
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.WriteListener;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+
 /**
- * Internal {@link SlingHttpServletResponse} implementation.
+ * Internal {@link SlingJakartaHttpServletResponseResultImpl} implementation.
  */
-public class SlingHttpServletResponseImpl 
-    extends SlingAdaptable 
-    implements SlingHttpServletResponseResult, SlingHttpServletResponseBuilder {
+public class SlingJakartaHttpServletResponseResultImpl
+    extends SlingAdaptable
+    implements SlingJakartaHttpServletResponseResult {
 
     /** Headers */
     private final HeaderSupport headerSupport = new HeaderSupport();
-    
+
     /** Cookies */
     private final Map<String, Cookie> cookies = new LinkedHashMap<>();
 
@@ -70,26 +68,13 @@ public class SlingHttpServletResponseImpl
     private int bufferSize = 8192;
 
     private ByteArrayOutputStream outputStream;
-    
+
     private ServletOutputStream servletOutputStream;
-    
+
     private PrintWriter printWriter;
-    
-    /** Is the builder locked? */
-    private boolean locked = false;
 
-    private void checkLocked() {
-        if ( locked ) {
-            throw new IllegalStateException("The builder can't be reused. Create a new builder instead.");
-        }
-    }
-
-    @Override
-    public @NotNull SlingHttpServletResponseResult build() {
-        this.checkLocked();
-        this.locked = true;
+    public SlingJakartaHttpServletResponseResultImpl() {
         this.reset();
-        return this;
     }
 
     private void checkCommitted() {
@@ -115,16 +100,16 @@ public class SlingHttpServletResponseImpl
         } else if ( this.characterEncoding == null ) {
             return this.contentType;
         }
-        return this.contentType.concat(SlingHttpServletRequestImpl.CHARSET_SEPARATOR).concat(this.characterEncoding);
+        return this.contentType.concat(SlingHttpServletRequestBuilderImpl.CHARSET_SEPARATOR).concat(this.characterEncoding);
     }
 
     @Override
     public void setContentType(final String type) {
         if (this.printWriter == null) {
-            final int pos = type == null ? -1 : type.indexOf(SlingHttpServletRequestImpl.CHARSET_SEPARATOR);
+            final int pos = type == null ? -1 : type.indexOf(SlingHttpServletRequestBuilderImpl.CHARSET_SEPARATOR);
             if (pos != -1) {
                 this.contentType = type.substring(0, pos);
-                this.characterEncoding = type.substring(pos + SlingHttpServletRequestImpl.CHARSET_SEPARATOR.length());
+                this.characterEncoding = type.substring(pos + SlingHttpServletRequestBuilderImpl.CHARSET_SEPARATOR.length());
             } else {
                 this.contentType = type;
             }
@@ -139,12 +124,6 @@ public class SlingHttpServletResponseImpl
     @Override
     public void setContentLengthLong(final long len) {
         this.contentLength = len;
-    }
-
-    @Override
-    public void setStatus(final int sc, final String message) {
-        setStatus(sc);
-        this.statusMessage = message;
     }
 
     @Override
@@ -257,7 +236,7 @@ public class SlingHttpServletResponseImpl
                 public boolean isReady() {
                     return true;
                 }
-                
+
                 @Override
                 public void setWriteListener(final WriteListener writeListener) {
                     throw new UnsupportedOperationException();
@@ -324,7 +303,7 @@ public class SlingHttpServletResponseImpl
     @Override
     public long getContentLength() {
         return this.contentLength;
-    }    
+    }
 
     @Override
     public String getStatusMessage() {
@@ -368,17 +347,7 @@ public class SlingHttpServletResponseImpl
 
     // --- unsupported operations ---
     @Override
-    public String encodeRedirectUrl(String url) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public String encodeRedirectURL(String url) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public String encodeUrl(String url) {
         throw new UnsupportedOperationException();
     }
 

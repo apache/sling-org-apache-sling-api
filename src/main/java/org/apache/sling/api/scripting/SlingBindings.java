@@ -33,7 +33,9 @@ import org.slf4j.Logger;
  * for script execution. The constants in this class define names of variables
  * which <em>MUST</em> or <em>MAY</em> be provided for the script execution.
  * Other variables may be define as callers see fit.
+ * @deprecated Use {@link SlingJakartaBindings} instead.
  */
+@Deprecated
 public class SlingBindings extends LazyBindings {
 
     private static final long serialVersionUID = 209505693646323450L;

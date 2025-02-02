@@ -18,7 +18,7 @@
  */
 package org.apache.sling.api;
 
-import javax.servlet.ServletException;
+import jakarta.servlet.ServletException;
 
 /**
  * The <code>SlingServletException</code> is a runtime exception wrapper for
@@ -30,8 +30,22 @@ public class SlingServletException extends SlingException {
 
     private static final long serialVersionUID = 8666411662509951915L;
 
+    /**
+     * Create a new exception
+     * @param cause The cause
+     * @since 2.4.0
+     */
     public SlingServletException(ServletException cause) {
         super(cause);
     }
 
+    /**
+     * Create a new exception
+     * @param cause The cause
+     * @deprecated Use {@link #SlingServletException(ServletException)}
+     */
+    @Deprecated
+    public SlingServletException(javax.servlet.ServletException cause) {
+        super(cause);
+    }
 }

@@ -68,7 +68,9 @@ import org.apache.sling.api.wrappers.SlingHttpServletResponseWrapper;
  * integration with traditional servlets.
  *
  * @see SlingAllMethodsServlet
+ * @deprecated Use {@link SlingJakartaSafeMethodsServlet} instead
  */
+@Deprecated
 public class SlingSafeMethodsServlet extends GenericServlet {
 
     private static final long serialVersionUID = 3620512288346703072L;

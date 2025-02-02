@@ -59,16 +59,6 @@ public class HttpSessionImplTest {
     }
 
     @Test
-    public void testValues() {
-        HttpSessionImpl httpSession = new HttpSessionImpl(new ServletContextImpl());
-        httpSession.putValue("attr1", "value1");
-        assertEquals(1, httpSession.getValueNames().length);
-        assertEquals("value1", httpSession.getValue("attr1"));
-        httpSession.removeValue("attr1");
-        assertEquals(0, httpSession.getValueNames().length);
-    }
-
-    @Test
     public void testInvalidate() {
         HttpSessionImpl httpSession = new HttpSessionImpl(new ServletContextImpl());
         httpSession.invalidate();

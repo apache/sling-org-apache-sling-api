@@ -21,6 +21,7 @@ import org.mockito.Mockito;
 
 import junit.framework.TestCase;
 
+@SuppressWarnings("deprecation")
 public class MediaRangeListTest extends TestCase {
     protected MediaRangeList rangeList;
 

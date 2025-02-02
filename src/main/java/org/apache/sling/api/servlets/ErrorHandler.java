@@ -28,7 +28,9 @@ import org.osgi.annotation.versioning.ConsumerType;
  * The <code>ErrorHandler</code> defines the interface of the service used by
  * the Sling to handle calls to <code>HttpServletResponse.sendError</code> and
  * to handle uncaught <code>Throwable</code>s.
+ * @deprecated Use {@link JakartaErrorHandler} instead.
  */
+@Deprecated
 @ConsumerType
 public interface ErrorHandler {
 

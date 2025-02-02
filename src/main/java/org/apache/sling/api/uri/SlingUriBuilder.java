@@ -34,7 +34,7 @@ import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.SlingJakartaHttpServletRequest;
 import org.apache.sling.api.request.RequestPathInfo;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -48,7 +48,7 @@ import org.slf4j.LoggerFactory;
  * Builder for immutable {@link SlingUri}s.
  * <p>
  * Example:
- * 
+ *
  * <pre>
  * SlingUri testUri = SlingUriBuilder.create()
  *         .setResourcePath("/test/to/path")
@@ -58,8 +58,7 @@ import org.slf4j.LoggerFactory;
  *         .setQuery("par1=val1&amp;par2=val2")
  *         .build();
  * </pre>
- * <p>
- * 
+ *
  * @since 1.0.0 (Sling API Bundle 2.23.0)
  */
 @ProviderType
@@ -88,7 +87,7 @@ public class SlingUriBuilder {
 
     /**
      * Creates a builder without any URI parameters set.
-     * 
+     *
      * @return a SlingUriBuilder
      */
     @NotNull
@@ -98,7 +97,7 @@ public class SlingUriBuilder {
 
     /**
      * Creates a builder from another SlingUri (clone and modify use case).
-     * 
+     *
      * @param slingUri the Sling URI to clone
      * @return a SlingUriBuilder
      */
@@ -124,7 +123,7 @@ public class SlingUriBuilder {
 
     /**
      * Creates a builder from a resource (only taking the resource path into account).
-     * 
+     *
      * @param resource the resource to take the resource path from
      * @return a SlingUriBuilder
      */
@@ -137,7 +136,7 @@ public class SlingUriBuilder {
 
     /**
      * Creates a builder from a RequestPathInfo instance .
-     * 
+     *
      * @param requestPathInfo the request path info to take resource path, selectors, extension and suffix from.
      * @return a SlingUriBuilder
      */
@@ -154,12 +153,49 @@ public class SlingUriBuilder {
 
     /**
      * Creates a builder from a request.
-     * 
+     *
      * @param request request to take the URI information from
      * @return a SlingUriBuilder
+     * @deprecated Use {@link #createFrom(SlingJakartaHttpServletRequest)} instead.
+     */
+    @Deprecated
+    @NotNull
+    public static SlingUriBuilder createFrom(@NotNull org.apache.sling.api.SlingHttpServletRequest request) {
+        @NotNull
+        ResourceResolver resourceResolver = request.getResourceResolver();
+        @NotNull
+        SlingUriBuilder uriBuilder = createFrom(request.getRequestPathInfo())
+                .setResourceResolver(resourceResolver)
+                .setScheme(request.getScheme())
+                .setHost(request.getServerName())
+                .setPort(request.getServerPort())
+                .setQuery(request.getQueryString());
+
+        // SLING-11347 - check if the original request was using a mapped path
+        @Nullable
+        String resourcePath = uriBuilder.getResourcePath();
+        if (resourcePath != null) {
+            @NotNull
+            String mappedResourcePath = resourceResolver.map(request, resourcePath);
+            if (!resourcePath.equals(mappedResourcePath) &&
+                    request.getPathInfo().startsWith(mappedResourcePath)) {
+                // mapped path is different from the resource path and
+                // the request path was the mapped path, so switch to it
+                uriBuilder.setResourcePath(mappedResourcePath);
+            }
+        }
+        return uriBuilder;
+    }
+
+    /**
+     * Creates a builder from a request.
+     *
+     * @param request request to take the URI information from
+     * @return a SlingUriBuilder
+     * @since 1.4.0
      */
     @NotNull
-    public static SlingUriBuilder createFrom(@NotNull SlingHttpServletRequest request) {
+    public static SlingUriBuilder createFrom(@NotNull SlingJakartaHttpServletRequest request) {
         @NotNull
         ResourceResolver resourceResolver = request.getResourceResolver();
         @NotNull
@@ -188,7 +224,7 @@ public class SlingUriBuilder {
 
     /**
      * Creates a builder from an arbitrary URI.
-     * 
+     *
      * @param uri the uri to transform to a SlingUri
      * @param resourceResolver a resource resolver is needed to decide up to what part the path is the resource path (that decision is only
      *        possible by checking against the underlying repository). If null is passed in, the shortest viable resource path is used.
@@ -218,7 +254,7 @@ public class SlingUriBuilder {
 
     /**
      * Creates a builder from an arbitrary URI string.
-     * 
+     *
      * @param uriStr to uri string to parse
      * @param resourceResolver a resource resolver is needed to decide up to what part the path is the resource path (that decision is only
      *        possible by checking against the underlying repository). If null is passed in, the shortest viable resource path is used.
@@ -307,7 +343,7 @@ public class SlingUriBuilder {
 
     /**
      * Set the user info of the URI.
-     * 
+     *
      * @param userInfo the user info
      * @return the builder for method chaining
      */
@@ -322,7 +358,7 @@ public class SlingUriBuilder {
 
     /**
      * Set the host of the URI.
-     * 
+     *
      * @param host the host
      * @return the builder for method chaining
      */
@@ -337,7 +373,7 @@ public class SlingUriBuilder {
 
     /**
      * Set the port of the URI.
-     * 
+     *
      * @param port the port
      * @return the builder for method chaining
      */
@@ -353,7 +389,7 @@ public class SlingUriBuilder {
     /**
      * Set the path of the URI that contains a resource path and optionally path parameters, selectors, an extension and a suffix. To remove
      * an existing path set path to {@code null}.
-     * 
+     *
      * @param path the path
      * @return the builder for method chaining
      */
@@ -390,7 +426,7 @@ public class SlingUriBuilder {
      * <p>
      * A resource resolver is necessary for this operation, hence
      * {@link #setResourceResolver(ResourceResolver)} needs to be called before {@link #rebaseResourcePath()} or a create method that implicitly sets this has to be used.
-     * 
+     *
      * @return the builder for method chaining
      * @throws IllegalStateException
      *             if no resource resolver is available
@@ -433,7 +469,7 @@ public class SlingUriBuilder {
 
     /**
      * Set the resource path of the URI.
-     * 
+     *
      * @param resourcePath the resource path
      * @return the builder for method chaining
      */
@@ -466,7 +502,7 @@ public class SlingUriBuilder {
 
     /**
      * Add a selector to the URI.
-     * 
+     *
      * @param selector the selector to add
      * @return the builder for method chaining
      */
@@ -497,7 +533,7 @@ public class SlingUriBuilder {
 
     /**
      * Set the extension of the URI.
-     * 
+     *
      * @param extension the extension
      * @return the builder for method chaining
      */
@@ -512,7 +548,7 @@ public class SlingUriBuilder {
 
     /**
      * Set a path parameter to the URI.
-     * 
+     *
      * @param key the path parameter key
      * @param value the path parameter value
      * @return the builder for method chaining
@@ -528,7 +564,7 @@ public class SlingUriBuilder {
 
     /**
      * Replaces all path parameters in the URI.
-     * 
+     *
      * @param pathParameters the path parameters
      * @return the builder for method chaining
      */
@@ -541,7 +577,7 @@ public class SlingUriBuilder {
 
     /**
      * Set the suffix of the URI.
-     * 
+     *
      * @param suffix the suffix
      * @return the builder for method chaining
      */
@@ -559,7 +595,7 @@ public class SlingUriBuilder {
 
     /**
      * Set the query of the URI.
-     * 
+     *
      * @param query the query
      * @return the builder for method chaining
      */
@@ -574,7 +610,7 @@ public class SlingUriBuilder {
 
     /**
      * Add a query parameter to the query of the URI. Key and value are URL-encoded before adding the parameter to the query string.
-     * 
+     *
      * @param parameterName the parameter name
      * @param value the parameter value
      * @return the builder for method chaining
@@ -601,7 +637,7 @@ public class SlingUriBuilder {
      * <p>
      * For adding multiple query parameters with the same name prefer to use {@link #addQueryParameter(String, String)}.
      * </p>
-     * 
+     *
      * @param queryParameters the map with the query parameters
      * @return the builder for method chaining
      */
@@ -619,7 +655,7 @@ public class SlingUriBuilder {
 
     /**
      * Set the fragment of the URI.
-     * 
+     *
      * @param fragment the fragment
      * @return the builder for method chaining
      */
@@ -631,7 +667,7 @@ public class SlingUriBuilder {
 
     /**
      * Set the scheme of the URI.
-     * 
+     *
      * @param scheme the scheme
      * @return the builder for method chaining
      */
@@ -643,7 +679,7 @@ public class SlingUriBuilder {
 
     /**
      * Set the scheme specific part of the URI. Use this for e.g. mail:jon@example.com URIs.
-     * 
+     *
      * @param schemeSpecificPart the scheme specific part
      * @return the builder for method chaining
      */
@@ -655,7 +691,7 @@ public class SlingUriBuilder {
 
     /**
      * Will remove scheme and authority (that is user info, host and port).
-     * 
+     *
      * @return the builder for method chaining
      */
     @NotNull
@@ -669,7 +705,7 @@ public class SlingUriBuilder {
 
     /**
      * Will take over scheme and authority (user info, host and port) from provided slingUri.
-     * 
+     *
      * @param slingUri the Sling URI
      * @return the builder for method chaining
      */
@@ -684,7 +720,7 @@ public class SlingUriBuilder {
 
     /**
      * Returns the resource path.
-     * 
+     *
      * @return returns the resource path or null if the URI does not contain a path.
      */
     @Nullable
@@ -694,7 +730,7 @@ public class SlingUriBuilder {
 
     /**
      * Returns the selector string
-     * 
+     *
      * @return returns the selector string or null if the URI does not contain selector(s) (in line with {@link RequestPathInfo})
      */
     @Nullable
@@ -704,7 +740,7 @@ public class SlingUriBuilder {
 
     /**
      * Returns the selectors array.
-     * 
+     *
      * @return the selectors array (empty if the URI does not contain selector(s), never null)
      */
     @NotNull
@@ -714,7 +750,7 @@ public class SlingUriBuilder {
 
     /**
      * Returns the extension.
-     * 
+     *
      * @return the extension or null if the URI does not contain an extension
      */
     @Nullable
@@ -724,7 +760,7 @@ public class SlingUriBuilder {
 
     /**
      * Returns the path parameters.
-     * 
+     *
      * @return the path parameters or an empty Map if the URI does not contain any
      */
     @Nullable
@@ -734,7 +770,7 @@ public class SlingUriBuilder {
 
     /**
      * Returns the suffix part of the URI
-     * 
+     *
      * @return the suffix string or null if the URI does not contain a suffix
      */
     @Nullable
@@ -749,7 +785,7 @@ public class SlingUriBuilder {
      * <li>the URI does not contain a suffix</li>
      * <li>if the suffix resource could not be found</li>
      * </ul>
-     * 
+     *
      * @return the suffix resource if available or null
      */
     @Nullable
@@ -763,7 +799,7 @@ public class SlingUriBuilder {
 
     /**
      * Returns the joint path of resource path, selectors, extension and suffix.
-     * 
+     *
      * @return the path or null if no path is set
      */
     @Nullable
@@ -773,7 +809,7 @@ public class SlingUriBuilder {
 
     /**
      * Returns the scheme-specific part of the URI, compare with Javadoc of {@link URI}.
-     * 
+     *
      * @return scheme specific part of the URI
      */
     @Nullable
@@ -787,7 +823,7 @@ public class SlingUriBuilder {
 
     /**
      * Returns the query.
-     * 
+     *
      * @return the query part of the URI or null if the URI does not contain a query
      */
     @Nullable
@@ -797,7 +833,7 @@ public class SlingUriBuilder {
 
     /**
      * Returns the fragment.
-     * 
+     *
      * @return the fragment or null if the URI does not contain a fragment
      */
     @Nullable
@@ -807,7 +843,7 @@ public class SlingUriBuilder {
 
     /**
      * Returns the scheme.
-     * 
+     *
      * @return the scheme or null if not set
      */
     @Nullable
@@ -817,7 +853,7 @@ public class SlingUriBuilder {
 
     /**
      * Returns the host.
-     * 
+     *
      * @return returns the host of the SlingUri or null if not set
      */
     @Nullable
@@ -827,7 +863,7 @@ public class SlingUriBuilder {
 
     /**
      * Returns the port.
-     * 
+     *
      * @return returns the port of the SlingUri or -1 if not set
      */
     public int getPort() {
@@ -836,7 +872,7 @@ public class SlingUriBuilder {
 
     /**
      * Returns the user info.
-     * 
+     *
      * @return the user info of the SlingUri or null if not set
      */
     @Nullable
@@ -846,7 +882,7 @@ public class SlingUriBuilder {
 
     /**
      * Will take over scheme and authority (user info, host and port) from provided URI.
-     * 
+     *
      * @param uri the URI
      * @return the builder for method chaining
      */
@@ -858,7 +894,7 @@ public class SlingUriBuilder {
 
     /**
      * Sets the resource resolver (required for {@link RequestPathInfo#getSuffixResource()}).
-     * 
+     *
      * @param resourceResolver the resource resolver
      * @return the builder for method chaining
      */
@@ -869,7 +905,7 @@ public class SlingUriBuilder {
     }
 
     /** Builds the immutable SlingUri from this builder.
-     * 
+     *
      * @return the builder for method chaining */
     @NotNull
     public SlingUri build() {
@@ -882,7 +918,7 @@ public class SlingUriBuilder {
 
     /**
      * Builds the corresponding string URI for this builder.
-     * 
+     *
      * @return string representation of builder
      */
     public String toString() {
@@ -891,7 +927,7 @@ public class SlingUriBuilder {
 
     /**
      * Returns true the URI is either a relative or absolute path (this is the case if scheme and host is empty and the URI path is set)
-     * 
+     *
      * @return returns true for path URIs
      */
     public boolean isPath() {
@@ -902,7 +938,7 @@ public class SlingUriBuilder {
 
     /**
      * Returns true if the URI has an absolute path starting with a slash ('/').
-     * 
+     *
      * @return true if the URI is an absolute path
      */
     public boolean isAbsolutePath() {
@@ -911,7 +947,7 @@ public class SlingUriBuilder {
 
     /**
      * Returns true if the URI is a relative path (no scheme and path does not start with '/').
-     * 
+     *
      * @return true if URI is a relative path
      */
     public boolean isRelativePath() {
@@ -920,7 +956,7 @@ public class SlingUriBuilder {
 
     /**
      * Returns true the URI is an absolute URI.
-     * 
+     *
      * @return true if the URI is an absolute URI containing a scheme.
      */
     public boolean isAbsolute() {
@@ -929,7 +965,7 @@ public class SlingUriBuilder {
 
     /**
      * Returns true for opaque URIs like e.g. mailto:jon@example.com.
-     * 
+     *
      * @return true if the URI is an opaque URI
      */
     public boolean isOpaque() {
@@ -938,7 +974,7 @@ public class SlingUriBuilder {
 
     private String toStringInternal(boolean includeScheme, boolean includeFragment) {
         StringBuilder requestUri = new StringBuilder();
-        
+
         if (includeScheme && isAbsolute()) {
             requestUri.append(scheme + CHAR_COLON);
         }

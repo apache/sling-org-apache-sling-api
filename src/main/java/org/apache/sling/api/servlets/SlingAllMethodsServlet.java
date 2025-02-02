@@ -38,7 +38,9 @@ import org.apache.sling.api.SlingHttpServletResponse;
  *
  * @see SlingSafeMethodsServlet for more information on supporting more HTTP
  *      methods
+ * @deprecated Use {@link SlingJakartaAllMethodsServlet} instead
  */
+@Deprecated
 public class SlingAllMethodsServlet extends SlingSafeMethodsServlet {
 
     private static final long serialVersionUID = -7960975481323952419L;

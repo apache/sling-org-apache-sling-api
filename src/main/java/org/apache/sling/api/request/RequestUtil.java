@@ -23,12 +23,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
-import javax.servlet.Servlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import org.apache.sling.api.SlingHttpServletRequest;
+import jakarta.servlet.Servlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import org.jetbrains.annotations.NotNull;
+import org.apache.sling.api.SlingJakartaHttpServletRequest;
 import org.apache.sling.api.servlets.HttpConstants;
 
 /**
@@ -103,7 +104,7 @@ public class RequestUtil {
         for (int i = 0; i < tokens.length; i++) {
             String[] parameters = tokens[i].split(";");
             String name = parameters[0];
-            Double qVal = new Double(1.0);
+            Double qVal = 1.0;
             if (parameters.length > 1) {
                 for (int j = 1; j < parameters.length; j++) {
                     String[] content = parameters[j].split("=", 2);
@@ -136,8 +137,41 @@ public class RequestUtil {
      *
      * @param servlet The servlet
      * @return The name of the servlet.
+     * @since 2.8.0
      */
     public static @NotNull String getServletName(@NotNull Servlet servlet) {
+        String name = null;
+
+        if (servlet.getServletConfig() != null) {
+            name = servlet.getServletConfig().getServletName();
+        }
+        if (name == null || name.length() == 0) {
+            name = servlet.getServletInfo();
+        }
+        if (name == null || name.length() == 0) {
+            name = servlet.getClass().getName();
+        }
+
+        return name;
+    }
+
+    /**
+     * Utility method to return a name for the given servlet. This method
+     * applies the following algorithm to find a non-<code>null</code>,
+     * non-empty name:
+     * <ol>
+     * <li>If the servlet has a servlet config, the servlet name from the
+     * servlet config is taken.
+     * <li>Otherwise check the servlet info
+     * <li>Otherwise use the fully qualified name of the servlet class
+     * </ol>
+     *
+     * @param servlet The servlet
+     * @return The name of the servlet.
+     * @deprecated Use {@link #getServletName(Servlet)}
+     */
+    @Deprecated
+    public static @NotNull String getServletName(@NotNull javax.servlet.Servlet servlet) {
         String name = null;
 
         if (servlet.getServletConfig() != null) {
@@ -163,8 +197,33 @@ public class RequestUtil {
      *            the attribte is actually removed from the request.
      * @return The previous value of the named request attribute or
      *         <code>null</code> if it was not set.
+     * @since 2.8.0
      */
     public static @Nullable Object setRequestAttribute(@NotNull HttpServletRequest request,
+            @NotNull String name, Object value) {
+        Object oldValue = request.getAttribute(name);
+        if (value == null) {
+            request.removeAttribute(name);
+        } else {
+            request.setAttribute(name, value);
+        }
+        return oldValue;
+    }
+
+    /**
+     * Sets the named request attribute to the new value and returns the
+     * previous value.
+     *
+     * @param request The request object whose attribute is to be set.
+     * @param name The name of the attribute to be set.
+     * @param value The new value of the attribute. If this is <code>null</code>
+     *            the attribte is actually removed from the request.
+     * @return The previous value of the named request attribute or
+     *         <code>null</code> if it was not set.
+     * @deprecated Use {@link #setRequestAttribute(HttpServletRequest, String, Object)}
+     */
+    @Deprecated
+    public static @Nullable Object setRequestAttribute(@NotNull javax.servlet.http.HttpServletRequest request,
             @NotNull String name, Object value) {
         Object oldValue = request.getAttribute(name);
         if (value == null) {
@@ -182,8 +241,9 @@ public class RequestUtil {
      * @param req the request
      * @param resp the response
      * @return <code>true</code> if the response was set
+     * @since 2.8.0
      */
-    public static boolean handleIfModifiedSince(@NotNull SlingHttpServletRequest req, @NotNull HttpServletResponse resp){
+    public static boolean handleIfModifiedSince(@NotNull SlingJakartaHttpServletRequest req, @NotNull HttpServletResponse resp){
         boolean responseSet=false;
         long lastModified=req.getResource().getResourceMetadata().getModificationTime();
         if (lastModified!=-1){
@@ -198,4 +258,28 @@ public class RequestUtil {
         return responseSet;
     }
 
+    /**
+     * Checks if the request contains a if-last-modified-since header and if the the
+	 * request's underlying resource has a jcr:lastModified property. if the properties were modified
+     * before the header a 304 is sent otherwise the response last modified header is set.
+     * @param req the request
+     * @param resp the response
+     * @return <code>true</code> if the response was set
+     * @deprecated Use {@link #handleIfModifiedSince(SlingJakartaHttpServletRequest, HttpServletResponse)} instead.
+     */
+    @Deprecated
+    public static boolean handleIfModifiedSince(@NotNull org.apache.sling.api.SlingHttpServletRequest req, @NotNull javax.servlet.http.HttpServletResponse resp){
+        boolean responseSet=false;
+        long lastModified=req.getResource().getResourceMetadata().getModificationTime();
+        if (lastModified!=-1){
+            long modifiedTime = lastModified/1000; //seconds
+            long ims = req.getDateHeader(HttpConstants.HEADER_IF_MODIFIED_SINCE)/1000; //seconds
+            if (modifiedTime <= ims) {
+                resp.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+                responseSet=true;
+            }
+            resp.setDateHeader(HttpConstants.HEADER_LAST_MODIFIED, lastModified);
+        }
+        return responseSet;
+    }
 }

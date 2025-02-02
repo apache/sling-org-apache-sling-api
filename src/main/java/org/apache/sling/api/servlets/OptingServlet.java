@@ -32,10 +32,12 @@ import org.osgi.annotation.versioning.ConsumerType;
  * properties.
  *
  * Note that servlets implementing this interface can have an impact
- * on system performance, as their resolution cannot be cached: the 
+ * on system performance, as their resolution cannot be cached: the
  * resolver has no insight into which parts of the request cause
  * {@link #accepts} to return true.
+ * @deprecated Use {@link JakartaOptingServlet} instead
  */
+@Deprecated
 @ConsumerType
 public interface OptingServlet extends Servlet {
 

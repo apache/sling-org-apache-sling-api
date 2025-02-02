@@ -20,15 +20,15 @@ package org.apache.sling.api.request.builder;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.SlingJakartaHttpServletRequest;
 import org.apache.sling.api.request.RequestProgressTracker;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 
-/** 
+import jakarta.servlet.http.HttpServletRequest;
+
+/**
  * <p>Fluent helper for building a request.</p>
  * <p><strong>Note:</strong> instances of this interface are not thread-safe.</p>
  * @since 1.0 (Sling API Bundle 2.24.0)
@@ -36,7 +36,7 @@ import org.osgi.annotation.versioning.ProviderType;
 @ProviderType
 public interface SlingHttpServletRequestBuilder {
 
-    /** 
+    /**
      * Sets the HTTP request method to use - defaults to {@code GET}.
      * @param method the HTTP method
      * @return this object
@@ -44,14 +44,14 @@ public interface SlingHttpServletRequestBuilder {
      */
     @NotNull SlingHttpServletRequestBuilder withRequestMethod(@NotNull String method);
 
-    /** 
+    /**
      * Sets the HTTP request's {@code Content-Type} header.
      * @param contentType the {@code Content-Type} value
      * @return this object
      */
     @NotNull SlingHttpServletRequestBuilder withContentType(@Nullable String contentType);
 
-    /** 
+    /**
      * Uses the supplied content as the request's body content.
      * @param content the request body content
      * @return this object
@@ -65,7 +65,7 @@ public interface SlingHttpServletRequestBuilder {
      */
     @NotNull SlingHttpServletRequestBuilder withSelectors(@Nullable String ... selectors);
 
-    /** 
+    /**
      * Sets the optional extension of the internal request, which influences the servlet/script resolution.
      * @param extension the extension
      * @return this object
@@ -79,7 +79,7 @@ public interface SlingHttpServletRequestBuilder {
      */
     @NotNull SlingHttpServletRequestBuilder withSuffix(@Nullable String suffix);
 
-    /** 
+    /**
      * Sets a request parameter.
      * @param key the name of the parameter
      * @param value the value of the parameter
@@ -88,7 +88,7 @@ public interface SlingHttpServletRequestBuilder {
      */
     @NotNull SlingHttpServletRequestBuilder withParameter(@NotNull String key, @NotNull String value);
 
-    /** 
+    /**
      * Sets a request parameter.
      * @param key the name of the parameter
      * @param values the values of the parameter
@@ -97,22 +97,62 @@ public interface SlingHttpServletRequestBuilder {
      */
     @NotNull SlingHttpServletRequestBuilder withParameter(@NotNull String key, @NotNull String[] values);
 
-    /** 
+    /**
      * Adds the supplied request parameters to the current ones.
      * @param parameters additional parameters
      * @return this object
      */
     @NotNull SlingHttpServletRequestBuilder withParameters(@Nullable Map<String, String[]> parameters);
 
-    /** 
+    /**
+     * Uses the request dispatcher from the provided request.
+     * @param request the request from which to use the dispatcher
+     * @return this object
+     * @throws IllegalArgumentException if {@code request} is {@code null}
+     * @deprecated Use {@link #useRequestDispatcherFrom(SlingJakartaHttpServletRequest)} instead
+     */
+    @Deprecated
+    @NotNull SlingHttpServletRequestBuilder useRequestDispatcherFrom(@NotNull org.apache.sling.api.SlingHttpServletRequest request);
+
+    /**
      * Uses the request dispatcher from the provided request.
      * @param request the request from which to use the dispatcher
      * @return this object
      * @throws IllegalArgumentException if {@code request} is {@code null}
      */
-    @NotNull SlingHttpServletRequestBuilder useRequestDispatcherFrom(@NotNull SlingHttpServletRequest request);
+    @NotNull SlingHttpServletRequestBuilder useRequestDispatcherFrom(@NotNull org.apache.sling.api.SlingJakartaHttpServletRequest request);
 
-    /** 
+    /**
+     * Uses the session from the provided request.
+     * @param request the request from which to use the session
+     * @return this object
+     * @throws IllegalArgumentException if {@code request} is {@code null}
+     * @deprecated Use {@link #useSessionFrom(HttpServletRequest)} instead
+     */
+    @Deprecated
+    @NotNull SlingHttpServletRequestBuilder useSessionFrom(@NotNull javax.servlet.http.HttpServletRequest request);
+
+    /**
+     * Uses the attributes backed by the provided request.
+     * @param request the request from which to use the attributes
+     * @return this object
+     * @throws IllegalArgumentException if {@code request} is {@code null}
+     * @deprecated Use {@link #useAttributesFrom(HttpServletRequest)} instead
+     */
+    @Deprecated
+    @NotNull SlingHttpServletRequestBuilder useAttributesFrom(@NotNull javax.servlet.http.HttpServletRequest request);
+
+    /**
+     * Uses the servlet context from the provided request.
+     * @param request the request from which to use the servlet context
+     * @return this object
+     * @throws IllegalArgumentException if {@code request} is {@code null}
+     * @deprecated Use {@link #useServletContextFrom(HttpServletRequest)} instead
+     */
+    @Deprecated
+    @NotNull SlingHttpServletRequestBuilder useServletContextFrom(@NotNull javax.servlet.http.HttpServletRequest request);
+
+    /**
      * Uses the session from the provided request.
      * @param request the request from which to use the session
      * @return this object
@@ -120,7 +160,7 @@ public interface SlingHttpServletRequestBuilder {
      */
     @NotNull SlingHttpServletRequestBuilder useSessionFrom(@NotNull HttpServletRequest request);
 
-    /** 
+    /**
      * Uses the attributes backed by the provided request.
      * @param request the request from which to use the attributes
      * @return this object
@@ -128,7 +168,7 @@ public interface SlingHttpServletRequestBuilder {
      */
     @NotNull SlingHttpServletRequestBuilder useAttributesFrom(@NotNull HttpServletRequest request);
 
-    /** 
+    /**
      * Uses the servlet context from the provided request.
      * @param request the request from which to use the servlet context
      * @return this object
@@ -148,6 +188,16 @@ public interface SlingHttpServletRequestBuilder {
      * Builds the request. Once this method has been called, the builder must not be used anymore. In order to create a new request a new
      * builder has to be used.
      * @return a request object
+     * @since 1.4
      */
-    @NotNull SlingHttpServletRequest build();
+    @NotNull SlingJakartaHttpServletRequest buildJakartaRequest();
+
+    /**
+     * Builds the request. Once this method has been called, the builder must not be used anymore. In order to create a new request a new
+     * builder has to be used.
+     * @return a request object
+     * @deprecated Use {@link #buildJakartaRequest()} instead
+     */
+    @Deprecated
+    @NotNull org.apache.sling.api.SlingHttpServletRequest build();
 }

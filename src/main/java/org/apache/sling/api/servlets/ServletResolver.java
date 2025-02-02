@@ -20,9 +20,9 @@ package org.apache.sling.api.servlets;
 
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
-import javax.servlet.Servlet;
+import jakarta.servlet.Servlet;
 
-import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.SlingJakartaHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 
@@ -30,7 +30,7 @@ import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * The <code>ServletResolver</code> defines the API for a service capable of
- * resolving <code>javax.servlet.Servlet</code> instances to handle the
+ * resolving <code>jakarta.servlet.Servlet</code> instances to handle the
  * processing of a request or resource.
  * <p>
  * Applications of the Sling Framework generally do not need the servlet
@@ -39,6 +39,91 @@ import org.osgi.annotation.versioning.ProviderType;
  */
 @ProviderType
 public interface ServletResolver {
+
+    /**
+     * Resolves a <code>jakarta.servlet.Servlet</code> whose
+     * <code>service</code> method may be used to handle the given
+     * <code>request</code>.
+     * <p>
+     * The returned servlet must be assumed to be initialized and ready to run.
+     * That is, the <code>init</code> nor the <code>destroy</code> methods
+     * must <em>NOT</em> be called on the returned servlet.
+     * <p>
+     * This method must not return a <code>Servlet</code> instance
+     * implementing the {@link JakartaOptingServlet} interface and returning
+     * <code>false</code> when the
+     * {@link JakartaOptingServlet#accepts(SlingJakartaHttpServletRequest)} method is called.
+     *
+     * @param request The {@link SlingJakartaHttpServletRequest} object used to drive
+     *            selection of the servlet.
+     * @return The servlet whose <code>service</code> method may be called to
+     *         handle the request. Might be {@code null}.
+     * @throws org.apache.sling.api.SlingException Is thrown if an error occurs
+     *             while trying to find an appropriate servlet to handle the
+     *             request.
+     * @throws NullPointerException If {@code request} is null.
+     * @since 2.5.0
+     */
+    @Nullable Servlet resolve(@NotNull SlingJakartaHttpServletRequest request);
+
+
+    /**
+     * Resolves a <code>jakarta.servlet.Servlet</code> whose
+     * <code>service</code> method may be used to handle a request.
+     * <p>
+     * The returned servlet must be assumed to be initialized and ready to run.
+     * That is, the <code>init</code> nor the <code>destroy</code> methods
+     * must <em>NOT</em> be called on the returned servlet.
+     * <p>
+     * This method skips all {@link OptingServlet}s as there is no
+     * request object available.
+     *
+     * Basically this method searches a script with the <code>scriptName</code>
+     * for the resource type defined by the <code>resource</code>.
+     *
+     * @param resource The {@link Resource} object used to drive
+     *            selection of the servlet.
+     * @param scriptName The name of the script - the script might have an
+     *                   extension. In this case only a script with the
+     *                   matching extension is used.
+     * @return The servlet whose <code>service</code> method may be called to
+     *         handle the request. Might be {@code null}.
+     * @throws org.apache.sling.api.SlingException Is thrown if an error occurs
+     *             while trying to find an appropriate servlet to handle the
+     *             request or if no servlet could be resolved to handle the
+     *             request.
+     * @throws IllegalArgumentException If {@code resource} is null.
+     * @since 2.1 (Sling API Bundle 2.1.0)
+     * @since 2.5.0
+     */
+    @Nullable Servlet resolve(@NotNull Resource resource, @NotNull String scriptName);
+
+    /**
+     * Resolves a <code>jakarta.servlet.Servlet</code> whose
+     * <code>service</code> method may be used to handle a request.
+     * <p>
+     * The returned servlet must be assumed to be initialized and ready to run.
+     * That is, the <code>init</code> nor the <code>destroy</code> methods
+     * must <em>NOT</em> be called on the returned servlet.
+     * <p>
+     * This method skips all {@link OptingServlet}s as there is no
+     * request object available.
+     *
+     * Basically this method searches a script with the <code>scriptName</code>
+     * @param resolver The {@link ResourceResolver} object used to drive
+     *            selection of the servlet.
+     * @param scriptName The name of the script - the script might have an
+     *                   extension. In this case only a script with the
+     *                   matching extension is used.
+     * @return The servlet whose <code>service</code> method may be called to
+     *         handle the request. Might be {@code null}.
+     * @throws org.apache.sling.api.SlingException Is thrown if an error occurs
+     *             while trying to find an appropriate servlet to handle the
+     *             request.
+     * @throws IllegalArgumentException If {@code resolver} is null.
+     * @since 2.5.0
+     */
+    @Nullable Servlet resolve(@NotNull ResourceResolver resolver, @NotNull String scriptName);
 
     /**
      * Resolves a <code>javax.servlet.Servlet</code> whose
@@ -52,9 +137,9 @@ public interface ServletResolver {
      * This method must not return a <code>Servlet</code> instance
      * implementing the {@link OptingServlet} interface and returning
      * <code>false</code> when the
-     * {@link OptingServlet#accepts(SlingHttpServletRequest)} method is called.
+     * {@link OptingServlet#accepts(org.apache.sling.api.SlingHttpServletRequest)} method is called.
      *
-     * @param request The {@link SlingHttpServletRequest} object used to drive
+     * @param request The {@link org.apache.sling.api.SlingHttpServletRequest} object used to drive
      *            selection of the servlet.
      * @return The servlet whose <code>service</code> method may be called to
      *         handle the request. Might be {@code null}.
@@ -62,8 +147,10 @@ public interface ServletResolver {
      *             while trying to find an appropriate servlet to handle the
      *             request.
      * @throws NullPointerException If {@code request} is null.
+     * @deprecated Use {@link #resolve(SlingJakartaHttpServletRequest)} instead.
      */
-    @Nullable Servlet resolveServlet(@NotNull SlingHttpServletRequest request);
+    @Deprecated
+    @Nullable javax.servlet.Servlet resolveServlet(@NotNull org.apache.sling.api.SlingHttpServletRequest request);
 
     /**
      * Resolves a <code>javax.servlet.Servlet</code> whose
@@ -92,8 +179,10 @@ public interface ServletResolver {
      *             request.
      * @throws IllegalArgumentException If {@code resource} is null.
      * @since 2.1 (Sling API Bundle 2.1.0)
+     * @deprecated Use {@link #resolve(Resource, String)} instead.
      */
-    @Nullable Servlet resolveServlet(@NotNull Resource resource, @NotNull String scriptName);
+    @Deprecated
+    @Nullable javax.servlet.Servlet resolveServlet(@NotNull Resource resource, @NotNull String scriptName);
 
     /**
      * Resolves a <code>javax.servlet.Servlet</code> whose
@@ -119,7 +208,8 @@ public interface ServletResolver {
      *             request.
      * @throws IllegalArgumentException If {@code resolver} is null.
      * @since 2.1 (Sling API Bundle 2.1.0)
+     * @deprecated Use {@link #resolve(ResourceResolver, String)} instead.
      */
-    @Nullable Servlet resolveServlet(@NotNull ResourceResolver resolver, @NotNull String scriptName);
-
+    @Deprecated
+    @Nullable javax.servlet.Servlet resolveServlet(@NotNull ResourceResolver resolver, @NotNull String scriptName);
 }

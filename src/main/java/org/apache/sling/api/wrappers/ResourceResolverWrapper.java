@@ -21,7 +21,7 @@ import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.PersistenceException;
@@ -71,6 +71,27 @@ public class ResourceResolverWrapper implements ResourceResolver {
     /**
      * Wraps and returns the {@code Resource} obtained by calling {@code resolve} on the wrapped resource resolver.
      *
+     * @param request The http servlet request object providing more hints at
+     *                how to resolve the <code>absPath</code>. This parameter may be
+     *                <code>null</code> in which case the implementation should use
+     *                reasonable defaults.
+     * @param absPath The absolute path to be resolved to a resource. If this
+     *                parameter is <code>null</code>, it is assumed to address the
+     *                root of the resource tree. If the path is relative it is
+     *                assumed relative to the root, that is a slash is prepended to
+     *                the path before resolving it.
+     * @return a wrapped resource obtained through the wrapped resource resolver
+     */
+    @NotNull
+    @Override
+    @Deprecated
+    public Resource resolve(@NotNull javax.servlet.http.HttpServletRequest request, @NotNull String absPath) {
+        return ResourceResolverResourceWrapper.wrap(this, wrapped.resolve(request, absPath));
+    }
+
+    /**
+     * Wraps and returns the {@code Resource} obtained by calling {@code resolve} on the wrapped resource resolver.
+     *
      * @param absPath The absolute path to be resolved to a resource. If this
      *                parameter is <code>null</code>, it is assumed to address the
      *                root of the resource tree. If the path is relative it is
@@ -94,7 +115,7 @@ public class ResourceResolverWrapper implements ResourceResolver {
     @SuppressWarnings("deprecation")
     @NotNull
     @Override
-    public Resource resolve(@NotNull HttpServletRequest request) {
+    public Resource resolve(@NotNull javax.servlet.http.HttpServletRequest request) {
         return ResourceResolverResourceWrapper.wrap(this, wrapped.resolve(request));
     }
 
@@ -106,6 +127,12 @@ public class ResourceResolverWrapper implements ResourceResolver {
 
     @Override
     public String map(@NotNull HttpServletRequest request, @NotNull String resourcePath) {
+        return wrapped.map(request, resourcePath);
+    }
+
+    @Override
+    @Deprecated
+    public String map(@NotNull javax.servlet.http.HttpServletRequest request, @NotNull String resourcePath) {
         return wrapped.map(request, resourcePath);
     }
 
@@ -348,7 +375,7 @@ public class ResourceResolverWrapper implements ResourceResolver {
     public Resource move(String srcAbsPath, String destAbsPath) throws PersistenceException {
         return ResourceResolverResourceWrapper.wrap(this, wrapped.move(srcAbsPath, destAbsPath));
     }
-    
+
     @Override
     public Map<String,Object> getPropertyMap() {
         return wrapped.getPropertyMap();

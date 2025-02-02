@@ -51,9 +51,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+@Deprecated
 public class SlingHttpServletRequestImplTest {
-    
-    private SlingHttpServletRequestImpl req;
+
+    private SlingHttpServletRequestBuilderImpl builder;
+    private SlingHttpServletRequest req;
 
     private Resource resource;
 
@@ -64,23 +66,23 @@ public class SlingHttpServletRequestImplTest {
         Mockito.when(resource.getPath()).thenReturn("/content/page");
         Mockito.when(resource.getResourceResolver()).thenReturn(resolver);
 
-        this.req = new SlingHttpServletRequestImpl(resource);
+        this.builder = new SlingHttpServletRequestBuilderImpl(resource);
     }
 
     @Test(expected = IllegalStateException.class) public void testCheckLocked() {
-        req.build();
-        req.withExtension("foo");
+        builder.build();
+        builder.withExtension("foo");
     }
 
     @Test public void testGetResource() {
-        req.build();
+        req = builder.build();
         assertEquals(resource, req.getResource());
         assertEquals(resource.getResourceResolver(), req.getResourceResolver());
     }
 
     @Test public void testGetRequestPathInfo() {
-        req.withExtension("html").withSelectors("tidy", "json");
-        req.build();
+        builder.withExtension("html").withSelectors("tidy", "json");
+        req = builder.build();
         assertEquals("html", req.getRequestPathInfo().getExtension());
         assertEquals("/content/page", req.getRequestPathInfo().getResourcePath());
         assertEquals("tidy.json", req.getRequestPathInfo().getSelectorString());
@@ -90,12 +92,11 @@ public class SlingHttpServletRequestImplTest {
     }
 
     @Test public void testInternalSession() {
-        req.build();
+        req = builder.build();
         assertNull(req.getSession(false));
         final HttpSession s = req.getSession();
         assertNotNull(s);
-        assertSame(s, req.getSession(true));
-        assertTrue(s instanceof HttpSessionImpl);
+        assertTrue(s instanceof org.apache.felix.http.javaxwrappers.HttpSessionWrapper);
     }
 
     @Test public void testProvidedSession() {
@@ -105,16 +106,15 @@ public class SlingHttpServletRequestImplTest {
         Mockito.when(outer.getSession(true)).thenReturn(outerSession);
         Mockito.when(outerSession.getId()).thenReturn("provided");
 
-        req.useSessionFrom(outer).build();
+        req = builder.useSessionFrom(outer).build();
         assertNull(req.getSession(false));
         final HttpSession s = req.getSession();
         assertNotNull(s);
-        assertSame(s, req.getSession(true));
         assertEquals("provided", s.getId());
     }
 
     @Test public void testInternalAttributes() {
-        req.build();
+        req = builder.build();
         assertFalse(req.getAttributeNames().hasMoreElements());
         req.setAttribute("a", "b");
         assertEquals("b", req.getAttribute("a"));
@@ -126,8 +126,8 @@ public class SlingHttpServletRequestImplTest {
 
     @Test public void testProvidedAttributes() {
         final SlingHttpServletRequest outer = Mockito.mock(SlingHttpServletRequest.class);
-
-        req.useAttributesFrom(outer).build();
+        Mockito.when(outer.getAttributeNames()).thenReturn(Collections.enumeration(Collections.emptyList()));
+        req = builder.useAttributesFrom(outer).build();
         req.getAttributeNames();
         Mockito.verify(outer, Mockito.atLeastOnce()).getAttributeNames();
         req.getAttribute("foo");
@@ -138,18 +138,18 @@ public class SlingHttpServletRequestImplTest {
         Mockito.verify(outer, Mockito.atLeastOnce()).setAttribute("foo", "bar");
     }
 
-    @Test public void testParameters() {
-        req.withParameter("a", "b");
-        req.withParameter("c", new String[] {"d", "e"});
-        req.withParameters(Collections.singletonMap("f", new String[] {"g"}));
-        req.withParameters(null);
-        req.build();
+    @Test public void testParameters() throws IOException, ServletException {
+        req = builder.withParameter("a", "b")
+            .withParameter("c", new String[] {"d", "e"})
+            .withParameters(Collections.singletonMap("f", new String[] {"g"}))
+            .withParameters(null)
+            .build();
 
         assertEquals("b", req.getParameter("a"));
         assertEquals("d", req.getParameter("c"));
         assertEquals("g", req.getParameter("f"));
         assertNull(req.getParameter("g"));
-    
+
         final Map<String, String[]> params = req.getParameterMap();
         assertEquals(3, params.size());
         assertArrayEquals(new String[] {"b"}, params.get("a"));
@@ -160,7 +160,7 @@ public class SlingHttpServletRequestImplTest {
         assertNotNull(req.getRequestParameter("c"));
         assertNotNull(req.getRequestParameter("f"));
         assertNull(req.getRequestParameter("g"));
-    
+
         assertEquals(1, req.getRequestParameters("a").length);
         assertEquals(2, req.getRequestParameters("c").length);
         assertEquals(1, req.getRequestParameters("f").length);
@@ -174,62 +174,62 @@ public class SlingHttpServletRequestImplTest {
     }
 
     @Test public void testNoQueryString() {
-        req.build();
+        req = builder.build();
         assertNull(req.getQueryString());
     }
 
     @Test public void testQueryString() {
-        req.withParameter("a", "b");
-        req.withParameter("c", new String[] {"d", "e"});
-        req.withParameters(Collections.singletonMap("f", new String[] {"g"}));
-        req.build();
+        req = builder.withParameter("a", "b")
+            .withParameter("c", new String[] {"d", "e"})
+            .withParameters(Collections.singletonMap("f", new String[] {"g"}))
+            .build();
 
         assertEquals("a=b&c=d&c=e&f=g", req.getQueryString());
     }
 
     @Test public void testLocale() {
-        req.build();
+        req = builder.build();
         assertEquals(Locale.US, req.getLocale());
         assertEquals(Collections.singletonList(Locale.US), Collections.list(req.getLocales()));
     }
 
     @Test public void testGetContextPath() {
-        req.build();
+        req = builder.build();
         assertEquals("", req.getContextPath());
     }
 
     @Test public void testGetScheme() {
-        req.build();
+        req = builder.build();
         assertEquals("http", req.getScheme());
     }
 
     @Test public void testGetServerName() {
-        req.build();
+        req = builder.build();
         assertEquals("localhost", req.getServerName());
     }
 
     @Test public void testGetServerPort() {
-        req.build();
+        req = builder.build();
         assertEquals(80, req.getServerPort());
     }
 
     @Test public void testIsSecure() {
-        req.build();
+        req = builder.build();
         assertFalse(req.isSecure());
     }
 
     @Test public void testDefaultGetMethod() {
-        req.build();
+        req = builder.build();
         assertEquals("GET", req.getMethod());
     }
 
     @Test public void testGetMethod() {
-        req.withRequestMethod("POST").build();
+        req = builder.withRequestMethod("POST").build();
         assertEquals("POST", req.getMethod());
     }
 
     @Test public void testHeaders() {
-        req.build();
+        req = builder.build();
         assertFalse(req.getHeaderNames().hasMoreElements());
         assertEquals(-1, req.getDateHeader("foo"));
         assertEquals(-1, req.getIntHeader("foo"));
@@ -238,31 +238,31 @@ public class SlingHttpServletRequestImplTest {
     }
 
     @Test public void testCookies() {
-        req.build();
+        req = builder.build();
         assertNull(req.getCookies());
         assertNull(req.getCookie("name"));
     }
 
     @Test public void testGetResourceBundle() {
-        req.build();
+        req = builder.build();
         assertNotNull(req.getResourceBundle(req.getLocale()));
         assertNotNull(req.getResourceBundle("base", req.getLocale()));
     }
 
     @Test public void testGetCharacterEncoding() throws UnsupportedEncodingException {
-        req.build();
+        req = builder.build();
         assertNull(req.getCharacterEncoding());
         req.setCharacterEncoding("UTF-8");
         assertEquals("UTF-8", req.getCharacterEncoding());
     }
 
     @Test public void testDefaultContentType() throws UnsupportedEncodingException {
-        req.build();
+        req = builder.build();
         assertNull(req.getContentType());
     }
 
     @Test public void testContentType() throws UnsupportedEncodingException {
-        req.withContentType("text/text").build();
+        req = builder.withContentType("text/text").build();
         assertEquals("text/text", req.getContentType());
         assertNull(req.getCharacterEncoding());
         req.setCharacterEncoding("UTF-8");
@@ -271,12 +271,12 @@ public class SlingHttpServletRequestImplTest {
     }
 
     @Test public void testNullContentType() {
-        req.withContentType(null).build();
+        req = builder.withContentType(null).build();
         assertNull("null", req.getContentType());
     }
 
     @Test public void testContentTypeAndCharset() throws UnsupportedEncodingException {
-        req.withContentType("text/text;charset=UTF-16").build();
+        req = builder.withContentType("text/text;charset=UTF-16").build();
         assertEquals("text/text;charset=UTF-16", req.getContentType());
         assertEquals("UTF-16", req.getCharacterEncoding());
         req.setCharacterEncoding("UTF-8");
@@ -285,13 +285,13 @@ public class SlingHttpServletRequestImplTest {
     }
 
     @Test public void testNoBody() {
-        req.build();
+        req = builder.build();
         assertEquals(0, req.getContentLength());
         assertEquals(0L, req.getContentLengthLong());
     }
 
     @Test public void testBodyReader() throws IOException {
-        req.withBody("body").build();
+        req = builder.withBody("body").build();
         assertEquals(4, req.getContentLength());
         assertEquals(4L, req.getContentLengthLong());
         final Reader r = req.getReader();
@@ -305,7 +305,7 @@ public class SlingHttpServletRequestImplTest {
     }
 
     @Test public void testBodyInputStream() throws IOException {
-        req.withBody("body").build();
+        req = builder.withBody("body").build();
         assertEquals(4, req.getContentLength());
         assertEquals(4L, req.getContentLengthLong());
         final InputStream in = req.getInputStream();
@@ -320,7 +320,7 @@ public class SlingHttpServletRequestImplTest {
 
     @Test public void testDefaultRequestDispatcher() {
         final Resource rsrc = Mockito.mock(Resource.class);
-        req.build();
+        req = builder.build();
         try {
             req.getRequestDispatcher("/path");
             fail();
@@ -343,7 +343,7 @@ public class SlingHttpServletRequestImplTest {
         final Resource rsrc = Mockito.mock(Resource.class);
         final RequestDispatcherOptions opts = new RequestDispatcherOptions();
         final SlingHttpServletRequest outer = Mockito.mock(SlingHttpServletRequest.class);
-        req.useRequestDispatcherFrom(outer).build();
+        req = builder.useRequestDispatcherFrom(outer).build();
 
         req.getRequestDispatcher("/path");
         Mockito.verify(outer, Mockito.times(1)).getRequestDispatcher("/path");
@@ -356,82 +356,82 @@ public class SlingHttpServletRequestImplTest {
     }
 
     @Test public void testGetRemoteUser() {
-        req.build();
+        req = builder.build();
         assertNull(req.getRemoteUser());
     }
 
     @Test public void testGetRemoteAddr() {
-        req.build();
+        req = builder.build();
         assertNull(req.getRemoteAddr());
     }
 
     @Test public void testGetRemoteHost() {
-        req.build();
+        req = builder.build();
         assertNull(req.getRemoteHost());
     }
 
     @Test public void testGetRemotePort() {
-        req.build();
+        req = builder.build();
         assertEquals(0, req.getRemotePort());
     }
 
     @Test public void testGetServletPath() {
-        req.build();
+        req = builder.build();
         assertEquals("", req.getServletPath());
     }
 
     @Test public void testGetPathInfo() {
-        req.build();
+        req = builder.build();
         assertEquals("/content/page", req.getPathInfo());
     }
 
     @Test public void testGetRequestURI() {
-        req.build();
+        req = builder.build();
         assertEquals("/content/page", req.getRequestURI());
     }
 
     @Test public void testGetRequestURL() {
-        req.build();
+        req = builder.build();
         assertEquals("http://localhost/content/page", req.getRequestURL().toString());
     }
 
     @Test public void testGetAuthType() {
-        req.build();
+        req = builder.build();
         assertNull(req.getAuthType());
     }
 
     @Test public void getResponseContentType() {
-        req.build();
+        req = builder.build();
         assertNull(req.getResponseContentType());
         assertEquals(Collections.singletonList(null), Collections.list(req.getResponseContentTypes()));
     }
 
     @Test public void testNewGetRequestProgressTracker() {
-        req.build();
+        req = builder.build();
         assertNotNull(req.getRequestProgressTracker());
     }
 
     @Test public void testProvidedGetRequestProgressTracker() {
         final RequestProgressTracker t = Builders.newRequestProgressTracker();
-        req.withRequestProgressTracker(t).build();
+        req = builder.withRequestProgressTracker(t).build();
         assertSame(t, req.getRequestProgressTracker());
     }
 
     @Test public void testProvidedByAttributesGetRequestProgressTracker() {
         // build a request with a tracker set in an attribute first
-        final SlingHttpServletRequest orig = new SlingHttpServletRequestImpl(this.resource);
+        final SlingHttpServletRequest orig = new SlingHttpServletRequestBuilderImpl(this.resource).build();
         final RequestProgressTracker t = Builders.newRequestProgressTracker();
         orig.setAttribute(RequestProgressTracker.class.getName(), t);
 
-        req.useAttributesFrom(orig).build();
+        req = builder.useAttributesFrom(orig).build();
         assertSame(t, req.getRequestProgressTracker());
     }
 
     @Test public void testDefaultServletContext() {
-        req.build();
+        req = builder.build();
         final ServletContext ctx = req.getServletContext();
         assertNotNull(ctx);
-        assertTrue(ctx instanceof ServletContextImpl);
+        assertTrue(ctx instanceof org.apache.felix.http.javaxwrappers.ServletContextWrapper);
     }
 
     @Test public void testProvidedServletContext() {
@@ -439,15 +439,15 @@ public class SlingHttpServletRequestImplTest {
         final ServletContext outerCtx = Mockito.mock(ServletContext.class);
         Mockito.when(outer.getServletContext()).thenReturn(outerCtx);
 
-        req.useServletContextFrom(outer).build();
+        req = builder.useServletContextFrom(outer).build();
         final ServletContext ctx = req.getServletContext();
         assertNotNull(ctx);
         Mockito.verify(outer, Mockito.times(1)).getServletContext();
-        assertFalse(ctx instanceof ServletContextImpl);
+        assertTrue(ctx instanceof org.apache.felix.http.javaxwrappers.ServletContextWrapper);
     }
 
     @Test public void testUnsupportedMethods() throws ServletException, IOException {
-        req.build();
+        req = builder.build();
         try {
             req.getPathTranslated();
             fail();

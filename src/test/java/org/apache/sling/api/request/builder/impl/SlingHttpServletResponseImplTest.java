@@ -34,42 +34,46 @@ import java.util.Locale;
 
 import javax.servlet.http.Cookie;
 
+import org.apache.sling.api.request.builder.SlingHttpServletResponseResult;
 import org.junit.Before;
 import org.junit.Test;
 
+@Deprecated
 public class SlingHttpServletResponseImplTest {
-    
-    private SlingHttpServletResponseImpl res;
+
+    private SlingHttpServletResponseBuilderImpl builder;
+
+    private SlingHttpServletResponseResult res;
 
     @Before
     public void setup() {
-        this.res = new SlingHttpServletResponseImpl();
+        this.builder = new SlingHttpServletResponseBuilderImpl();
     }
 
     @Test(expected = IllegalStateException.class) public void testCheckLocked() {
         try {
-            res.build();
+            res = builder.build();
         } catch ( final IllegalStateException error) {
             fail();
         }
-        res.build();
+        res = builder.build();
     }
 
 
     @Test public void testGetCharacterEncoding() throws UnsupportedEncodingException {
-        res.build();
+        res = builder.build();
         assertNull(res.getCharacterEncoding());
         res.setCharacterEncoding("UTF-8");
         assertEquals("UTF-8", res.getCharacterEncoding());
     }
 
     @Test public void testDefaultContentType() throws UnsupportedEncodingException {
-        res.build();
+        res = builder.build();
         assertNull(res.getContentType());
     }
 
-    @Test public void testContentType() throws UnsupportedEncodingException {
-        res.build();
+    @Test public void testContentType() throws IOException {
+        res = builder.build();
         res.setContentType("text/text");
         assertEquals("text/text", res.getContentType());
         assertNull(res.getCharacterEncoding());
@@ -86,7 +90,7 @@ public class SlingHttpServletResponseImplTest {
     }
 
     @Test public void testContentTypeAndCharset() throws UnsupportedEncodingException {
-        res.build();
+        res = builder.build();
         res.setContentType("text/text;charset=UTF-16");
         assertEquals("text/text;charset=UTF-16", res.getContentType());
         assertEquals("UTF-16", res.getCharacterEncoding());
@@ -96,7 +100,7 @@ public class SlingHttpServletResponseImplTest {
     }
 
     @Test public void testContentLength() {
-        res.build();
+        res = builder.build();
         assertEquals(-1L, res.getContentLength());
         res.setContentLength(500);
         assertEquals(500L, res.getContentLength());
@@ -105,7 +109,7 @@ public class SlingHttpServletResponseImplTest {
     }
 
     @Test public void testSetStatus() {
-        res.build();
+        res = builder.build();
         assertEquals(200, res.getStatus());
         assertNull(res.getStatusMessage());
 
@@ -120,24 +124,24 @@ public class SlingHttpServletResponseImplTest {
         assertFalse(res.isCommitted());
     }
 
-    @Test public void testSendError() {
-        res.build();
+    @Test public void testSendError() throws IOException {
+        res = builder.build();
         res.sendError(500);
         assertEquals(500, res.getStatus());
         assertNull(res.getStatusMessage());
         assertTrue(res.isCommitted());
     }
 
-    @Test public void testSendErrorWithMessage() {
-        res.build();
+    @Test public void testSendErrorWithMessage() throws IOException {
+        res = builder.build();
         res.sendError(500, "msg");
         assertEquals(500, res.getStatus());
         assertEquals("msg", res.getStatusMessage());
         assertTrue(res.isCommitted());
     }
 
-    @Test public void testSendRedirect() {
-        res.build();
+    @Test public void testSendRedirect() throws IOException {
+        res = builder.build();
         res.sendRedirect("/redirect");
         assertEquals(302, res.getStatus());
         assertNull(res.getStatusMessage());
@@ -146,7 +150,7 @@ public class SlingHttpServletResponseImplTest {
     }
 
     @Test public void testHeaders() {
-        res.build();
+        res = builder.build();
         assertTrue(res.getHeaderNames().isEmpty());
         res.addDateHeader("date", 50000);
         res.addIntHeader("number", 5);
@@ -169,8 +173,8 @@ public class SlingHttpServletResponseImplTest {
         assertEquals(1, res.getHeaders("name").size());
     }
 
-    @Test public void testGetWriter() {
-        res.build();
+    @Test public void testGetWriter() throws IOException {
+        res = builder.build();
         final PrintWriter writer = res.getWriter();
         writer.write("body");
         assertEquals("body", res.getOutputAsString());
@@ -178,7 +182,7 @@ public class SlingHttpServletResponseImplTest {
     }
 
     @Test public void testGetOutputStream() throws IOException {
-        res.build();
+        res = builder.build();
         final OutputStream out = res.getOutputStream();
         out.write("body".getBytes(StandardCharsets.UTF_8));
         assertEquals("body", res.getOutputAsString());
@@ -186,7 +190,7 @@ public class SlingHttpServletResponseImplTest {
     }
 
     @Test public void testReset() {
-        res.build();
+        res = builder.build();
         res.setStatus(201);
         res.setContentLength(500);
         res.reset();
@@ -195,7 +199,7 @@ public class SlingHttpServletResponseImplTest {
     }
 
     @Test public void testResetBuffer() {
-        res.build();
+        res = builder.build();
         res.setStatus(201);
         res.setContentLength(500);
         res.resetBuffer();
@@ -204,21 +208,21 @@ public class SlingHttpServletResponseImplTest {
     }
 
     @Test public void testBufferSize() {
-        res.build();
+        res = builder.build();
         assertEquals(8192, res.getBufferSize());
         res.setBufferSize(16384);
         assertEquals(16384, res.getBufferSize());
     }
 
-    @Test public void testFlushBuffer() {
-        res.build();
+    @Test public void testFlushBuffer() throws IOException {
+        res = builder.build();
         assertFalse(res.isCommitted());
         res.flushBuffer();
         assertTrue(res.isCommitted());
     }
 
     @Test public void testCookies() {
-        res.build();
+        res = builder.build();
         assertNull(res.getCookies());
         res.addCookie(new Cookie("name", "value"));
         assertEquals(1, res.getCookies().length);
@@ -227,14 +231,14 @@ public class SlingHttpServletResponseImplTest {
     }
 
     @Test public void testLocale() {
-        res.build();
+        res = builder.build();
         assertEquals(Locale.US, res.getLocale());
         res.setLocale(Locale.CANADA);
         assertEquals(Locale.CANADA, res.getLocale());
     }
 
     @Test public void testUnsupportedMethods() {
-        res.build();
+        res = builder.build();
         try {
             res.encodeRedirectURL("/url");
             fail();

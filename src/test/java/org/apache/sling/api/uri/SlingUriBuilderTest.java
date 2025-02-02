@@ -30,6 +30,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.SlingJakartaHttpServletRequest;
 import org.apache.sling.api.request.RequestPathInfo;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -40,10 +41,14 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
+@SuppressWarnings("deprecation")
 public class SlingUriBuilderTest {
 
     @Mock
     SlingHttpServletRequest request;
+
+    @Mock
+    SlingJakartaHttpServletRequest jakartaRequest;
 
     @Mock
     RequestPathInfo requestPathInfo;
@@ -57,6 +62,7 @@ public class SlingUriBuilderTest {
     @Before
     public void before() {
         when(request.getRequestPathInfo()).thenReturn(requestPathInfo);
+        when(jakartaRequest.getRequestPathInfo()).thenReturn(requestPathInfo);
     }
 
     @Test
@@ -90,7 +96,6 @@ public class SlingUriBuilderTest {
 
     @Test
     public void testCreateFromRequest() {
-
         // to satisfy that the return of this call is @NotNull
         when(request.getResourceResolver()).thenReturn(resourceResolver);
         when(resourceResolver.map(request, "/test/to/path")).thenReturn("/test/to/path");
@@ -105,6 +110,26 @@ public class SlingUriBuilderTest {
         when(requestPathInfo.getSuffix()).thenReturn("/suffix/path");
 
         SlingUri testUri = SlingUriBuilder.createFrom(request).build();
+
+        assertEquals("https://example.com/test/to/path.sel1.sel2.html/suffix/path?par1=val1", testUri.toString());
+    }
+
+    @Test
+    public void testCreateFromRequestJakarta() {
+        // to satisfy that the return of this call is @NotNull
+        when(jakartaRequest.getResourceResolver()).thenReturn(resourceResolver);
+        when(resourceResolver.map(jakartaRequest, "/test/to/path")).thenReturn("/test/to/path");
+
+        when(jakartaRequest.getScheme()).thenReturn("https");
+        when(jakartaRequest.getServerName()).thenReturn("example.com");
+        when(jakartaRequest.getServerPort()).thenReturn(443);
+        when(jakartaRequest.getQueryString()).thenReturn("par1=val1");
+        when(requestPathInfo.getResourcePath()).thenReturn("/test/to/path");
+        when(requestPathInfo.getSelectors()).thenReturn(new String[] { "sel1", "sel2" });
+        when(requestPathInfo.getExtension()).thenReturn("html");
+        when(requestPathInfo.getSuffix()).thenReturn("/suffix/path");
+
+        SlingUri testUri = SlingUriBuilder.createFrom(jakartaRequest).build();
 
         assertEquals("https://example.com/test/to/path.sel1.sel2.html/suffix/path?par1=val1", testUri.toString());
     }
@@ -137,6 +162,33 @@ public class SlingUriBuilderTest {
     }
 
     /**
+     * SLING-11347 verify that mapped path remains mapped in the new SlingUri
+     */
+    @Test
+    public void testCreateFromRequestWithMappedPathJakarta() {
+
+        when(jakartaRequest.getResourceResolver()).thenReturn(resourceResolver);
+        // simulate the resourcePath not already under /content so ResourceResolver#resolve would
+        //   change the result
+        when(jakartaRequest.getPathInfo()).thenReturn("/test/to/path");
+        when(resourceResolver.map(jakartaRequest, "/content/test/to/path")).thenReturn("/test/to/path");
+
+        when(jakartaRequest.getScheme()).thenReturn("https");
+        when(jakartaRequest.getServerName()).thenReturn("example.com");
+        when(jakartaRequest.getServerPort()).thenReturn(443);
+        when(jakartaRequest.getQueryString()).thenReturn("par1=val1");
+        // simulate the ResourceResolver#resolve switching to a resource under /content
+        when(requestPathInfo.getResourcePath()).thenReturn("/content/test/to/path");
+        when(requestPathInfo.getSelectors()).thenReturn(new String[] { "sel1", "sel2" });
+        when(requestPathInfo.getExtension()).thenReturn("html");
+        when(requestPathInfo.getSuffix()).thenReturn("/suffix/path");
+
+        SlingUri testUri = SlingUriBuilder.createFrom(jakartaRequest).build();
+
+        assertEquals("https://example.com/test/to/path.sel1.sel2.html/suffix/path?par1=val1", testUri.toString());
+    }
+
+    /**
      * SLING-11347 verify that not-mapped path remains not-mapped in the new SlingUri
      */
     @Test
@@ -158,6 +210,32 @@ public class SlingUriBuilderTest {
         when(requestPathInfo.getSuffix()).thenReturn("/suffix/path");
 
         SlingUri testUri = SlingUriBuilder.createFrom(request).build();
+
+        assertEquals("https://example.com/content/test/to/path.sel1.sel2.html/suffix/path?par1=val1", testUri.toString());
+    }
+
+    /**
+     * SLING-11347 verify that not-mapped path remains not-mapped in the new SlingUri
+     */
+    @Test
+    public void testCreateFromRequestWithNotMappedPathJakarta() {
+
+        when(jakartaRequest.getResourceResolver()).thenReturn(resourceResolver);
+        // simulate the resourcePath already under /content so ResourceResolver#resolve would
+        //   not change the result
+        when(jakartaRequest.getPathInfo()).thenReturn("/content/test/to/path");
+        when(resourceResolver.map(jakartaRequest, "/content/test/to/path")).thenReturn("/test/to/path");
+
+        when(jakartaRequest.getScheme()).thenReturn("https");
+        when(jakartaRequest.getServerName()).thenReturn("example.com");
+        when(jakartaRequest.getServerPort()).thenReturn(443);
+        when(jakartaRequest.getQueryString()).thenReturn("par1=val1");
+        when(requestPathInfo.getResourcePath()).thenReturn("/content/test/to/path");
+        when(requestPathInfo.getSelectors()).thenReturn(new String[] { "sel1", "sel2" });
+        when(requestPathInfo.getExtension()).thenReturn("html");
+        when(requestPathInfo.getSuffix()).thenReturn("/suffix/path");
+
+        SlingUri testUri = SlingUriBuilder.createFrom(jakartaRequest).build();
 
         assertEquals("https://example.com/content/test/to/path.sel1.sel2.html/suffix/path?par1=val1", testUri.toString());
     }
@@ -203,6 +281,27 @@ public class SlingUriBuilderTest {
         when(requestPathInfo.getSuffix()).thenReturn("/suffix/path");
 
         SlingUri testUri = SlingUriBuilder.createFrom(request).build();
+
+        assertEquals("https://example.com/test/to/path.sel1.sel2.html/suffix/path?par1=val1", testUri.toString());
+    }
+
+    @Test
+    public void testCreateFromPathJakarta() {
+
+        // to satisfy that the return of this call is @NotNull
+        when(jakartaRequest.getResourceResolver()).thenReturn(resourceResolver);
+        when(resourceResolver.map(jakartaRequest, "/test/to/path")).thenReturn("/test/to/path");
+
+        when(jakartaRequest.getScheme()).thenReturn("https");
+        when(jakartaRequest.getServerName()).thenReturn("example.com");
+        when(jakartaRequest.getServerPort()).thenReturn(443);
+        when(jakartaRequest.getQueryString()).thenReturn("par1=val1");
+        when(requestPathInfo.getResourcePath()).thenReturn("/test/to/path");
+        when(requestPathInfo.getSelectors()).thenReturn(new String[] { "sel1", "sel2" });
+        when(requestPathInfo.getExtension()).thenReturn("html");
+        when(requestPathInfo.getSuffix()).thenReturn("/suffix/path");
+
+        SlingUri testUri = SlingUriBuilder.createFrom(jakartaRequest).build();
 
         assertEquals("https://example.com/test/to/path.sel1.sel2.html/suffix/path?par1=val1", testUri.toString());
     }

@@ -34,6 +34,17 @@ public interface SlingHttpServletResponseBuilder {
      * builder has to be used.
      *
      * @return a response object
+     * @deprecated Use {@link #buildJakartaResponseResult()} instead
      */
+    @Deprecated
     @NotNull SlingHttpServletResponseResult build();
+
+    /**
+     * Builds the response. Once this method has been called, the builder must not be used anymore. In order to create a new response a new
+     * builder has to be used.
+     *
+     * @return a response object
+     * @since 1.4
+     */
+    @NotNull SlingJakartaHttpServletResponseResult buildJakartaResponseResult();
 }
