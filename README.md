@@ -40,7 +40,7 @@ If such compilation error occurs nevertheless, a quick (but wrong) fix is to cas
 
 With the release of Sling API Version 3, the Jakarta Servlet API is used as the base. Previous releases are based on the Javax Servlet API 3. While the API based on Servlet 3 is still available and functional, it is mainly there for compatiblity. All new code should leverage Jakarta Servelt API and it is advised to migrate existing code.
 
-In most cases, the migration is as simply as a series of search and replace operations. For Sling API based on Servlet 3 there is an alternative with the same functionality based on Jakarta Servelt API. However, for API that has been deprecated already, there is no alternative. Therefore, all usage of deprecated Sling API needs to be replaced first.
+In most cases, the migration is as simply as a series of search and replace operations. For Sling API based on Servlet 3 there is an alternative with the same functionality based on Jakarta Servlet API. However, for API that has been deprecated already, there is no alternative. Therefore, all usage of deprecated Sling API needs to be replaced first.
 
 The following table lists the replacements:
 
