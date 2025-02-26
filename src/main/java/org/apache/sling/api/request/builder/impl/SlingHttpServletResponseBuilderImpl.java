@@ -18,8 +18,8 @@
  */
 package org.apache.sling.api.request.builder.impl;
 
-import org.apache.sling.api.request.builder.SlingJakartaHttpServletResponseResult;
 import org.apache.sling.api.request.builder.SlingHttpServletResponseBuilder;
+import org.apache.sling.api.request.builder.SlingJakartaHttpServletResponseResult;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -31,7 +31,7 @@ public class SlingHttpServletResponseBuilderImpl implements SlingHttpServletResp
     private boolean locked = false;
 
     private void checkLocked() {
-        if ( locked ) {
+        if (locked) {
             throw new IllegalStateException("The builder can't be reused. Create a new builder instead.");
         }
     }

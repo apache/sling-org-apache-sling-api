@@ -21,7 +21,6 @@ package org.apache.sling.api.resource.mapping;
 import java.util.Collection;
 
 import jakarta.servlet.http.HttpServletRequest;
-
 import org.apache.sling.api.resource.ResourceResolver;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ProviderType;
@@ -64,7 +63,8 @@ public interface ResourceMapper {
      *
      * @since 1.0.0 (Sling API Bundle 2.19.0)
      */
-    @NotNull String getMapping(@NotNull String resourcePath);
+    @NotNull
+    String getMapping(@NotNull String resourcePath);
 
     /**
      * Returns an URL mapped from the (resource) path applying the reverse
@@ -84,7 +84,7 @@ public interface ResourceMapper {
      * {@link ResourceResolver#resolve(HttpServletRequest, String)} method. As such the URL
      * returned is expected to be an absolute URL including scheme, host, any
      * servlet context path and the actual path used to resolve the resource.
-
+     *
      * @param resourcePath The path for which to return a mapped path.
      * @param request The http servlet request object which may be used to apply
      *            more mapping functionality.
@@ -93,7 +93,8 @@ public interface ResourceMapper {
      *             {@link ResourceResolver#close() closed}.
      * @since 1.1.0
      */
-    @NotNull String getMapping(@NotNull String resourcePath, @NotNull HttpServletRequest request);
+    @NotNull
+    String getMapping(@NotNull String resourcePath, @NotNull HttpServletRequest request);
 
     /**
      * Returns an URL mapped from the (resource) path applying the reverse
@@ -113,7 +114,7 @@ public interface ResourceMapper {
      * {@link ResourceResolver#resolve(HttpServletRequest, String)} method. As such the URL
      * returned is expected to be an absolute URL including scheme, host, any
      * servlet context path and the actual path used to resolve the resource.
-
+     *
      * @param resourcePath The path for which to return a mapped path.
      * @param request The http servlet request object which may be used to apply
      *            more mapping functionality.
@@ -124,7 +125,8 @@ public interface ResourceMapper {
      * @deprecated Use {@link #getMapping(String, HttpServletRequest)} instead.
      */
     @Deprecated
-    @NotNull String getMapping(@NotNull String resourcePath, @NotNull javax.servlet.http.HttpServletRequest request);
+    @NotNull
+    String getMapping(@NotNull String resourcePath, @NotNull javax.servlet.http.HttpServletRequest request);
 
     /**
      * Returns all possible mappings for a given {@code resourcePath} as paths.
@@ -157,7 +159,7 @@ public interface ResourceMapper {
      * @param resourcePath The path for which to return a mapped path.
      * @param request The http servlet request object which may be used to apply
      *            more mapping functionality.
-
+     *
      * @return a collection of mapped URLs, in no particular order. May not be null or empty.
      * @throws IllegalStateException if the underlying resource resolver has already been
      *             {@link ResourceResolver#close() closed}.
@@ -178,7 +180,7 @@ public interface ResourceMapper {
      * @param resourcePath The path for which to return a mapped path.
      * @param request The http servlet request object which may be used to apply
      *            more mapping functionality.
-
+     *
      * @return a collection of mapped URLs, in no particular order. May not be null or empty.
      * @throws IllegalStateException if the underlying resource resolver has already been
      *             {@link ResourceResolver#close() closed}.
@@ -186,5 +188,6 @@ public interface ResourceMapper {
      * @deprecated Use {@link #getAllMappings(String, HttpServletRequest)} instead.
      */
     @Deprecated
-    Collection<String> getAllMappings(@NotNull String resourcePath, @NotNull javax.servlet.http.HttpServletRequest request);
+    Collection<String> getAllMappings(
+            @NotNull String resourcePath, @NotNull javax.servlet.http.HttpServletRequest request);
 }

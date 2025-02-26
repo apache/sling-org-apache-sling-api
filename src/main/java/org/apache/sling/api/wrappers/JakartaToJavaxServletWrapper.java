@@ -18,6 +18,12 @@
  */
 package org.apache.sling.api.wrappers;
 
+import javax.servlet.Servlet;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+
 import java.io.IOException;
 
 import org.apache.felix.http.jakartawrappers.ServletConfigWrapper;
@@ -27,12 +33,6 @@ import org.apache.sling.api.servlets.JakartaOptingServlet;
 import org.apache.sling.api.servlets.OptingServlet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import javax.servlet.Servlet;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 
 /**
  * This class wraps a servlet based on the Jakarta Servlet API
@@ -60,7 +60,7 @@ public class JakartaToJavaxServletWrapper implements Servlet {
     private final jakarta.servlet.Servlet servlet;
 
     public JakartaToJavaxServletWrapper(final jakarta.servlet.Servlet servlet) {
-         this.servlet = servlet;
+        this.servlet = servlet;
     }
 
     @Override
@@ -75,7 +75,9 @@ public class JakartaToJavaxServletWrapper implements Servlet {
     @Override
     public void service(final ServletRequest req, final ServletResponse res) throws ServletException, IOException {
         try {
-            this.servlet.service(JavaxToJakartaRequestWrapper.toJakartaRequest(req), JavaxToJakartaResponseWrapper.toJakartaResponse(res));
+            this.servlet.service(
+                    JavaxToJakartaRequestWrapper.toJakartaRequest(req),
+                    JavaxToJakartaResponseWrapper.toJakartaResponse(res));
         } catch (final jakarta.servlet.ServletException e) {
             throw ServletExceptionUtil.getServletException(e);
         }
@@ -99,7 +101,8 @@ public class JakartaToJavaxServletWrapper implements Servlet {
         return servlet.getServletInfo();
     }
 
-    public static class JakartaToJavaxOptingServletWrapper extends JakartaToJavaxServletWrapper implements OptingServlet {
+    public static class JakartaToJavaxOptingServletWrapper extends JakartaToJavaxServletWrapper
+            implements OptingServlet {
 
         private final JakartaOptingServlet servlet;
 
@@ -114,4 +117,3 @@ public class JakartaToJavaxServletWrapper implements Servlet {
         }
     }
 }
-

@@ -18,9 +18,8 @@
  */
 package org.apache.sling.api.adapter;
 
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
-
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
@@ -92,7 +91,6 @@ public interface AdapterFactory {
      * @return The adapted object or <code>null</code> if this factory instance
      *         cannot adapt the object.
      */
-    @Nullable <AdapterType> AdapterType getAdapter(@NotNull Object adaptable,
-            @NotNull Class<AdapterType> type);
-
+    @Nullable
+    <AdapterType> AdapterType getAdapter(@NotNull Object adaptable, @NotNull Class<AdapterType> type);
 }

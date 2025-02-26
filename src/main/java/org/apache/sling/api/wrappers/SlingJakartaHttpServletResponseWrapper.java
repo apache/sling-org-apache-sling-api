@@ -19,7 +19,6 @@
 package org.apache.sling.api.wrappers;
 
 import jakarta.servlet.http.HttpServletResponseWrapper;
-
 import org.apache.sling.api.SlingJakartaHttpServletResponse;
 
 /**

@@ -18,16 +18,14 @@
  */
 package org.apache.sling.api;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
-
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.sling.api.adapter.Adaptable;
 import org.apache.sling.api.request.RequestDispatcherOptions;
@@ -37,7 +35,8 @@ import org.apache.sling.api.request.RequestPathInfo;
 import org.apache.sling.api.request.RequestProgressTracker;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -73,7 +72,8 @@ public interface SlingHttpServletRequest extends HttpServletRequest, Adaptable {
      *
      * @return The <code>Resource</code> object of this request.
      */
-    @NotNull Resource getResource();
+    @NotNull
+    Resource getResource();
 
     /**
      * Returns the {@link ResourceResolver} which resolved the
@@ -81,14 +81,16 @@ public interface SlingHttpServletRequest extends HttpServletRequest, Adaptable {
      *
      * @return The resource resolver
      */
-    @NotNull ResourceResolver getResourceResolver();
+    @NotNull
+    ResourceResolver getResourceResolver();
 
     /**
      * Returns the {@link RequestPathInfo} pertaining to this request.
      *
      * @return the request path info.
      */
-    @NotNull RequestPathInfo getRequestPathInfo();
+    @NotNull
+    RequestPathInfo getRequestPathInfo();
 
     /**
      * Returns the value of a request parameter as a {@link RequestParameter},
@@ -112,7 +114,8 @@ public interface SlingHttpServletRequest extends HttpServletRequest, Adaptable {
      * @see RequestParameterMap#getValue(String)
      * @throws IllegalArgumentException if name is <code>null</code>.
      */
-    @Nullable RequestParameter getRequestParameter(@NotNull String name);
+    @Nullable
+    RequestParameter getRequestParameter(@NotNull String name);
 
     /**
      * Returns an array of {@link RequestParameter} objects containing all of
@@ -132,7 +135,8 @@ public interface SlingHttpServletRequest extends HttpServletRequest, Adaptable {
      * @see RequestParameterMap#getValues(String)
      * @throws IllegalArgumentException if name is <code>null</code>.
      */
-    @Nullable RequestParameter[] getRequestParameters(@NotNull String name);
+    @Nullable
+    RequestParameter[] getRequestParameters(@NotNull String name);
 
     /**
      * Returns a <code>Map</code> of the parameters of this request.
@@ -148,7 +152,8 @@ public interface SlingHttpServletRequest extends HttpServletRequest, Adaptable {
      *         parameter map are of type String. The values in the parameter map
      *         are of type {@link RequestParameter} array (<code>RequestParameter[]</code>).
      */
-   @NotNull RequestParameterMap getRequestParameterMap();
+    @NotNull
+    RequestParameterMap getRequestParameterMap();
 
     /**
      * Returns the request parameters as instances of the
@@ -160,7 +165,8 @@ public interface SlingHttpServletRequest extends HttpServletRequest, Adaptable {
      *         order.
      * @since 2.3  (Sling API Bundle 2.6.0)
      */
-    @NotNull List<RequestParameter> getRequestParameterList();
+    @NotNull
+    List<RequestParameter> getRequestParameterList();
 
     /**
      * Returns a <code>RequestDispatcher</code> object that acts as a wrapper
@@ -179,8 +185,8 @@ public interface SlingHttpServletRequest extends HttpServletRequest, Adaptable {
      *         for the <code>resource</code> or <code>null</code> if an
      *         error occurs preparing the dispatcher.
      */
-    @Nullable RequestDispatcher getRequestDispatcher(@NotNull String path,
-            RequestDispatcherOptions options);
+    @Nullable
+    RequestDispatcher getRequestDispatcher(@NotNull String path, RequestDispatcherOptions options);
 
     /**
      * Returns a <code>RequestDispatcher</code> object that acts as a wrapper
@@ -198,8 +204,8 @@ public interface SlingHttpServletRequest extends HttpServletRequest, Adaptable {
      *         for the <code>resource</code> or <code>null</code> if an
      *         error occurs preparing the dispatcher.
      */
-    @Nullable RequestDispatcher getRequestDispatcher(@NotNull Resource resource,
-            RequestDispatcherOptions options);
+    @Nullable
+    RequestDispatcher getRequestDispatcher(@NotNull Resource resource, RequestDispatcherOptions options);
 
     /**
      * Same as {@link #getRequestDispatcher(Resource,RequestDispatcherOptions)}
@@ -210,7 +216,8 @@ public interface SlingHttpServletRequest extends HttpServletRequest, Adaptable {
      *         for the <code>resource</code> or <code>null</code> if an
      *         error occurs preparing the dispatcher.
      */
-    @Nullable RequestDispatcher getRequestDispatcher(@NotNull Resource resource);
+    @Nullable
+    RequestDispatcher getRequestDispatcher(@NotNull Resource resource);
 
     /**
      * Returns the named cookie from the HTTP request or <code>null</code> if
@@ -219,7 +226,8 @@ public interface SlingHttpServletRequest extends HttpServletRequest, Adaptable {
      * @param name The name of the cookie to return.
      * @return The named cookie or <code>null</code> if no such cookie exists.
      */
-    @Nullable Cookie getCookie(String name);
+    @Nullable
+    Cookie getCookie(String name);
 
     /**
      * Returns the framework preferred content type for the response. The
@@ -231,7 +239,8 @@ public interface SlingHttpServletRequest extends HttpServletRequest, Adaptable {
      *
      * @return preferred MIME type of the response
      */
-    @Nullable String getResponseContentType();
+    @Nullable
+    String getResponseContentType();
 
     /**
      * Gets a list of content types which the framework accepts for the
@@ -246,7 +255,8 @@ public interface SlingHttpServletRequest extends HttpServletRequest, Adaptable {
      *
      * @return ordered list of MIME types for the response
      */
-    @NotNull Enumeration<String> getResponseContentTypes();
+    @NotNull
+    Enumeration<String> getResponseContentTypes();
 
     /**
      * Returns the resource bundle for the given locale.
@@ -256,7 +266,8 @@ public interface SlingHttpServletRequest extends HttpServletRequest, Adaptable {
      *            {@link #getLocale()} is used to select the resource bundle.
      * @return the resource bundle for the given locale
      */
-    @Nullable ResourceBundle getResourceBundle(Locale locale);
+    @Nullable
+    ResourceBundle getResourceBundle(Locale locale);
 
     /**
      * Returns the resource bundle of the given base name for the given locale.
@@ -270,14 +281,15 @@ public interface SlingHttpServletRequest extends HttpServletRequest, Adaptable {
      *            {@link #getLocale()} is used to select the resource bundle.
      * @return the resource bundle for the given locale
      */
-    @Nullable ResourceBundle getResourceBundle(String baseName, Locale locale);
+    @Nullable
+    ResourceBundle getResourceBundle(String baseName, Locale locale);
 
     /**
      * Returns the {@link RequestProgressTracker} of this request.
      * @return The request progress tracker.
      */
-    @NotNull RequestProgressTracker getRequestProgressTracker();
-
+    @NotNull
+    RequestProgressTracker getRequestProgressTracker();
 
     /**
      * Returns a {@code java.security.Principal} object containing
@@ -292,30 +304,33 @@ public interface SlingHttpServletRequest extends HttpServletRequest, Adaptable {
      * @see #getAuthType()
      * @see #getRemoteUser()
      */
-     @Nullable java.security.Principal getUserPrincipal();
+    @Nullable
+    java.security.Principal getUserPrincipal();
 
-     /**
-      * Returns the name of the authentication scheme used to protect
-      * the servlet. All servlet containers support basic, form and client
-      * certificate authentication, and may additionally support digest
-      * authentication.
-      * If the request is not authenticated {@code null} is returned.
-      *
-      * @return the authentication scheme or {code null}
-      * @see getRemoteUser()
-      * @see HttpServletRequest#getAuthType()
-      */
-     @Nullable String getAuthType();
+    /**
+     * Returns the name of the authentication scheme used to protect
+     * the servlet. All servlet containers support basic, form and client
+     * certificate authentication, and may additionally support digest
+     * authentication.
+     * If the request is not authenticated {@code null} is returned.
+     *
+     * @return the authentication scheme or {code null}
+     * @see getRemoteUser()
+     * @see HttpServletRequest#getAuthType()
+     */
+    @Nullable
+    String getAuthType();
 
-     /**
-      * Returns the login of the user making this request, if the
-      * user has been authenticated, or {@code null} if the user
-      * has not been authenticated.
-      *
-      * @return	a {@code String} specifying the login of the user making
-      *         this request, or {@code null}
-      * @see getAuthType()
-      * @see HttpServletRequest#getRemoteUser()
-      */
-     @Nullable String getRemoteUser();
+    /**
+     * Returns the login of the user making this request, if the
+     * user has been authenticated, or {@code null} if the user
+     * has not been authenticated.
+     *
+     * @return	a {@code String} specifying the login of the user making
+     *         this request, or {@code null}
+     * @see getAuthType()
+     * @see HttpServletRequest#getRemoteUser()
+     */
+    @Nullable
+    String getRemoteUser();
 }

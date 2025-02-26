@@ -36,15 +36,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import org.apache.sling.api.SlingJakartaHttpServletRequest;
-import org.apache.sling.api.adapter.SlingAdaptable;
-import org.apache.sling.api.request.RequestDispatcherOptions;
-import org.apache.sling.api.request.RequestParameter;
-import org.apache.sling.api.request.RequestParameterMap;
-import org.apache.sling.api.request.RequestPathInfo;
-import org.apache.sling.api.request.RequestProgressTracker;
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
 import jakarta.servlet.AsyncContext;
 import jakarta.servlet.DispatcherType;
 import jakarta.servlet.ReadListener;
@@ -60,6 +51,15 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.HttpUpgradeHandler;
 import jakarta.servlet.http.Part;
+import org.apache.sling.api.SlingJakartaHttpServletRequest;
+import org.apache.sling.api.adapter.SlingAdaptable;
+import org.apache.sling.api.request.RequestDispatcherOptions;
+import org.apache.sling.api.request.RequestParameter;
+import org.apache.sling.api.request.RequestParameterMap;
+import org.apache.sling.api.request.RequestPathInfo;
+import org.apache.sling.api.request.RequestProgressTracker;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 
 /**
  * Internal {@link SlingJakartaHttpServletRequest} implementation.
@@ -90,11 +90,11 @@ public class SlingJakartaHttpServletRequestImpl extends SlingAdaptable implement
     @Override
     public HttpSession getSession(final boolean create) {
         if (this.builder.session == null && create) {
-            if ( this.builder.sessionProvider != null ) {
+            if (this.builder.sessionProvider != null) {
                 this.builder.session = this.builder.sessionProvider.getSession(create);
             } else {
                 this.builder.session = new HttpSessionImpl(this.builder.servletContext);
-           }
+            }
         }
         return this.builder.session;
     }
@@ -106,7 +106,7 @@ public class SlingJakartaHttpServletRequestImpl extends SlingAdaptable implement
 
     @Override
     public Object getAttribute(final String name) {
-        if ( this.builder.attributesProvider != null ) {
+        if (this.builder.attributesProvider != null) {
             return this.builder.attributesProvider.getAttribute(name);
         }
         return this.builder.attributeMap.get(name);
@@ -114,7 +114,7 @@ public class SlingJakartaHttpServletRequestImpl extends SlingAdaptable implement
 
     @Override
     public Enumeration<String> getAttributeNames() {
-        if ( this.builder.attributesProvider != null ) {
+        if (this.builder.attributesProvider != null) {
             return this.builder.attributesProvider.getAttributeNames();
         }
         return Collections.enumeration(this.builder.attributeMap.keySet());
@@ -122,7 +122,7 @@ public class SlingJakartaHttpServletRequestImpl extends SlingAdaptable implement
 
     @Override
     public void removeAttribute(final String name) {
-        if ( this.builder.attributesProvider != null ) {
+        if (this.builder.attributesProvider != null) {
             this.builder.attributesProvider.removeAttribute(name);
         } else {
             this.builder.attributeMap.remove(name);
@@ -131,7 +131,7 @@ public class SlingJakartaHttpServletRequestImpl extends SlingAdaptable implement
 
     @Override
     public void setAttribute(final String name, final Object object) {
-        if ( this.builder.attributesProvider != null ) {
+        if (this.builder.attributesProvider != null) {
             this.builder.attributesProvider.setAttribute(name, object);
         } else {
             this.builder.attributeMap.put(name, object);
@@ -169,7 +169,7 @@ public class SlingJakartaHttpServletRequestImpl extends SlingAdaptable implement
 
     @Override
     public RequestParameterMap getRequestParameterMap() {
-        if ( this.builder.requestParameterMap == null ) {
+        if (this.builder.requestParameterMap == null) {
             this.builder.requestParameterMap = new RequestParameterMapImpl(this.builder.parameters);
         }
         return this.builder.requestParameterMap;
@@ -183,7 +183,8 @@ public class SlingJakartaHttpServletRequestImpl extends SlingAdaptable implement
     @Override
     public List<RequestParameter> getRequestParameterList() {
         final List<RequestParameter> params = new ArrayList<>();
-        for (final RequestParameter[] requestParameters : getRequestParameterMap().values()) {
+        for (final RequestParameter[] requestParameters :
+                getRequestParameterMap().values()) {
             params.addAll(Arrays.asList(requestParameters));
         }
         return params;
@@ -276,7 +277,7 @@ public class SlingJakartaHttpServletRequestImpl extends SlingAdaptable implement
 
     @Override
     public Cookie[] getCookies() {
-        if ( this.builder.cookies.isEmpty() ) {
+        if (this.builder.cookies.isEmpty()) {
             return null;
         }
         return this.builder.cookies.values().toArray(new Cookie[this.builder.cookies.size()]);
@@ -306,10 +307,13 @@ public class SlingJakartaHttpServletRequestImpl extends SlingAdaptable implement
     public String getContentType() {
         if (this.builder.contentType == null) {
             return null;
-        } else if ( this.builder.characterEncoding == null ) {
+        } else if (this.builder.characterEncoding == null) {
             return this.builder.contentType;
         }
-        return this.builder.contentType.concat(SlingHttpServletRequestBuilderImpl.CHARSET_SEPARATOR).concat(this.builder.characterEncoding);
+        return this.builder
+                .contentType
+                .concat(SlingHttpServletRequestBuilderImpl.CHARSET_SEPARATOR)
+                .concat(this.builder.characterEncoding);
     }
 
     @Override
@@ -364,7 +368,7 @@ public class SlingJakartaHttpServletRequestImpl extends SlingAdaptable implement
 
     @Override
     public RequestDispatcher getRequestDispatcher(final String path) {
-        if ( this.builder.requestDispatcherProvider != null ) {
+        if (this.builder.requestDispatcherProvider != null) {
             return this.builder.requestDispatcherProvider.getRequestDispatcher(path);
         }
         throw new UnsupportedOperationException();
@@ -372,7 +376,7 @@ public class SlingJakartaHttpServletRequestImpl extends SlingAdaptable implement
 
     @Override
     public RequestDispatcher getRequestDispatcher(final String path, final RequestDispatcherOptions options) {
-        if ( this.builder.requestDispatcherProvider != null ) {
+        if (this.builder.requestDispatcherProvider != null) {
             return this.builder.requestDispatcherProvider.getRequestDispatcher(path, options);
         }
         throw new UnsupportedOperationException();
@@ -380,7 +384,7 @@ public class SlingJakartaHttpServletRequestImpl extends SlingAdaptable implement
 
     @Override
     public RequestDispatcher getRequestDispatcher(final Resource resource) {
-        if ( this.builder.requestDispatcherProvider != null ) {
+        if (this.builder.requestDispatcherProvider != null) {
             return this.builder.requestDispatcherProvider.getRequestDispatcher(resource);
         }
         throw new UnsupportedOperationException();
@@ -388,7 +392,7 @@ public class SlingJakartaHttpServletRequestImpl extends SlingAdaptable implement
 
     @Override
     public RequestDispatcher getRequestDispatcher(final Resource resource, final RequestDispatcherOptions options) {
-        if ( this.builder.requestDispatcherProvider != null ) {
+        if (this.builder.requestDispatcherProvider != null) {
             return this.builder.requestDispatcherProvider.getRequestDispatcher(resource, options);
         }
         throw new UnsupportedOperationException();
@@ -441,11 +445,13 @@ public class SlingJakartaHttpServletRequestImpl extends SlingAdaptable implement
         requestUrl.append("://");
         requestUrl.append(this.builder.serverName);
         boolean includePort = true;
-        if ( (SlingHttpServletRequestBuilderImpl.HTTP_PROTOCOL.equals(this.builder.scheme) && this.builder.serverPort == 80 )
-             || (SlingHttpServletRequestBuilderImpl.SECURE_PROTOCOL.equals(this.builder.scheme) && this.builder.serverPort == 443) ) {
+        if ((SlingHttpServletRequestBuilderImpl.HTTP_PROTOCOL.equals(this.builder.scheme)
+                        && this.builder.serverPort == 80)
+                || (SlingHttpServletRequestBuilderImpl.SECURE_PROTOCOL.equals(this.builder.scheme)
+                        && this.builder.serverPort == 443)) {
             includePort = false;
         }
-        if ( includePort ) {
+        if (includePort) {
             requestUrl.append(':');
             requestUrl.append(this.builder.serverPort);
         }

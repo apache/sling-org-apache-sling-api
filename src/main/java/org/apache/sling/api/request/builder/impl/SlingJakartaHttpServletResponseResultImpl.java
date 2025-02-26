@@ -29,21 +29,19 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.sling.api.adapter.SlingAdaptable;
-import org.apache.sling.api.request.builder.SlingJakartaHttpServletResponseResult;
-import org.jetbrains.annotations.NotNull;
-
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.WriteListener;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.sling.api.adapter.SlingAdaptable;
+import org.apache.sling.api.request.builder.SlingJakartaHttpServletResponseResult;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Internal {@link SlingJakartaHttpServletResponseResultImpl} implementation.
  */
-public class SlingJakartaHttpServletResponseResultImpl
-    extends SlingAdaptable
-    implements SlingJakartaHttpServletResponseResult {
+public class SlingJakartaHttpServletResponseResultImpl extends SlingAdaptable
+        implements SlingJakartaHttpServletResponseResult {
 
     /** Headers */
     private final HeaderSupport headerSupport = new HeaderSupport();
@@ -97,10 +95,12 @@ public class SlingJakartaHttpServletResponseResultImpl
     public String getContentType() {
         if (this.contentType == null) {
             return null;
-        } else if ( this.characterEncoding == null ) {
+        } else if (this.characterEncoding == null) {
             return this.contentType;
         }
-        return this.contentType.concat(SlingHttpServletRequestBuilderImpl.CHARSET_SEPARATOR).concat(this.characterEncoding);
+        return this.contentType
+                .concat(SlingHttpServletRequestBuilderImpl.CHARSET_SEPARATOR)
+                .concat(this.characterEncoding);
     }
 
     @Override
@@ -109,7 +109,8 @@ public class SlingJakartaHttpServletResponseResultImpl
             final int pos = type == null ? -1 : type.indexOf(SlingHttpServletRequestBuilderImpl.CHARSET_SEPARATOR);
             if (pos != -1) {
                 this.contentType = type.substring(0, pos);
-                this.characterEncoding = type.substring(pos + SlingHttpServletRequestBuilderImpl.CHARSET_SEPARATOR.length());
+                this.characterEncoding =
+                        type.substring(pos + SlingHttpServletRequestBuilderImpl.CHARSET_SEPARATOR.length());
             } else {
                 this.contentType = type;
             }
@@ -209,7 +210,7 @@ public class SlingJakartaHttpServletResponseResultImpl
     }
 
     private Charset getCharset() {
-        if ( this.characterEncoding == null ) {
+        if (this.characterEncoding == null) {
             return StandardCharsets.UTF_8;
         }
         return Charset.forName(this.characterEncoding);
@@ -317,7 +318,7 @@ public class SlingJakartaHttpServletResponseResultImpl
 
     @Override
     public Cookie[] getCookies() {
-        if ( this.cookies.isEmpty() ) {
+        if (this.cookies.isEmpty()) {
             return null;
         }
         return cookies.values().toArray(new Cookie[cookies.size()]);

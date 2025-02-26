@@ -352,7 +352,6 @@ public class ResourceMetadata extends HashMap<String, Object> {
         return null;
     }
 
-
     /**
      * Make this object read-only. All method calls trying to modify this object
      * result in an exception!
@@ -366,7 +365,7 @@ public class ResourceMetadata extends HashMap<String, Object> {
      * Check if this object is read only and if so throw an unsupported operation exception.
      */
     private void checkReadOnly() {
-        if ( this.isReadOnly ) {
+        if (this.isReadOnly) {
             throw new UnsupportedOperationException(getClass().getSimpleName() + " is locked");
         }
     }
@@ -408,15 +407,15 @@ public class ResourceMetadata extends HashMap<String, Object> {
         return result;
     }
 
-	// volatile for correct double-checked locking in getLockedData()
+    // volatile for correct double-checked locking in getLockedData()
     private transient volatile Set<Map.Entry<String, Object>> lockedEntrySet;
     private transient Set<String> lockedKeySet;
     private transient Collection<Object> lockedValues;
 
     private void getLockedData() {
-        if(isReadOnly && lockedEntrySet == null) {
+        if (isReadOnly && lockedEntrySet == null) {
             synchronized (this) {
-                if(isReadOnly && lockedEntrySet == null) {
+                if (isReadOnly && lockedEntrySet == null) {
                     lockedEntrySet = Collections.unmodifiableSet(super.entrySet());
                     lockedKeySet = Collections.unmodifiableSet(super.keySet());
                     lockedValues = Collections.unmodifiableCollection(super.values());

@@ -37,8 +37,7 @@ public class ScriptEvaluationException extends SlingException {
         this.scriptName = scriptName;
     }
 
-    public ScriptEvaluationException(String scriptName, String message,
-            Throwable cause) {
+    public ScriptEvaluationException(String scriptName, String message, Throwable cause) {
         super(message, cause);
 
         this.scriptName = scriptName;

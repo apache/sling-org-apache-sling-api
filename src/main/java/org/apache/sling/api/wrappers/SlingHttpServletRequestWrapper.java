@@ -18,14 +18,14 @@
  */
 package org.apache.sling.api.wrappers;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequestWrapper;
+
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
-
-import javax.servlet.RequestDispatcher;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.request.RequestDispatcherOptions;
@@ -43,8 +43,7 @@ import org.apache.sling.api.resource.ResourceResolver;
  * @deprecated Use {@link SlingJakartaHttpServletRequestWrapper}
  */
 @Deprecated
-public class SlingHttpServletRequestWrapper extends HttpServletRequestWrapper
-        implements SlingHttpServletRequest {
+public class SlingHttpServletRequestWrapper extends HttpServletRequestWrapper implements SlingHttpServletRequest {
 
     /**
      * Create a wrapper for the supplied wrappedRequest
@@ -79,14 +78,12 @@ public class SlingHttpServletRequestWrapper extends HttpServletRequestWrapper
     }
 
     @Override
-    public RequestDispatcher getRequestDispatcher(Resource resource,
-            RequestDispatcherOptions options) {
+    public RequestDispatcher getRequestDispatcher(Resource resource, RequestDispatcherOptions options) {
         return getSlingRequest().getRequestDispatcher(resource, options);
     }
 
     @Override
-    public RequestDispatcher getRequestDispatcher(String path,
-            RequestDispatcherOptions options) {
+    public RequestDispatcher getRequestDispatcher(String path, RequestDispatcherOptions options) {
         return getSlingRequest().getRequestDispatcher(path, options);
     }
 

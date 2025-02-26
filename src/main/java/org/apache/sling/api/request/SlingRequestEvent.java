@@ -16,7 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 package org.apache.sling.api.request;
 
 import javax.servlet.ServletContext;
@@ -31,47 +30,50 @@ import javax.servlet.ServletRequest;
  * @see org.apache.sling.api.request.SlingRequestListener
  * @since 2.1.0 (Sling API Bundle 2.1.0)
  * @deprecated Use {@link org.apache.sling.api.request.SlingJakartaRequestEvent} instead.
-*/
+ */
 @Deprecated
 public class SlingRequestEvent {
 
-	private final ServletContext sc;
-	private final ServletRequest request;
-	private final EventType type;
+    private final ServletContext sc;
+    private final ServletRequest request;
+    private final EventType type;
 
-	/**
-	 * type of the event
-	 */
-	public enum EventType { EVENT_INIT, EVENT_DESTROY };
+    /**
+     * type of the event
+     */
+    public enum EventType {
+        EVENT_INIT,
+        EVENT_DESTROY
+    };
 
-	public SlingRequestEvent (ServletContext sc, ServletRequest request, EventType type ) {
-		this.sc = sc;
-		this.request = request;
-		this.type = type;
-	}
+    public SlingRequestEvent(ServletContext sc, ServletRequest request, EventType type) {
+        this.sc = sc;
+        this.request = request;
+        this.type = type;
+    }
 
-	/**
-	 * Gets the actual servlet context object as <code>ServletContext</code>
-	 * @return the actual servlet context.
-	 */
-	public ServletContext getServletContext() {
-		return sc;
-	}
+    /**
+     * Gets the actual servlet context object as <code>ServletContext</code>
+     * @return the actual servlet context.
+     */
+    public ServletContext getServletContext() {
+        return sc;
+    }
 
-	/**
-	 * Gets the actual request object as <code>ServletRequest</code>
-	 * @return the actual request object as <code>ServletRequest</code>
-	 */
-	public ServletRequest getServletRequest() {
-		return request;
-	}
+    /**
+     * Gets the actual request object as <code>ServletRequest</code>
+     * @return the actual request object as <code>ServletRequest</code>
+     */
+    public ServletRequest getServletRequest() {
+        return request;
+    }
 
-	/**
-	 * get the type of the event, eg. EVENT_INIT or EVENT_DESTROY
-	 * @return the type of the event as <code>EventType</code>,
-	 * eg. EVENT_INIT or EVENT_DESTROY
-	 */
-	public EventType getType () {
-		return type;
-	}
+    /**
+     * get the type of the event, eg. EVENT_INIT or EVENT_DESTROY
+     * @return the type of the event as <code>EventType</code>,
+     * eg. EVENT_INIT or EVENT_DESTROY
+     */
+    public EventType getType() {
+        return type;
+    }
 }

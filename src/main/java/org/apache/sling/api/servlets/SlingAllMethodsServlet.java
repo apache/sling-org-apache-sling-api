@@ -1,30 +1,32 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 package org.apache.sling.api.servlets;
+
+import javax.servlet.ServletException;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import org.jetbrains.annotations.NotNull;
-import javax.servlet.ServletException;
-
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Helper base class for data modifying Servlets used in Sling. This class
@@ -62,9 +64,8 @@ public class SlingAllMethodsServlet extends SlingSafeMethodsServlet {
      * @throws IOException If the error status cannot be reported back to the
      *             client.
      */
-    protected void doPost(@NotNull SlingHttpServletRequest request,
-            @NotNull SlingHttpServletResponse response) throws ServletException,
-            IOException {
+    protected void doPost(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response)
+            throws ServletException, IOException {
         handleMethodNotImplemented(request, response);
     }
 
@@ -85,9 +86,8 @@ public class SlingAllMethodsServlet extends SlingSafeMethodsServlet {
      * @throws IOException If the error status cannot be reported back to the
      *             client.
      */
-    protected void doPut(@NotNull SlingHttpServletRequest request,
-            @NotNull SlingHttpServletResponse response) throws ServletException,
-            IOException {
+    protected void doPut(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response)
+            throws ServletException, IOException {
         handleMethodNotImplemented(request, response);
     }
 
@@ -108,9 +108,8 @@ public class SlingAllMethodsServlet extends SlingSafeMethodsServlet {
      * @throws IOException If the error status cannot be reported back to the
      *             client.
      */
-    protected void doDelete(@NotNull SlingHttpServletRequest request,
-            @NotNull SlingHttpServletResponse response) throws ServletException,
-            IOException {
+    protected void doDelete(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response)
+            throws ServletException, IOException {
         handleMethodNotImplemented(request, response);
     }
 
@@ -131,9 +130,8 @@ public class SlingAllMethodsServlet extends SlingSafeMethodsServlet {
      * @throws ServletException Forwarded from any of the dispatched methods
      * @throws IOException Forwarded from any of the dispatched methods
      */
-    protected boolean mayService(@NotNull SlingHttpServletRequest request,
-            @NotNull SlingHttpServletResponse response) throws ServletException,
-            IOException {
+    protected boolean mayService(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response)
+            throws ServletException, IOException {
 
         // assume the method is known for now
         if (super.mayService(request, response)) {
@@ -175,8 +173,7 @@ public class SlingAllMethodsServlet extends SlingSafeMethodsServlet {
      * @return A <code>StringBuffer</code> containing the list of HTTP methods
      *         supported.
      */
-    protected @NotNull StringBuffer getAllowedRequestMethods(
-            @NotNull Map<String, Method> declaredMethods) {
+    protected @NotNull StringBuffer getAllowedRequestMethods(@NotNull Map<String, Method> declaredMethods) {
         StringBuffer allowBuf = super.getAllowedRequestMethods(declaredMethods);
 
         // add more method names depending on the methods found

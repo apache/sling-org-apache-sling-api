@@ -18,20 +18,21 @@
  */
 package org.apache.sling.api.request.builder.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import org.junit.Test;
-
 public class HeaderSupportTest {
-    
-    @Test public void testDateHeaders() {
+
+    @Test
+    public void testDateHeaders() {
         final HeaderSupport support = new HeaderSupport();
         // no header set, return -1
         assertEquals(-1L, support.getDateHeader("date"));
@@ -48,12 +49,13 @@ public class HeaderSupportTest {
         try {
             support.getDateHeader("nodate");
             fail();
-        } catch ( final IllegalArgumentException iae) {
+        } catch (final IllegalArgumentException iae) {
             // expected
         }
     }
 
-    @Test public void testIntDateHeaders() {
+    @Test
+    public void testIntDateHeaders() {
         final HeaderSupport support = new HeaderSupport();
         // no header set, return -1
         assertEquals(-1L, support.getIntHeader("number"));
@@ -66,12 +68,13 @@ public class HeaderSupportTest {
         try {
             support.getIntHeader("nonumber");
             fail();
-        } catch ( final NumberFormatException nfe) {
+        } catch (final NumberFormatException nfe) {
             // expected
         }
     }
 
-    @Test public void testAddSetHeaders() {
+    @Test
+    public void testAddSetHeaders() {
         final HeaderSupport support = new HeaderSupport();
         support.addHeader("string", "a");
         support.addHeader("string", "b");
@@ -105,7 +108,7 @@ public class HeaderSupportTest {
 
         assertTrue(support.containsHeader("date"));
         assertFalse(support.containsHeader("foo"));
-        
+
         assertTrue(support.getHeaders("foo").isEmpty());
 
         assertEquals(Arrays.asList("string", "number", "date"), new ArrayList<>(support.getHeaderNames()));

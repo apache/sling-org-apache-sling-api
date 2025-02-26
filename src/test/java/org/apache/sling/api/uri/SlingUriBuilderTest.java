@@ -18,12 +18,6 @@
  */
 package org.apache.sling.api.uri;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.when;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.LinkedHashMap;
@@ -39,6 +33,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("deprecation")
@@ -70,7 +70,7 @@ public class SlingUriBuilderTest {
 
         SlingUri testUri = SlingUriBuilder.create()
                 .setResourcePath("/test/to/path")
-                .setSelectors(new String[] { "sel1", "sel2" })
+                .setSelectors(new String[] {"sel1", "sel2"})
                 .setExtension("html")
                 .setSuffix("/suffix/path")
                 .setQuery("par1=val1&par2=val2")
@@ -105,7 +105,7 @@ public class SlingUriBuilderTest {
         when(request.getServerPort()).thenReturn(443);
         when(request.getQueryString()).thenReturn("par1=val1");
         when(requestPathInfo.getResourcePath()).thenReturn("/test/to/path");
-        when(requestPathInfo.getSelectors()).thenReturn(new String[] { "sel1", "sel2" });
+        when(requestPathInfo.getSelectors()).thenReturn(new String[] {"sel1", "sel2"});
         when(requestPathInfo.getExtension()).thenReturn("html");
         when(requestPathInfo.getSuffix()).thenReturn("/suffix/path");
 
@@ -125,7 +125,7 @@ public class SlingUriBuilderTest {
         when(jakartaRequest.getServerPort()).thenReturn(443);
         when(jakartaRequest.getQueryString()).thenReturn("par1=val1");
         when(requestPathInfo.getResourcePath()).thenReturn("/test/to/path");
-        when(requestPathInfo.getSelectors()).thenReturn(new String[] { "sel1", "sel2" });
+        when(requestPathInfo.getSelectors()).thenReturn(new String[] {"sel1", "sel2"});
         when(requestPathInfo.getExtension()).thenReturn("html");
         when(requestPathInfo.getSuffix()).thenReturn("/suffix/path");
 
@@ -152,7 +152,7 @@ public class SlingUriBuilderTest {
         when(request.getQueryString()).thenReturn("par1=val1");
         // simulate the ResourceResolver#resolve switching to a resource under /content
         when(requestPathInfo.getResourcePath()).thenReturn("/content/test/to/path");
-        when(requestPathInfo.getSelectors()).thenReturn(new String[] { "sel1", "sel2" });
+        when(requestPathInfo.getSelectors()).thenReturn(new String[] {"sel1", "sel2"});
         when(requestPathInfo.getExtension()).thenReturn("html");
         when(requestPathInfo.getSuffix()).thenReturn("/suffix/path");
 
@@ -179,7 +179,7 @@ public class SlingUriBuilderTest {
         when(jakartaRequest.getQueryString()).thenReturn("par1=val1");
         // simulate the ResourceResolver#resolve switching to a resource under /content
         when(requestPathInfo.getResourcePath()).thenReturn("/content/test/to/path");
-        when(requestPathInfo.getSelectors()).thenReturn(new String[] { "sel1", "sel2" });
+        when(requestPathInfo.getSelectors()).thenReturn(new String[] {"sel1", "sel2"});
         when(requestPathInfo.getExtension()).thenReturn("html");
         when(requestPathInfo.getSuffix()).thenReturn("/suffix/path");
 
@@ -205,13 +205,14 @@ public class SlingUriBuilderTest {
         when(request.getServerPort()).thenReturn(443);
         when(request.getQueryString()).thenReturn("par1=val1");
         when(requestPathInfo.getResourcePath()).thenReturn("/content/test/to/path");
-        when(requestPathInfo.getSelectors()).thenReturn(new String[] { "sel1", "sel2" });
+        when(requestPathInfo.getSelectors()).thenReturn(new String[] {"sel1", "sel2"});
         when(requestPathInfo.getExtension()).thenReturn("html");
         when(requestPathInfo.getSuffix()).thenReturn("/suffix/path");
 
         SlingUri testUri = SlingUriBuilder.createFrom(request).build();
 
-        assertEquals("https://example.com/content/test/to/path.sel1.sel2.html/suffix/path?par1=val1", testUri.toString());
+        assertEquals(
+                "https://example.com/content/test/to/path.sel1.sel2.html/suffix/path?par1=val1", testUri.toString());
     }
 
     /**
@@ -231,13 +232,14 @@ public class SlingUriBuilderTest {
         when(jakartaRequest.getServerPort()).thenReturn(443);
         when(jakartaRequest.getQueryString()).thenReturn("par1=val1");
         when(requestPathInfo.getResourcePath()).thenReturn("/content/test/to/path");
-        when(requestPathInfo.getSelectors()).thenReturn(new String[] { "sel1", "sel2" });
+        when(requestPathInfo.getSelectors()).thenReturn(new String[] {"sel1", "sel2"});
         when(requestPathInfo.getExtension()).thenReturn("html");
         when(requestPathInfo.getSuffix()).thenReturn("/suffix/path");
 
         SlingUri testUri = SlingUriBuilder.createFrom(jakartaRequest).build();
 
-        assertEquals("https://example.com/content/test/to/path.sel1.sel2.html/suffix/path?par1=val1", testUri.toString());
+        assertEquals(
+                "https://example.com/content/test/to/path.sel1.sel2.html/suffix/path?par1=val1", testUri.toString());
     }
 
     @Test
@@ -276,7 +278,7 @@ public class SlingUriBuilderTest {
         when(request.getServerPort()).thenReturn(443);
         when(request.getQueryString()).thenReturn("par1=val1");
         when(requestPathInfo.getResourcePath()).thenReturn("/test/to/path");
-        when(requestPathInfo.getSelectors()).thenReturn(new String[] { "sel1", "sel2" });
+        when(requestPathInfo.getSelectors()).thenReturn(new String[] {"sel1", "sel2"});
         when(requestPathInfo.getExtension()).thenReturn("html");
         when(requestPathInfo.getSuffix()).thenReturn("/suffix/path");
 
@@ -297,7 +299,7 @@ public class SlingUriBuilderTest {
         when(jakartaRequest.getServerPort()).thenReturn(443);
         when(jakartaRequest.getQueryString()).thenReturn("par1=val1");
         when(requestPathInfo.getResourcePath()).thenReturn("/test/to/path");
-        when(requestPathInfo.getSelectors()).thenReturn(new String[] { "sel1", "sel2" });
+        when(requestPathInfo.getSelectors()).thenReturn(new String[] {"sel1", "sel2"});
         when(requestPathInfo.getExtension()).thenReturn("html");
         when(requestPathInfo.getSuffix()).thenReturn("/suffix/path");
 
@@ -378,25 +380,37 @@ public class SlingUriBuilderTest {
         assertEquals(0, u1.getSelectors().length);
         assertNull(u1.getSelectorString());
 
-        u1 = SlingUriBuilder.parse("/content", null).setSelectors(new String[] {"a","b"}).build();
+        u1 = SlingUriBuilder.parse("/content", null)
+                .setSelectors(new String[] {"a", "b"})
+                .build();
         assertArrayEquals(new String[] {"a", "b"}, u1.getSelectors());
         assertEquals("a.b", u1.getSelectorString());
 
-        u1 = SlingUriBuilder.parse("/content", null).setSelectors(new String[] {"a","b"}).setSelectors(null).build();
+        u1 = SlingUriBuilder.parse("/content", null)
+                .setSelectors(new String[] {"a", "b"})
+                .setSelectors(null)
+                .build();
         assertEquals(0, u1.getSelectors().length);
         assertNull(u1.getSelectorString());
     }
 
     @Test
     public void testRemoveSelector() {
-        SlingUri u1 = SlingUriBuilder.parse("/content", null).setSelectors(new String[] {"a","b"}).removeSelector("b").removeSelector("c").build();
+        SlingUri u1 = SlingUriBuilder.parse("/content", null)
+                .setSelectors(new String[] {"a", "b"})
+                .removeSelector("b")
+                .removeSelector("c")
+                .build();
         assertArrayEquals(new String[] {"a"}, u1.getSelectors());
         assertEquals("a", u1.getSelectorString());
     }
 
     @Test
     public void testAddSelector() {
-        SlingUri u1 = SlingUriBuilder.parse("/content", null).setSelectors(new String[] {"a","b"}).addSelector("c").build();
+        SlingUri u1 = SlingUriBuilder.parse("/content", null)
+                .setSelectors(new String[] {"a", "b"})
+                .addSelector("c")
+                .build();
         assertArrayEquals(new String[] {"a", "b", "c"}, u1.getSelectors());
         assertEquals("a.b.c", u1.getSelectorString());
     }

@@ -165,21 +165,21 @@ public class RequestProgressTrackerImpl implements RequestProgressTracker {
 
     private String formatMessage(final long offset, final String message) {
         // Set exact length to avoid array copies within StringBuilder
-        final StringBuilder sb = new StringBuilder(PADDING_WIDTH + 1 +  message.length() + 1);
+        final StringBuilder sb = new StringBuilder(PADDING_WIDTH + 1 + message.length() + 1);
         final String offsetStr = Long.toString(offset / 1000);
         for (int i = PADDING_WIDTH - offsetStr.length(); i > 0; i--) {
             sb.append(' ');
         }
-        sb.append(offsetStr).append(' ')
-          .append(message.replace('\n', '_').replace('\r', '_'))
-          .append('\n');
+        sb.append(offsetStr)
+                .append(' ')
+                .append(message.replace('\n', '_').replace('\r', '_'))
+                .append('\n');
         return sb.toString();
     }
 
     @Override
     public void dump(final PrintWriter writer) {
-        logTimer(REQUEST_PROCESSING_TIMER,
-            "Dumping SlingRequestProgressTracker Entries");
+        logTimer(REQUEST_PROCESSING_TIMER, "Dumping SlingRequestProgressTracker Entries");
 
         final Iterator<String> messages = getMessages();
         while (messages.hasNext()) {
@@ -241,7 +241,7 @@ public class RequestProgressTrackerImpl implements RequestProgressTracker {
         sb.append(',');
         sb.append(name);
         sb.append('}');
-        if(msg != null) {
+        if (msg != null) {
             sb.append(' ');
             sb.append(msg);
         }
@@ -250,7 +250,7 @@ public class RequestProgressTrackerImpl implements RequestProgressTracker {
 
     @Override
     public void done() {
-        if(processingEnd != -1) return;
+        if (processingEnd != -1) return;
         logTimer(REQUEST_PROCESSING_TIMER, REQUEST_PROCESSING_TIMER);
         processingEnd = System.nanoTime();
     }

@@ -18,15 +18,15 @@
  */
 package org.apache.sling.api.wrappers.impl;
 
-import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.api.wrappers.ValueMapUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
+import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.api.wrappers.ValueMapUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * ValueMap decorator that caches key-value pairs that were accessed before.
@@ -69,7 +69,7 @@ public class CachingValueMap implements ValueMap {
 
     @Override
     public Object get(Object key) {
-        return key instanceof String ? cache.computeIfAbsent((String)key, delegate::get) : null;
+        return key instanceof String ? cache.computeIfAbsent((String) key, delegate::get) : null;
     }
 
     @NotNull

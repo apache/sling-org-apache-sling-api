@@ -18,16 +18,14 @@
  */
 package org.apache.sling.api.adapter;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.*;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class SlingAdaptableTest {
 
@@ -50,38 +48,35 @@ public class SlingAdaptableTest {
     @Test
     public void testAdaptToWithCache() {
         SlingAdaptable.setAdapterManager(adapterMgr);
-        when (adapterMgr.getAdapter(any(), eq(TestAdapterType.class))).thenReturn(new TestAdapterType());
+        when(adapterMgr.getAdapter(any(), eq(TestAdapterType.class))).thenReturn(new TestAdapterType());
         assertNotNull(sut.adaptTo(TestAdapterType.class));
-        verify(adapterMgr,times(1)).getAdapter(any(), eq(TestAdapterType.class));
-        
+        verify(adapterMgr, times(1)).getAdapter(any(), eq(TestAdapterType.class));
+
         // the 2nd time it has to come out of the cache
         assertNotNull(sut.adaptTo(TestAdapterType.class));
-        verify(adapterMgr,times(1)).getAdapter(any(), eq(TestAdapterType.class));
+        verify(adapterMgr, times(1)).getAdapter(any(), eq(TestAdapterType.class));
 
         assertNull(sut.adaptTo(TestAdapterType2.class));
-        when (adapterMgr.getAdapter(any(), eq(TestAdapterType2.class))).thenReturn(new TestAdapterType2());
+        when(adapterMgr.getAdapter(any(), eq(TestAdapterType2.class))).thenReturn(new TestAdapterType2());
         assertNotNull(sut.adaptTo(TestAdapterType2.class));
         assertNotNull(sut.adaptTo(TestAdapterType.class));
     }
-    
+
     // SLING-10371
     @Test()
     public void testNestedAdaptTo() {
         SlingAdaptable.setAdapterManager(adapterMgr);
         SuperTypeCallingAdaptable adaptable = new SuperTypeCallingAdaptable();
-        when(adapterMgr.getAdapter(eq(adaptable),eq(TestAdapterType.class)))
-            .thenAnswer(invocation -> {
-                SlingAdaptable a = (SlingAdaptable) invocation.getArgument(0);
-                a.adaptTo(String.class); // trigger nested invocation
-                return new TestAdapterType();
-            });
-        when(adapterMgr.getAdapter(eq(adaptable),eq(String.class)))
-        .thenAnswer(invocation -> {
+        when(adapterMgr.getAdapter(eq(adaptable), eq(TestAdapterType.class))).thenAnswer(invocation -> {
+            SlingAdaptable a = (SlingAdaptable) invocation.getArgument(0);
+            a.adaptTo(String.class); // trigger nested invocation
+            return new TestAdapterType();
+        });
+        when(adapterMgr.getAdapter(eq(adaptable), eq(String.class))).thenAnswer(invocation -> {
             return "someValue";
         });
         assertNotNull(adaptable.adaptTo(TestAdapterType.class));
     }
-    
 
     public class SuperTypeCallingAdaptable extends SlingAdaptable {
         @Override

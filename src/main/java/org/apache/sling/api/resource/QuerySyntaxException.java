@@ -41,8 +41,7 @@ public class QuerySyntaxException extends SlingException {
         this.language = language;
     }
 
-    public QuerySyntaxException(String message, String query, String language,
-            Throwable cause) {
+    public QuerySyntaxException(String message, String query, String language, Throwable cause) {
         super(message, cause);
 
         this.query = query;

@@ -1,18 +1,20 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 package org.apache.sling.api.request.header;
 
@@ -23,7 +25,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import jakarta.servlet.http.HttpServletRequest;
-
 import org.osgi.annotation.versioning.ConsumerType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +58,7 @@ public class JakartaMediaRangeList extends TreeSet<JakartaMediaRangeList.MediaRa
         if (queryParam != null && queryParam.trim().length() != 0) {
             init(queryParam);
         } else {
-           init(request.getHeader(HEADER_ACCEPT));
+            init(request.getHeader(HEADER_ACCEPT));
         }
     }
 
@@ -76,7 +77,9 @@ public class JakartaMediaRangeList extends TreeSet<JakartaMediaRangeList.MediaRa
         try {
             init(listStr);
         } catch (Throwable t) {
-            log.error("Error building MediaRangeList from '" + listStr + "' - will assume client accepts all media types", t);
+            log.error(
+                    "Error building MediaRangeList from '" + listStr + "' - will assume client accepts all media types",
+                    t);
             init(null);
         }
     }
@@ -150,7 +153,7 @@ public class JakartaMediaRangeList extends TreeSet<JakartaMediaRangeList.MediaRa
             ranges.add(new MediaRange(mediaRange));
         }
         final MediaRange preferred = prefer(ranges);
-        return(preferred == null ? null : preferred.toString());
+        return (preferred == null ? null : preferred.toString());
     }
 
     /**
@@ -194,7 +197,7 @@ public class JakartaMediaRangeList extends TreeSet<JakartaMediaRangeList.MediaRa
             String[] parts = exp.split(";");
             this.setType(parts[0].trim());
             if (parts.length > 1) {
-                this.parameters  = new HashMap<String, String>(parts.length - 1);
+                this.parameters = new HashMap<String, String>(parts.length - 1);
             }
             for (int i = 1, partsLength = parts.length; i < partsLength; i++) {
                 String parameter = parts[i];
@@ -219,7 +222,6 @@ public class JakartaMediaRangeList extends TreeSet<JakartaMediaRangeList.MediaRa
             this.setType(supertype, subtype);
         }
 
-
         /**
          * Returns <code>true</code> if this is a catch-all media range (<code>*&#47;*</code>).
          * @return <code>true</code> if this range is a catch-all media range, <code>false</code> otherwise
@@ -240,17 +242,16 @@ public class JakartaMediaRangeList extends TreeSet<JakartaMediaRangeList.MediaRa
             String[] parts = typeDef.split("/");
             String superType = parts[0];
             String subType = WILDCARD;
-            if(parts.length > 1){
+            if (parts.length > 1) {
                 subType = parts[1];
             }
-            this.setType(superType,subType);
+            this.setType(superType, subType);
         }
 
         MediaRange(String supertype, String subtype, double q) {
             this(supertype, subtype);
             this.q = q;
         }
-
 
         public String getParameter(String key) {
             if (parameters != null) {
@@ -311,7 +312,8 @@ public class JakartaMediaRangeList extends TreeSet<JakartaMediaRangeList.MediaRa
         public boolean equals(Object obj) {
             if (obj instanceof MediaRange) {
                 MediaRange mr = (MediaRange) obj;
-                return mr.getSupertype().equals(this.supertype) && mr.getSubtype().equals(this.subtype);
+                return mr.getSupertype().equals(this.supertype)
+                        && mr.getSubtype().equals(this.subtype);
             }
             return super.equals(obj);
         }

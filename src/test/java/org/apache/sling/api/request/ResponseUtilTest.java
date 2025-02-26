@@ -18,8 +18,6 @@
  */
 package org.apache.sling.api.request;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -32,32 +30,34 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import static org.junit.Assert.assertEquals;
+
 @RunWith(Parameterized.class)
 public class ResponseUtilTest {
-    
+
     private final String input;
     private final String expected;
-    
+
     @Parameters
     public static Collection<Object[]> data() {
         final List<Object[]> result = new ArrayList<Object[]>();
-        result.add(new Object[] { "", "" });
-        result.add(new Object[] { "The quick brown fox runs over the lazy dog", null });
-        result.add(new Object[] { "&><'\"", "&amp;&gt;&lt;&apos;&quot;" });
-        result.add(new Object[] { "1&2>3<4'5\"6", "1&amp;2&gt;3&lt;4&apos;5&quot;6" });
+        result.add(new Object[] {"", ""});
+        result.add(new Object[] {"The quick brown fox runs over the lazy dog", null});
+        result.add(new Object[] {"&><'\"", "&amp;&gt;&lt;&apos;&quot;"});
+        result.add(new Object[] {"1&2>3<4'5\"6", "1&amp;2&gt;3&lt;4&apos;5&quot;6"});
         return result;
     }
-    
+
     public ResponseUtilTest(String input, String expected) {
         this.input = input;
         this.expected = expected == null ? input : expected;
     }
-    
+
     @Test
     public void testEscapeXml() {
         assertEquals(expected, ResponseUtil.escapeXml(input));
     }
-    
+
     @Test
     public void testXmlWriter() throws IOException {
         final StringWriter w = new StringWriter();

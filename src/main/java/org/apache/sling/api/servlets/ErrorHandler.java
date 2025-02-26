@@ -50,8 +50,7 @@ public interface ErrorHandler {
      * @throws IOException May be thrown if an error occurrs sending the
      *             response.
      */
-    void handleError(int status, String message,
-            SlingHttpServletRequest request, SlingHttpServletResponse response)
+    void handleError(int status, String message, SlingHttpServletRequest request, SlingHttpServletResponse response)
             throws IOException;
 
     /**
@@ -68,7 +67,6 @@ public interface ErrorHandler {
      * @throws IOException May be thrown if an error occurrs sending the
      *             response.
      */
-    void handleError(Throwable throwable, SlingHttpServletRequest request,
-            SlingHttpServletResponse response) throws IOException;
-
+    void handleError(Throwable throwable, SlingHttpServletRequest request, SlingHttpServletResponse response)
+            throws IOException;
 }

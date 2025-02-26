@@ -18,19 +18,19 @@
  */
 package org.apache.sling.api.wrappers;
 
-import java.io.IOException;
-
-import org.apache.felix.http.jakartawrappers.FilterConfigWrapper;
-import org.apache.felix.http.javaxwrappers.ServletExceptionUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+
+import java.io.IOException;
+
+import org.apache.felix.http.jakartawrappers.FilterConfigWrapper;
+import org.apache.felix.http.javaxwrappers.ServletExceptionUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * This class wraps a filter based on the Jakarta Servlet API
@@ -54,7 +54,7 @@ public class JakartaToJavaxFilterWrapper implements Filter {
     private final jakarta.servlet.Filter filter;
 
     public JakartaToJavaxFilterWrapper(final jakarta.servlet.Filter filter) {
-         this.filter = filter;
+        this.filter = filter;
     }
 
     @Override
@@ -70,9 +70,10 @@ public class JakartaToJavaxFilterWrapper implements Filter {
     public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
             throws IOException, ServletException {
         try {
-            this.filter.doFilter(JavaxToJakartaRequestWrapper.toJakartaRequest(request),
-                JavaxToJakartaResponseWrapper.toJakartaResponse(response),
-                new FilterChainWrapper(chain));
+            this.filter.doFilter(
+                    JavaxToJakartaRequestWrapper.toJakartaRequest(request),
+                    JavaxToJakartaResponseWrapper.toJakartaResponse(response),
+                    new FilterChainWrapper(chain));
         } catch (final jakarta.servlet.ServletException e) {
             throw ServletExceptionUtil.getServletException(e);
         }
@@ -83,7 +84,7 @@ public class JakartaToJavaxFilterWrapper implements Filter {
         this.filter.destroy();
     }
 
-    public static class FilterChainWrapper implements jakarta.servlet.FilterChain{
+    public static class FilterChainWrapper implements jakarta.servlet.FilterChain {
 
         private final FilterChain filterChain;
 
@@ -92,14 +93,16 @@ public class JakartaToJavaxFilterWrapper implements Filter {
         }
 
         @Override
-        public void doFilter(final jakarta.servlet.ServletRequest request, final jakarta.servlet.ServletResponse response)
+        public void doFilter(
+                final jakarta.servlet.ServletRequest request, final jakarta.servlet.ServletResponse response)
                 throws IOException, jakarta.servlet.ServletException {
             try {
-                this.filterChain.doFilter(JakartaToJavaxRequestWrapper.toJavaxRequest(request), JakartaToJavaxResponseWrapper.toJavaxResponse(response));
+                this.filterChain.doFilter(
+                        JakartaToJavaxRequestWrapper.toJavaxRequest(request),
+                        JakartaToJavaxResponseWrapper.toJavaxResponse(response));
             } catch (final javax.servlet.ServletException e) {
                 throw org.apache.felix.http.jakartawrappers.ServletExceptionUtil.getServletException(e);
             }
         }
     }
 }
-

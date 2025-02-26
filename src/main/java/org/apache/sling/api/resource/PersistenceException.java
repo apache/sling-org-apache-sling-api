@@ -66,10 +66,8 @@ public class PersistenceException extends IOException {
      * @param resourcePath The optional resource path
      * @param propertyName The optional property name
      */
-    public PersistenceException(final String msg,
-                    final Throwable cause,
-                    final String resourcePath,
-                    final String propertyName) {
+    public PersistenceException(
+            final String msg, final Throwable cause, final String resourcePath, final String propertyName) {
         super(msg);
         initCause(cause);
         this.resourcePath = resourcePath;

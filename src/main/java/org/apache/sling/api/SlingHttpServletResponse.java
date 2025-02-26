@@ -37,7 +37,4 @@ import org.osgi.annotation.versioning.ProviderType;
  */
 @ProviderType
 @Deprecated
-public interface SlingHttpServletResponse extends HttpServletResponse,
-        Adaptable {
-
-}
+public interface SlingHttpServletResponse extends HttpServletResponse, Adaptable {}

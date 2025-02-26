@@ -42,5 +42,4 @@ public class RecursionTooDeepException extends SlingException {
     public RecursionTooDeepException(String resourcePath) {
         super(resourcePath);
     }
-
 }

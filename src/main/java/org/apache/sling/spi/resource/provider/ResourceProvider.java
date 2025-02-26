@@ -22,13 +22,12 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
-
 import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
@@ -229,7 +228,7 @@ public abstract class ResourceProvider<T> {
      */
     public static final String RESOURCE_TYPE_SYNTHETIC = "sling:syntheticResourceProviderResource";
 
-    /** 
+    /**
      * Mode for the resource provide
      * The value is either {@link #MODE_OVERLAY} (default) or {@link #MODE_PASSTHROUGH}.
      * The overlay mode is the default. With this mode a resource provider is completely overlaying a
@@ -243,14 +242,14 @@ public abstract class ResourceProvider<T> {
      */
     public static final String PROPERTY_MODE = "provider.mode";
 
-    /** 
+    /**
      * Default mode.
      * The resource provider overlays everything from the parent provider.
      * @since 1.4
      */
     public static final String MODE_OVERLAY = "overlay";
 
-    /** 
+    /**
      * Passthrough mode.
      * The implementation passes certain functionality through to the parent resource provider.
      * @since 1.4
@@ -349,8 +348,7 @@ public abstract class ResourceProvider<T> {
      *      href="http://sling.apache.org/documentation/the-sling-engine/service-authentication.html">Service
      *      Authentication</a>
      */
-    public @Nullable T authenticate(final @NotNull Map<String, Object> authenticationInfo)
-    throws LoginException {
+    public @Nullable T authenticate(final @NotNull Map<String, Object> authenticationInfo) throws LoginException {
         return null;
     }
 
@@ -442,7 +440,8 @@ public abstract class ResourceProvider<T> {
      * @throws org.apache.sling.api.SlingException
      *             may be thrown in case of any problem creating the {@code Resource} instance.
      */
-    public abstract @Nullable Resource getResource(@NotNull final ResolveContext<T> ctx,
+    public abstract @Nullable Resource getResource(
+            @NotNull final ResolveContext<T> ctx,
             @NotNull final String path,
             @NotNull final ResourceContext resourceContext,
             @Nullable final Resource parent);
@@ -477,7 +476,8 @@ public abstract class ResourceProvider<T> {
      * @throws org.apache.sling.api.SlingException
      *             If any error occurs acquiring the child resource iterator.
      */
-    public abstract @Nullable Iterator<Resource> listChildren(final @NotNull ResolveContext<T> ctx, final @NotNull Resource parent);
+    public abstract @Nullable Iterator<Resource> listChildren(
+            final @NotNull ResolveContext<T> ctx, final @NotNull Resource parent);
 
     /**
      * Returns a collection of attribute names whose value can be retrieved
@@ -532,16 +532,17 @@ public abstract class ResourceProvider<T> {
      *
      * @throws PersistenceException If anything fails
      */
-    public @NotNull Resource create(final @NotNull ResolveContext<T> ctx, final String path, final Map<String, Object> properties)
-    throws PersistenceException {
+    public @NotNull Resource create(
+            final @NotNull ResolveContext<T> ctx, final String path, final Map<String, Object> properties)
+            throws PersistenceException {
         throw new UnsupportedOperationException("create is not supported.");
     }
 
     /**
      * Orders the child resources returned by {@link #listChildren(ResolveContext, Resource)} so that a given resource is listed before the given sibling resource.
-     * 
+     *
      * The changes are transient until {@link #commit(ResolveContext)} is called..
-     * 
+     *
      * @param ctx The {@link ResolveContext}.
      * @param parent the parent resource containing the child resources to order.
      * @param name the name of the child resource in {@code parent} to order. Must be an existing child name.
@@ -553,7 +554,11 @@ public abstract class ResourceProvider<T> {
      * @since 1.3.0 (Sling API Bundle 2.24.0)
      * @see #listChildren(ResolveContext, Resource)
      */
-    public boolean orderBefore(final @NotNull ResolveContext<T> ctx, final @NotNull Resource parent, final @NotNull String name, final @Nullable String followingSiblingName)
+    public boolean orderBefore(
+            final @NotNull ResolveContext<T> ctx,
+            final @NotNull Resource parent,
+            final @NotNull String name,
+            final @Nullable String followingSiblingName)
             throws PersistenceException {
         throw new UnsupportedOperationException("orderBefore is not supported.");
     }
@@ -572,7 +577,7 @@ public abstract class ResourceProvider<T> {
      * @throws PersistenceException If anything fails
      */
     public void delete(final @NotNull ResolveContext<T> ctx, final @NotNull Resource resource)
-    throws PersistenceException {
+            throws PersistenceException {
         throw new UnsupportedOperationException("delete is not supported.");
     }
 
@@ -597,8 +602,7 @@ public abstract class ResourceProvider<T> {
      * @param ctx The {@link ResolveContext}.
      * @throws PersistenceException If anything fails
      */
-    public void commit(final @NotNull ResolveContext<T> ctx)
-    throws PersistenceException {
+    public void commit(final @NotNull ResolveContext<T> ctx) throws PersistenceException {
         // nothing to do here
     }
 
@@ -649,8 +653,8 @@ public abstract class ResourceProvider<T> {
      * @return The adapter target or {@code null} if the provider cannot
      *         be adapt to the requested type.
      */
-    public @Nullable <AdapterType> AdapterType adaptTo(final  @NotNull ResolveContext<T> ctx,
-            final @NotNull Class<AdapterType> type) {
+    public @Nullable <AdapterType> AdapterType adaptTo(
+            final @NotNull ResolveContext<T> ctx, final @NotNull Class<AdapterType> type) {
         return null;
     }
 
@@ -676,9 +680,9 @@ public abstract class ResourceProvider<T> {
      * @throws PersistenceException If an error occurs.
      * @return {@code true} if the provider can perform the copy
      */
-    public boolean copy(final  @NotNull ResolveContext<T> ctx,
-              final @NotNull String srcAbsPath,
-              final @NotNull String destAbsPath) throws PersistenceException {
+    public boolean copy(
+            final @NotNull ResolveContext<T> ctx, final @NotNull String srcAbsPath, final @NotNull String destAbsPath)
+            throws PersistenceException {
         return false;
     }
 
@@ -704,9 +708,9 @@ public abstract class ResourceProvider<T> {
      * @throws PersistenceException If an error occurs.
      * @return {@code true} if the provider can perform the move
      */
-    public boolean move(final  @NotNull ResolveContext<T> ctx,
-              final @NotNull String srcAbsPath,
-              final @NotNull String destAbsPath) throws PersistenceException {
+    public boolean move(
+            final @NotNull ResolveContext<T> ctx, final @NotNull String srcAbsPath, final @NotNull String destAbsPath)
+            throws PersistenceException {
         return false;
     }
 }

@@ -48,7 +48,8 @@ public interface SlingHttpServletResponseResult extends SlingHttpServletResponse
      *
      * @return the status message or {@code null}.
      */
-    @Nullable String getStatusMessage();
+    @Nullable
+    String getStatusMessage();
 
     /**
      * Gets the named cookie.
@@ -56,14 +57,16 @@ public interface SlingHttpServletResponseResult extends SlingHttpServletResponse
      * @param name the name of the cookie
      * @return the cookie or {@code null} if no cookie with that name exists
      */
-    @Nullable Cookie getCookie(String name);
+    @Nullable
+    Cookie getCookie(String name);
 
     /**
      * Gets all cookies.
      *
      * @return the array of cookies or {@code null} if no cookies were set
      */
-    @Nullable Cookie[] getCookies();
+    @Nullable
+    Cookie[] getCookies();
 
     /**
      * Gets the output as a byte array.
@@ -77,5 +80,6 @@ public interface SlingHttpServletResponseResult extends SlingHttpServletResponse
      *
      * @return the output as a string
      */
-    @NotNull String getOutputAsString();
+    @NotNull
+    String getOutputAsString();
 }

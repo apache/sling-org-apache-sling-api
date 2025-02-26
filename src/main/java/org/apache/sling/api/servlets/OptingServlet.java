@@ -18,11 +18,10 @@
  */
 package org.apache.sling.api.servlets;
 
-import org.jetbrains.annotations.NotNull;
 import javax.servlet.Servlet;
 
 import org.apache.sling.api.SlingHttpServletRequest;
-
+import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
@@ -52,5 +51,4 @@ public interface OptingServlet extends Servlet {
      *         <code>false</code> otherwise
      */
     boolean accepts(@NotNull SlingHttpServletRequest request);
-
 }

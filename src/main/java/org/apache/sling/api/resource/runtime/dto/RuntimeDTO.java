@@ -29,11 +29,11 @@ public class RuntimeDTO {
      * DTOs for all active providers.
      * If there is none, the array is empty.
      */
-    public ResourceProviderDTO[] providers; //NOSONAR
+    public ResourceProviderDTO[] providers; // NOSONAR
 
     /**
      * DTOs for all inactive/failed providers.
      * If there is none, the array is empty.
      */
-    public ResourceProviderFailureDTO[] failedProviders; //NOSONAR
+    public ResourceProviderFailureDTO[] failedProviders; // NOSONAR
 }

@@ -18,10 +18,9 @@
  */
 package org.apache.sling.api.servlets;
 
+import jakarta.servlet.Servlet;
 import org.apache.sling.api.SlingJakartaHttpServletRequest;
 import org.jetbrains.annotations.NotNull;
-import jakarta.servlet.Servlet;
-
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
@@ -49,5 +48,4 @@ public interface JakartaOptingServlet extends Servlet {
      *         <code>false</code> otherwise
      */
     boolean accepts(@NotNull SlingJakartaHttpServletRequest request);
-
 }

@@ -22,9 +22,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
-
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -45,7 +44,8 @@ public interface RequestParameter {
      * @return the name of this {@code RequestParameter}
      * @since 2.4 (Sling API Bundle 2.6)
      */
-    @NotNull String getName();
+    @NotNull
+    String getName();
 
     /**
      * Determines whether or not this instance represents a simple form field or
@@ -63,7 +63,8 @@ public interface RequestParameter {
      * @return The content type passed by the browser or <code>null</code> if
      *         not defined.
      */
-    @Nullable String getContentType();
+    @Nullable
+    String getContentType();
 
     /**
      * Returns the size in bytes of the parameter.
@@ -91,7 +92,8 @@ public interface RequestParameter {
      *         file.
      * @throws IOException if an error occurs.
      */
-    @Nullable InputStream getInputStream() throws IOException;
+    @Nullable
+    InputStream getInputStream() throws IOException;
 
     /**
      * Returns the original filename in the client's filesystem, as provided by
@@ -101,7 +103,8 @@ public interface RequestParameter {
      *
      * @return The original filename in the client's filesystem.
      */
-    @Nullable String getFileName();
+    @Nullable
+    String getFileName();
 
     /**
      * Returns the contents of the parameter as a String, using the default
@@ -110,7 +113,8 @@ public interface RequestParameter {
      *
      * @return The contents of the parameter, as a string.
      */
-    @NotNull String getString();
+    @NotNull
+    String getString();
 
     /**
      * Returns the contents of the parameter as a String, using the specified
@@ -122,6 +126,6 @@ public interface RequestParameter {
      * @throws UnsupportedEncodingException if the requested character encoding
      *             is not available.
      */
-    @NotNull String getString(@NotNull String encoding) throws UnsupportedEncodingException;
-
+    @NotNull
+    String getString(@NotNull String encoding) throws UnsupportedEncodingException;
 }

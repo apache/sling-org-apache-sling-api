@@ -28,13 +28,13 @@ import org.junit.Test;
 
 public class ResourceChangeListenerTest {
 
-    private final static String CHANGE_CONSTANT_PREFIX = "CHANGE_";
+    private static final String CHANGE_CONSTANT_PREFIX = "CHANGE_";
 
     @Test
     public void testChangeConstants() throws IllegalArgumentException, IllegalAccessException {
         Collection<Field> changeConstants = getChangeConstants();
         for (Field changeConstant : changeConstants) {
-            ResourceChange.ChangeType.valueOf((String)changeConstant.get(null));
+            ResourceChange.ChangeType.valueOf((String) changeConstant.get(null));
         }
         Assert.assertEquals(ResourceChange.ChangeType.values().length, changeConstants.size());
     }
@@ -43,7 +43,8 @@ public class ResourceChangeListenerTest {
         Field[] declaredFields = ResourceChangeListener.class.getDeclaredFields();
         List<Field> constantChangeFields = new ArrayList<Field>();
         for (Field field : declaredFields) {
-            if (java.lang.reflect.Modifier.isStatic(field.getModifiers()) && java.lang.reflect.Modifier.isFinal(field.getModifiers())) {
+            if (java.lang.reflect.Modifier.isStatic(field.getModifiers())
+                    && java.lang.reflect.Modifier.isFinal(field.getModifiers())) {
                 if (field.getName().startsWith(CHANGE_CONSTANT_PREFIX)) {
                     constantChangeFields.add(field);
                 }

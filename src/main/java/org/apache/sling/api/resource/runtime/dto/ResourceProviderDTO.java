@@ -29,52 +29,52 @@ public class ResourceProviderDTO {
      * The name of the resource provider.
      * Optional might be {@code null}.
      */
-    public String name; //NOSONAR
+    public String name; // NOSONAR
 
     /**
      * The path of the resource provider.
      * This is never {@code null}.
      */
-    public String path; //NOSONAR
+    public String path; // NOSONAR
 
     /**
      * Whether resource access security should be used.
      */
-    public boolean useResourceAccessSecurity; //NOSONAR
+    public boolean useResourceAccessSecurity; // NOSONAR
 
     /**
      * The auth handling for this provider.
      * This is never {@code null}.
      */
-    public AuthType authType; //NOSONAR
+    public AuthType authType; // NOSONAR
 
     /**
      * Whether the resource provider supports modifications.
      */
-    public boolean modifiable; //NOSONAR
+    public boolean modifiable; // NOSONAR
 
     /**
      * Whether the resource provider supports adaptable.
      */
-    public boolean adaptable; //NOSONAR
+    public boolean adaptable; // NOSONAR
 
     /**
      * Whether the resource provider supports refreshing.
      */
-    public boolean refreshable; //NOSONAR
+    public boolean refreshable; // NOSONAR
 
     /**
      * Whether the resource provider supports attributes.
      */
-    public boolean attributable; //NOSONAR
+    public boolean attributable; // NOSONAR
 
     /**
      * Whether the resource provider supports query languages.
      */
-    public boolean supportsQueryLanguage; //NOSONAR
+    public boolean supportsQueryLanguage; // NOSONAR
 
     /**
      * The service id from the service registry.
      */
-    public long serviceId; //NOSONAR
+    public long serviceId; // NOSONAR
 }

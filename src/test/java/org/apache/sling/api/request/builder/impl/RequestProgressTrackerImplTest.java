@@ -1,24 +1,22 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 package org.apache.sling.api.request.builder.impl;
-
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.junit.Assert.assertEquals;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,6 +27,10 @@ import java.util.Iterator;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class RequestProgressTrackerImplTest {
 
@@ -51,14 +53,14 @@ public class RequestProgressTrackerImplTest {
     @Test
     public void messageFormatting() {
         final String[] expected = {
-                "TIMER_START{Request Processing}\n",
-                "COMMENT timer_end format is {<elapsed microseconds>,<timer name>} <optional message>\n",
-                "TIMER_START{foo}\n",
-                "LOG one eins, two zwei, three drei\n",
-                "TIMER_START{bar}\n",
-                "TIMER_END{?,bar}\n",
-                "TIMER_END{?,foo}\n",
-                "TIMER_END{?,Request Processing} Request Processing\n"
+            "TIMER_START{Request Processing}\n",
+            "COMMENT timer_end format is {<elapsed microseconds>,<timer name>} <optional message>\n",
+            "TIMER_START{foo}\n",
+            "LOG one eins, two zwei, three drei\n",
+            "TIMER_START{bar}\n",
+            "TIMER_END{?,bar}\n",
+            "TIMER_END{?,foo}\n",
+            "TIMER_END{?,Request Processing} Request Processing\n"
         };
 
         addTestData();
@@ -87,20 +89,18 @@ public class RequestProgressTrackerImplTest {
         w.flush();
         final String result = w.toString();
 
-        final String [] expected = {
-                "TIMER_START{Request Processing}",
-                "TIMER_START{foo}",
-                "Dumping SlingRequestProgressTracker Entries"
+        final String[] expected = {
+            "TIMER_START{Request Processing}", "TIMER_START{foo}", "Dumping SlingRequestProgressTracker Entries"
         };
-        for(String exp : expected) {
-            if(!result.contains(exp)) {
+        for (String exp : expected) {
+            if (!result.contains(exp)) {
                 fail("Expected result to contain [" + exp + "] but was [" + result + "]");
             }
         }
 
         int lineCount = 0;
         final BufferedReader br = new BufferedReader(new StringReader(result));
-        while(br.readLine() != null) {
+        while (br.readLine() != null) {
             lineCount++;
         }
         assertEquals(9, lineCount);
@@ -124,7 +124,7 @@ public class RequestProgressTrackerImplTest {
         assertEquals(d, tracker.getDuration());
     }
 
-    @Test(expected=UnsupportedOperationException.class)
+    @Test(expected = UnsupportedOperationException.class)
     public void removeFails() {
         tracker.getMessages().remove();
     }
@@ -138,6 +138,7 @@ public class RequestProgressTrackerImplTest {
         final String result = w.toString();
         assertTrue(result.contains("LOG foo__bar"));
     }
+
     private String substringAfter(String string, char ch) {
         final int pos = string.indexOf(ch);
         return string.substring(pos);

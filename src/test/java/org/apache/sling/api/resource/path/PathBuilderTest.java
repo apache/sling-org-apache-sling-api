@@ -18,10 +18,10 @@
  */
 package org.apache.sling.api.resource.path;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import org.hamcrest.Matchers;
 import org.junit.Test;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class PathBuilderTest {
 

@@ -22,15 +22,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jetbrains.annotations.Nullable;
-
 import jakarta.servlet.Servlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import org.jetbrains.annotations.NotNull;
 import org.apache.sling.api.SlingJakartaHttpServletRequest;
 import org.apache.sling.api.servlets.HttpConstants;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Request related utility methods.
@@ -199,8 +197,8 @@ public class RequestUtil {
      *         <code>null</code> if it was not set.
      * @since 2.8.0
      */
-    public static @Nullable Object setRequestAttribute(@NotNull HttpServletRequest request,
-            @NotNull String name, Object value) {
+    public static @Nullable Object setRequestAttribute(
+            @NotNull HttpServletRequest request, @NotNull String name, Object value) {
         Object oldValue = request.getAttribute(name);
         if (value == null) {
             request.removeAttribute(name);
@@ -223,8 +221,8 @@ public class RequestUtil {
      * @deprecated Use {@link #setRequestAttribute(HttpServletRequest, String, Object)}
      */
     @Deprecated
-    public static @Nullable Object setRequestAttribute(@NotNull javax.servlet.http.HttpServletRequest request,
-            @NotNull String name, Object value) {
+    public static @Nullable Object setRequestAttribute(
+            @NotNull javax.servlet.http.HttpServletRequest request, @NotNull String name, Object value) {
         Object oldValue = request.getAttribute(name);
         if (value == null) {
             request.removeAttribute(name);
@@ -236,22 +234,23 @@ public class RequestUtil {
 
     /**
      * Checks if the request contains a if-last-modified-since header and if the the
-	 * request's underlying resource has a jcr:lastModified property. if the properties were modified
+     * request's underlying resource has a jcr:lastModified property. if the properties were modified
      * before the header a 304 is sent otherwise the response last modified header is set.
      * @param req the request
      * @param resp the response
      * @return <code>true</code> if the response was set
      * @since 2.8.0
      */
-    public static boolean handleIfModifiedSince(@NotNull SlingJakartaHttpServletRequest req, @NotNull HttpServletResponse resp){
-        boolean responseSet=false;
-        long lastModified=req.getResource().getResourceMetadata().getModificationTime();
-        if (lastModified!=-1){
-            long modifiedTime = lastModified/1000; //seconds
-            long ims = req.getDateHeader(HttpConstants.HEADER_IF_MODIFIED_SINCE)/1000; //seconds
+    public static boolean handleIfModifiedSince(
+            @NotNull SlingJakartaHttpServletRequest req, @NotNull HttpServletResponse resp) {
+        boolean responseSet = false;
+        long lastModified = req.getResource().getResourceMetadata().getModificationTime();
+        if (lastModified != -1) {
+            long modifiedTime = lastModified / 1000; // seconds
+            long ims = req.getDateHeader(HttpConstants.HEADER_IF_MODIFIED_SINCE) / 1000; // seconds
             if (modifiedTime <= ims) {
                 resp.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
-                responseSet=true;
+                responseSet = true;
             }
             resp.setDateHeader(HttpConstants.HEADER_LAST_MODIFIED, lastModified);
         }
@@ -260,7 +259,7 @@ public class RequestUtil {
 
     /**
      * Checks if the request contains a if-last-modified-since header and if the the
-	 * request's underlying resource has a jcr:lastModified property. if the properties were modified
+     * request's underlying resource has a jcr:lastModified property. if the properties were modified
      * before the header a 304 is sent otherwise the response last modified header is set.
      * @param req the request
      * @param resp the response
@@ -268,15 +267,17 @@ public class RequestUtil {
      * @deprecated Use {@link #handleIfModifiedSince(SlingJakartaHttpServletRequest, HttpServletResponse)} instead.
      */
     @Deprecated
-    public static boolean handleIfModifiedSince(@NotNull org.apache.sling.api.SlingHttpServletRequest req, @NotNull javax.servlet.http.HttpServletResponse resp){
-        boolean responseSet=false;
-        long lastModified=req.getResource().getResourceMetadata().getModificationTime();
-        if (lastModified!=-1){
-            long modifiedTime = lastModified/1000; //seconds
-            long ims = req.getDateHeader(HttpConstants.HEADER_IF_MODIFIED_SINCE)/1000; //seconds
+    public static boolean handleIfModifiedSince(
+            @NotNull org.apache.sling.api.SlingHttpServletRequest req,
+            @NotNull javax.servlet.http.HttpServletResponse resp) {
+        boolean responseSet = false;
+        long lastModified = req.getResource().getResourceMetadata().getModificationTime();
+        if (lastModified != -1) {
+            long modifiedTime = lastModified / 1000; // seconds
+            long ims = req.getDateHeader(HttpConstants.HEADER_IF_MODIFIED_SINCE) / 1000; // seconds
             if (modifiedTime <= ims) {
                 resp.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
-                responseSet=true;
+                responseSet = true;
             }
             resp.setDateHeader(HttpConstants.HEADER_LAST_MODIFIED, lastModified);
         }

@@ -18,6 +18,8 @@
  */
 package org.apache.sling.api.wrappers;
 
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.felix.http.jakartawrappers.HttpServletResponseWrapper;
 import org.apache.felix.http.jakartawrappers.ServletResponseWrapper;
 import org.apache.sling.api.SlingHttpServletResponse;
@@ -25,17 +27,13 @@ import org.apache.sling.api.SlingJakartaHttpServletResponse;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import jakarta.servlet.ServletResponse;
-import jakarta.servlet.http.HttpServletResponse;
-
 /**
  * Wrapper for {@link SlingHttpServletResponse} to adapt it to the Jacax Servlet API.
  * @since 2.9.0
  */
 @SuppressWarnings("deprecation")
-public class JavaxToJakartaResponseWrapper
-    extends HttpServletResponseWrapper
-    implements SlingJakartaHttpServletResponse {
+public class JavaxToJakartaResponseWrapper extends HttpServletResponseWrapper
+        implements SlingJakartaHttpServletResponse {
 
     /**
      * Create a new wrapper
@@ -44,23 +42,23 @@ public class JavaxToJakartaResponseWrapper
      */
     public static ServletResponse toJakartaResponse(final javax.servlet.ServletResponse response) {
         if (response instanceof JakartaToJavaxResponseWrapper) {
-            return ((JakartaToJavaxResponseWrapper)response).getResponse();
+            return ((JakartaToJavaxResponseWrapper) response).getResponse();
         }
         if (response instanceof SlingHttpServletResponse) {
-            return new JavaxToJakartaResponseWrapper((SlingHttpServletResponse)response);
+            return new JavaxToJakartaResponseWrapper((SlingHttpServletResponse) response);
         }
         if (response instanceof javax.servlet.http.HttpServletResponse) {
-            return new HttpServletResponseWrapper((javax.servlet.http.HttpServletResponse)response);
+            return new HttpServletResponseWrapper((javax.servlet.http.HttpServletResponse) response);
         }
         return new ServletResponseWrapper(response);
     }
 
     public static HttpServletResponse toJakartaResponse(final javax.servlet.http.HttpServletResponse response) {
-        return (HttpServletResponse)toJakartaResponse((javax.servlet.ServletResponse)response);
+        return (HttpServletResponse) toJakartaResponse((javax.servlet.ServletResponse) response);
     }
 
     public static SlingJakartaHttpServletResponse toJakartaResponse(final SlingHttpServletResponse response) {
-        return (SlingJakartaHttpServletResponse)toJakartaResponse((javax.servlet.ServletResponse)response);
+        return (SlingJakartaHttpServletResponse) toJakartaResponse((javax.servlet.ServletResponse) response);
     }
 
     private final SlingHttpServletResponse wrappedResponse;

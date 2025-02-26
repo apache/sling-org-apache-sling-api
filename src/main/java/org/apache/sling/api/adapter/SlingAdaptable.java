@@ -95,15 +95,15 @@ public abstract class SlingAdaptable implements Adaptable {
     @SuppressWarnings("unchecked")
     public <AdapterType> AdapterType adaptTo(Class<AdapterType> type) {
         AdapterType result = null;
-        synchronized ( this ) {
-            if ( adaptersCache != null ) {
+        synchronized (this) {
+            if (adaptersCache != null) {
                 result = (AdapterType) adaptersCache.get(type);
             }
-            if ( result == null ) {
+            if (result == null) {
                 final AdapterManager mgr = ADAPTER_MANAGER;
                 result = (mgr == null ? null : mgr.getAdapter(this, type));
-                if ( result != null ) {
-                    if ( adaptersCache == null ) {
+                if (result != null) {
+                    if (adaptersCache == null) {
                         adaptersCache = new HashMap<Class<?>, Object>();
                     }
                     adaptersCache.put(type, result);

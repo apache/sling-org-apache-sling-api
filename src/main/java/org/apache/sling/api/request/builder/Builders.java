@@ -89,7 +89,8 @@ public final class Builders {
      * @return a request parameter
      * @since 1.2 (Sling API Bundle 2.26.2)
      */
-    public static @NotNull RequestParameter newRequestParameter(@NotNull String name, @NotNull String value, @NotNull Charset encoding) {
+    public static @NotNull RequestParameter newRequestParameter(
+            @NotNull String name, @NotNull String value, @NotNull Charset encoding) {
         return new RequestParameterImpl(name, value, encoding);
     }
 
@@ -103,7 +104,8 @@ public final class Builders {
      * @return a request parameter
      * @since 1.3 (Sling API Bundle 2.28.0)
      */
-    public static @NotNull RequestParameter newRequestParameter(@NotNull String name, byte @NotNull[] value, String fileName, String contentType) {
+    public static @NotNull RequestParameter newRequestParameter(
+            @NotNull String name, byte @NotNull [] value, String fileName, String contentType) {
         return new RequestParameterImpl(name, value, fileName, contentType);
     }
 }

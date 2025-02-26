@@ -28,14 +28,13 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Implementation of {@link RequestParameterMap}.
  */
-public class RequestParameterMapImpl extends LinkedHashMap<String, RequestParameter[]>
-    implements RequestParameterMap {
-    
+public class RequestParameterMapImpl extends LinkedHashMap<String, RequestParameter[]> implements RequestParameterMap {
+
     public RequestParameterMapImpl(@NotNull final Map<String, String[]> params) {
-        for(final Map.Entry<String, String[]> entry : params.entrySet()) {
+        for (final Map.Entry<String, String[]> entry : params.entrySet()) {
             final RequestParameter[] values = new RequestParameter[entry.getValue().length];
             int index = 0;
-            for(final String v : entry.getValue()) {
+            for (final String v : entry.getValue()) {
                 values[index] = new RequestParameterImpl(entry.getKey(), v);
                 index++;
             }

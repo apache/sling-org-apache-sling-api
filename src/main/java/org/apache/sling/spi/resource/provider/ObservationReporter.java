@@ -20,9 +20,8 @@ package org.apache.sling.spi.resource.provider;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-
 import org.apache.sling.api.resource.observation.ResourceChange;
+import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -40,7 +39,8 @@ public interface ObservationReporter {
      * reporter is bound to.
      * @return A list of observer configurations, the list might be empty.
      */
-    @NotNull List<ObserverConfiguration> getObserverConfigurations();
+    @NotNull
+    List<ObserverConfiguration> getObserverConfigurations();
 
     /**
      * A resource provider can inform about a list of changes.
@@ -81,7 +81,6 @@ public interface ObservationReporter {
      * @param distribute Whether the changes should be distributed to other instances.
      * @since 1.1.0 (Sling API Bundle 2.15.0)
      */
-    void reportChanges(@NotNull ObserverConfiguration config,
-            @NotNull Iterable<ResourceChange> changes,
-            boolean distribute);
+    void reportChanges(
+            @NotNull ObserverConfiguration config, @NotNull Iterable<ResourceChange> changes, boolean distribute);
 }

@@ -18,10 +18,9 @@
  */
 package org.apache.sling.api.auth;
 
-import org.jetbrains.annotations.NotNull;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
+import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -130,7 +129,9 @@ public interface Authenticator {
      * @deprecated Use {@link #login(HttpServletRequest, HttpServletResponse)} instead.
      */
     @Deprecated
-    void login(@NotNull javax.servlet.http.HttpServletRequest request, @NotNull javax.servlet.http.HttpServletResponse response);
+    void login(
+            @NotNull javax.servlet.http.HttpServletRequest request,
+            @NotNull javax.servlet.http.HttpServletResponse response);
 
     /**
      * Logs out if the current request is authenticated.
@@ -159,5 +160,7 @@ public interface Authenticator {
      * @deprecated Use {@link #logout(HttpServletRequest, HttpServletResponse)} instead.
      */
     @Deprecated
-    void logout(@NotNull javax.servlet.http.HttpServletRequest request, @NotNull javax.servlet.http.HttpServletResponse response);
+    void logout(
+            @NotNull javax.servlet.http.HttpServletRequest request,
+            @NotNull javax.servlet.http.HttpServletResponse response);
 }

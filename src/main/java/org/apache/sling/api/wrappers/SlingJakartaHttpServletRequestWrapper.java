@@ -26,7 +26,6 @@ import java.util.ResourceBundle;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequestWrapper;
-
 import org.apache.sling.api.SlingJakartaHttpServletRequest;
 import org.apache.sling.api.request.RequestDispatcherOptions;
 import org.apache.sling.api.request.RequestParameter;
@@ -78,14 +77,12 @@ public class SlingJakartaHttpServletRequestWrapper extends HttpServletRequestWra
     }
 
     @Override
-    public RequestDispatcher getRequestDispatcher(Resource resource,
-            RequestDispatcherOptions options) {
+    public RequestDispatcher getRequestDispatcher(Resource resource, RequestDispatcherOptions options) {
         return getSlingRequest().getRequestDispatcher(resource, options);
     }
 
     @Override
-    public RequestDispatcher getRequestDispatcher(String path,
-            RequestDispatcherOptions options) {
+    public RequestDispatcher getRequestDispatcher(String path, RequestDispatcherOptions options) {
         return getSlingRequest().getRequestDispatcher(path, options);
     }
 

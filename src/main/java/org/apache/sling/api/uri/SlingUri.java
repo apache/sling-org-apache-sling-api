@@ -37,7 +37,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * <p>
  * Opposed to {@link URI}, the regular getters of {@code SlingUri} will not return decoded values, rather the values for user info, path,
  * query and fragment are returned exactly as set before.
- * 
+ *
  * @since 1.0.0 (Sling API Bundle 2.23.0)
  */
 @ProviderType
@@ -45,7 +45,7 @@ public interface SlingUri extends RequestPathInfo {
 
     /**
      * Returns the {@link URI}.
-     * 
+     *
      * @return the URI
      */
     @NotNull
@@ -53,7 +53,7 @@ public interface SlingUri extends RequestPathInfo {
 
     /**
      * Returns the URI as String.
-     * 
+     *
      * @return the URI string
      */
     @NotNull
@@ -61,7 +61,7 @@ public interface SlingUri extends RequestPathInfo {
 
     /**
      * Returns the scheme.
-     * 
+     *
      * @return the scheme or null if not set
      */
     @Nullable
@@ -69,7 +69,7 @@ public interface SlingUri extends RequestPathInfo {
 
     /**
      * Returns the user info.
-     * 
+     *
      * @return the user info of the SlingUri or null if not set
      */
     @Nullable
@@ -77,7 +77,7 @@ public interface SlingUri extends RequestPathInfo {
 
     /**
      * Returns the host.
-     * 
+     *
      * @return returns the host of the SlingUri or null if not set
      */
     @Nullable
@@ -85,14 +85,14 @@ public interface SlingUri extends RequestPathInfo {
 
     /**
      * Returns the port.
-     * 
+     *
      * @return returns the port of the SlingUri or -1 if not set
      */
     int getPort();
 
     /**
      * Returns the resource path.
-     * 
+     *
      * @return returns the resource path or null if the URI does not contain a path.
      */
     @Override
@@ -101,7 +101,7 @@ public interface SlingUri extends RequestPathInfo {
 
     /**
      * Returns the selector string.
-     * 
+     *
      * @return returns the selector string or null if the URI does not contain selector(s) (in line with {@link RequestPathInfo})
      */
     @Override
@@ -110,7 +110,7 @@ public interface SlingUri extends RequestPathInfo {
 
     /**
      * Returns the selectors array.
-     * 
+     *
      * @return the selectors array (empty if the URI does not contain selector(s), never null)
      */
     @Override
@@ -119,7 +119,7 @@ public interface SlingUri extends RequestPathInfo {
 
     /**
      * Returns the extension.
-     * 
+     *
      * @return the extension or null if the URI does not contain an extension
      */
     @Override
@@ -128,7 +128,7 @@ public interface SlingUri extends RequestPathInfo {
 
     /**
      * Returns the path parameters.
-     * 
+     *
      * @return the path parameters or an empty Map if the URI does not contain any
      */
     @NotNull
@@ -136,7 +136,7 @@ public interface SlingUri extends RequestPathInfo {
 
     /**
      * Returns the suffix part of the URI
-     * 
+     *
      * @return the suffix string or null if the URI does not contain a suffix
      */
     @Override
@@ -145,7 +145,7 @@ public interface SlingUri extends RequestPathInfo {
 
     /**
      * Returns the joint path of resource path, selectors, extension and suffix.
-     * 
+     *
      * @return the path or null if no path is set
      */
     @Nullable
@@ -153,7 +153,7 @@ public interface SlingUri extends RequestPathInfo {
 
     /**
      * Returns the query.
-     * 
+     *
      * @return the query part of the URI or null if the URI does not contain a query
      */
     @Nullable
@@ -161,7 +161,7 @@ public interface SlingUri extends RequestPathInfo {
 
     /**
      * Returns the fragment.
-     * 
+     *
      * @return the fragment or null if the URI does not contain a fragment
      */
     @Nullable
@@ -169,7 +169,7 @@ public interface SlingUri extends RequestPathInfo {
 
     /**
      * Returns the scheme-specific part of the URI, compare with Javadoc of {@link URI}.
-     * 
+     *
      * @return scheme specific part of the URI
      */
     @Nullable
@@ -182,7 +182,7 @@ public interface SlingUri extends RequestPathInfo {
      * <li>the URI does not contain a suffix</li>
      * <li>if the suffix resource could not be found</li>
      * </ul>
-     * 
+     *
      * @return the suffix resource if available or null
      */
     @Override
@@ -191,42 +191,42 @@ public interface SlingUri extends RequestPathInfo {
 
     /**
      * Returns true the URI is either a relative or absolute path (this is the case if scheme and host is empty and the URI path is set)
-     * 
+     *
      * @return returns true for path URIs
      */
     boolean isPath();
 
     /**
      * Returns true if the URI has an absolute path starting with a slash ('/').
-     * 
+     *
      * @return true if the URI is an absolute path
      */
     boolean isAbsolutePath();
 
     /**
      * Returns true if the URI is a relative path (no scheme and path does not start with '/').
-     * 
+     *
      * @return true if URI is a relative path
      */
     boolean isRelativePath();
 
     /**
      * Returns true the URI is an absolute URI.
-     * 
+     *
      * @return true if the URI is an absolute URI containing a scheme.
      */
     boolean isAbsolute();
 
     /**
      * Returns true for opaque URIs like e.g. mailto:jon@example.com.
-     * 
+     *
      * @return true if the URI is an opaque URI
      */
     boolean isOpaque();
 
     /**
      * Shortcut to adjust Sling URIs, e.g. {@code slingUri = slingUri.adjust(b -> b.setExtension("html")); }.
-     * 
+     *
      * @param builderConsumer the consumer (e.g. {@code b -> b.setExtension("html")})
      * @return the adjusted SlingUri (new instance)
      */
@@ -236,5 +236,4 @@ public interface SlingUri extends RequestPathInfo {
         builderConsumer.accept(builder);
         return builder.build();
     }
-
 }

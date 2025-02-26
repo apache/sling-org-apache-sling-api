@@ -21,9 +21,8 @@ package org.apache.sling.api.resource;
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
-
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -121,7 +120,8 @@ public interface ResourceResolverFactory {
      *             <code>ResourceResolver</code> with the provided credential
      *             data.
      */
-    @NotNull ResourceResolver getResourceResolver(Map<String, Object> authenticationInfo) throws LoginException;
+    @NotNull
+    ResourceResolver getResourceResolver(Map<String, Object> authenticationInfo) throws LoginException;
 
     /**
      * Returns a new {@link ResourceResolver} instance with administrative
@@ -158,7 +158,8 @@ public interface ResourceResolverFactory {
      *             the {@link #getServiceResourceResolver(Map)} instead.
      */
     @Deprecated
-    @NotNull ResourceResolver getAdministrativeResourceResolver(Map<String, Object> authenticationInfo) throws LoginException;
+    @NotNull
+    ResourceResolver getAdministrativeResourceResolver(Map<String, Object> authenticationInfo) throws LoginException;
 
     /**
      * Returns a new {@link ResourceResolver} instance with privileges assigned
@@ -187,7 +188,8 @@ public interface ResourceResolverFactory {
      *      href="http://sling.apache.org/documentation/the-sling-engine/service-authentication.html">Service
      *      Authentication</a>
      */
-    @NotNull ResourceResolver getServiceResourceResolver(Map<String, Object> authenticationInfo) throws LoginException;
+    @NotNull
+    ResourceResolver getServiceResourceResolver(Map<String, Object> authenticationInfo) throws LoginException;
 
     /**
      * Returns the {@link ResourceResolver} for the current thread.
@@ -204,7 +206,8 @@ public interface ResourceResolverFactory {
      *
      * @since 2.6 (Sling API Bundle 2.8.0)
      */
-    @Nullable ResourceResolver getThreadResourceResolver();
+    @Nullable
+    ResourceResolver getThreadResourceResolver();
 
     /**
      * Returns the search path used by the resource resolvers to search for
@@ -219,5 +222,6 @@ public interface ResourceResolverFactory {
      * @return An immutable list containing the search path
      * @since 2.11 (Sling API Bundle 2.18.0)
      */
-    @NotNull List<String> getSearchPath();
+    @NotNull
+    List<String> getSearchPath();
 }

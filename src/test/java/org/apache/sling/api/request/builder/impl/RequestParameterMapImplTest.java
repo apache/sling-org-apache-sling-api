@@ -18,18 +18,19 @@
  */
 package org.apache.sling.api.request.builder.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 public class RequestParameterMapImplTest {
 
-    @Test public void testMap() {
+    @Test
+    public void testMap() {
         final Map<String, String[]> initial = new HashMap<>();
         initial.put("foo", new String[] {"bar"});
         initial.put("a", new String[] {"b", "c"});

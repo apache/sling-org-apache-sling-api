@@ -34,7 +34,7 @@ public final class PathBuilder {
      */
     public PathBuilder(final String path) {
 
-        if ( path == null || path.isEmpty() || path.charAt(0) != '/') {
+        if (path == null || path.isEmpty() || path.charAt(0) != '/') {
             throw new IllegalArgumentException("Path '" + path + "' is not absolute");
         }
 
@@ -49,16 +49,16 @@ public final class PathBuilder {
      */
     public PathBuilder append(final String path) {
 
-        if ( path == null || path.isEmpty() ) {
+        if (path == null || path.isEmpty()) {
             throw new IllegalArgumentException("Path '" + path + "' is null or empty");
         }
 
         boolean trailingSlash = sb.charAt(sb.length() - 1) == '/';
         boolean leadingSlash = path.charAt(0) == '/';
 
-        if ( trailingSlash && leadingSlash) {
+        if (trailingSlash && leadingSlash) {
             sb.append(path.substring(1));
-        } else if ( !trailingSlash && !leadingSlash ) {
+        } else if (!trailingSlash && !leadingSlash) {
             sb.append('/').append(path);
         } else {
             sb.append(path);

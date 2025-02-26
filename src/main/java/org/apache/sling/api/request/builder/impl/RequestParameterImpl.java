@@ -33,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
 public class RequestParameterImpl implements RequestParameter {
 
     private final @NotNull String name;
-    private final byte @NotNull[] value;
+    private final byte @NotNull [] value;
     private final @NotNull Charset encoding;
     private final String contentType;
     private final String fileName;
@@ -43,15 +43,30 @@ public class RequestParameterImpl implements RequestParameter {
         this(name, value, StandardCharsets.UTF_8);
     }
 
-    public RequestParameterImpl(@NotNull final String name, @NotNull final String value, @NotNull final Charset encoding) {
-        this(name, value.getBytes(encoding), encoding, null, null, true); // by default application/x-www-form-urlencoded is returning null for content type in Sling Engine
+    public RequestParameterImpl(
+            @NotNull final String name, @NotNull final String value, @NotNull final Charset encoding) {
+        this(
+                name,
+                value.getBytes(encoding),
+                encoding,
+                null,
+                null,
+                true); // by default application/x-www-form-urlencoded is returning null for content type in Sling
+        // Engine
     }
 
-    public RequestParameterImpl(@NotNull final String name, byte @NotNull[] value, String fileName, String contentType) {
+    public RequestParameterImpl(
+            @NotNull final String name, byte @NotNull [] value, String fileName, String contentType) {
         this(name, value, StandardCharsets.UTF_8, fileName, contentType, false);
     }
 
-    private RequestParameterImpl(@NotNull final String name, byte @NotNull [] value, @NotNull final Charset encoding, String fileName, final String contentType, boolean isFormField) {
+    private RequestParameterImpl(
+            @NotNull final String name,
+            byte @NotNull [] value,
+            @NotNull final Charset encoding,
+            String fileName,
+            final String contentType,
+            boolean isFormField) {
         this.name = name;
         this.value = value;
         this.contentType = contentType;

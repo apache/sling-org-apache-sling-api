@@ -18,8 +18,6 @@
  */
 package org.apache.sling.api.uri;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
@@ -29,19 +27,23 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import static org.junit.Assert.assertEquals;
+
 @RunWith(MockitoJUnitRunner.class)
 public class SlingUriEncodingTest {
 
     @Test
     public void testUriWithEuroSign() throws URISyntaxException, UnsupportedEncodingException {
 
-        testUriUnchangedForEncodedAndDecodedStr("/test-with-euro-sign-%E2%82%AC-suffix.pdf", true, true, false, false, false);
+        testUriUnchangedForEncodedAndDecodedStr(
+                "/test-with-euro-sign-%E2%82%AC-suffix.pdf", true, true, false, false, false);
     }
 
     @Test
     public void testUriWithSpaces() throws URISyntaxException, UnsupportedEncodingException {
 
-        testUriUnchangedForEncodedAndDecodedStr("/test+with+spaces%20in+different%20encodings", true, true, false, false, false);
+        testUriUnchangedForEncodedAndDecodedStr(
+                "/test+with+spaces%20in+different%20encodings", true, true, false, false, false);
     }
 
     @Test
@@ -56,16 +58,14 @@ public class SlingUriEncodingTest {
     public void testUriWithSpecialCharactersInUserInfo() throws URISyntaxException, UnsupportedEncodingException {
 
         testUriUnchangedForEncodedAndDecodedStr(
-                "http://user:%2B%26%2B-%25%3D%2A%5E%3F%23@example.com/path.txt",
-                false, false, false, true, false);
+                "http://user:%2B%26%2B-%25%3D%2A%5E%3F%23@example.com/path.txt", false, false, false, true, false);
     }
 
     @Test
     public void testUriWithSpecialCharactersInQuery() throws URISyntaxException, UnsupportedEncodingException {
 
         testUriUnchangedForEncodedAndDecodedStr(
-                "http://example.com/path.txt?testParam=%2B%26%2B-%25%3D%2A%5E%3F%23",
-                false, false, false, true, false);
+                "http://example.com/path.txt?testParam=%2B%26%2B-%25%3D%2A%5E%3F%23", false, false, false, true, false);
     }
 
     @Test
@@ -76,8 +76,14 @@ public class SlingUriEncodingTest {
                 false, false, false, true, false);
     }
 
-    private void testUriUnchangedForEncodedAndDecodedStr(String testUriStrEncoded, boolean isPath, boolean isAbsolutePath,
-            boolean isRelativePath, boolean isAbsolute, boolean isOpaque) throws UnsupportedEncodingException {
+    private void testUriUnchangedForEncodedAndDecodedStr(
+            String testUriStrEncoded,
+            boolean isPath,
+            boolean isAbsolutePath,
+            boolean isRelativePath,
+            boolean isAbsolute,
+            boolean isOpaque)
+            throws UnsupportedEncodingException {
 
         testUriUnchanged(testUriStrEncoded, isPath, isAbsolutePath, isRelativePath, isAbsolute, isOpaque);
 
@@ -86,8 +92,13 @@ public class SlingUriEncodingTest {
         testUriUnchanged(testUriStrDecoded, isPath, isAbsolutePath, isRelativePath, isAbsolute, isOpaque);
     }
 
-    public static SlingUri testUriUnchanged(String testUri, boolean isPath, boolean isAbsolutePath, boolean isRelativePath,
-            boolean isAbsolute, boolean isOpaque) {
+    public static SlingUri testUriUnchanged(
+            String testUri,
+            boolean isPath,
+            boolean isAbsolutePath,
+            boolean isRelativePath,
+            boolean isAbsolute,
+            boolean isOpaque) {
         SlingUri slingUri = SlingUriBuilder.parse(testUri, null).build();
 
         assertEquals("Uri toString() same as input", testUri, slingUri.toString());
@@ -98,12 +109,14 @@ public class SlingUriEncodingTest {
         assertEquals("isAbsolute()", isAbsolute, slingUri.isAbsolute());
         assertEquals("isOpaque()", isOpaque, slingUri.isOpaque());
 
-        SlingUri slingUriParsedFromSameInput = SlingUriBuilder.parse(testUri, null).build();
+        SlingUri slingUriParsedFromSameInput =
+                SlingUriBuilder.parse(testUri, null).build();
         assertEquals("uris parsed from same input are expected to be equal", slingUriParsedFromSameInput, slingUri);
-        assertEquals("uris parsed from same input are expected to have the same hash code", slingUriParsedFromSameInput.hashCode(),
+        assertEquals(
+                "uris parsed from same input are expected to have the same hash code",
+                slingUriParsedFromSameInput.hashCode(),
                 slingUri.hashCode());
 
         return slingUri;
     }
-
 }
