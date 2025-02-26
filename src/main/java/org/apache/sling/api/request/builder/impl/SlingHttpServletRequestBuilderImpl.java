@@ -28,6 +28,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.apache.felix.http.jakartawrappers.HttpServletRequestWrapper;
 import org.apache.felix.http.jakartawrappers.RequestDispatcherWrapper;
 import org.apache.felix.http.jakartawrappers.ServletContextWrapper;
@@ -43,12 +48,6 @@ import org.apache.sling.api.uri.SlingUriBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletContext;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-
 /**
  * Internal {@link SlingHttpServletRequestBuilder} implementation
  */
@@ -59,6 +58,7 @@ public class SlingHttpServletRequestBuilderImpl implements SlingHttpServletReque
 
     /** Protocol */
     static final String SECURE_PROTOCOL = "https";
+
     static final String HTTP_PROTOCOL = "http";
 
     static final String CHARSET_SEPARATOR = ";charset=";
@@ -88,6 +88,7 @@ public class SlingHttpServletRequestBuilderImpl implements SlingHttpServletReque
 
     /** Optional content type / character encoding */
     String contentType;
+
     String characterEncoding;
 
     /** Optional body */
@@ -161,7 +162,7 @@ public class SlingHttpServletRequestBuilderImpl implements SlingHttpServletReque
     }
 
     private void checkLocked() {
-        if ( locked ) {
+        if (locked) {
             throw new IllegalStateException("The builder can't be reused. Create a new builder instead.");
         }
     }
@@ -173,7 +174,7 @@ public class SlingHttpServletRequestBuilderImpl implements SlingHttpServletReque
     }
 
     @Override
-    public @NotNull SlingHttpServletRequestBuilder withRequestMethod(@NotNull  String method) {
+    public @NotNull SlingHttpServletRequestBuilder withRequestMethod(@NotNull String method) {
         this.checkLocked();
         this.checkNotNull("method", method);
         this.requestMethod = method.toUpperCase();
@@ -186,7 +187,8 @@ public class SlingHttpServletRequestBuilderImpl implements SlingHttpServletReque
         final int pos = type == null ? -1 : type.indexOf(SlingHttpServletRequestBuilderImpl.CHARSET_SEPARATOR);
         if (pos != -1) {
             this.contentType = type.substring(0, pos);
-            this.characterEncoding = type.substring(pos + SlingHttpServletRequestBuilderImpl.CHARSET_SEPARATOR.length());
+            this.characterEncoding =
+                    type.substring(pos + SlingHttpServletRequestBuilderImpl.CHARSET_SEPARATOR.length());
         } else {
             this.contentType = type;
         }
@@ -201,7 +203,7 @@ public class SlingHttpServletRequestBuilderImpl implements SlingHttpServletReque
     }
 
     @Override
-    public @NotNull SlingHttpServletRequestBuilder withSelectors(final String ... selectors) {
+    public @NotNull SlingHttpServletRequestBuilder withSelectors(final String... selectors) {
         this.checkLocked();
         this.selectors = selectors;
         return this;
@@ -222,7 +224,8 @@ public class SlingHttpServletRequestBuilderImpl implements SlingHttpServletReque
     }
 
     @Override
-    public @NotNull SlingHttpServletRequestBuilder withParameter(final @NotNull String key, final @NotNull String value) {
+    public @NotNull SlingHttpServletRequestBuilder withParameter(
+            final @NotNull String key, final @NotNull String value) {
         this.checkLocked();
         this.checkNotNull("key", key);
         this.checkNotNull("value", value);
@@ -231,7 +234,8 @@ public class SlingHttpServletRequestBuilderImpl implements SlingHttpServletReque
     }
 
     @Override
-    public @NotNull SlingHttpServletRequestBuilder withParameter(final @NotNull String key, final @NotNull String[] values) {
+    public @NotNull SlingHttpServletRequestBuilder withParameter(
+            final @NotNull String key, final @NotNull String[] values) {
         this.checkLocked();
         this.checkNotNull("key", key);
         this.checkNotNull("values", values);
@@ -249,7 +253,8 @@ public class SlingHttpServletRequestBuilderImpl implements SlingHttpServletReque
     }
 
     @Override
-    public @NotNull SlingHttpServletRequestBuilder useAttributesFrom(@NotNull javax.servlet.http.HttpServletRequest request) {
+    public @NotNull SlingHttpServletRequestBuilder useAttributesFrom(
+            @NotNull javax.servlet.http.HttpServletRequest request) {
         this.checkLocked();
         this.checkNotNull(REQUEST, request);
         this.attributesProvider = new HttpServletRequestWrapper(request);
@@ -257,7 +262,8 @@ public class SlingHttpServletRequestBuilderImpl implements SlingHttpServletReque
     }
 
     @Override
-    public @NotNull SlingHttpServletRequestBuilder useServletContextFrom(@NotNull javax.servlet.http.HttpServletRequest request) {
+    public @NotNull SlingHttpServletRequestBuilder useServletContextFrom(
+            @NotNull javax.servlet.http.HttpServletRequest request) {
         this.checkLocked();
         this.checkNotNull(REQUEST, request);
         this.servletContext = new ServletContextWrapper(request.getServletContext());
@@ -265,7 +271,8 @@ public class SlingHttpServletRequestBuilderImpl implements SlingHttpServletReque
     }
 
     @Override
-    public @NotNull SlingHttpServletRequestBuilder useSessionFrom(@NotNull javax.servlet.http.HttpServletRequest request) {
+    public @NotNull SlingHttpServletRequestBuilder useSessionFrom(
+            @NotNull javax.servlet.http.HttpServletRequest request) {
         this.checkLocked();
         this.checkNotNull(REQUEST, request);
         this.sessionProvider = new HttpServletRequestWrapper(request);
@@ -274,7 +281,8 @@ public class SlingHttpServletRequestBuilderImpl implements SlingHttpServletReque
 
     @Override
     @Deprecated
-    public @NotNull SlingHttpServletRequestBuilder useRequestDispatcherFrom(@NotNull org.apache.sling.api.SlingHttpServletRequest request) {
+    public @NotNull SlingHttpServletRequestBuilder useRequestDispatcherFrom(
+            @NotNull org.apache.sling.api.SlingHttpServletRequest request) {
         this.checkLocked();
         this.checkNotNull(REQUEST, request);
         this.requestDispatcherProvider = new SlingJakartaHttpServletRequestImpl(this) {
@@ -307,14 +315,14 @@ public class SlingHttpServletRequestBuilderImpl implements SlingHttpServletReque
             }
 
             @Override
-            public RequestDispatcher getRequestDispatcher(final Resource resource, final RequestDispatcherOptions options) {
+            public RequestDispatcher getRequestDispatcher(
+                    final Resource resource, final RequestDispatcherOptions options) {
                 final javax.servlet.RequestDispatcher dispatcher = request.getRequestDispatcher(resource, options);
                 if (dispatcher != null) {
                     return new RequestDispatcherWrapper(dispatcher);
                 }
                 return null;
             }
-
         };
         return this;
     }
@@ -344,7 +352,8 @@ public class SlingHttpServletRequestBuilderImpl implements SlingHttpServletReque
     }
 
     @Override
-    public @NotNull SlingHttpServletRequestBuilder useRequestDispatcherFrom(@NotNull SlingJakartaHttpServletRequest request) {
+    public @NotNull SlingHttpServletRequestBuilder useRequestDispatcherFrom(
+            @NotNull SlingJakartaHttpServletRequest request) {
         this.checkLocked();
         this.checkNotNull(REQUEST, request);
         this.requestDispatcherProvider = request;
@@ -364,26 +373,26 @@ public class SlingHttpServletRequestBuilderImpl implements SlingHttpServletReque
         this.locked = true;
 
         this.requestPathInfo = SlingUriBuilder.createFrom(this.resource)
-            .setExtension(this.extension)
-            .setSuffix(this.suffix)
-            .setSelectors(this.selectors)
-            .build();
+                .setExtension(this.extension)
+                .setSuffix(this.suffix)
+                .setSelectors(this.selectors)
+                .build();
 
         this.queryString = this.formatQueryString();
         this.pathInfo = this.buildPathInfo();
 
-        if ( this.servletContext == null ) {
+        if (this.servletContext == null) {
             this.servletContext = new ServletContextImpl();
         }
-        if (this.body == null ) {
+        if (this.body == null) {
             this.body = "";
         }
         final org.apache.sling.api.SlingHttpServletRequest req = new SlingHttpServletRequestImpl(this);
         if (this.progressTracker == null) {
             // if attributes are shared with a Sling request, then the progress tracker is available from there
             final Object attrTracker = req.getAttribute(RequestProgressTracker.class.getName());
-            if ( attrTracker instanceof RequestProgressTracker) {
-                this.progressTracker = (RequestProgressTracker)attrTracker;
+            if (attrTracker instanceof RequestProgressTracker) {
+                this.progressTracker = (RequestProgressTracker) attrTracker;
             } else {
                 this.progressTracker = Builders.newRequestProgressTracker();
             }
@@ -397,26 +406,26 @@ public class SlingHttpServletRequestBuilderImpl implements SlingHttpServletReque
         this.locked = true;
 
         this.requestPathInfo = SlingUriBuilder.createFrom(this.resource)
-            .setExtension(this.extension)
-            .setSuffix(this.suffix)
-            .setSelectors(this.selectors)
-            .build();
+                .setExtension(this.extension)
+                .setSuffix(this.suffix)
+                .setSelectors(this.selectors)
+                .build();
 
         this.queryString = this.formatQueryString();
         this.pathInfo = this.buildPathInfo();
 
-        if ( this.servletContext == null ) {
+        if (this.servletContext == null) {
             this.servletContext = new ServletContextImpl();
         }
-        if (this.body == null ) {
+        if (this.body == null) {
             this.body = "";
         }
         final SlingJakartaHttpServletRequest req = new SlingJakartaHttpServletRequestImpl(this);
         if (this.progressTracker == null) {
             // if attributes are shared with a Sling request, then the progress tracker is available from there
             final Object attrTracker = req.getAttribute(RequestProgressTracker.class.getName());
-            if ( attrTracker instanceof RequestProgressTracker) {
-                this.progressTracker = (RequestProgressTracker)attrTracker;
+            if (attrTracker instanceof RequestProgressTracker) {
+                this.progressTracker = (RequestProgressTracker) attrTracker;
             } else {
                 this.progressTracker = Builders.newRequestProgressTracker();
             }
@@ -428,17 +437,17 @@ public class SlingHttpServletRequestBuilderImpl implements SlingHttpServletReque
         final StringBuilder builder = new StringBuilder();
 
         builder.append(this.requestPathInfo.getResourcePath());
-        if ( this.requestPathInfo.getSelectorString() != null ) {
+        if (this.requestPathInfo.getSelectorString() != null) {
             builder.append('.');
             builder.append(this.requestPathInfo.getSelectorString());
         }
 
-        if ( this.requestPathInfo.getExtension() != null ) {
+        if (this.requestPathInfo.getExtension() != null) {
             builder.append('.');
             builder.append(this.requestPathInfo.getExtension());
         }
 
-        if ( this.requestPathInfo.getSuffix() != null ) {
+        if (this.requestPathInfo.getSuffix() != null) {
             builder.append(this.requestPathInfo.getSuffix());
         }
 
@@ -464,7 +473,8 @@ public class SlingHttpServletRequestBuilderImpl implements SlingHttpServletReque
         }
     }
 
-    private static void formatQueryStringParameter(final StringBuilder builder, final Map.Entry<String, String[]> entry) {
+    private static void formatQueryStringParameter(
+            final StringBuilder builder, final Map.Entry<String, String[]> entry) {
         for (String value : entry.getValue()) {
             if (builder.length() != 0) {
                 builder.append('&');

@@ -19,7 +19,6 @@
 package org.apache.sling.api;
 
 import jakarta.servlet.http.HttpServletResponse;
-
 import org.apache.sling.api.adapter.Adaptable;
 import org.osgi.annotation.versioning.ProviderType;
 
@@ -34,7 +33,4 @@ import org.osgi.annotation.versioning.ProviderType;
  * {@link Adaptable} interface.
  */
 @ProviderType
-public interface SlingJakartaHttpServletResponse extends HttpServletResponse,
-        Adaptable {
-
-}
+public interface SlingJakartaHttpServletResponse extends HttpServletResponse, Adaptable {}

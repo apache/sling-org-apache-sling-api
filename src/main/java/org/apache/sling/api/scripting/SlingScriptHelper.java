@@ -18,14 +18,12 @@
  */
 package org.apache.sling.api.scripting;
 
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
-
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.request.RequestDispatcherOptions;
 import org.apache.sling.api.resource.Resource;
-
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -43,20 +41,23 @@ public interface SlingScriptHelper {
      * request.
      * @return The request
      */
-    @NotNull SlingHttpServletRequest getRequest();
+    @NotNull
+    SlingHttpServletRequest getRequest();
 
     /**
      * Returns the {@link SlingHttpServletResponse} representing the output of
      * the request.
      * @return The response
      */
-    @NotNull SlingHttpServletResponse getResponse();
+    @NotNull
+    SlingHttpServletResponse getResponse();
 
     /**
      * Returns the {@link SlingScript} being called to handle the request.
      * @return The script
      */
-    @NotNull SlingScript getScript();
+    @NotNull
+    SlingScript getScript();
 
     /**
      * Same as {@link #include(String,RequestDispatcherOptions)}, but using
@@ -343,7 +344,8 @@ public interface SlingScriptHelper {
      * @param <ServiceType> The type (interface) of the service.
      * @return The service instance, or {@code null} if no services are registered which implement the specified class.
      */
-    @Nullable <ServiceType> ServiceType getService(@NotNull Class<ServiceType> serviceType);
+    @Nullable
+    <ServiceType> ServiceType getService(@NotNull Class<ServiceType> serviceType);
 
     /**
      * Lookup one or several services.
@@ -363,8 +365,8 @@ public interface SlingScriptHelper {
      *
      * @see <a href="https://osgi.org/javadoc/r5/core/org/osgi/framework/Filter.html">Filter class in OSGi</a>
      */
-    @Nullable <ServiceType> ServiceType[] getServices(@NotNull Class<ServiceType> serviceType,
-            String filter);
+    @Nullable
+    <ServiceType> ServiceType[] getServices(@NotNull Class<ServiceType> serviceType, String filter);
 
     /**
      * Dispose the helper. This method can be used to clean up the script helper

@@ -20,12 +20,10 @@ package org.apache.sling.spi.resource.provider;
 
 import java.util.Iterator;
 
-import org.jetbrains.annotations.NotNull;
-
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
+import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
-
 
 /**
  * The JCR query provider supports querying based on the JCR spec.

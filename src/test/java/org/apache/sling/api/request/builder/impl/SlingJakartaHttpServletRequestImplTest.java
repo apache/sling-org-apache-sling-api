@@ -18,15 +18,6 @@
  */
 package org.apache.sling.api.request.builder.impl;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -39,7 +30,6 @@ import java.util.Map;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpSession;
-
 import org.apache.sling.api.SlingJakartaHttpServletRequest;
 import org.apache.sling.api.request.RequestDispatcherOptions;
 import org.apache.sling.api.request.RequestParameter;
@@ -50,6 +40,15 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class SlingJakartaHttpServletRequestImplTest {
 
@@ -68,29 +67,34 @@ public class SlingJakartaHttpServletRequestImplTest {
         this.builder = new SlingHttpServletRequestBuilderImpl(resource);
     }
 
-    @Test(expected = IllegalStateException.class) public void testCheckLocked() {
+    @Test(expected = IllegalStateException.class)
+    public void testCheckLocked() {
         builder.buildJakartaRequest();
         builder.withExtension("foo");
     }
 
-    @Test public void testGetResource() {
+    @Test
+    public void testGetResource() {
         req = builder.buildJakartaRequest();
         assertEquals(resource, req.getResource());
         assertEquals(resource.getResourceResolver(), req.getResourceResolver());
     }
 
-    @Test public void testGetRequestPathInfo() {
+    @Test
+    public void testGetRequestPathInfo() {
         builder.withExtension("html").withSelectors("tidy", "json");
         req = builder.buildJakartaRequest();
         assertEquals("html", req.getRequestPathInfo().getExtension());
         assertEquals("/content/page", req.getRequestPathInfo().getResourcePath());
         assertEquals("tidy.json", req.getRequestPathInfo().getSelectorString());
-        assertArrayEquals(new String[] {"tidy", "json"}, req.getRequestPathInfo().getSelectors());
+        assertArrayEquals(
+                new String[] {"tidy", "json"}, req.getRequestPathInfo().getSelectors());
         assertNull(req.getRequestPathInfo().getSuffix());
         assertNull(req.getRequestPathInfo().getSuffixResource());
     }
 
-    @Test public void testInternalSession() {
+    @Test
+    public void testInternalSession() {
         req = builder.buildJakartaRequest();
         assertNull(req.getSession(false));
         final HttpSession s = req.getSession();
@@ -99,7 +103,8 @@ public class SlingJakartaHttpServletRequestImplTest {
         assertTrue(s instanceof HttpSessionImpl);
     }
 
-    @Test public void testProvidedSession() {
+    @Test
+    public void testProvidedSession() {
         final SlingJakartaHttpServletRequest outer = Mockito.mock(SlingJakartaHttpServletRequest.class);
         final HttpSession outerSession = Mockito.mock(HttpSession.class);
         Mockito.when(outer.getSession()).thenReturn(outerSession);
@@ -114,7 +119,8 @@ public class SlingJakartaHttpServletRequestImplTest {
         assertEquals("provided", s.getId());
     }
 
-    @Test public void testInternalAttributes() {
+    @Test
+    public void testInternalAttributes() {
         req = builder.buildJakartaRequest();
         assertFalse(req.getAttributeNames().hasMoreElements());
         req.setAttribute("a", "b");
@@ -125,7 +131,8 @@ public class SlingJakartaHttpServletRequestImplTest {
         assertNull(req.getAttribute("a"));
     }
 
-    @Test public void testProvidedAttributes() {
+    @Test
+    public void testProvidedAttributes() {
         final SlingJakartaHttpServletRequest outer = Mockito.mock(SlingJakartaHttpServletRequest.class);
         Mockito.when(outer.getAttributeNames()).thenReturn(Collections.enumeration(Collections.emptyList()));
         req = builder.useAttributesFrom(outer).buildJakartaRequest();
@@ -139,12 +146,13 @@ public class SlingJakartaHttpServletRequestImplTest {
         Mockito.verify(outer, Mockito.atLeastOnce()).setAttribute("foo", "bar");
     }
 
-    @Test public void testParameters() throws IOException, ServletException {
+    @Test
+    public void testParameters() throws IOException, ServletException {
         req = builder.withParameter("a", "b")
-            .withParameter("c", new String[] {"d", "e"})
-            .withParameters(Collections.singletonMap("f", new String[] {"g"}))
-            .withParameters(null)
-            .buildJakartaRequest();
+                .withParameter("c", new String[] {"d", "e"})
+                .withParameters(Collections.singletonMap("f", new String[] {"g"}))
+                .withParameters(null)
+                .buildJakartaRequest();
 
         assertEquals("b", req.getParameter("a"));
         assertEquals("d", req.getParameter("c"));
@@ -174,62 +182,73 @@ public class SlingJakartaHttpServletRequestImplTest {
         assertNull(req.getPart("a"));
     }
 
-    @Test public void testNoQueryString() {
+    @Test
+    public void testNoQueryString() {
         req = builder.buildJakartaRequest();
         assertNull(req.getQueryString());
     }
 
-    @Test public void testQueryString() {
+    @Test
+    public void testQueryString() {
         req = builder.withParameter("a", "b")
-            .withParameter("c", new String[] {"d", "e"})
-            .withParameters(Collections.singletonMap("f", new String[] {"g"}))
-            .buildJakartaRequest();
+                .withParameter("c", new String[] {"d", "e"})
+                .withParameters(Collections.singletonMap("f", new String[] {"g"}))
+                .buildJakartaRequest();
 
         assertEquals("a=b&c=d&c=e&f=g", req.getQueryString());
     }
 
-    @Test public void testLocale() {
+    @Test
+    public void testLocale() {
         req = builder.buildJakartaRequest();
         assertEquals(Locale.US, req.getLocale());
         assertEquals(Collections.singletonList(Locale.US), Collections.list(req.getLocales()));
     }
 
-    @Test public void testGetContextPath() {
+    @Test
+    public void testGetContextPath() {
         req = builder.buildJakartaRequest();
         assertEquals("", req.getContextPath());
     }
 
-    @Test public void testGetScheme() {
+    @Test
+    public void testGetScheme() {
         req = builder.buildJakartaRequest();
         assertEquals("http", req.getScheme());
     }
 
-    @Test public void testGetServerName() {
+    @Test
+    public void testGetServerName() {
         req = builder.buildJakartaRequest();
         assertEquals("localhost", req.getServerName());
     }
 
-    @Test public void testGetServerPort() {
+    @Test
+    public void testGetServerPort() {
         req = builder.buildJakartaRequest();
         assertEquals(80, req.getServerPort());
     }
 
-    @Test public void testIsSecure() {
+    @Test
+    public void testIsSecure() {
         req = builder.buildJakartaRequest();
         assertFalse(req.isSecure());
     }
 
-    @Test public void testDefaultGetMethod() {
+    @Test
+    public void testDefaultGetMethod() {
         req = builder.buildJakartaRequest();
         assertEquals("GET", req.getMethod());
     }
 
-    @Test public void testGetMethod() {
+    @Test
+    public void testGetMethod() {
         req = builder.withRequestMethod("POST").buildJakartaRequest();
         assertEquals("POST", req.getMethod());
     }
 
-    @Test public void testHeaders() {
+    @Test
+    public void testHeaders() {
         req = builder.buildJakartaRequest();
         assertFalse(req.getHeaderNames().hasMoreElements());
         assertEquals(-1, req.getDateHeader("foo"));
@@ -238,31 +257,36 @@ public class SlingJakartaHttpServletRequestImplTest {
         assertFalse(req.getHeaders("foo").hasMoreElements());
     }
 
-    @Test public void testCookies() {
+    @Test
+    public void testCookies() {
         req = builder.buildJakartaRequest();
         assertNull(req.getCookies());
         assertNull(req.getCookie("name"));
     }
 
-    @Test public void testGetResourceBundle() {
+    @Test
+    public void testGetResourceBundle() {
         req = builder.buildJakartaRequest();
         assertNotNull(req.getResourceBundle(req.getLocale()));
         assertNotNull(req.getResourceBundle("base", req.getLocale()));
     }
 
-    @Test public void testGetCharacterEncoding() throws UnsupportedEncodingException {
+    @Test
+    public void testGetCharacterEncoding() throws UnsupportedEncodingException {
         req = builder.buildJakartaRequest();
         assertNull(req.getCharacterEncoding());
         req.setCharacterEncoding("UTF-8");
         assertEquals("UTF-8", req.getCharacterEncoding());
     }
 
-    @Test public void testDefaultContentType() throws UnsupportedEncodingException {
+    @Test
+    public void testDefaultContentType() throws UnsupportedEncodingException {
         req = builder.buildJakartaRequest();
         assertNull(req.getContentType());
     }
 
-    @Test public void testContentType() throws UnsupportedEncodingException {
+    @Test
+    public void testContentType() throws UnsupportedEncodingException {
         req = builder.withContentType("text/text").buildJakartaRequest();
         assertEquals("text/text", req.getContentType());
         assertNull(req.getCharacterEncoding());
@@ -271,12 +295,14 @@ public class SlingJakartaHttpServletRequestImplTest {
         assertEquals("text/text;charset=UTF-8", req.getContentType());
     }
 
-    @Test public void testNullContentType() {
+    @Test
+    public void testNullContentType() {
         req = builder.withContentType(null).buildJakartaRequest();
         assertNull("null", req.getContentType());
     }
 
-    @Test public void testContentTypeAndCharset() throws UnsupportedEncodingException {
+    @Test
+    public void testContentTypeAndCharset() throws UnsupportedEncodingException {
         req = builder.withContentType("text/text;charset=UTF-16").buildJakartaRequest();
         assertEquals("text/text;charset=UTF-16", req.getContentType());
         assertEquals("UTF-16", req.getCharacterEncoding());
@@ -285,13 +311,15 @@ public class SlingJakartaHttpServletRequestImplTest {
         assertEquals("text/text;charset=UTF-8", req.getContentType());
     }
 
-    @Test public void testNoBody() {
+    @Test
+    public void testNoBody() {
         req = builder.buildJakartaRequest();
         assertEquals(0, req.getContentLength());
         assertEquals(0L, req.getContentLengthLong());
     }
 
-    @Test public void testBodyReader() throws IOException {
+    @Test
+    public void testBodyReader() throws IOException {
         req = builder.withBody("body").buildJakartaRequest();
         assertEquals(4, req.getContentLength());
         assertEquals(4L, req.getContentLengthLong());
@@ -299,13 +327,15 @@ public class SlingJakartaHttpServletRequestImplTest {
         try {
             req.getInputStream();
             fail();
-        } catch ( final IllegalStateException iae) {}
+        } catch (final IllegalStateException iae) {
+        }
         final char[] cbuf = new char[96];
         final int l = r.read(cbuf);
         assertEquals("body", new String(cbuf, 0, l));
     }
 
-    @Test public void testBodyInputStream() throws IOException {
+    @Test
+    public void testBodyInputStream() throws IOException {
         req = builder.withBody("body").buildJakartaRequest();
         assertEquals(4, req.getContentLength());
         assertEquals(4L, req.getContentLengthLong());
@@ -313,34 +343,41 @@ public class SlingJakartaHttpServletRequestImplTest {
         try {
             req.getReader();
             fail();
-        } catch ( final IllegalStateException iae) {}
+        } catch (final IllegalStateException iae) {
+        }
         final byte[] buf = new byte[96];
         final int l = in.read(buf);
         assertEquals("body", new String(buf, 0, l));
     }
 
-    @Test public void testDefaultRequestDispatcher() {
+    @Test
+    public void testDefaultRequestDispatcher() {
         final Resource rsrc = Mockito.mock(Resource.class);
         req = builder.buildJakartaRequest();
         try {
             req.getRequestDispatcher("/path");
             fail();
-        } catch ( final UnsupportedOperationException expected) {}
+        } catch (final UnsupportedOperationException expected) {
+        }
         try {
             req.getRequestDispatcher("/path", new RequestDispatcherOptions());
             fail();
-        } catch ( final UnsupportedOperationException expected) {}
+        } catch (final UnsupportedOperationException expected) {
+        }
         try {
             req.getRequestDispatcher(rsrc);
             fail();
-        } catch ( final UnsupportedOperationException expected) {}
+        } catch (final UnsupportedOperationException expected) {
+        }
         try {
             req.getRequestDispatcher(rsrc, new RequestDispatcherOptions());
             fail();
-        } catch ( final UnsupportedOperationException expected) {}
+        } catch (final UnsupportedOperationException expected) {
+        }
     }
 
-    @Test public void testProvidedRequestDispatcher() {
+    @Test
+    public void testProvidedRequestDispatcher() {
         final Resource rsrc = Mockito.mock(Resource.class);
         final RequestDispatcherOptions opts = new RequestDispatcherOptions();
         final SlingJakartaHttpServletRequest outer = Mockito.mock(SlingJakartaHttpServletRequest.class);
@@ -356,71 +393,85 @@ public class SlingJakartaHttpServletRequestImplTest {
         Mockito.verify(outer, Mockito.times(1)).getRequestDispatcher(rsrc, opts);
     }
 
-    @Test public void testGetRemoteUser() {
+    @Test
+    public void testGetRemoteUser() {
         req = builder.buildJakartaRequest();
         assertNull(req.getRemoteUser());
     }
 
-    @Test public void testGetRemoteAddr() {
+    @Test
+    public void testGetRemoteAddr() {
         req = builder.buildJakartaRequest();
         assertNull(req.getRemoteAddr());
     }
 
-    @Test public void testGetRemoteHost() {
+    @Test
+    public void testGetRemoteHost() {
         req = builder.buildJakartaRequest();
         assertNull(req.getRemoteHost());
     }
 
-    @Test public void testGetRemotePort() {
+    @Test
+    public void testGetRemotePort() {
         req = builder.buildJakartaRequest();
         assertEquals(0, req.getRemotePort());
     }
 
-    @Test public void testGetServletPath() {
+    @Test
+    public void testGetServletPath() {
         req = builder.buildJakartaRequest();
         assertEquals("", req.getServletPath());
     }
 
-    @Test public void testGetPathInfo() {
+    @Test
+    public void testGetPathInfo() {
         req = builder.buildJakartaRequest();
         assertEquals("/content/page", req.getPathInfo());
     }
 
-    @Test public void testGetRequestURI() {
+    @Test
+    public void testGetRequestURI() {
         req = builder.buildJakartaRequest();
         assertEquals("/content/page", req.getRequestURI());
     }
 
-    @Test public void testGetRequestURL() {
+    @Test
+    public void testGetRequestURL() {
         req = builder.buildJakartaRequest();
         assertEquals("http://localhost/content/page", req.getRequestURL().toString());
     }
 
-    @Test public void testGetAuthType() {
+    @Test
+    public void testGetAuthType() {
         req = builder.buildJakartaRequest();
         assertNull(req.getAuthType());
     }
 
-    @Test public void getResponseContentType() {
+    @Test
+    public void getResponseContentType() {
         req = builder.buildJakartaRequest();
         assertNull(req.getResponseContentType());
         assertEquals(Collections.singletonList(null), Collections.list(req.getResponseContentTypes()));
     }
 
-    @Test public void testNewGetRequestProgressTracker() {
+    @Test
+    public void testNewGetRequestProgressTracker() {
         req = builder.buildJakartaRequest();
         assertNotNull(req.getRequestProgressTracker());
     }
 
-    @Test public void testProvidedGetRequestProgressTracker() {
+    @Test
+    public void testProvidedGetRequestProgressTracker() {
         final RequestProgressTracker t = Builders.newRequestProgressTracker();
         req = builder.withRequestProgressTracker(t).buildJakartaRequest();
         assertSame(t, req.getRequestProgressTracker());
     }
 
-    @Test public void testProvidedByAttributesGetRequestProgressTracker() {
+    @Test
+    public void testProvidedByAttributesGetRequestProgressTracker() {
         // build a request with a tracker set in an attribute first
-        final SlingJakartaHttpServletRequest orig = new SlingHttpServletRequestBuilderImpl(this.resource).buildJakartaRequest();
+        final SlingJakartaHttpServletRequest orig =
+                new SlingHttpServletRequestBuilderImpl(this.resource).buildJakartaRequest();
         final RequestProgressTracker t = Builders.newRequestProgressTracker();
         orig.setAttribute(RequestProgressTracker.class.getName(), t);
 
@@ -428,14 +479,16 @@ public class SlingJakartaHttpServletRequestImplTest {
         assertSame(t, req.getRequestProgressTracker());
     }
 
-    @Test public void testDefaultServletContext() {
+    @Test
+    public void testDefaultServletContext() {
         req = builder.buildJakartaRequest();
         final ServletContext ctx = req.getServletContext();
         assertNotNull(ctx);
         assertTrue(ctx instanceof ServletContextImpl);
     }
 
-    @Test public void testProvidedServletContext() {
+    @Test
+    public void testProvidedServletContext() {
         final SlingJakartaHttpServletRequest outer = Mockito.mock(SlingJakartaHttpServletRequest.class);
         final ServletContext outerCtx = Mockito.mock(ServletContext.class);
         Mockito.when(outer.getServletContext()).thenReturn(outerCtx);
@@ -447,91 +500,113 @@ public class SlingJakartaHttpServletRequestImplTest {
         assertFalse(ctx instanceof ServletContextImpl);
     }
 
-    @Test public void testUnsupportedMethods() throws ServletException, IOException {
+    @Test
+    public void testUnsupportedMethods() throws ServletException, IOException {
         req = builder.buildJakartaRequest();
         try {
             req.getPathTranslated();
             fail();
-        } catch ( final UnsupportedOperationException expected) {}
+        } catch (final UnsupportedOperationException expected) {
+        }
         try {
             req.getRequestedSessionId();
             fail();
-        } catch ( final UnsupportedOperationException expected) {}
+        } catch (final UnsupportedOperationException expected) {
+        }
         try {
             req.getUserPrincipal();
             fail();
-        } catch ( final UnsupportedOperationException expected) {}
+        } catch (final UnsupportedOperationException expected) {
+        }
         try {
             req.isRequestedSessionIdFromCookie();
             fail();
-        } catch ( final UnsupportedOperationException expected) {}
+        } catch (final UnsupportedOperationException expected) {
+        }
         try {
             req.isRequestedSessionIdFromURL();
             fail();
-        } catch ( final UnsupportedOperationException expected) {}
+        } catch (final UnsupportedOperationException expected) {
+        }
         try {
             req.isRequestedSessionIdValid();
             fail();
-        } catch ( final UnsupportedOperationException expected) {}
+        } catch (final UnsupportedOperationException expected) {
+        }
         try {
             req.isUserInRole("foo");
             fail();
-        } catch ( final UnsupportedOperationException expected) {}
+        } catch (final UnsupportedOperationException expected) {
+        }
         try {
             req.getLocalAddr();
             fail();
-        } catch ( final UnsupportedOperationException expected) {}
+        } catch (final UnsupportedOperationException expected) {
+        }
         try {
             req.getLocalName();
             fail();
-        } catch ( final UnsupportedOperationException expected) {}
+        } catch (final UnsupportedOperationException expected) {
+        }
         try {
             req.getLocalPort();
             fail();
-        } catch ( final UnsupportedOperationException expected) {}
+        } catch (final UnsupportedOperationException expected) {
+        }
         try {
             req.authenticate(null);
             fail();
-        } catch ( final UnsupportedOperationException expected) {}
+        } catch (final UnsupportedOperationException expected) {
+        }
         try {
             req.login("u", "p");
             fail();
-        } catch ( final UnsupportedOperationException expected) {}
+        } catch (final UnsupportedOperationException expected) {
+        }
         try {
             req.logout();
             fail();
-        } catch ( final UnsupportedOperationException expected) {}
+        } catch (final UnsupportedOperationException expected) {
+        }
         try {
             req.startAsync();
             fail();
-        } catch ( final UnsupportedOperationException expected) {}
+        } catch (final UnsupportedOperationException expected) {
+        }
         try {
             req.startAsync(null, null);
             fail();
-        } catch ( final UnsupportedOperationException expected) {}
+        } catch (final UnsupportedOperationException expected) {
+        }
         try {
             req.isAsyncStarted();
             fail();
-        } catch ( final UnsupportedOperationException expected) {}
+        } catch (final UnsupportedOperationException expected) {
+        }
         try {
             req.isAsyncSupported();
             fail();
-        } catch ( final UnsupportedOperationException expected) {}
+        } catch (final UnsupportedOperationException expected) {
+        }
         try {
             req.getAsyncContext();
             fail();
-        } catch ( final UnsupportedOperationException expected) {}
+        } catch (final UnsupportedOperationException expected) {
+        }
         try {
             req.getDispatcherType();
             fail();
-        } catch ( final UnsupportedOperationException expected) {}
+        } catch (final UnsupportedOperationException expected) {
+        }
         try {
             req.changeSessionId();
             fail();
-        } catch ( final UnsupportedOperationException expected) {}
+        } catch (final UnsupportedOperationException expected) {
+        }
         try {
             req.upgrade(null);
             fail();
-        } catch ( final UnsupportedOperationException expected) {}
+        } catch (final UnsupportedOperationException expected) {
+        }
     }
 }

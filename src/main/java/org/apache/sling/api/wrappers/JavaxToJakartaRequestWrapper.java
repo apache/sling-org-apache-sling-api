@@ -23,6 +23,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.felix.http.jakartawrappers.CookieWrapper;
 import org.apache.felix.http.jakartawrappers.HttpServletRequestWrapper;
 import org.apache.felix.http.jakartawrappers.RequestDispatcherWrapper;
@@ -39,19 +43,12 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-
 /**
  * Wrapper for {@link SlingHttpServletRequest} to adapt it to the Jakarta Servlet API.
  * @since 2.9.0
  */
 @SuppressWarnings("deprecation")
-public class JavaxToJakartaRequestWrapper
-    extends HttpServletRequestWrapper
-    implements SlingJakartaHttpServletRequest {
+public class JavaxToJakartaRequestWrapper extends HttpServletRequestWrapper implements SlingJakartaHttpServletRequest {
 
     /**
      * Create a new wrapper
@@ -60,23 +57,23 @@ public class JavaxToJakartaRequestWrapper
      */
     public static ServletRequest toJakartaRequest(final javax.servlet.ServletRequest request) {
         if (request instanceof JakartaToJavaxRequestWrapper) {
-            return ((JakartaToJavaxRequestWrapper)request).getRequest();
+            return ((JakartaToJavaxRequestWrapper) request).getRequest();
         }
         if (request instanceof SlingHttpServletRequest) {
-            return new JavaxToJakartaRequestWrapper((SlingHttpServletRequest)request);
+            return new JavaxToJakartaRequestWrapper((SlingHttpServletRequest) request);
         }
         if (request instanceof javax.servlet.http.HttpServletRequest) {
-            return new HttpServletRequestWrapper((javax.servlet.http.HttpServletRequest)request);
+            return new HttpServletRequestWrapper((javax.servlet.http.HttpServletRequest) request);
         }
         return new ServletRequestWrapper(request);
     }
 
     public static HttpServletRequest toJakartaRequest(final javax.servlet.http.HttpServletRequest request) {
-        return (HttpServletRequest)toJakartaRequest((javax.servlet.ServletRequest)request);
+        return (HttpServletRequest) toJakartaRequest((javax.servlet.ServletRequest) request);
     }
 
     public static SlingJakartaHttpServletRequest toJakartaRequest(final SlingHttpServletRequest request) {
-        return (SlingJakartaHttpServletRequest)toJakartaRequest((javax.servlet.ServletRequest)request);
+        return (SlingJakartaHttpServletRequest) toJakartaRequest((javax.servlet.ServletRequest) request);
     }
 
     private final SlingHttpServletRequest wrappedRequest;
@@ -96,7 +93,8 @@ public class JavaxToJakartaRequestWrapper
     }
 
     @Override
-    public @Nullable RequestDispatcher getRequestDispatcher(@NotNull final String path, final RequestDispatcherOptions options) {
+    public @Nullable RequestDispatcher getRequestDispatcher(
+            @NotNull final String path, final RequestDispatcherOptions options) {
         final javax.servlet.RequestDispatcher dispatcher = this.wrappedRequest.getRequestDispatcher(path, options);
         if (dispatcher != null) {
             return new RequestDispatcherWrapper(dispatcher);
@@ -105,14 +103,14 @@ public class JavaxToJakartaRequestWrapper
     }
 
     @Override
-    public @Nullable RequestDispatcher getRequestDispatcher(@NotNull final Resource resource,
-            RequestDispatcherOptions options) {
-                final javax.servlet.RequestDispatcher dispatcher = this.wrappedRequest.getRequestDispatcher(resource, options);
-                if (dispatcher != null) {
-                    return new RequestDispatcherWrapper(dispatcher);
-                }
-                return null;
-            }
+    public @Nullable RequestDispatcher getRequestDispatcher(
+            @NotNull final Resource resource, RequestDispatcherOptions options) {
+        final javax.servlet.RequestDispatcher dispatcher = this.wrappedRequest.getRequestDispatcher(resource, options);
+        if (dispatcher != null) {
+            return new RequestDispatcherWrapper(dispatcher);
+        }
+        return null;
+    }
 
     @Override
     public @Nullable RequestDispatcher getRequestDispatcher(@NotNull final Resource resource) {

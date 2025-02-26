@@ -26,12 +26,10 @@ import org.apache.sling.api.resource.ModifiableValueMap;
  * <code>ModifiableValueMapDecorator</code> decorates another {@link Map}
  * to provide a basic implementation for the additional methods
  * of a {@link ModifiableValueMap}.
- * 
+ *
  * @since 2.2 (Sling API Bundle 2.7.0)
  */
-public class ModifiableValueMapDecorator
-extends ValueMapDecorator
-implements ModifiableValueMap {
+public class ModifiableValueMapDecorator extends ValueMapDecorator implements ModifiableValueMap {
 
     /**
      * Creates a new wrapper around a given map.

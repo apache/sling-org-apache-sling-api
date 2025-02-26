@@ -76,7 +76,7 @@ public class HeaderSupport {
 
     public String getHeader(final String name) {
         final List<String> values = this.headers.get(name);
-        if ( values == null ) {
+        if (values == null) {
             return null;
         }
         return values.get(0);
@@ -84,7 +84,7 @@ public class HeaderSupport {
 
     public int getIntHeader(String name) {
         final String value = getHeader(name);
-        if ( value != null ) {
+        if (value != null) {
             return Integer.valueOf(value);
         }
         return -1;
@@ -92,12 +92,13 @@ public class HeaderSupport {
 
     public long getDateHeader(final String name) {
         final String value = getHeader(name);
-        if ( value != null ) {
-            try {                
-                final Date date = Date.from(ZonedDateTime.parse(value, RFC_1123_DATE_TIME).toInstant());
+        if (value != null) {
+            try {
+                final Date date =
+                        Date.from(ZonedDateTime.parse(value, RFC_1123_DATE_TIME).toInstant());
                 return date.getTime();
             } catch (final DateTimeParseException ex) {
-                throw new IllegalArgumentException("Invalid date value: " + value, ex);                
+                throw new IllegalArgumentException("Invalid date value: " + value, ex);
             }
         }
         return -1L;
@@ -106,7 +107,7 @@ public class HeaderSupport {
     public Collection<String> getHeaders(final String name) {
         final List<String> values = new ArrayList<String>();
         final List<String> headers = this.headers.get(name);
-        if ( headers != null ) {
+        if (headers != null) {
             values.addAll(headers);
         }
         return values;

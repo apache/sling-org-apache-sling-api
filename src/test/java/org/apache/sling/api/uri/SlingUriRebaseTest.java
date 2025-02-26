@@ -18,10 +18,6 @@
  */
 package org.apache.sling.api.uri;
 
-import static org.apache.sling.api.uri.SlingUriTest.testUri;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
-
 import java.net.URISyntaxException;
 
 import org.apache.sling.api.resource.Resource;
@@ -30,6 +26,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import static org.apache.sling.api.uri.SlingUriTest.testUri;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.Silent.class)
 public class SlingUriRebaseTest {
@@ -46,12 +46,20 @@ public class SlingUriRebaseTest {
     public void testRebaseResourcePathSimplePath() {
         String testUriStrSimple = "/test/to/file";
         when(resolver.getResource("/test/to/file")).thenReturn(resource);
-        testUri(testUriStrSimple, true, true, false, false, false, slingUri -> {
-            assertEquals("/test/to/file", slingUri.getResourcePath());
-            assertEquals(null, slingUri.getSelectorString());
-            assertEquals(null, slingUri.getExtension());
-            assertEquals(null, slingUri.getSuffix());
-        }, resolver);
+        testUri(
+                testUriStrSimple,
+                true,
+                true,
+                false,
+                false,
+                false,
+                slingUri -> {
+                    assertEquals("/test/to/file", slingUri.getResourcePath());
+                    assertEquals(null, slingUri.getSelectorString());
+                    assertEquals(null, slingUri.getExtension());
+                    assertEquals(null, slingUri.getSuffix());
+                },
+                resolver);
     }
 
     @Test
@@ -60,12 +68,20 @@ public class SlingUriRebaseTest {
         String testUriStrSimpleFile = "/test/to/file.css";
         when(resolver.getResource("/test/to/file.css")).thenReturn(resource);
         when(resolver.getResource("/test/to/file")).thenReturn(null);
-        testUri(testUriStrSimpleFile, true, true, false, false, false, slingUri -> {
-            assertEquals("/test/to/file.css", slingUri.getResourcePath());
-            assertEquals(null, slingUri.getSelectorString());
-            assertEquals(null, slingUri.getExtension());
-            assertEquals(null, slingUri.getSuffix());
-        }, resolver);
+        testUri(
+                testUriStrSimpleFile,
+                true,
+                true,
+                false,
+                false,
+                false,
+                slingUri -> {
+                    assertEquals("/test/to/file.css", slingUri.getResourcePath());
+                    assertEquals(null, slingUri.getSelectorString());
+                    assertEquals(null, slingUri.getExtension());
+                    assertEquals(null, slingUri.getSuffix());
+                },
+                resolver);
     }
 
     @Test
@@ -73,12 +89,20 @@ public class SlingUriRebaseTest {
         String testUriStrSimplePage = "/path/to/page.html";
         when(resolver.getResource("/path/to/page.html")).thenReturn(null);
         when(resolver.getResource("/path/to/page")).thenReturn(resource);
-        testUri(testUriStrSimplePage, true, true, false, false, false, slingUri -> {
-            assertEquals("/path/to/page", slingUri.getResourcePath());
-            assertEquals(null, slingUri.getSelectorString());
-            assertEquals("html", slingUri.getExtension());
-            assertEquals(null, slingUri.getSuffix());
-        }, resolver);
+        testUri(
+                testUriStrSimplePage,
+                true,
+                true,
+                false,
+                false,
+                false,
+                slingUri -> {
+                    assertEquals("/path/to/page", slingUri.getResourcePath());
+                    assertEquals(null, slingUri.getSelectorString());
+                    assertEquals("html", slingUri.getExtension());
+                    assertEquals(null, slingUri.getSuffix());
+                },
+                resolver);
     }
 
     @Test
@@ -91,12 +115,20 @@ public class SlingUriRebaseTest {
         when(resolver.getResource("/test/to/file.ext.sel1")).thenReturn(null);
         when(resolver.getResource("/test/to/file.ext")).thenReturn(null);
         when(resolver.getResource("/test/to/file")).thenReturn(null);
-        testUri(FULL_URI, true, true, false, false, false, slingUri -> {
-            assertEquals("/test/to/file.ext.sel1.json/suffix/path.js", slingUri.getResourcePath());
-            assertEquals(null, slingUri.getSelectorString());
-            assertEquals(null, slingUri.getExtension());
-            assertEquals(null, slingUri.getSuffix());
-        }, resolver);
+        testUri(
+                FULL_URI,
+                true,
+                true,
+                false,
+                false,
+                false,
+                slingUri -> {
+                    assertEquals("/test/to/file.ext.sel1.json/suffix/path.js", slingUri.getResourcePath());
+                    assertEquals(null, slingUri.getSelectorString());
+                    assertEquals(null, slingUri.getExtension());
+                    assertEquals(null, slingUri.getSuffix());
+                },
+                resolver);
     }
 
     @Test
@@ -108,12 +140,20 @@ public class SlingUriRebaseTest {
         when(resolver.getResource("/test/to/file.ext.sel1")).thenReturn(null);
         when(resolver.getResource("/test/to/file.ext")).thenReturn(null);
         when(resolver.getResource("/test/to/file")).thenReturn(null);
-        testUri(FULL_URI, true, true, false, false, false, slingUri -> {
-            assertEquals("/test/to/file.ext.sel1.json/suffix/path", slingUri.getResourcePath());
-            assertEquals(null, slingUri.getSelectorString());
-            assertEquals("js", slingUri.getExtension());
-            assertEquals(null, slingUri.getSuffix());
-        }, resolver);
+        testUri(
+                FULL_URI,
+                true,
+                true,
+                false,
+                false,
+                false,
+                slingUri -> {
+                    assertEquals("/test/to/file.ext.sel1.json/suffix/path", slingUri.getResourcePath());
+                    assertEquals(null, slingUri.getSelectorString());
+                    assertEquals("js", slingUri.getExtension());
+                    assertEquals(null, slingUri.getSuffix());
+                },
+                resolver);
     }
 
     @Test
@@ -126,13 +166,20 @@ public class SlingUriRebaseTest {
         when(resolver.getResource("/test/to/file.ext.sel1")).thenReturn(null);
         when(resolver.getResource("/test/to/file.ext")).thenReturn(null);
         when(resolver.getResource("/test/to/file")).thenReturn(null);
-        testUri(FULL_URI, true, true, false, false, false, slingUri -> {
-            assertEquals("/test/to/file", slingUri.getResourcePath());
-            assertEquals("ext.sel1", slingUri.getSelectorString());
-            assertEquals("json", slingUri.getExtension());
-            assertEquals("/suffix/path.js", slingUri.getSuffix());
-        }, resolver);
-
+        testUri(
+                FULL_URI,
+                true,
+                true,
+                false,
+                false,
+                false,
+                slingUri -> {
+                    assertEquals("/test/to/file", slingUri.getResourcePath());
+                    assertEquals("ext.sel1", slingUri.getSelectorString());
+                    assertEquals("json", slingUri.getExtension());
+                    assertEquals("/suffix/path.js", slingUri.getSuffix());
+                },
+                resolver);
     }
 
     @Test
@@ -143,13 +190,20 @@ public class SlingUriRebaseTest {
         when(resolver.getResource("/test/to/file.ext.sel1")).thenReturn(resource);
         when(resolver.getResource("/test/to/file.ext")).thenReturn(null);
         when(resolver.getResource("/test/to/file")).thenReturn(null);
-        testUri(FULL_URI, true, true, false, false, false, slingUri -> {
-            assertEquals("/test/to/file.ext.sel1", slingUri.getResourcePath());
-            assertEquals(null, slingUri.getSelectorString());
-            assertEquals("json", slingUri.getExtension());
-            assertEquals("/suffix/path.js", slingUri.getSuffix());
-        }, resolver);
-
+        testUri(
+                FULL_URI,
+                true,
+                true,
+                false,
+                false,
+                false,
+                slingUri -> {
+                    assertEquals("/test/to/file.ext.sel1", slingUri.getResourcePath());
+                    assertEquals(null, slingUri.getSelectorString());
+                    assertEquals("json", slingUri.getExtension());
+                    assertEquals("/suffix/path.js", slingUri.getSuffix());
+                },
+                resolver);
     }
 
     @Test
@@ -160,13 +214,20 @@ public class SlingUriRebaseTest {
         when(resolver.getResource("/test/to/file.ext.sel1")).thenReturn(null);
         when(resolver.getResource("/test/to/file.ext")).thenReturn(resource);
         when(resolver.getResource("/test/to/file")).thenReturn(null);
-        testUri(FULL_URI, true, true, false, false, false, slingUri -> {
-            assertEquals("/test/to/file.ext", slingUri.getResourcePath());
-            assertEquals("sel1", slingUri.getSelectorString());
-            assertEquals("json", slingUri.getExtension());
-            assertEquals("/suffix/path.js", slingUri.getSuffix());
-        }, resolver);
-
+        testUri(
+                FULL_URI,
+                true,
+                true,
+                false,
+                false,
+                false,
+                slingUri -> {
+                    assertEquals("/test/to/file.ext", slingUri.getResourcePath());
+                    assertEquals("sel1", slingUri.getSelectorString());
+                    assertEquals("json", slingUri.getExtension());
+                    assertEquals("/suffix/path.js", slingUri.getSuffix());
+                },
+                resolver);
     }
 
     @Test
@@ -177,12 +238,20 @@ public class SlingUriRebaseTest {
         when(resolver.getResource("/test/to/file.ext.sel1")).thenReturn(null);
         when(resolver.getResource("/test/to/file.ext")).thenReturn(null);
         when(resolver.getResource("/test/to/file")).thenReturn(resource);
-        testUri(FULL_URI, true, true, false, false, false, slingUri -> {
-            assertEquals("/test/to/file", slingUri.getResourcePath());
-            assertEquals("ext.sel1", slingUri.getSelectorString());
-            assertEquals("json", slingUri.getExtension());
-            assertEquals("/suffix/path.js", slingUri.getSuffix());
-        }, resolver);
+        testUri(
+                FULL_URI,
+                true,
+                true,
+                false,
+                false,
+                false,
+                slingUri -> {
+                    assertEquals("/test/to/file", slingUri.getResourcePath());
+                    assertEquals("ext.sel1", slingUri.getSelectorString());
+                    assertEquals("json", slingUri.getExtension());
+                    assertEquals("/suffix/path.js", slingUri.getSuffix());
+                },
+                resolver);
     }
 
     @Test
@@ -194,12 +263,20 @@ public class SlingUriRebaseTest {
         when(resolver.getResource("/test/to/file.ext.sel1")).thenReturn(resource);
         when(resolver.getResource("/test/to/file.ext")).thenReturn(resource);
         when(resolver.getResource("/test/to/file")).thenReturn(resource);
-        testUri(FULL_URI, true, true, false, false, false, slingUri -> {
-            assertEquals("/test/to/file.ext.sel1", slingUri.getResourcePath());
-            assertEquals(null, slingUri.getSelectorString());
-            assertEquals("json", slingUri.getExtension());
-            assertEquals("/suffix/path.js", slingUri.getSuffix());
-        }, resolver);
+        testUri(
+                FULL_URI,
+                true,
+                true,
+                false,
+                false,
+                false,
+                slingUri -> {
+                    assertEquals("/test/to/file.ext.sel1", slingUri.getResourcePath());
+                    assertEquals(null, slingUri.getSelectorString());
+                    assertEquals("json", slingUri.getExtension());
+                    assertEquals("/suffix/path.js", slingUri.getSuffix());
+                },
+                resolver);
     }
 
     @Test
@@ -211,21 +288,26 @@ public class SlingUriRebaseTest {
         when(resolver.getResource("/test/to/file.ext.sel1")).thenReturn(null);
         when(resolver.getResource("/test/to/file.ext")).thenReturn(null);
         when(resolver.getResource("/test/to/file")).thenReturn(null);
-        testUri(FULL_URI, true, true, false, false, false, slingUri -> {
-            assertEquals("/test/to/file", slingUri.getResourcePath());
-            assertEquals("ext.sel1", slingUri.getSelectorString());
-            assertEquals("json", slingUri.getExtension());
-            assertEquals("/suffix/path.js", slingUri.getSuffix());
-        }, resolver);
+        testUri(
+                FULL_URI,
+                true,
+                true,
+                false,
+                false,
+                false,
+                slingUri -> {
+                    assertEquals("/test/to/file", slingUri.getResourcePath());
+                    assertEquals("ext.sel1", slingUri.getSelectorString());
+                    assertEquals("json", slingUri.getExtension());
+                    assertEquals("/suffix/path.js", slingUri.getSuffix());
+                },
+                resolver);
     }
 
     @Test(expected = IllegalStateException.class)
     public void testRebaseNotAllowedWithoutResolver() throws URISyntaxException {
 
         String testPath = "/path/to/page.html";
-        SlingUriBuilder.parse(testPath, null)
-                .rebaseResourcePath()
-                .build();
+        SlingUriBuilder.parse(testPath, null).rebaseResourcePath().build();
     }
-
 }

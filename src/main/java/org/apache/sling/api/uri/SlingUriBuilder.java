@@ -83,7 +83,8 @@ public class SlingUriBuilder {
     static final String CHAR_SLASH = "/";
     static final String SELECTOR_DOT_REGEX = "\\.(?!\\.?/)"; // (?!\\.?/) to avoid matching ./ and ../
     static final String PATH_PARAMETERS_REGEX = ";([a-zA-z0-9]+)=(?:\\'([^']*)\\'|([^/]+))";
-    static final String BEST_EFFORT_INVALID_URI_MATCHER = "^(?:([^:#@]+):)?(?://(?:([^@#]+)@)?([^/#:]+)(?::([0-9]+))?)?(?:([^?#]+))?(?:\\?([^#]*))?(?:#(.*))?$";
+    static final String BEST_EFFORT_INVALID_URI_MATCHER =
+            "^(?:([^:#@]+):)?(?://(?:([^@#]+)@)?([^/#:]+)(?::([0-9]+))?)?(?:([^?#]+))?(?:\\?([^#]*))?(?:#(.*))?$";
 
     /**
      * Creates a builder without any URI parameters set.
@@ -103,8 +104,7 @@ public class SlingUriBuilder {
      */
     @NotNull
     public static SlingUriBuilder createFrom(@NotNull SlingUri slingUri) {
-        return create()
-                .setScheme(slingUri.getScheme())
+        return create().setScheme(slingUri.getScheme())
                 .setUserInfo(slingUri.getUserInfo())
                 .setHost(slingUri.getHost())
                 .setPort(slingUri.getPort())
@@ -116,9 +116,10 @@ public class SlingUriBuilder {
                 .setQuery(slingUri.getQuery())
                 .setFragment(slingUri.getFragment())
                 .setSchemeSpecificPart(slingUri.isOpaque() ? slingUri.getSchemeSpecificPart() : null)
-                .setResourceResolver(slingUri instanceof ImmutableSlingUri
-                        ? ((ImmutableSlingUri) slingUri).getData().resourceResolver
-                        : null);
+                .setResourceResolver(
+                        slingUri instanceof ImmutableSlingUri
+                                ? ((ImmutableSlingUri) slingUri).getData().resourceResolver
+                                : null);
     }
 
     /**
@@ -129,9 +130,7 @@ public class SlingUriBuilder {
      */
     @NotNull
     public static SlingUriBuilder createFrom(@NotNull Resource resource) {
-        return create()
-                .setResourcePath(resource.getPath())
-                .setResourceResolver(resource.getResourceResolver());
+        return create().setResourcePath(resource.getPath()).setResourceResolver(resource.getResourceResolver());
     }
 
     /**
@@ -143,8 +142,7 @@ public class SlingUriBuilder {
     @NotNull
     public static SlingUriBuilder createFrom(@NotNull RequestPathInfo requestPathInfo) {
         Resource suffixResource = requestPathInfo.getSuffixResource();
-        return create()
-                .setResourceResolver(suffixResource != null ? suffixResource.getResourceResolver() : null)
+        return create().setResourceResolver(suffixResource != null ? suffixResource.getResourceResolver() : null)
                 .setResourcePath(requestPathInfo.getResourcePath())
                 .setSelectors(requestPathInfo.getSelectors())
                 .setExtension(requestPathInfo.getExtension())
@@ -161,8 +159,7 @@ public class SlingUriBuilder {
     @Deprecated
     @NotNull
     public static SlingUriBuilder createFrom(@NotNull org.apache.sling.api.SlingHttpServletRequest request) {
-        @NotNull
-        ResourceResolver resourceResolver = request.getResourceResolver();
+        @NotNull ResourceResolver resourceResolver = request.getResourceResolver();
         @NotNull
         SlingUriBuilder uriBuilder = createFrom(request.getRequestPathInfo())
                 .setResourceResolver(resourceResolver)
@@ -172,13 +169,11 @@ public class SlingUriBuilder {
                 .setQuery(request.getQueryString());
 
         // SLING-11347 - check if the original request was using a mapped path
-        @Nullable
-        String resourcePath = uriBuilder.getResourcePath();
+        @Nullable String resourcePath = uriBuilder.getResourcePath();
         if (resourcePath != null) {
-            @NotNull
-            String mappedResourcePath = resourceResolver.map(request, resourcePath);
-            if (!resourcePath.equals(mappedResourcePath) &&
-                    request.getPathInfo().startsWith(mappedResourcePath)) {
+            @NotNull String mappedResourcePath = resourceResolver.map(request, resourcePath);
+            if (!resourcePath.equals(mappedResourcePath)
+                    && request.getPathInfo().startsWith(mappedResourcePath)) {
                 // mapped path is different from the resource path and
                 // the request path was the mapped path, so switch to it
                 uriBuilder.setResourcePath(mappedResourcePath);
@@ -196,8 +191,7 @@ public class SlingUriBuilder {
      */
     @NotNull
     public static SlingUriBuilder createFrom(@NotNull SlingJakartaHttpServletRequest request) {
-        @NotNull
-        ResourceResolver resourceResolver = request.getResourceResolver();
+        @NotNull ResourceResolver resourceResolver = request.getResourceResolver();
         @NotNull
         SlingUriBuilder uriBuilder = createFrom(request.getRequestPathInfo())
                 .setResourceResolver(resourceResolver)
@@ -207,13 +201,11 @@ public class SlingUriBuilder {
                 .setQuery(request.getQueryString());
 
         // SLING-11347 - check if the original request was using a mapped path
-        @Nullable
-        String resourcePath = uriBuilder.getResourcePath();
+        @Nullable String resourcePath = uriBuilder.getResourcePath();
         if (resourcePath != null) {
-            @NotNull
-            String mappedResourcePath = resourceResolver.map(request, resourcePath);
-            if (!resourcePath.equals(mappedResourcePath) &&
-                    request.getPathInfo().startsWith(mappedResourcePath)) {
+            @NotNull String mappedResourcePath = resourceResolver.map(request, resourcePath);
+            if (!resourcePath.equals(mappedResourcePath)
+                    && request.getPathInfo().startsWith(mappedResourcePath)) {
                 // mapped path is different from the resource path and
                 // the request path was the mapped path, so switch to it
                 uriBuilder.setResourcePath(mappedResourcePath);
@@ -240,8 +232,7 @@ public class SlingUriBuilder {
         if (FILE_SCHEME.equals(uri.getScheme()) && uriHost == null) {
             uriHost = ""; // ensure three slashes in file URIs without host
         }
-        return create()
-                .setResourceResolver(resourceResolver)
+        return create().setResourceResolver(resourceResolver)
                 .setScheme(uri.getScheme())
                 .setUserInfo(uri.getRawUserInfo())
                 .setHost(uriHost)
@@ -286,14 +277,12 @@ public class SlingUriBuilder {
         String fragment = matcher.groupCount() >= 7 ? matcher.group(7) : null;
         if (!isBlank(scheme) && isBlank(host)) {
             // opaque case
-            return create()
-                    .setResourceResolver(resourceResolver)
+            return create().setResourceResolver(resourceResolver)
                     .setScheme(scheme)
                     .setSchemeSpecificPart(path)
                     .setFragment(fragment);
         } else if (!isBlank(host) || !isBlank(path)) {
-            return create()
-                    .setResourceResolver(resourceResolver)
+            return create().setResourceResolver(resourceResolver)
                     .setScheme(scheme)
                     .setUserInfo(userInfo)
                     .setHost(host)
@@ -302,9 +291,7 @@ public class SlingUriBuilder {
                     .setQuery(query)
                     .setFragment(fragment);
         } else {
-            return create()
-                    .setResourceResolver(resourceResolver)
-                    .setSchemeSpecificPart(uriStr);
+            return create().setResourceResolver(resourceResolver).setSchemeSpecificPart(uriStr);
         }
     }
 
@@ -338,8 +325,7 @@ public class SlingUriBuilder {
     // to ensure a builder is used only once (as the ImmutableSlingUri being created in build() is sharing its state)
     private boolean isBuilt = false;
 
-    private SlingUriBuilder() {
-    }
+    private SlingUriBuilder() {}
 
     /**
      * Set the user info of the URI.
@@ -407,7 +393,8 @@ public class SlingUriBuilder {
         if (path != null && path.startsWith(SlingUriBuilder.CHAR_SLASH) && resourceResolver != null) {
             setResourcePath(path);
             rebaseResourcePath();
-        } else if (path != null && (dotMatcher = Pattern.compile(SELECTOR_DOT_REGEX).matcher(path)).find()) {
+        } else if (path != null
+                && (dotMatcher = Pattern.compile(SELECTOR_DOT_REGEX).matcher(path)).find()) {
             int firstDotPosition = dotMatcher.start();
             setPathWithDefinedResourcePosition(path, firstDotPosition);
         } else {
@@ -494,7 +481,7 @@ public class SlingUriBuilder {
             return this;
         }
         this.selectors.clear();
-        if ( selectors != null ) {
+        if (selectors != null) {
             Arrays.stream(selectors).forEach(this.selectors::add);
         }
         return this;
@@ -931,9 +918,7 @@ public class SlingUriBuilder {
      * @return returns true for path URIs
      */
     public boolean isPath() {
-        return isBlank(scheme)
-                && isBlank(host)
-                && isNotBlank(resourcePath);
+        return isBlank(scheme) && isBlank(host) && isNotBlank(resourcePath);
     }
 
     /**
@@ -1016,7 +1001,10 @@ public class SlingUriBuilder {
         if (pathBits.length > 1) {
             setSelectors(Arrays.copyOfRange(pathBits, 0, pathBits.length - 1));
         }
-        setExtension(pathBits.length > 0 && pathBits[pathBits.length - 1].length() > 0 ? pathBits[pathBits.length - 1] : null);
+        setExtension(
+                pathBits.length > 0 && pathBits[pathBits.length - 1].length() > 0
+                        ? pathBits[pathBits.length - 1]
+                        : null);
         setSuffix(firstSlashAfterFirstDotPosition > -1 ? path.substring(firstSlashAfterFirstDotPosition) : null);
     }
 
@@ -1054,8 +1042,12 @@ public class SlingUriBuilder {
         pathBuilder.append(resourcePath);
         if (includePathParamters && !pathParameters.isEmpty()) {
             for (Map.Entry<String, String> pathParameter : pathParameters.entrySet()) {
-                pathBuilder.append(CHAR_SEMICOLON + pathParameter.getKey() + CHAR_EQUALS +
-                        CHAR_SINGLEQUOTE + pathParameter.getValue() + CHAR_SINGLEQUOTE);
+                pathBuilder.append(CHAR_SEMICOLON
+                        + pathParameter.getKey()
+                        + CHAR_EQUALS
+                        + CHAR_SINGLEQUOTE
+                        + pathParameter.getValue()
+                        + CHAR_SINGLEQUOTE);
             }
         }
 
@@ -1077,7 +1069,6 @@ public class SlingUriBuilder {
         }
         return pathBuilder.toString();
     }
-
 
     // read-only view on the builder data (to avoid another copy of the data into a new object)
     private class ImmutableSlingUri implements SlingUri {
@@ -1223,70 +1214,44 @@ public class SlingUriBuilder {
 
         @Override
         public boolean equals(Object obj) {
-            if (this == obj)
-                return true;
-            if (obj == null)
-                return false;
-            if (getClass() != obj.getClass())
-                return false;
+            if (this == obj) return true;
+            if (obj == null) return false;
+            if (getClass() != obj.getClass()) return false;
             ImmutableSlingUri other = (ImmutableSlingUri) obj;
             if (extension == null) {
-                if (other.getData().extension != null)
-                    return false;
-            } else if (!extension.equals(other.getData().extension))
-                return false;
+                if (other.getData().extension != null) return false;
+            } else if (!extension.equals(other.getData().extension)) return false;
             if (fragment == null) {
-                if (other.getData().fragment != null)
-                    return false;
-            } else if (!fragment.equals(other.getData().fragment))
-                return false;
+                if (other.getData().fragment != null) return false;
+            } else if (!fragment.equals(other.getData().fragment)) return false;
             if (host == null) {
-                if (other.getData().host != null)
-                    return false;
-            } else if (!host.equals(other.getData().host))
-                return false;
+                if (other.getData().host != null) return false;
+            } else if (!host.equals(other.getData().host)) return false;
             if (pathParameters == null) {
-                if (other.getData().pathParameters != null)
-                    return false;
-            } else if (!pathParameters.equals(other.getData().pathParameters))
-                return false;
-            if (port != other.getData().port)
-                return false;
+                if (other.getData().pathParameters != null) return false;
+            } else if (!pathParameters.equals(other.getData().pathParameters)) return false;
+            if (port != other.getData().port) return false;
             if (query == null) {
-                if (other.getData().query != null)
-                    return false;
-            } else if (!query.equals(other.getData().query))
-                return false;
+                if (other.getData().query != null) return false;
+            } else if (!query.equals(other.getData().query)) return false;
             if (resourcePath == null) {
-                if (other.getData().resourcePath != null)
-                    return false;
-            } else if (!resourcePath.equals(other.getData().resourcePath))
-                return false;
+                if (other.getData().resourcePath != null) return false;
+            } else if (!resourcePath.equals(other.getData().resourcePath)) return false;
             if (scheme == null) {
-                if (other.getData().scheme != null)
-                    return false;
-            } else if (!scheme.equals(other.getData().scheme))
-                return false;
+                if (other.getData().scheme != null) return false;
+            } else if (!scheme.equals(other.getData().scheme)) return false;
             if (schemeSpecificPart == null) {
-                if (other.getData().schemeSpecificPart != null)
-                    return false;
-            } else if (!schemeSpecificPart.equals(other.getData().schemeSpecificPart))
-                return false;
+                if (other.getData().schemeSpecificPart != null) return false;
+            } else if (!schemeSpecificPart.equals(other.getData().schemeSpecificPart)) return false;
             if (selectors == null) {
-                if (other.getData().selectors != null)
-                    return false;
-            } else if (!selectors.equals(other.getData().selectors))
-                return false;
+                if (other.getData().selectors != null) return false;
+            } else if (!selectors.equals(other.getData().selectors)) return false;
             if (suffix == null) {
-                if (other.getData().suffix != null)
-                    return false;
-            } else if (!suffix.equals(other.getData().suffix))
-                return false;
+                if (other.getData().suffix != null) return false;
+            } else if (!suffix.equals(other.getData().suffix)) return false;
             if (userInfo == null) {
-                if (other.getData().userInfo != null)
-                    return false;
-            } else if (!userInfo.equals(other.getData().userInfo))
-                return false;
+                if (other.getData().userInfo != null) return false;
+            } else if (!userInfo.equals(other.getData().userInfo)) return false;
             return true;
         }
     }
@@ -1354,5 +1319,4 @@ public class SlingUriBuilder {
             throw new UnsupportedOperationException("remove");
         }
     }
-
 }

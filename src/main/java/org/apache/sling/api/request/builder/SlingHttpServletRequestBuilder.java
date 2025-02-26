@@ -20,13 +20,12 @@ package org.apache.sling.api.request.builder;
 
 import java.util.Map;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.sling.api.SlingJakartaHttpServletRequest;
 import org.apache.sling.api.request.RequestProgressTracker;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
-
-import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * <p>Fluent helper for building a request.</p>
@@ -42,42 +41,48 @@ public interface SlingHttpServletRequestBuilder {
      * @return this object
      * @throws IllegalArgumentException If method is {@code null}
      */
-    @NotNull SlingHttpServletRequestBuilder withRequestMethod(@NotNull String method);
+    @NotNull
+    SlingHttpServletRequestBuilder withRequestMethod(@NotNull String method);
 
     /**
      * Sets the HTTP request's {@code Content-Type} header.
      * @param contentType the {@code Content-Type} value
      * @return this object
      */
-    @NotNull SlingHttpServletRequestBuilder withContentType(@Nullable String contentType);
+    @NotNull
+    SlingHttpServletRequestBuilder withContentType(@Nullable String contentType);
 
     /**
      * Uses the supplied content as the request's body content.
      * @param content the request body content
      * @return this object
      */
-    @NotNull SlingHttpServletRequestBuilder withBody(@Nullable String content);
+    @NotNull
+    SlingHttpServletRequestBuilder withBody(@Nullable String content);
 
     /**
      * Sets the optional selectors of the internal request, which influence the servlet/script resolution.
      * @param selectors the selectors
      * @return this object
      */
-    @NotNull SlingHttpServletRequestBuilder withSelectors(@Nullable String ... selectors);
+    @NotNull
+    SlingHttpServletRequestBuilder withSelectors(@Nullable String... selectors);
 
     /**
      * Sets the optional extension of the internal request, which influences the servlet/script resolution.
      * @param extension the extension
      * @return this object
      */
-    @NotNull SlingHttpServletRequestBuilder withExtension(@Nullable String extension);
+    @NotNull
+    SlingHttpServletRequestBuilder withExtension(@Nullable String extension);
 
     /**
      * Sets the optional suffix of the internal request.
      * @param suffix the suffix
      * @return this object
      */
-    @NotNull SlingHttpServletRequestBuilder withSuffix(@Nullable String suffix);
+    @NotNull
+    SlingHttpServletRequestBuilder withSuffix(@Nullable String suffix);
 
     /**
      * Sets a request parameter.
@@ -86,7 +91,8 @@ public interface SlingHttpServletRequestBuilder {
      * @return this object
      * @throws IllegalArgumentException if either {@code key} or {@code value} is {@code null}
      */
-    @NotNull SlingHttpServletRequestBuilder withParameter(@NotNull String key, @NotNull String value);
+    @NotNull
+    SlingHttpServletRequestBuilder withParameter(@NotNull String key, @NotNull String value);
 
     /**
      * Sets a request parameter.
@@ -95,14 +101,16 @@ public interface SlingHttpServletRequestBuilder {
      * @return this object
      * @throws IllegalArgumentException if either {@code key} or {@code values} is {@code null}
      */
-    @NotNull SlingHttpServletRequestBuilder withParameter(@NotNull String key, @NotNull String[] values);
+    @NotNull
+    SlingHttpServletRequestBuilder withParameter(@NotNull String key, @NotNull String[] values);
 
     /**
      * Adds the supplied request parameters to the current ones.
      * @param parameters additional parameters
      * @return this object
      */
-    @NotNull SlingHttpServletRequestBuilder withParameters(@Nullable Map<String, String[]> parameters);
+    @NotNull
+    SlingHttpServletRequestBuilder withParameters(@Nullable Map<String, String[]> parameters);
 
     /**
      * Uses the request dispatcher from the provided request.
@@ -112,7 +120,9 @@ public interface SlingHttpServletRequestBuilder {
      * @deprecated Use {@link #useRequestDispatcherFrom(SlingJakartaHttpServletRequest)} instead
      */
     @Deprecated
-    @NotNull SlingHttpServletRequestBuilder useRequestDispatcherFrom(@NotNull org.apache.sling.api.SlingHttpServletRequest request);
+    @NotNull
+    SlingHttpServletRequestBuilder useRequestDispatcherFrom(
+            @NotNull org.apache.sling.api.SlingHttpServletRequest request);
 
     /**
      * Uses the request dispatcher from the provided request.
@@ -120,7 +130,9 @@ public interface SlingHttpServletRequestBuilder {
      * @return this object
      * @throws IllegalArgumentException if {@code request} is {@code null}
      */
-    @NotNull SlingHttpServletRequestBuilder useRequestDispatcherFrom(@NotNull org.apache.sling.api.SlingJakartaHttpServletRequest request);
+    @NotNull
+    SlingHttpServletRequestBuilder useRequestDispatcherFrom(
+            @NotNull org.apache.sling.api.SlingJakartaHttpServletRequest request);
 
     /**
      * Uses the session from the provided request.
@@ -130,7 +142,8 @@ public interface SlingHttpServletRequestBuilder {
      * @deprecated Use {@link #useSessionFrom(HttpServletRequest)} instead
      */
     @Deprecated
-    @NotNull SlingHttpServletRequestBuilder useSessionFrom(@NotNull javax.servlet.http.HttpServletRequest request);
+    @NotNull
+    SlingHttpServletRequestBuilder useSessionFrom(@NotNull javax.servlet.http.HttpServletRequest request);
 
     /**
      * Uses the attributes backed by the provided request.
@@ -140,7 +153,8 @@ public interface SlingHttpServletRequestBuilder {
      * @deprecated Use {@link #useAttributesFrom(HttpServletRequest)} instead
      */
     @Deprecated
-    @NotNull SlingHttpServletRequestBuilder useAttributesFrom(@NotNull javax.servlet.http.HttpServletRequest request);
+    @NotNull
+    SlingHttpServletRequestBuilder useAttributesFrom(@NotNull javax.servlet.http.HttpServletRequest request);
 
     /**
      * Uses the servlet context from the provided request.
@@ -150,7 +164,8 @@ public interface SlingHttpServletRequestBuilder {
      * @deprecated Use {@link #useServletContextFrom(HttpServletRequest)} instead
      */
     @Deprecated
-    @NotNull SlingHttpServletRequestBuilder useServletContextFrom(@NotNull javax.servlet.http.HttpServletRequest request);
+    @NotNull
+    SlingHttpServletRequestBuilder useServletContextFrom(@NotNull javax.servlet.http.HttpServletRequest request);
 
     /**
      * Uses the session from the provided request.
@@ -158,7 +173,8 @@ public interface SlingHttpServletRequestBuilder {
      * @return this object
      * @throws IllegalArgumentException if {@code request} is {@code null}
      */
-    @NotNull SlingHttpServletRequestBuilder useSessionFrom(@NotNull HttpServletRequest request);
+    @NotNull
+    SlingHttpServletRequestBuilder useSessionFrom(@NotNull HttpServletRequest request);
 
     /**
      * Uses the attributes backed by the provided request.
@@ -166,7 +182,8 @@ public interface SlingHttpServletRequestBuilder {
      * @return this object
      * @throws IllegalArgumentException if {@code request} is {@code null}
      */
-    @NotNull SlingHttpServletRequestBuilder useAttributesFrom(@NotNull HttpServletRequest request);
+    @NotNull
+    SlingHttpServletRequestBuilder useAttributesFrom(@NotNull HttpServletRequest request);
 
     /**
      * Uses the servlet context from the provided request.
@@ -174,7 +191,8 @@ public interface SlingHttpServletRequestBuilder {
      * @return this object
      * @throws IllegalArgumentException if {@code request} is {@code null}
      */
-    @NotNull SlingHttpServletRequestBuilder useServletContextFrom(@NotNull HttpServletRequest request);
+    @NotNull
+    SlingHttpServletRequestBuilder useServletContextFrom(@NotNull HttpServletRequest request);
 
     /**
      * Uses the provided request progress tracker
@@ -182,7 +200,8 @@ public interface SlingHttpServletRequestBuilder {
      * @return this object
      * @since 1.1 (Sling API Bundle 2.25.0)
      */
-    @NotNull SlingHttpServletRequestBuilder withRequestProgressTracker(@NotNull RequestProgressTracker tracker);
+    @NotNull
+    SlingHttpServletRequestBuilder withRequestProgressTracker(@NotNull RequestProgressTracker tracker);
 
     /**
      * Builds the request. Once this method has been called, the builder must not be used anymore. In order to create a new request a new
@@ -190,7 +209,8 @@ public interface SlingHttpServletRequestBuilder {
      * @return a request object
      * @since 1.4
      */
-    @NotNull SlingJakartaHttpServletRequest buildJakartaRequest();
+    @NotNull
+    SlingJakartaHttpServletRequest buildJakartaRequest();
 
     /**
      * Builds the request. Once this method has been called, the builder must not be used anymore. In order to create a new request a new
@@ -199,5 +219,6 @@ public interface SlingHttpServletRequestBuilder {
      * @deprecated Use {@link #buildJakartaRequest()} instead
      */
     @Deprecated
-    @NotNull org.apache.sling.api.SlingHttpServletRequest build();
+    @NotNull
+    org.apache.sling.api.SlingHttpServletRequest build();
 }

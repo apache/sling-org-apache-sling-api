@@ -18,10 +18,8 @@
  */
 package org.apache.sling.api.scripting;
 
-import org.jetbrains.annotations.NotNull;
-
 import org.apache.sling.api.resource.Resource;
-
+import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
@@ -44,7 +42,8 @@ public interface SlingScript {
      * Returns the Resource providing the script source code.
      * @return The script resource.
      */
-    @NotNull Resource getScriptResource();
+    @NotNull
+    Resource getScriptResource();
 
     /**
      * Evaluates this script using the bound variables as global variables to

@@ -41,5 +41,4 @@ public class TooManyCallsException extends SlingException {
     public TooManyCallsException(String servletName) {
         super(servletName);
     }
-
 }

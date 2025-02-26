@@ -55,9 +55,9 @@ public class Path implements Comparable<Path> {
      * @throws IllegalArgumentException If the provided path is not absolute, or if the glob pattern does not start with a slash.
      */
     public Path(@NotNull final String path) {
-        if ( path.equals("/") ) {
+        if (path.equals("/")) {
             this.path = "/";
-        } else if ( path.endsWith("/") ) {
+        } else if (path.endsWith("/")) {
             this.path = path.substring(0, path.length() - 1);
         } else {
             this.path = path;
@@ -68,11 +68,11 @@ public class Path implements Comparable<Path> {
             this.regexPattern = Pattern.compile(toRegexPattern(patternPath));
             int lastSlash = 0;
             int pos = 1;
-            while ( patternPath.length() > pos ) {
+            while (patternPath.length() > pos) {
                 final char c = patternPath.charAt(pos);
-                if ( c == '/') {
+                if (c == '/') {
                     lastSlash = pos;
-                } else if ( c == '*') {
+                } else if (c == '*') {
                     break;
                 }
                 pos++;
@@ -84,7 +84,7 @@ public class Path implements Comparable<Path> {
             this.regexPattern = null;
             this.prefix = this.path.equals("/") ? "/" : this.path.concat("/");
         }
-        if ( !this.prefix.startsWith("/") ) {
+        if (!this.prefix.startsWith("/")) {
             throw new IllegalArgumentException("Path must be absolute: " + path);
         }
     }
@@ -113,8 +113,8 @@ public class Path implements Comparable<Path> {
      * @throws IllegalArgumentException If the provided path is not absolute, or if the glob pattern does not start with a slash.
      */
     public boolean matches(final String otherPath) {
-        if ( otherPath.startsWith(GLOB_PREFIX) ) {
-            if ( this.isPattern ) {
+        if (otherPath.startsWith(GLOB_PREFIX)) {
+            if (this.isPattern) {
                 // both are patterns, then they must be equal.
                 // need to compare Pattern.pattern() as that class does
                 // not implement a semantic equals(...) method
@@ -125,7 +125,7 @@ public class Path implements Comparable<Path> {
             // this is path, provided argument is a pattern
 
             // simple check, if this is root, everything is a sub pattern
-            if ( "/".equals(this.path) ) {
+            if ("/".equals(this.path)) {
                 return true;
             }
             // simplest case - the prefix of the glob pattern matches already
@@ -133,13 +133,13 @@ public class Path implements Comparable<Path> {
             //              glob      = /apps/**
             // then we iterate by removing the last path segment
             String subPath = otherPath;
-            while ( subPath != null ) {
+            while (subPath != null) {
                 final Path oPath = new Path(subPath);
-                if ( oPath.matches(this.path) ) {
+                if (oPath.matches(this.path)) {
                     return true;
                 }
                 final int lastSlash = subPath.lastIndexOf('/');
-                if ( lastSlash == GLOB_PREFIX.length() ) {
+                if (lastSlash == GLOB_PREFIX.length()) {
                     subPath = null;
                 } else {
                     subPath = subPath.substring(0, lastSlash);
@@ -150,7 +150,7 @@ public class Path implements Comparable<Path> {
         }
 
         // provided argument is a path
-        if ( !otherPath.startsWith("/") ) {
+        if (!otherPath.startsWith("/")) {
             throw new IllegalArgumentException("Path must be absolute: " + otherPath);
         }
         if (isPattern) {
@@ -196,7 +196,7 @@ public class Path implements Comparable<Path> {
         if (obj == null || !(obj instanceof Path)) {
             return false;
         }
-        return this.getPath().equals(((Path)obj).getPath());
+        return this.getPath().equals(((Path) obj).getPath());
     }
 
     private static String toRegexPattern(String pattern) {

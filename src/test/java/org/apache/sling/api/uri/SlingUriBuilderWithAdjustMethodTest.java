@@ -18,17 +18,17 @@
  */
 package org.apache.sling.api.uri;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import java.util.function.Consumer;
 
 import org.apache.sling.api.resource.ResourceResolver;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SlingUriBuilderWithAdjustMethodTest {
@@ -58,7 +58,7 @@ public class SlingUriBuilderWithAdjustMethodTest {
                 },
                 "/test/to/path.test.html/suffix/path/to/file",
                 slingUri -> {
-                    assertArrayEquals(new String[] { "test" }, slingUri.getSelectors());
+                    assertArrayEquals(new String[] {"test"}, slingUri.getSelectors());
                     assertEquals("/suffix/path/to/file", slingUri.getSuffix());
                 });
     }
@@ -255,13 +255,20 @@ public class SlingUriBuilderWithAdjustMethodTest {
                 slingUri -> {
                     assertEquals("/simple/other/path", slingUri.getPath());
                     assertEquals("/simple/other/path", slingUri.getResourcePath());
-                    assertEquals("setPath() (opposed to setResourcePath()) must also remove selectors if not present in path", null,
+                    assertEquals(
+                            "setPath() (opposed to setResourcePath()) must also remove selectors if not present in path",
+                            null,
                             slingUri.getSelectorString());
-                    assertEquals("setPath() (opposed to setResourcePath()) must also remove extension if not present in path", null,
+                    assertEquals(
+                            "setPath() (opposed to setResourcePath()) must also remove extension if not present in path",
+                            null,
                             slingUri.getExtension());
-                    assertEquals("setPath() (opposed to setResourcePath()) must also remove suffix if not present in path", null,
+                    assertEquals(
+                            "setPath() (opposed to setResourcePath()) must also remove suffix if not present in path",
+                            null,
                             slingUri.getSuffix());
-                    assertTrue("setPath() (opposed to setResourcePath()) must also remove path parameters if not present in path",
+                    assertTrue(
+                            "setPath() (opposed to setResourcePath()) must also remove path parameters if not present in path",
                             slingUri.getPathParameters().isEmpty());
                     assertEquals("queryPar=val", slingUri.getQuery());
                 });
@@ -279,11 +286,17 @@ public class SlingUriBuilderWithAdjustMethodTest {
                 slingUri -> {
                     assertEquals("/simple/other/path;key='val'", slingUri.getPath());
                     assertEquals("/simple/other/path", slingUri.getResourcePath());
-                    assertEquals("setPath() (opposed to setResourcePath()) must also remove selectors if not present in path", null,
+                    assertEquals(
+                            "setPath() (opposed to setResourcePath()) must also remove selectors if not present in path",
+                            null,
                             slingUri.getSelectorString());
-                    assertEquals("setPath() (opposed to setResourcePath()) must also remove extension if not present in path", null,
+                    assertEquals(
+                            "setPath() (opposed to setResourcePath()) must also remove extension if not present in path",
+                            null,
                             slingUri.getExtension());
-                    assertEquals("setPath() (opposed to setResourcePath()) must also remove suffix if not present in path", null,
+                    assertEquals(
+                            "setPath() (opposed to setResourcePath()) must also remove suffix if not present in path",
+                            null,
                             slingUri.getSuffix());
                     assertEquals(1, slingUri.getPathParameters().size());
                     assertEquals("val", slingUri.getPathParameters().get("key"));
@@ -293,13 +306,20 @@ public class SlingUriBuilderWithAdjustMethodTest {
 
     // -- helper methods
 
-    public static void testAdjustUri(String testUri, Consumer<SlingUriBuilder> adjuster, String testUriAfterEdit,
+    public static void testAdjustUri(
+            String testUri,
+            Consumer<SlingUriBuilder> adjuster,
+            String testUriAfterEdit,
             Consumer<SlingUri> additionalAssertions) {
         testAdjustUri(testUri, adjuster, testUriAfterEdit, additionalAssertions, null);
     }
 
-    public static void testAdjustUri(String testUri, Consumer<SlingUriBuilder> adjuster, String testUriAfterEdit,
-            Consumer<SlingUri> additionalAssertions, ResourceResolver resourceResolver) {
+    public static void testAdjustUri(
+            String testUri,
+            Consumer<SlingUriBuilder> adjuster,
+            String testUriAfterEdit,
+            Consumer<SlingUri> additionalAssertions,
+            ResourceResolver resourceResolver) {
         SlingUri slingUri = SlingUriBuilder.parse(testUri, resourceResolver).build();
 
         SlingUri adjustedSlingUri = slingUri.adjust(adjuster);
@@ -309,5 +329,4 @@ public class SlingUriBuilderWithAdjustMethodTest {
 
         additionalAssertions.accept(adjustedSlingUri);
     }
-
 }

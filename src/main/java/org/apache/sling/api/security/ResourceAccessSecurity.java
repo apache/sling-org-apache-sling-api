@@ -18,12 +18,10 @@
  */
 package org.apache.sling.api.security;
 
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
-
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -87,7 +85,8 @@ public interface ResourceAccessSecurity {
      * @param resource The resource to test.
      * @return null if {@link Resource} cannot be read
      */
-    @Nullable Resource getReadableResource(Resource resource);
+    @Nullable
+    Resource getReadableResource(Resource resource);
 
     /**
      * Check whether a resource can be created at the path.
@@ -168,7 +167,7 @@ public interface ResourceAccessSecurity {
      * @return the transformed query
      * @throws AccessSecurityException If access is denied
      */
-    @NotNull String transformQuery(@NotNull String query, @NotNull String language, @NotNull ResourceResolver resourceResolver)
-    throws AccessSecurityException;
-
+    @NotNull
+    String transformQuery(@NotNull String query, @NotNull String language, @NotNull ResourceResolver resourceResolver)
+            throws AccessSecurityException;
 }

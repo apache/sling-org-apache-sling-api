@@ -20,11 +20,9 @@ package org.apache.sling.api.request;
 
 import java.util.Map;
 
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
-
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
-
 
 /**
  * The <code>RequestParameterMap</code> encapsulates all request parameters of
@@ -38,12 +36,14 @@ public interface RequestParameterMap extends Map<String, RequestParameter[]> {
      * @param name The parameter name
      * @return The request parameter array or {@code null}.
      */
-    @Nullable RequestParameter[] getValues(@NotNull String name);
+    @Nullable
+    RequestParameter[] getValues(@NotNull String name);
 
     /**
      * Returns the first value for the named parameter or null if none
      * @param name The parameter name
      * @return The request parameter or {@code null}.
      */
-    @Nullable RequestParameter getValue(String name);
+    @Nullable
+    RequestParameter getValue(String name);
 }

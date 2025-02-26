@@ -20,4 +20,3 @@
 package org.apache.sling.api.uri;
 
 import org.osgi.annotation.versioning.Version;
-

@@ -33,8 +33,7 @@ import org.apache.sling.api.SlingHttpServletResponse;
  * @deprecated Use {@link SlingJakartaHttpServletResponseWrapper}
  */
 @Deprecated
-public class SlingHttpServletResponseWrapper extends HttpServletResponseWrapper
-        implements SlingHttpServletResponse {
+public class SlingHttpServletResponseWrapper extends HttpServletResponseWrapper implements SlingHttpServletResponse {
 
     /**
      * Create a wrapper for the supplied wrappedRequest

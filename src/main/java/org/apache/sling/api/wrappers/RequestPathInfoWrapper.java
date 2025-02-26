@@ -31,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
 public class RequestPathInfoWrapper implements RequestPathInfo {
 
     private final @NotNull RequestPathInfo delegate;
-    
+
     public RequestPathInfoWrapper(@NotNull RequestPathInfo delegate) {
         this.delegate = delegate;
     }

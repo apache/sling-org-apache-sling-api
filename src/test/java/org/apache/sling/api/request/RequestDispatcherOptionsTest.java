@@ -18,92 +18,98 @@
  */
 package org.apache.sling.api.request;
 
+import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Test;
-
-
 public class RequestDispatcherOptionsTest {
 
-    @Test public void testNullString() {
-        final RequestDispatcherOptions result = new RequestDispatcherOptions(
-            null);
+    @Test
+    public void testNullString() {
+        final RequestDispatcherOptions result = new RequestDispatcherOptions(null);
         assertTrue(result.isEmpty());
     }
 
-    @Test public void testEmptyString() {
+    @Test
+    public void testEmptyString() {
         final RequestDispatcherOptions result = new RequestDispatcherOptions("");
         assertTrue(result.isEmpty());
     }
 
-    @Test public void testSingleOption() {
-        final RequestDispatcherOptions result = new RequestDispatcherOptions(
-            "forceResourceType= widget");
+    @Test
+    public void testSingleOption() {
+        final RequestDispatcherOptions result = new RequestDispatcherOptions("forceResourceType= widget");
         assertNotNull(result);
-        assertEquals("Expected option found (" + result + ")", "widget",
-            result.get(RequestDispatcherOptions.OPT_FORCE_RESOURCE_TYPE));
-        assertEquals("Expected option found (" + result + ")", "widget",
-            result.getForceResourceType());
+        assertEquals(
+                "Expected option found (" + result + ")",
+                "widget",
+                result.get(RequestDispatcherOptions.OPT_FORCE_RESOURCE_TYPE));
+        assertEquals("Expected option found (" + result + ")", "widget", result.getForceResourceType());
     }
 
-    @Test public void testResourceTypeSlashShortcut() {
+    @Test
+    public void testResourceTypeSlashShortcut() {
         // a single option with no comma or colon means "forceResourceType"
-        final RequestDispatcherOptions result = new RequestDispatcherOptions(
-            "\t components/widget  ");
+        final RequestDispatcherOptions result = new RequestDispatcherOptions("\t components/widget  ");
         assertNotNull(result);
-        assertEquals("Expected option found (" + result + ")",
-            "components/widget",
-            result.get(RequestDispatcherOptions.OPT_FORCE_RESOURCE_TYPE));
-        assertEquals("Expected option found (" + result + ")",
-            "components/widget", result.getForceResourceType());
+        assertEquals(
+                "Expected option found (" + result + ")",
+                "components/widget",
+                result.get(RequestDispatcherOptions.OPT_FORCE_RESOURCE_TYPE));
+        assertEquals("Expected option found (" + result + ")", "components/widget", result.getForceResourceType());
     }
 
-    @Test public void testResourceTypeColonShortcut() {
+    @Test
+    public void testResourceTypeColonShortcut() {
         // a single option with no comma or colon means "forceResourceType"
-        final RequestDispatcherOptions result = new RequestDispatcherOptions(
-            "\t components:widget  ");
+        final RequestDispatcherOptions result = new RequestDispatcherOptions("\t components:widget  ");
         assertNotNull(result);
-        assertEquals("Expected option found (" + result + ")",
-            "components:widget",
-            result.get(RequestDispatcherOptions.OPT_FORCE_RESOURCE_TYPE));
-        assertEquals("Expected option found (" + result + ")",
-            "components:widget", result.getForceResourceType());
+        assertEquals(
+                "Expected option found (" + result + ")",
+                "components:widget",
+                result.get(RequestDispatcherOptions.OPT_FORCE_RESOURCE_TYPE));
+        assertEquals("Expected option found (" + result + ")", "components:widget", result.getForceResourceType());
     }
 
-    @Test public void testTwoOptions() {
-        final RequestDispatcherOptions result = new RequestDispatcherOptions(
-            "forceResourceType= components:widget, replaceSelectors = xyz  ,");
+    @Test
+    public void testTwoOptions() {
+        final RequestDispatcherOptions result =
+                new RequestDispatcherOptions("forceResourceType= components:widget, replaceSelectors = xyz  ,");
         assertNotNull(result);
-        assertEquals("Expected option found (" + result + ")",
-            "components:widget",
-            result.get(RequestDispatcherOptions.OPT_FORCE_RESOURCE_TYPE));
-        assertEquals("Expected option found (" + result + ")",
-            "components:widget", result.getForceResourceType());
-        assertEquals("Expected option found (" + result + ")", "xyz",
-            result.get(RequestDispatcherOptions.OPT_REPLACE_SELECTORS));
-        assertEquals("Expected option found (" + result + ")", "xyz",
-            result.getReplaceSelectors());
+        assertEquals(
+                "Expected option found (" + result + ")",
+                "components:widget",
+                result.get(RequestDispatcherOptions.OPT_FORCE_RESOURCE_TYPE));
+        assertEquals("Expected option found (" + result + ")", "components:widget", result.getForceResourceType());
+        assertEquals(
+                "Expected option found (" + result + ")",
+                "xyz",
+                result.get(RequestDispatcherOptions.OPT_REPLACE_SELECTORS));
+        assertEquals("Expected option found (" + result + ")", "xyz", result.getReplaceSelectors());
     }
 
-    @Test public void testReplaceExtensionSetterGetter() {
+    @Test
+    public void testReplaceExtensionSetterGetter() {
         final RequestDispatcherOptions result = new RequestDispatcherOptions();
         assertNull(result.getReplaceExtension());
         result.setReplaceExtension("foo");
         assertEquals("foo", result.getReplaceExtension());
         result.setReplaceExtension(null);
         assertEquals("foo", result.getReplaceExtension());
-    } 
+    }
 
-    @Test public void testReplaceExtensionConstructor() {
+    @Test
+    public void testReplaceExtensionConstructor() {
         final RequestDispatcherOptions result = new RequestDispatcherOptions("replaceExtension=foo");
         assertEquals("foo", result.getReplaceExtension());
     }
 
-    @Test public void testProtectHeadersOnInclude() {
+    @Test
+    public void testProtectHeadersOnInclude() {
         final RequestDispatcherOptions options = new RequestDispatcherOptions();
         assertNull(options.get(RequestDispatcherOptions.OPT_PROTECT_HEADERS_ON_INCLUDE));
         assertFalse(options.isProtectHeadersOnInclude());

@@ -16,7 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 package org.apache.sling.api.request;
 
 import org.osgi.annotation.versioning.ConsumerType;
@@ -33,16 +32,16 @@ import org.osgi.annotation.versioning.ConsumerType;
 @Deprecated
 public interface SlingRequestListener {
 
-	String SERVICE_NAME = "org.apache.sling.api.request.SlingRequestListener";
+    String SERVICE_NAME = "org.apache.sling.api.request.SlingRequestListener";
 
-	/**
-	 * This method is called from the Sling application for every
-	 * <code>EventType</code> appearing during the dispatching of
-	 * a Sling request
-	 *
-	 * @param sre the object representing the event
-	 *
-	 * @see org.apache.sling.api.request.SlingRequestEvent.EventType
-	 */
-	void onEvent( SlingRequestEvent sre );
+    /**
+     * This method is called from the Sling application for every
+     * <code>EventType</code> appearing during the dispatching of
+     * a Sling request
+     *
+     * @param sre the object representing the event
+     *
+     * @see org.apache.sling.api.request.SlingRequestEvent.EventType
+     */
+    void onEvent(SlingRequestEvent sre);
 }

@@ -18,14 +18,12 @@
  */
 package org.apache.sling.api.servlets;
 
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
 import jakarta.servlet.Servlet;
-
 import org.apache.sling.api.SlingJakartaHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -64,8 +62,8 @@ public interface ServletResolver {
      * @throws NullPointerException If {@code request} is null.
      * @since 2.5.0
      */
-    @Nullable Servlet resolve(@NotNull SlingJakartaHttpServletRequest request);
-
+    @Nullable
+    Servlet resolve(@NotNull SlingJakartaHttpServletRequest request);
 
     /**
      * Resolves a <code>jakarta.servlet.Servlet</code> whose
@@ -96,7 +94,8 @@ public interface ServletResolver {
      * @since 2.1 (Sling API Bundle 2.1.0)
      * @since 2.5.0
      */
-    @Nullable Servlet resolve(@NotNull Resource resource, @NotNull String scriptName);
+    @Nullable
+    Servlet resolve(@NotNull Resource resource, @NotNull String scriptName);
 
     /**
      * Resolves a <code>jakarta.servlet.Servlet</code> whose
@@ -123,7 +122,8 @@ public interface ServletResolver {
      * @throws IllegalArgumentException If {@code resolver} is null.
      * @since 2.5.0
      */
-    @Nullable Servlet resolve(@NotNull ResourceResolver resolver, @NotNull String scriptName);
+    @Nullable
+    Servlet resolve(@NotNull ResourceResolver resolver, @NotNull String scriptName);
 
     /**
      * Resolves a <code>javax.servlet.Servlet</code> whose
@@ -150,7 +150,8 @@ public interface ServletResolver {
      * @deprecated Use {@link #resolve(SlingJakartaHttpServletRequest)} instead.
      */
     @Deprecated
-    @Nullable javax.servlet.Servlet resolveServlet(@NotNull org.apache.sling.api.SlingHttpServletRequest request);
+    @Nullable
+    javax.servlet.Servlet resolveServlet(@NotNull org.apache.sling.api.SlingHttpServletRequest request);
 
     /**
      * Resolves a <code>javax.servlet.Servlet</code> whose
@@ -182,7 +183,8 @@ public interface ServletResolver {
      * @deprecated Use {@link #resolve(Resource, String)} instead.
      */
     @Deprecated
-    @Nullable javax.servlet.Servlet resolveServlet(@NotNull Resource resource, @NotNull String scriptName);
+    @Nullable
+    javax.servlet.Servlet resolveServlet(@NotNull Resource resource, @NotNull String scriptName);
 
     /**
      * Resolves a <code>javax.servlet.Servlet</code> whose
@@ -211,5 +213,6 @@ public interface ServletResolver {
      * @deprecated Use {@link #resolve(ResourceResolver, String)} instead.
      */
     @Deprecated
-    @Nullable javax.servlet.Servlet resolveServlet(@NotNull ResourceResolver resolver, @NotNull String scriptName);
+    @Nullable
+    javax.servlet.Servlet resolveServlet(@NotNull ResourceResolver resolver, @NotNull String scriptName);
 }

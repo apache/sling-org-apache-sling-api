@@ -20,19 +20,18 @@ package org.apache.sling.api.wrappers;
 
 import java.io.IOException;
 
-import org.apache.felix.http.javaxwrappers.ServletConfigWrapper;
-import org.apache.felix.http.jakartawrappers.ServletExceptionUtil;
-import org.apache.sling.api.SlingJakartaHttpServletRequest;
-import org.apache.sling.api.servlets.JakartaOptingServlet;
-import org.apache.sling.api.servlets.OptingServlet;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import jakarta.servlet.Servlet;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
+import org.apache.felix.http.jakartawrappers.ServletExceptionUtil;
+import org.apache.felix.http.javaxwrappers.ServletConfigWrapper;
+import org.apache.sling.api.SlingJakartaHttpServletRequest;
+import org.apache.sling.api.servlets.JakartaOptingServlet;
+import org.apache.sling.api.servlets.OptingServlet;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * This class wraps a servlet based on the Servlet API 3
@@ -60,7 +59,7 @@ public class JavaxToJakartaServletWrapper implements Servlet {
     private final javax.servlet.Servlet servlet;
 
     public JavaxToJakartaServletWrapper(final javax.servlet.Servlet servlet) {
-         this.servlet = servlet;
+        this.servlet = servlet;
     }
 
     @Override
@@ -75,7 +74,9 @@ public class JavaxToJakartaServletWrapper implements Servlet {
     @Override
     public void service(final ServletRequest req, final ServletResponse res) throws ServletException, IOException {
         try {
-            this.servlet.service(JakartaToJavaxRequestWrapper.toJavaxRequest(req), JakartaToJavaxResponseWrapper.toJavaxResponse(res));
+            this.servlet.service(
+                    JakartaToJavaxRequestWrapper.toJavaxRequest(req),
+                    JakartaToJavaxResponseWrapper.toJavaxResponse(res));
         } catch (final javax.servlet.ServletException e) {
             throw ServletExceptionUtil.getServletException(e);
         }
@@ -99,7 +100,8 @@ public class JavaxToJakartaServletWrapper implements Servlet {
         return servlet.getServletInfo();
     }
 
-    public static class JavaxToJakartaOptingServletWrapper extends JavaxToJakartaServletWrapper implements JakartaOptingServlet {
+    public static class JavaxToJakartaOptingServletWrapper extends JavaxToJakartaServletWrapper
+            implements JakartaOptingServlet {
 
         private final OptingServlet servlet;
 
@@ -114,4 +116,3 @@ public class JavaxToJakartaServletWrapper implements Servlet {
         }
     }
 }
-

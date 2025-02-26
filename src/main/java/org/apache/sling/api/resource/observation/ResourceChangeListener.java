@@ -21,7 +21,6 @@ package org.apache.sling.api.resource.observation;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
-
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
@@ -75,7 +74,7 @@ public interface ResourceChangeListener {
      * implementation might only send a single remove event for {@code /foo} but not for any child resources.
      * Similarly for renaming a subtree from {@code /foo} to {@code /bar} the add event may only be sent for {@code /bar}
      * but not for any child resources.
-     * Therefore a listener might get remove/add events for resources that not directly match the specified paths/path patterns. 
+     * Therefore a listener might get remove/add events for resources that not directly match the specified paths/path patterns.
      * For example if a listener is registered for path {@code /foo/bar} and {@code /foo} is removed, the listener will get a remove event for {@code /foo}.
      * The same is true if any pattern is used and any parent of a matching resource is removed/added. The listener
      * must handle these events accordingly.
@@ -145,7 +144,7 @@ public interface ResourceChangeListener {
      * Report resource changes based on the filter properties of this listener.
      * <p>
      * Note that resource changes for paths which are <strong>ancestors</strong> of the paths this
-     * listener was registered to may be reported through this method. This is due to limitations of 
+     * listener was registered to may be reported through this method. This is due to limitations of
      * certain resource providers to provide events on a more granular level
      * (e.g. for deletion or movement of resources containing (potentially nested) child resources).
      * <p>

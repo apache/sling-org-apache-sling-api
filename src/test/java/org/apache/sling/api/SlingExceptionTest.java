@@ -19,7 +19,6 @@
 package org.apache.sling.api;
 
 import junit.framework.TestCase;
-
 import org.junit.Test;
 
 public class SlingExceptionTest {
@@ -58,5 +57,4 @@ public class SlingExceptionTest {
         TestCase.assertEquals(message, e.getMessage());
         TestCase.assertEquals(cause, e.getCause());
     }
-
 }

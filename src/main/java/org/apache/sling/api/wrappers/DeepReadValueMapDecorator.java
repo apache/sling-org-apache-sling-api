@@ -45,13 +45,13 @@ public class DeepReadValueMapDecorator extends ValueMapDecorator {
 
     private ValueMap getValueMap(final String name) {
         final int pos = name.lastIndexOf("/");
-        if ( pos == -1 ) {
+        if (pos == -1) {
             return this.base;
         }
         final Resource rsrc = this.resolver.getResource(pathPrefix + name.substring(0, pos));
-        if ( rsrc != null ) {
+        if (rsrc != null) {
             final ValueMap vm = rsrc.adaptTo(ValueMap.class);
-            if ( vm != null ) {
+            if (vm != null) {
                 return vm;
             }
         }
@@ -60,7 +60,7 @@ public class DeepReadValueMapDecorator extends ValueMapDecorator {
 
     private String getPropertyName(final String name) {
         final int pos = name.lastIndexOf("/");
-        if ( pos == -1 ) {
+        if (pos == -1) {
             return name;
         }
         return name.substring(pos + 1);
@@ -88,7 +88,7 @@ public class DeepReadValueMapDecorator extends ValueMapDecorator {
      */
     @Override
     public boolean containsKey(final Object key) {
-        if ( key == null ) {
+        if (key == null) {
             return false;
         }
         final String name = key.toString();
@@ -100,7 +100,7 @@ public class DeepReadValueMapDecorator extends ValueMapDecorator {
      */
     @Override
     public Object get(final Object key) {
-        if ( key == null ) {
+        if (key == null) {
             return null;
         }
         final String name = key.toString();

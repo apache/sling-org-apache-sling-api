@@ -18,11 +18,6 @@
  */
 package org.apache.sling.api.wrappers;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
@@ -36,6 +31,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 public class ValueMapDecoratorTest {
 
@@ -51,10 +51,12 @@ public class ValueMapDecoratorTest {
     // SLING-4178
     @Test
     public void testIncompatibleTypeInArray() {
-        map.put("prop1", new String[] { "test", "test2" });
+        map.put("prop1", new String[] {"test", "test2"});
         map.put("prop2", "test");
-        Assert.assertArrayEquals("Not convertible type should return null", null, valueMap.get("prop1", Integer[].class));
-        Assert.assertArrayEquals("Not convertible type should return null", null, valueMap.get("prop2", Integer[].class));
+        Assert.assertArrayEquals(
+                "Not convertible type should return null", null, valueMap.get("prop1", Integer[].class));
+        Assert.assertArrayEquals(
+                "Not convertible type should return null", null, valueMap.get("prop2", Integer[].class));
     }
 
     // SLING-662
@@ -64,29 +66,35 @@ public class ValueMapDecoratorTest {
         map.put("prop2", "1");
         Assert.assertArrayEquals(
                 "Even though the underlying entry is single-value if should be enclosed in a single element array",
-                new String[] { "test" }, valueMap.get("prop1", String[].class));
+                new String[] {"test"},
+                valueMap.get("prop1", String[].class));
         Assert.assertArrayEquals(
                 "Even though the underlying entry is single-value if should be enclosed in a single element array",
-                new Integer[] { 1 }, valueMap.get("prop2", Integer[].class));
-    }
-
-    @Test
-    public void testGettingArraysFromMultiValueEntries() {
-        map.put("prop1", new String[] { "test", "test2" });
-        map.put("prop2", new String[] { "1", "2" });
-        Assert.assertArrayEquals("Could not get values from underlying array", new String[] { "test", "test2" },
-                valueMap.get("prop1", String[].class));
-        Assert.assertArrayEquals("Conversion to Integer was not possible", new Integer[] { 1, 2 },
+                new Integer[] {1},
                 valueMap.get("prop2", Integer[].class));
     }
 
     @Test
+    public void testGettingArraysFromMultiValueEntries() {
+        map.put("prop1", new String[] {"test", "test2"});
+        map.put("prop2", new String[] {"1", "2"});
+        Assert.assertArrayEquals(
+                "Could not get values from underlying array",
+                new String[] {"test", "test2"},
+                valueMap.get("prop1", String[].class));
+        Assert.assertArrayEquals(
+                "Conversion to Integer was not possible", new Integer[] {1, 2}, valueMap.get("prop2", Integer[].class));
+    }
+
+    @Test
     public void testGettingSingleValuesFromMultiValueEntries() {
-        map.put("prop1", new String[] { "test", "test2" });
-        map.put("prop2", new String[] { "1", "2" });
-        Assert.assertEquals("First element from underlying array should be returned", "test",
-                valueMap.get("prop1", String.class));
-        Assert.assertEquals("First element from underlying array should be returned", Integer.valueOf(1),
+        map.put("prop1", new String[] {"test", "test2"});
+        map.put("prop2", new String[] {"1", "2"});
+        Assert.assertEquals(
+                "First element from underlying array should be returned", "test", valueMap.get("prop1", String.class));
+        Assert.assertEquals(
+                "First element from underlying array should be returned",
+                Integer.valueOf(1),
                 valueMap.get("prop2", Integer.class));
     }
 
@@ -98,14 +106,18 @@ public class ValueMapDecoratorTest {
 
     @Test
     public void testPrimitiveTypes() {
-        map.put("prop1", new String[] { "1", "2" });
-        Assert.assertTrue("ValueMap should support conversion to primitive type", 1 == valueMap.get("prop1", int.class));
+        map.put("prop1", new String[] {"1", "2"});
+        Assert.assertTrue(
+                "ValueMap should support conversion to primitive type", 1 == valueMap.get("prop1", int.class));
     }
+
     @Test()
     public void testPrimitiveTypesArray() {
-        map.put("prop1", new String[] { "1", "2" });
-        Assert.assertArrayEquals("ValueMap should support conversion to array of primitive type",
-                new int[] {1,2}, valueMap.get("prop1", int[].class));
+        map.put("prop1", new String[] {"1", "2"});
+        Assert.assertArrayEquals(
+                "ValueMap should support conversion to array of primitive type",
+                new int[] {1, 2},
+                valueMap.get("prop1", int[].class));
     }
 
     @Test
@@ -113,13 +125,17 @@ public class ValueMapDecoratorTest {
         map.put("prop1", "some string");
         ValueMapDecorator valueMap2 = new ValueMapDecorator(map);
         Assert.assertTrue("Two ValueMapDecorators based on the same map should be equal", valueMap.equals(valueMap2));
-        Assert.assertEquals("Two equal ValueMapDecorators should have the same hash code", valueMap.hashCode(),
+        Assert.assertEquals(
+                "Two equal ValueMapDecorators should have the same hash code",
+                valueMap.hashCode(),
                 valueMap2.hashCode());
 
         ValueMapDecorator valueMap3 = new ValueMapDecorator(new HashMap<String, Object>());
         valueMap3.put("prop1", "some string");
         Assert.assertEquals(valueMap, valueMap3);
-        Assert.assertEquals("Two equal ValueMapDecorators should have the same hash code", valueMap.hashCode(),
+        Assert.assertEquals(
+                "Two equal ValueMapDecorators should have the same hash code",
+                valueMap.hashCode(),
                 valueMap3.hashCode());
 
         Assert.assertEquals(map, valueMap);
@@ -129,16 +145,20 @@ public class ValueMapDecoratorTest {
     @Ignore("SLING-4784")
     @Test
     public void testEqualsAndHashCodeOfEqualValueMapsWithArrayTypes() {
-        map.put("prop1", new String[] { "1", "2" });
+        map.put("prop1", new String[] {"1", "2"});
         ValueMapDecorator valueMap2 = new ValueMapDecorator(map);
         Assert.assertTrue("Two ValueMapDecorators based on the same map should be equal", valueMap.equals(valueMap2));
-        Assert.assertEquals("Two equal ValueMapDecorators should have the same hash code", valueMap.hashCode(),
+        Assert.assertEquals(
+                "Two equal ValueMapDecorators should have the same hash code",
+                valueMap.hashCode(),
                 valueMap2.hashCode());
 
         ValueMapDecorator valueMap3 = new ValueMapDecorator(new HashMap<String, Object>());
-        valueMap3.put("prop1", new String[] { "1", "2" });
+        valueMap3.put("prop1", new String[] {"1", "2"});
         Assert.assertEquals(valueMap, valueMap3);
-        Assert.assertEquals("Two equal ValueMapDecorators should have the same hash code", valueMap.hashCode(),
+        Assert.assertEquals(
+                "Two equal ValueMapDecorators should have the same hash code",
+                valueMap.hashCode(),
                 valueMap3.hashCode());
     }
 
@@ -147,25 +167,26 @@ public class ValueMapDecoratorTest {
         valueMap.put("prop", "value");
         ValueMapDecorator valueMap2 = new ValueMapDecorator(new HashMap<String, Object>());
         valueMap2.put("prop", "value2");
-        Assert.assertFalse("Two ValueMapDecorators based on maps with different entries should not be equal",
+        Assert.assertFalse(
+                "Two ValueMapDecorators based on maps with different entries should not be equal",
                 valueMap.equals(valueMap2));
-
     }
 
     @Test
     public void testEqualsOfInequalValueMapsWithArrayTypes() {
-        valueMap.put("prop", new String[] { "1", "2" });
+        valueMap.put("prop", new String[] {"1", "2"});
         ValueMapDecorator valueMap2 = new ValueMapDecorator(new HashMap<String, Object>());
-        valueMap2.put("prop", new String[] { "3", "4" });
-        Assert.assertFalse("Two ValueMapDecorators based on maps with different entries should not be equal",
+        valueMap2.put("prop", new String[] {"3", "4"});
+        Assert.assertFalse(
+                "Two ValueMapDecorators based on maps with different entries should not be equal",
                 valueMap.equals(valueMap2));
     }
-    
+
     @Test
     public void testDelegateToValueMap() {
         ValueMap original = mock(ValueMap.class);
         ValueMap decorated = new ValueMapDecorator(original);
-        
+
         decorated.get("prop1", String.class);
         verify(original, times(1)).get("prop1", String.class);
 
@@ -184,16 +205,25 @@ public class ValueMapDecoratorTest {
         map.put("dateAsCalendar", calendar);
         map.put("dateAsZonedDateTime", zonedDateTime);
 
-        assertThat("Conversion from \"dateAsIso8601\" to ZonedDateTime",
-                valueMap.get("dateAsIso8601", ZonedDateTime.class), Matchers.is(zonedDateTime));
-        assertThat("Conversion from \"dateAsCalendar\" to ZonedDateTime",
-                valueMap.get("dateAsCalendar", ZonedDateTime.class), Matchers.is(zonedDateTime));
-        assertThat("Conversion from \"dateAsZonedDateTime\" to ZonedDateTime",
-                valueMap.get("dateAsZonedDateTime", ZonedDateTime.class), Matchers.is(zonedDateTime));
-        assertThat("Conversion from \"dateAsZonedDateTime\" to Calendar",
-                valueMap.get("dateAsZonedDateTime", Calendar.class), Matchers.is(calendar));
-        assertThat("Conversion from \"dateAsZonedDateTime\" to String",
-                valueMap.get("dateAsZonedDateTime", String.class), Matchers.is(dateAsIso8601));
+        assertThat(
+                "Conversion from \"dateAsIso8601\" to ZonedDateTime",
+                valueMap.get("dateAsIso8601", ZonedDateTime.class),
+                Matchers.is(zonedDateTime));
+        assertThat(
+                "Conversion from \"dateAsCalendar\" to ZonedDateTime",
+                valueMap.get("dateAsCalendar", ZonedDateTime.class),
+                Matchers.is(zonedDateTime));
+        assertThat(
+                "Conversion from \"dateAsZonedDateTime\" to ZonedDateTime",
+                valueMap.get("dateAsZonedDateTime", ZonedDateTime.class),
+                Matchers.is(zonedDateTime));
+        assertThat(
+                "Conversion from \"dateAsZonedDateTime\" to Calendar",
+                valueMap.get("dateAsZonedDateTime", Calendar.class),
+                Matchers.is(calendar));
+        assertThat(
+                "Conversion from \"dateAsZonedDateTime\" to String",
+                valueMap.get("dateAsZonedDateTime", String.class),
+                Matchers.is(dateAsIso8601));
     }
-    
 }

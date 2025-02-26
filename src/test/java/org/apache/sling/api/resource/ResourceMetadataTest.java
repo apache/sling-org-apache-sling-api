@@ -18,10 +18,6 @@
  */
 package org.apache.sling.api.resource;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.fail;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -32,9 +28,14 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.fail;
+
 public class ResourceMetadataTest {
 
     private static final Map<String, Object> TEST_MAP = new HashMap<String, Object>();
+
     static {
         TEST_MAP.put("first", "one");
         TEST_MAP.put("second", Integer.MAX_VALUE);
@@ -47,7 +48,7 @@ public class ResourceMetadataTest {
         try {
             m.put("after", "locking");
             fail("put() should fail after locking");
-        } catch(UnsupportedOperationException uoe) {
+        } catch (UnsupportedOperationException uoe) {
             // all good
         }
     }
@@ -59,7 +60,7 @@ public class ResourceMetadataTest {
         try {
             m.clear();
             fail("clear() should fail after locking");
-        } catch(UnsupportedOperationException uoe) {
+        } catch (UnsupportedOperationException uoe) {
             // all good
         }
     }
@@ -71,7 +72,7 @@ public class ResourceMetadataTest {
         try {
             m.putAll(TEST_MAP);
             fail("putAll() should fail after locking");
-        } catch(UnsupportedOperationException uoe) {
+        } catch (UnsupportedOperationException uoe) {
             // all good
         }
     }
@@ -83,7 +84,7 @@ public class ResourceMetadataTest {
         try {
             m.remove("foo");
             fail("remove() should fail after locking");
-        } catch(UnsupportedOperationException uoe) {
+        } catch (UnsupportedOperationException uoe) {
             // all good
         }
     }

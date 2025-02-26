@@ -82,8 +82,7 @@ public class RequestDispatcherOptions extends HashMap<String, String> {
     /**
      * Creates an instance with no options set.
      */
-    public RequestDispatcherOptions() {
-    }
+    public RequestDispatcherOptions() {}
 
     /**
      * Creates a new instances setting options by parsing the given
@@ -114,8 +113,9 @@ public class RequestDispatcherOptions extends HashMap<String, String> {
                     String entry = tk.nextToken();
                     int equals = entry.indexOf('=');
                     if (equals > 0 && equals < entry.length() - 1) {
-                        put(entry.substring(0, equals).trim(), entry.substring(
-                            equals + 1).trim());
+                        put(
+                                entry.substring(0, equals).trim(),
+                                entry.substring(equals + 1).trim());
                     }
                 }
             }
@@ -204,7 +204,7 @@ public class RequestDispatcherOptions extends HashMap<String, String> {
         return get(OPT_REPLACE_SUFFIX);
     }
 
-   /**
+    /**
      * Sets the {@link #OPT_REPLACE_EXTENSION} option to the given
      * <code>replaceExtension</code> if not <code>null</code>.
      * If this value contains an empty string, the original extension
@@ -228,7 +228,7 @@ public class RequestDispatcherOptions extends HashMap<String, String> {
         return get(OPT_REPLACE_EXTENSION);
     }
 
-   /**
+    /**
      * Sets the {@link #OPT_PROTECT_HEADERS_ON_INCLUDE} option to the given
      * value.
      * @param flag The value to set

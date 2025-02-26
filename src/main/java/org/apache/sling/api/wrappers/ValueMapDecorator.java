@@ -54,14 +54,14 @@ public class ValueMapDecorator implements ValueMap {
     public <T> T get(@NotNull String name, @NotNull Class<T> type) {
         if (base instanceof ValueMap) {
             // shortcut if decorated map is ValueMap
-            return ((ValueMap)base).get(name, type);
+            return ((ValueMap) base).get(name, type);
         }
         Object value = get(name);
         if (value == null) {
             return null;
         }
         if (type.isAssignableFrom(value.getClass())) {
-            return (T)value;
+            return (T) value;
         }
         return ObjectConverter.convert(value, type);
     }
@@ -75,7 +75,7 @@ public class ValueMapDecorator implements ValueMap {
     public <T> T get(@NotNull String name, @NotNull T defaultValue) {
         if (base instanceof ValueMap) {
             // shortcut if decorated map is ValueMap
-            return ((ValueMap)base).get(name, defaultValue);
+            return ((ValueMap) base).get(name, defaultValue);
         }
         if (defaultValue == null) {
             return (T) get(name);
@@ -203,6 +203,4 @@ public class ValueMapDecorator implements ValueMap {
     public boolean equals(Object obj) {
         return base.equals(obj);
     }
-
-
 }

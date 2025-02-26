@@ -37,7 +37,7 @@ import org.slf4j.Logger;
  */
 public class SlingJakartaBindings extends LazyBindings {
 
-   /**
+    /**
      * The name of the global scripting variable providing the
      * {@link org.apache.sling.api.SlingJakartaHttpServletRequest} object (value is
      * "request"). The value of the scripting variable is the same as that
@@ -168,8 +168,8 @@ public class SlingJakartaBindings extends LazyBindings {
     @SuppressWarnings("unchecked")
     protected <ObjectType> ObjectType get(final String key, final Class<ObjectType> type) {
         final Object o = this.get(key);
-        if ( type.isInstance(o) ) {
-            return (ObjectType)o;
+        if (type.isInstance(o)) {
+            return (ObjectType) o;
         }
         return null;
     }
@@ -180,7 +180,7 @@ public class SlingJakartaBindings extends LazyBindings {
      * @param value The value
      */
     protected void safePut(final String key, final Object value) {
-        if ( value != null ) {
+        if (value != null) {
             this.put(key, value);
         }
     }
@@ -200,7 +200,7 @@ public class SlingJakartaBindings extends LazyBindings {
      */
     public boolean getFlush() {
         Boolean value = this.get(FLUSH, Boolean.class);
-        if (value != null ) {
+        if (value != null) {
             return value;
         }
 

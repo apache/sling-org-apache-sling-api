@@ -22,12 +22,11 @@ import java.io.Closeable;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
 import jakarta.servlet.http.HttpServletRequest;
-
 import org.apache.sling.api.adapter.Adaptable;
 import org.apache.sling.api.resource.mapping.ResourceMapper;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -155,8 +154,7 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * @deprecated
      */
     @Deprecated
-    String REQUEST_ATTR_WORKSPACE_INFO = ResourceResolver.class.getName()
-        + "/use.workspace";
+    String REQUEST_ATTR_WORKSPACE_INFO = ResourceResolver.class.getName() + "/use.workspace";
 
     /**
      * The name of the resource resolver attribute which is set if the resource
@@ -210,7 +208,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * @since 2.14.0
      * @see <a href="https://sling.apache.org/documentation/the-sling-engine/mappings-for-resource-resolution.html">Mappings for Resource Resolution</a>
      */
-    @NotNull Resource resolve(@NotNull HttpServletRequest request, @NotNull String absPath);
+    @NotNull
+    Resource resolve(@NotNull HttpServletRequest request, @NotNull String absPath);
 
     /**
      * Resolves the resource from the given <code>absPath</code> optionally
@@ -244,7 +243,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * @deprecated Use {@link #resolve(HttpServletRequest, String)} instead.
      */
     @Deprecated
-    @NotNull Resource resolve(@NotNull javax.servlet.http.HttpServletRequest request, @NotNull String absPath);
+    @NotNull
+    Resource resolve(@NotNull javax.servlet.http.HttpServletRequest request, @NotNull String absPath);
 
     /**
      * Resolves the resource from the given absolute path. Returns a
@@ -273,7 +273,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      *             {@link #close() closed}.
      * @see <a href="https://sling.apache.org/documentation/the-sling-engine/mappings-for-resource-resolution.html">Mappings for Resource Resolution</a>
      */
-    @NotNull Resource resolve(@NotNull String absPath);
+    @NotNull
+    Resource resolve(@NotNull String absPath);
 
     /**
      * Resolves the resource from the given <code>HttpServletRequest</code>.
@@ -302,7 +303,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * @see <a href="https://sling.apache.org/documentation/the-sling-engine/mappings-for-resource-resolution.html">Mappings for Resource Resolution</a>
      */
     @Deprecated
-    @NotNull Resource resolve(@NotNull javax.servlet.http.HttpServletRequest request);
+    @NotNull
+    Resource resolve(@NotNull javax.servlet.http.HttpServletRequest request);
 
     /**
      * Returns a (request) path mapped from the (resource) path applying the reverse
@@ -334,7 +336,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * @see <a href="https://tools.ietf.org/html/rfc3986#section-2.1">Percent-Encoding</a>
      * @see <a href="https://sling.apache.org/documentation/the-sling-engine/mappings-for-resource-resolution.html">Mappings for Resource Resolution</a>
      */
-    @NotNull String map(@NotNull String resourcePath);
+    @NotNull
+    String map(@NotNull String resourcePath);
 
     /**
      * Returns an URL mapped from the (resource) path applying the reverse
@@ -372,7 +375,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * @see <a href="https://tools.ietf.org/html/rfc3986#section-2.1">Percent-Encoding</a>
      * @see <a href="https://sling.apache.org/documentation/the-sling-engine/mappings-for-resource-resolution.html">Mappings for Resource Resolution</a>
      */
-    @NotNull String map(@NotNull HttpServletRequest request, @NotNull String resourcePath);
+    @NotNull
+    String map(@NotNull HttpServletRequest request, @NotNull String resourcePath);
 
     /**
      * Returns an URL mapped from the (resource) path applying the reverse
@@ -412,7 +416,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * @deprecated Use {@link #map(HttpServletRequest, String)} instead.
      */
     @Deprecated
-    @NotNull String map(@NotNull javax.servlet.http.HttpServletRequest request, @NotNull String resourcePath);
+    @NotNull
+    String map(@NotNull javax.servlet.http.HttpServletRequest request, @NotNull String resourcePath);
 
     /**
      * Returns a {@link Resource} object for data located at the given path.
@@ -439,7 +444,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * @throws IllegalStateException if this resource resolver has already been
      *             {@link #close() closed}.
      */
-    @Nullable Resource getResource(@NotNull String path);
+    @Nullable
+    Resource getResource(@NotNull String path);
 
     /**
      * Returns a {@link Resource} object for data located at the given path.
@@ -469,7 +475,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * @throws IllegalStateException if this resource resolver has already been
      *             {@link #close() closed}.
      */
-    @Nullable Resource getResource(Resource base, @NotNull String path);
+    @Nullable
+    Resource getResource(Resource base, @NotNull String path);
 
     /**
      * Returns the search path used by the {@link #getResource(String)} method
@@ -493,7 +500,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * @throws IllegalStateException if this resource resolver has already been
      *             {@link #close() closed}.
      */
-    @NotNull String[] getSearchPath();
+    @NotNull
+    String[] getSearchPath();
 
     /**
      * Returns an <code>Iterator</code> of {@link Resource} objects loaded from
@@ -513,7 +521,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * @throws IllegalStateException if this resource resolver has already been
      *             {@link #close() closed}.
      */
-    @NotNull Iterator<Resource> listChildren(@NotNull Resource parent);
+    @NotNull
+    Iterator<Resource> listChildren(@NotNull Resource parent);
 
     /**
      * Returns the parent resource of this resource.
@@ -531,7 +540,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      *             {@link #close() closed}.
      * @since 2.9 (Sling API Bundle 2.11.0)
      */
-    @Nullable Resource getParent(@NotNull Resource child);
+    @Nullable
+    Resource getParent(@NotNull Resource child);
 
     /**
      * Returns an <code>Iterable</code> of {@link Resource} objects loaded from
@@ -552,7 +562,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      *             {@link #close() closed}.
      * @since 2.2 (Sling API Bundle 2.2.0)
      */
-    @NotNull Iterable<Resource> getChildren(@NotNull Resource parent);
+    @NotNull
+    Iterable<Resource> getChildren(@NotNull Resource parent);
 
     /**
      * Searches for resources using the given query formulated in the given
@@ -579,7 +590,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * @throws IllegalStateException if this resource resolver has already been
      *             {@link #close() closed}.
      */
-    @NotNull Iterator<Resource> findResources(@NotNull String query, String language);
+    @NotNull
+    Iterator<Resource> findResources(@NotNull String query, String language);
 
     /**
      * Queries the storage using the given query formulated in the given
@@ -609,7 +621,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * @throws IllegalStateException if this resource resolver has already been
      *             {@link #close() closed}.
      */
-    @NotNull Iterator<Map<String, Object>> queryResources(@NotNull String query, String language);
+    @NotNull
+    Iterator<Map<String, Object>> queryResources(@NotNull String query, String language);
 
     /**
      * Checks if the specified resource has any direct child resources.
@@ -651,8 +664,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      *             {@link #close() closed}.
      * @since 2.1 (Sling API Bundle 2.1.0)
      */
-    @NotNull ResourceResolver clone(Map<String, Object> authenticationInfo)
-            throws LoginException;
+    @NotNull
+    ResourceResolver clone(Map<String, Object> authenticationInfo) throws LoginException;
 
     /**
      * Returns <code>true</code> if this resource resolver is still usable.
@@ -703,7 +716,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      *             {@link #close() closed}.
      * @since 2.1 (Sling API Bundle 2.1.0)
      */
-    @Nullable String getUserID();
+    @Nullable
+    String getUserID();
 
     /**
      * Returns an iterator of attribute names whose value can be retrieved
@@ -714,7 +728,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * @throws IllegalStateException if this resource resolver has already been
      *             {@link #close() closed}.
      */
-    @NotNull Iterator<String> getAttributeNames();
+    @NotNull
+    Iterator<String> getAttributeNames();
 
     /**
      * Returns the value of the given resource resolver attribute or
@@ -729,7 +744,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * @throws IllegalStateException if this resource resolver has already been
      *             {@link #close() closed}.
      */
-    @Nullable Object getAttribute(@NotNull String name);
+    @Nullable
+    Object getAttribute(@NotNull String name);
 
     /**
      * Delete the resource
@@ -748,8 +764,7 @@ public interface ResourceResolver extends Adaptable, Closeable {
      *             {@link #close() closed}.
      * @since 2.2 (Sling API Bundle 2.2.0)
      */
-    void delete(@NotNull Resource resource)
-    throws PersistenceException;
+    void delete(@NotNull Resource resource) throws PersistenceException;
 
     /**
      * Add a child resource to the given parent resource.
@@ -768,8 +783,9 @@ public interface ResourceResolver extends Adaptable, Closeable {
      *             {@link #close() closed}.
      * @since 2.2 (Sling API Bundle 2.2.0)
      */
-    @NotNull Resource create(@NotNull Resource parent, @NotNull String name, Map<String, Object> properties)
-    throws PersistenceException;
+    @NotNull
+    Resource create(@NotNull Resource parent, @NotNull String name, Map<String, Object> properties)
+            throws PersistenceException;
 
     /**
      * Orders the child resources returned by {@link #getChildren(Resource)} and {@link #listChildren(Resource)} so that a given resource is listed before the given sibling resource.
@@ -788,7 +804,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * @see #listChildren(Resource)
      * @see #getChildren(Resource)
      */
-    boolean orderBefore(@NotNull Resource parent, @NotNull String name, @Nullable String followingSiblingName) throws UnsupportedOperationException, PersistenceException, IllegalArgumentException;
+    boolean orderBefore(@NotNull Resource parent, @NotNull String name, @Nullable String followingSiblingName)
+            throws UnsupportedOperationException, PersistenceException, IllegalArgumentException;
 
     /**
      * Revert all pending changes.
@@ -832,7 +849,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      *             {@link #close() closed}.
      * @since 2.3 (Sling API Bundle 2.4.0)
      */
-    @Nullable String getParentResourceType(final Resource resource);
+    @Nullable
+    String getParentResourceType(final Resource resource);
 
     /**
      * Returns the super type of the given resource type. This method converts
@@ -850,7 +868,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      *             {@link #close() closed}.
      * @since 2.3 (Sling API Bundle 2.4.0)
      */
-    @Nullable String getParentResourceType(final String resourceType);
+    @Nullable
+    String getParentResourceType(final String resourceType);
 
     /**
      * Returns <code>true</code> if the resource type or any of the resource's
@@ -908,8 +927,7 @@ public interface ResourceResolver extends Adaptable, Closeable {
      *             {@link #close() closed}.
      * @since 2.9 (Sling API Bundle 2.11.0)
      */
-    Resource copy(final String srcAbsPath,
-              final String destAbsPath) throws PersistenceException;
+    Resource copy(final String srcAbsPath, final String destAbsPath) throws PersistenceException;
 
     /**
      * This method moves the subgraph rooted at, and including, the resource at
@@ -938,8 +956,7 @@ public interface ResourceResolver extends Adaptable, Closeable {
      *             {@link #close() closed}.
      * @since 2.9 (Sling API Bundle 2.11.0)
      */
-    Resource move(final String srcAbsPath,
-              final String destAbsPath) throws PersistenceException;
+    Resource move(final String srcAbsPath, final String destAbsPath) throws PersistenceException;
 
     /**
      * Returns a mutable map to store temporary objects.
@@ -960,5 +977,6 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * @see #close()
      * @since 2.13.0 (Sling API Bundle 2.24.0)
      */
-    @NotNull Map<String,Object> getPropertyMap();
+    @NotNull
+    Map<String, Object> getPropertyMap();
 }

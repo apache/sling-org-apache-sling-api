@@ -20,8 +20,6 @@ package org.apache.sling.api.resource;
 
 import org.osgi.annotation.versioning.ConsumerType;
 
-
-
 /**
  * A resource provider might return the state when it was created and not
  * update to the latest state.

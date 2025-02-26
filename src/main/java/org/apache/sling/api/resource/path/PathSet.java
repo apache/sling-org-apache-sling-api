@@ -32,7 +32,7 @@ import java.util.Set;
 public class PathSet implements Iterable<Path> {
 
     /** Empty path set. */
-    public static final PathSet EMPTY_SET = new PathSet(Collections.<Path> emptySet());
+    public static final PathSet EMPTY_SET = new PathSet(Collections.<Path>emptySet());
 
     /**
      * Create a path set from a collection of path objects
@@ -41,7 +41,7 @@ public class PathSet implements Iterable<Path> {
      */
     public static PathSet fromPathCollection(final Collection<Path> paths) {
         final Set<Path> set = new HashSet<Path>();
-        for(final Path p : paths) {
+        for (final Path p : paths) {
             set.add(p);
         }
         optimize(set);
@@ -53,9 +53,9 @@ public class PathSet implements Iterable<Path> {
      * @param paths The collection of path objects
      * @return The path set
      */
-    public static PathSet fromPaths(final Path...paths) {
+    public static PathSet fromPaths(final Path... paths) {
         final Set<Path> set = new HashSet<Path>();
-        for(final Path p : paths) {
+        for (final Path p : paths) {
             set.add(p);
         }
         optimize(set);
@@ -69,7 +69,7 @@ public class PathSet implements Iterable<Path> {
      */
     public static PathSet fromStringCollection(final Collection<String> paths) {
         final Set<Path> set = new HashSet<Path>();
-        for(final String p : paths) {
+        for (final String p : paths) {
             set.add(new Path(p));
         }
         optimize(set);
@@ -81,9 +81,9 @@ public class PathSet implements Iterable<Path> {
      * @param strings The array of strings
      * @return The path set
      */
-    public static PathSet fromStrings(final String...strings) {
+    public static PathSet fromStrings(final String... strings) {
         final Set<Path> set = new HashSet<Path>();
-        for(final String p : strings) {
+        for (final String p : strings) {
             set.add(new Path(p));
         }
         optimize(set);
@@ -97,16 +97,16 @@ public class PathSet implements Iterable<Path> {
      */
     private static void optimize(final Set<Path> set) {
         final Iterator<Path> i = set.iterator();
-        while ( i.hasNext() ) {
+        while (i.hasNext()) {
             final Path next = i.next();
             boolean found = false;
-            for(final Path p : set) {
-                if ( p != next && p.matches(next.getPath()) ) {
+            for (final Path p : set) {
+                if (p != next && p.matches(next.getPath())) {
                     found = true;
                     break;
                 }
             }
-            if ( found ) {
+            if (found) {
                 i.remove();
             }
         }
@@ -130,12 +130,12 @@ public class PathSet implements Iterable<Path> {
      * @see Path#matches(String)
      */
     public Path matches(final String otherPath) {
-         for(final Path p : this.paths) {
-             if ( p.matches(otherPath) ) {
-                 return p;
-             }
-         }
-         return null;
+        for (final Path p : this.paths) {
+            if (p.matches(otherPath)) {
+                return p;
+            }
+        }
+        return null;
     }
 
     /**
@@ -157,8 +157,8 @@ public class PathSet implements Iterable<Path> {
      */
     public PathSet getSubset(final Path path) {
         final Set<Path> result = new HashSet<Path>();
-        for(final Path p : this.paths) {
-            if ( path.matches(p.getPath()) ) {
+        for (final Path p : this.paths) {
+            if (path.matches(p.getPath())) {
                 result.add(p);
             }
         }
@@ -173,8 +173,8 @@ public class PathSet implements Iterable<Path> {
      */
     public PathSet getSubset(final PathSet set) {
         final Set<Path> result = new HashSet<Path>();
-        for(final Path p : this.paths) {
-            if ( set.matches(p.getPath()) != null ) {
+        for (final Path p : this.paths) {
+            if (set.matches(p.getPath()) != null) {
                 result.add(p);
             }
         }
@@ -187,7 +187,7 @@ public class PathSet implements Iterable<Path> {
      */
     public Set<String> toStringSet() {
         final Set<String> set = new HashSet<String>();
-        for(final Path p : this) {
+        for (final Path p : this) {
             set.add(p.getPath());
         }
         return Collections.unmodifiableSet(set);
@@ -215,7 +215,7 @@ public class PathSet implements Iterable<Path> {
         if (obj == null || !(obj instanceof PathSet)) {
             return false;
         }
-        return this.paths.equals(((PathSet)obj).paths);
+        return this.paths.equals(((PathSet) obj).paths);
     }
 
     @Override

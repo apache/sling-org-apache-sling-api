@@ -16,7 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 package org.apache.sling.api.resource.external;
 
 import java.net.URI;
@@ -45,7 +44,8 @@ public interface URIProvider {
      * @return a URI if the resource has a URI suitable for the requested scope and operation, otherwise the implementation should throw an IlleagalArgumentException.
      * @throws IllegalArgumentException if a URI for the requested scope and operation cannot be provided to the caller.
      */
-    @NotNull URI toURI(@NotNull Resource resource, @NotNull URIProvider.Scope scope, @NotNull URIProvider.Operation operation);
+    @NotNull
+    URI toURI(@NotNull Resource resource, @NotNull URIProvider.Scope scope, @NotNull URIProvider.Operation operation);
 
     /**
      * Defines which operation the URI may be used to perform.

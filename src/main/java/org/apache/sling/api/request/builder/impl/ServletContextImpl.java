@@ -173,7 +173,8 @@ public class ServletContextImpl implements ServletContext {
     }
 
     @Override
-    public ServletRegistration.Dynamic addServlet(final String servletName, final Class<? extends Servlet> servletClass) {
+    public ServletRegistration.Dynamic addServlet(
+            final String servletName, final Class<? extends Servlet> servletClass) {
         throw new UnsupportedOperationException();
     }
 
@@ -316,5 +317,4 @@ public class ServletContextImpl implements ServletContext {
     public void setSessionTimeout(int sessionTimeout) {
         throw new UnsupportedOperationException();
     }
-
 }

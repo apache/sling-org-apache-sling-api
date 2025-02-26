@@ -18,11 +18,6 @@
  */
 package org.apache.sling.api.request.builder;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -37,14 +32,19 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 public class BuildersTest {
 
-    @Test(expected = IllegalArgumentException.class) 
+    @Test(expected = IllegalArgumentException.class)
     public void createRequestBuilderNullResource() {
         Builders.newRequestBuilder(null);
     }
 
-    @Test 
+    @Test
     public void createRequestBuilder() {
         final ResourceResolver resolver = Mockito.mock(ResourceResolver.class);
         final Resource resource = Mockito.mock(Resource.class);
@@ -60,7 +60,8 @@ public class BuildersTest {
         assertEquals("html", req.getRequestPathInfo().getExtension());
         assertEquals("/content/page", req.getRequestPathInfo().getResourcePath());
         assertEquals("tidy.json", req.getRequestPathInfo().getSelectorString());
-        assertArrayEquals(new String[] {"tidy", "json"}, req.getRequestPathInfo().getSelectors());
+        assertArrayEquals(
+                new String[] {"tidy", "json"}, req.getRequestPathInfo().getSelectors());
         assertNull(req.getRequestPathInfo().getSuffix());
         assertNull(req.getRequestPathInfo().getSuffixResource());
 
@@ -71,7 +72,7 @@ public class BuildersTest {
     public void createResponseBuilder() {
         final SlingHttpServletResponseBuilder builder = Builders.newResponseBuilder();
         final SlingHttpServletResponseResult result = builder.build();
-        assertNotNull(result);        
+        assertNotNull(result);
     }
 
     @Test
@@ -81,8 +82,7 @@ public class BuildersTest {
 
     @Test
     public void createRequestParameter() throws UnsupportedEncodingException {
-        @NotNull
-        RequestParameter rp = Builders.newRequestParameter("key", "value");
+        @NotNull RequestParameter rp = Builders.newRequestParameter("key", "value");
         assertNotNull(rp);
         assertEquals("key", rp.getName());
         assertEquals("value", rp.getString());
@@ -91,8 +91,7 @@ public class BuildersTest {
 
     @Test
     public void createRequestParameterWithCharset() throws UnsupportedEncodingException {
-        @NotNull
-        RequestParameter rp = Builders.newRequestParameter("key", "value", StandardCharsets.UTF_16);
+        @NotNull RequestParameter rp = Builders.newRequestParameter("key", "value", StandardCharsets.UTF_16);
         assertNotNull(rp);
         assertEquals("key", rp.getName());
         assertEquals("value", rp.getString());

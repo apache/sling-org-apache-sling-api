@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
     Licensed to the Apache Software Foundation (ASF) under one
     or more contributor license agreements.  See the NOTICE file
@@ -31,22 +31,20 @@
     <version>3.0.0-SNAPSHOT</version>
 
     <name>Apache Sling API</name>
-    <description>
-        The Apache Sling API defines an extension to the Jakarta Servlet
+    <description>The Apache Sling API defines an extension to the Jakarta Servlet
         API 6.0 to provide access to content and unified access
         to request parameters hiding the differences between the
         different methods of transferring parameters from client
         to server. Note that the Apache Sling API bundle does not
         include the Servlet API but instead requires the API to
         be provided by the Servlet container in which the Apache
-        Sling framework is running or by another bundle.
-    </description>
+        Sling framework is running or by another bundle.</description>
 
     <scm>
         <connection>scm:git:https://gitbox.apache.org/repos/asf/sling-org-apache-sling-api.git</connection>
         <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/sling-org-apache-sling-api.git</developerConnection>
         <url>https://github.com/apache/sling-org-apache-sling-api.git</url>
-  </scm>
+    </scm>
 
     <properties>
         <site.jira.version.id>12314252</site.jira.version.id>
@@ -137,7 +135,8 @@
             <groupId>org.apache.sling</groupId>
             <artifactId>org.apache.sling.resource.filter</artifactId>
             <version>1.0.0</version>
-            <scope>provided</scope> <!-- just used for javadoc link -->
+            <scope>provided</scope>
+            <!-- just used for javadoc link -->
         </dependency>
     </dependencies>
 
@@ -155,7 +154,7 @@
                         <diffpackage>*</diffpackage>
                     </diffpackages>
                 </configuration>
-             </plugin>
+            </plugin>
             <plugin>
                 <groupId>org.apache.rat</groupId>
                 <artifactId>apache-rat-plugin</artifactId>

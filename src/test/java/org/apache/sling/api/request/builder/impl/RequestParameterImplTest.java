@@ -18,13 +18,6 @@
  */
 package org.apache.sling.api.request.builder.impl;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -32,15 +25,23 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 public class RequestParameterImplTest {
 
-    @Test 
+    @Test
     public void testTextualParameter() throws IOException {
         final RequestParameterImpl param = new RequestParameterImpl("foo", "bar");
         assertEquals("foo", param.getName());
         assertEquals("bar", param.getString());
         assertArrayEquals("bar".getBytes(StandardCharsets.UTF_8), param.get());
-        assertNull(param.getContentType());  // compare with https://github.com/apache/sling-org-apache-sling-engine/blob/8b6b5b273f667b7e156b37a791493b00b87cc733/src/main/java/org/apache/sling/engine/impl/parameters/ContainerRequestParameter.java#L73
+        assertNull(param.getContentType()); // compare with
+        // https://github.com/apache/sling-org-apache-sling-engine/blob/8b6b5b273f667b7e156b37a791493b00b87cc733/src/main/java/org/apache/sling/engine/impl/parameters/ContainerRequestParameter.java#L73
         try (InputStream is = param.getInputStream()) {
             byte[] actualValue = new byte[30];
             int length = is.read(actualValue);
@@ -56,9 +57,9 @@ public class RequestParameterImplTest {
         assertEquals(param.getString(), param.toString());
     }
 
-    @Test 
+    @Test
     public void testBinaryParameter() throws IOException {
-        byte[] value = new byte[] { 1, 2, 3 };
+        byte[] value = new byte[] {1, 2, 3};
         final RequestParameterImpl param = new RequestParameterImpl("foo", value, "filename", null);
         assertEquals("foo", param.getName());
         assertArrayEquals(value, param.get());

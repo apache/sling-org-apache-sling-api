@@ -38,7 +38,7 @@ public class AccessSecurityException extends Exception {
     /**
      * Constructs a new instance of this class with the specified detail
      * message.
-     * 
+     *
      * @param message
      *            the detail message. The detail message is saved for later
      *            retrieval by the {@link #getMessage()} method.
@@ -50,7 +50,7 @@ public class AccessSecurityException extends Exception {
     /**
      * Constructs a new instance of this class with the specified detail message
      * and root cause.
-     * 
+     *
      * @param message
      *            the detail message. The detail message is saved for later
      *            retrieval by the {@link #getMessage()} method.
@@ -63,7 +63,7 @@ public class AccessSecurityException extends Exception {
 
     /**
      * Constructs a new instance of this class with the specified root cause.
-     * 
+     *
      * @param rootCause
      *            root failure cause
      */

@@ -20,9 +20,8 @@ package org.apache.sling.api.resource.observation;
 
 import java.util.Set;
 
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
-
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
@@ -53,11 +52,11 @@ public class ResourceChange {
      * The type of the change
      */
     public enum ChangeType {
-        ADDED,            // the resource has been added
-        REMOVED,          // the resource has been removed
-        CHANGED,          // the resource has been changed
-        PROVIDER_ADDED,   // a provider has been added
-        PROVIDER_REMOVED  // a provider has been removed
+        ADDED, // the resource has been added
+        REMOVED, // the resource has been removed
+        CHANGED, // the resource has been changed
+        PROVIDER_ADDED, // a provider has been added
+        PROVIDER_REMOVED // a provider has been removed
     }
 
     /** The resource path. */
@@ -86,9 +85,7 @@ public class ResourceChange {
      * @param isExternal {code true} if the change happened on another node
      * @since 1.2.0 (Sling API Bundle 2.15.0)
      */
-    public ResourceChange(final @NotNull ChangeType changeType,
-            final @NotNull String path,
-            final boolean isExternal) {
+    public ResourceChange(final @NotNull ChangeType changeType, final @NotNull String path, final boolean isExternal) {
         this.path = path;
         this.changeType = changeType;
         this.isExternal = isExternal;
@@ -109,7 +106,8 @@ public class ResourceChange {
      * @deprecated The sets of property names are not supported anymore.
      */
     @Deprecated
-    public ResourceChange(final @NotNull ChangeType changeType,
+    public ResourceChange(
+            final @NotNull ChangeType changeType,
             final @NotNull String path,
             final boolean isExternal,
             final Set<String> addedPropertyNames,
@@ -147,7 +145,7 @@ public class ResourceChange {
         return this.isExternal;
     }
 
-   /**
+    /**
      * Get the type of change
      * @return The type of change
      */
@@ -213,12 +211,12 @@ public class ResourceChange {
     public String toString() {
         StringBuilder b = new StringBuilder();
         b.append("ResourceChange[type=")
-          .append(this.getType())
-          .append(", path=")
-          .append(this.getPath())
-          .append(", external=")
-          .append(this.isExternal)
-          .append("]");
+                .append(this.getType())
+                .append(", path=")
+                .append(this.getPath())
+                .append(", external=")
+                .append(this.isExternal)
+                .append("]");
         return b.toString();
     }
 }

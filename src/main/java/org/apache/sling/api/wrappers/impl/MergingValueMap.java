@@ -136,10 +136,7 @@ public class MergingValueMap implements ValueMap {
 
     @NotNull
     private Stream<String> keyStream() {
-        return valueMaps.stream()
-                .map(Map::keySet)
-                .flatMap(Collection::stream)
-                .distinct();
+        return valueMaps.stream().map(Map::keySet).flatMap(Collection::stream).distinct();
     }
 
     @NotNull

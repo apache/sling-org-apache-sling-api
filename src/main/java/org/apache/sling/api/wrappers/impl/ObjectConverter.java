@@ -41,19 +41,17 @@ public final class ObjectConverter {
 
         static {
             ConverterBuilder converterBuilder = Converters.newConverterBuilder()
-                    .rule(new TypeRule<String, Calendar>(String.class, Calendar.class,
-                            ObjectConverter::toCalendar))
-                    .rule(new TypeRule<Date, Calendar>(Date.class, Calendar.class,
-                            ObjectConverter::toCalendar))
+                    .rule(new TypeRule<String, Calendar>(String.class, Calendar.class, ObjectConverter::toCalendar))
+                    .rule(new TypeRule<Date, Calendar>(Date.class, Calendar.class, ObjectConverter::toCalendar))
                     .rule(new TypeRule<String, Date>(String.class, Date.class, ObjectConverter::toDate))
-                    .rule(new TypeRule<Calendar, String>(Calendar.class, String.class,
-                            ObjectConverter::toString))
+                    .rule(new TypeRule<Calendar, String>(Calendar.class, String.class, ObjectConverter::toString))
                     .rule(new TypeRule<Date, String>(Date.class, String.class, ObjectConverter::toString))
-                    .rule(new TypeRule<Calendar, Date>(Calendar.class, Date.class,
-                            ObjectConverter::toDate))
+                    .rule(new TypeRule<Calendar, Date>(Calendar.class, Date.class, ObjectConverter::toDate))
                     .rule(new TypeRule<>(Calendar.class, ZonedDateTime.class, ObjectConverter::toZonedDateTime))
-                    .rule(new TypeRule<ZonedDateTime, Calendar>(ZonedDateTime.class, Calendar.class, ObjectConverter::toCalendar))
-                    .rule(new TypeRule<ZonedDateTime, String>(ZonedDateTime.class, String.class, ObjectConverter::toString));
+                    .rule(new TypeRule<ZonedDateTime, Calendar>(
+                            ZonedDateTime.class, Calendar.class, ObjectConverter::toCalendar))
+                    .rule(new TypeRule<ZonedDateTime, String>(
+                            ZonedDateTime.class, String.class, ObjectConverter::toString));
             try {
                 JcrRules.addJcrRules(converterBuilder);
             } catch (NoClassDefFoundError e) {
@@ -76,11 +74,15 @@ public final class ObjectConverter {
     }
 
     private static ZonedDateTime toZonedDateTime(Calendar calendar) {
-        return ZonedDateTime.ofInstant(calendar.toInstant(), calendar.getTimeZone().toZoneId().normalized());
+        return ZonedDateTime.ofInstant(
+                calendar.toInstant(), calendar.getTimeZone().toZoneId().normalized());
     }
 
     private static String toString(Calendar cal) {
-        return ZonedDateTime.ofInstant(Instant.ofEpochMilli(cal.getTimeInMillis()), cal.getTimeZone().toZoneId()).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        return ZonedDateTime.ofInstant(
+                        Instant.ofEpochMilli(cal.getTimeInMillis()),
+                        cal.getTimeZone().toZoneId())
+                .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
     }
 
     private static String toString(Date cal) {
@@ -108,7 +110,7 @@ public final class ObjectConverter {
 
     /**
      * Converts the object to the given type.
-     * 
+     *
      * @param obj
      *            object
      * @param type
@@ -127,5 +129,4 @@ public final class ObjectConverter {
             return null;
         }
     }
-
 }
