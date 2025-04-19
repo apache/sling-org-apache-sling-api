@@ -153,10 +153,7 @@ public class SlingJakartaHttpServletResponseResultImpl extends SlingAdaptable
 
     @Override
     public void sendRedirect(final String location) {
-        this.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
-        this.statusMessage = null;
-        this.setHeader("Location", location);
-        this.isCommitted = true;
+        this.sendRedirect(location, SC_MOVED_TEMPORARILY, true);
     }
 
     @Override
@@ -355,5 +352,19 @@ public class SlingJakartaHttpServletResponseResultImpl extends SlingAdaptable
     @Override
     public String encodeURL(String url) {
         throw new UnsupportedOperationException();
+    }
+
+    /**
+     * New method in Servlet 6.1
+     */
+    @Override
+    public void sendRedirect(String location, int sc, boolean clearBuffer) {
+        if (clearBuffer) {
+            this.resetBuffer();
+        }
+        this.setStatus(sc);
+        this.statusMessage = null;
+        this.setHeader("Location", location);
+        this.isCommitted = true;
     }
 }
