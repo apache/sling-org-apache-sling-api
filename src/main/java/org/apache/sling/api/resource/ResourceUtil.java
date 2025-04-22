@@ -271,25 +271,25 @@ public class ResourceUtil {
      * @throws NullPointerException If <code>path</code> is <code>null</code>.
      */
     public static @NotNull String getName(@NotNull String path) {
-        if (path == null) {
-            throw new NullPointerException("provided path is null");
-        }
+        //        if (path == null) {
+        //            throw new NullPointerException("provided path is null");
+        //        }
         if ("/".equals(path)) {
             return "";
         }
 
         // normalize path (remove . and ..)
-        path = normalize(path);
-        if (path == null) {
+        final String normalizedPath = normalize(path);
+        if (normalizedPath == null) {
             throw new IllegalArgumentException(
-                    String.format("normalized path '%s' resolves to a path higher than root", path));
+                    String.format("normalizing path '%s' resolves to a path higher than root", path));
         }
-        if ("/".equals(path)) {
+        if ("/".equals(normalizedPath)) {
             return "";
         }
 
         // find the last slash
-        return path.substring(path.lastIndexOf('/') + 1);
+        return normalizedPath.substring(normalizedPath.lastIndexOf('/') + 1);
     }
 
     /**
