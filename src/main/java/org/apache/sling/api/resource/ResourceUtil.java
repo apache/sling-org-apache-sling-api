@@ -271,12 +271,19 @@ public class ResourceUtil {
      * @throws NullPointerException If <code>path</code> is <code>null</code>.
      */
     public static @NotNull String getName(@NotNull String path) {
+        if (path == null) {
+            throw new NullPointerException("provided path is null");
+        }
         if ("/".equals(path)) {
             return "";
         }
 
         // normalize path (remove . and ..)
         path = normalize(path);
+        if (path == null) {
+            throw new IllegalArgumentException(
+                    String.format("normalized path '%s' resolves to a path higher than root", path));
+        }
         if ("/".equals(path)) {
             return "";
         }
