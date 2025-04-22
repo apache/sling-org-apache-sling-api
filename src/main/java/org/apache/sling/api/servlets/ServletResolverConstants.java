@@ -48,6 +48,15 @@ public final class ServletResolverConstants {
     public static final String SLING_SERVLET_PATHS = "sling.servlet.paths";
 
     /**
+     * When set to {@code true} the strict selection mode for path based servlets is enabled (value is "sling.servlet.paths.strict").
+     * In strict mode, the configured selectors, extensions and methods are taken into account to select servlets.
+     * If this property is not set to {@code true} the behavior is unchanged from previous versions and only the {@link #SLING_SERVLET_PATHS} property is considered when selecting servlets.
+     * The special value {@code .EMPTY.} can be used for the {@link #SLING_SERVLET_SELECTORS} and {@link #SLING_SERVLET_EXTENSIONS} properties to require the corresponding request values to be empty for the servlet to be selected.
+     * @since 2.5.0
+     */
+    public static final String SLING_SERVLET_PATHS_STRICT = "sling.servlet.paths.strict";
+
+    /**
      * The name of the service registration property of a servlet registered as
      * a service containing the resource type(s) supported by the servlet (value
      * is "sling.servlet.resourceTypes").
