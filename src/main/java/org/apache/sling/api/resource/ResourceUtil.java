@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.jetbrains.annotations.NotNull;
@@ -271,9 +272,7 @@ public class ResourceUtil {
      * @throws NullPointerException If <code>path</code> is <code>null</code>.
      */
     public static @NotNull String getName(@NotNull String path) {
-        //        if (path == null) {
-        //            throw new NullPointerException("provided path is null");
-        //        }
+        Objects.requireNonNull(path, "provided path is null");
         if ("/".equals(path)) {
             return "";
         }
