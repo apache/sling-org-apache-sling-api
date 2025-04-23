@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.jetbrains.annotations.NotNull;
@@ -271,18 +272,23 @@ public class ResourceUtil {
      * @throws NullPointerException If <code>path</code> is <code>null</code>.
      */
     public static @NotNull String getName(@NotNull String path) {
+        Objects.requireNonNull(path, "provided path is null");
         if ("/".equals(path)) {
             return "";
         }
 
         // normalize path (remove . and ..)
-        path = normalize(path);
-        if ("/".equals(path)) {
+        final String normalizedPath = normalize(path);
+        if (normalizedPath == null) {
+            throw new IllegalArgumentException(
+                    String.format("normalizing path '%s' resolves to a path higher than root", path));
+        }
+        if ("/".equals(normalizedPath)) {
             return "";
         }
 
         // find the last slash
-        return path.substring(path.lastIndexOf('/') + 1);
+        return normalizedPath.substring(normalizedPath.lastIndexOf('/') + 1);
     }
 
     /**

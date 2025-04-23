@@ -32,6 +32,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
@@ -181,6 +182,9 @@ public class ResourceUtilTest {
         assertEquals("b", ResourceUtil.getName("b/c/.."));
         assertEquals("b", ResourceUtil.getName("/b/c/.."));
         assertEquals("", ResourceUtil.getName("/b/c/../.."));
+
+        assertThrows(NullPointerException.class, () -> ResourceUtil.getName((String) null));
+        assertThrows(IllegalArgumentException.class, () -> ResourceUtil.getName("/b/c/../../../a"));
     }
 
     @Test
