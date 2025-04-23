@@ -65,5 +65,7 @@ public interface ResourceDecorator {
      */
     @Deprecated
     @Nullable
-    Resource decorate(@NotNull Resource resource, @NotNull HttpServletRequest request);
+    default Resource decorate(@NotNull Resource resource, @NotNull HttpServletRequest request) {
+        return this.decorate(resource);
+    }
 }
