@@ -48,7 +48,12 @@ public abstract class AbstractResource extends SlingAdaptable implements Resourc
      * resource.
      */
     public String getName() {
-        return ResourceUtil.getName(getPath());
+        try {
+            return ResourceUtil.getName(getPath());
+        } catch (final IllegalArgumentException e) {
+            // this happens if the path is invald
+            return "<INVALID>";
+        }
     }
 
     /**
