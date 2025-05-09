@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
  * See <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">RFC 2616 section 14.1</a>
  * @deprecated Use {@link org.apache.sling.api.request.header.JakartaMediaRangeList} instead.
  */
+@Deprecated
 @ConsumerType
 public class MediaRangeList extends TreeSet<MediaRangeList.MediaRange> {
 

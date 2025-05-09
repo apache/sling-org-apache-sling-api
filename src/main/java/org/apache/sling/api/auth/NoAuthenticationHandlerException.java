@@ -36,7 +36,6 @@ import org.apache.sling.api.SlingException;
  *
  * @since 1.0 (Sling API Bundle 2.1.0)
  */
-@SuppressWarnings("serial")
 public class NoAuthenticationHandlerException extends SlingException {
 
     public NoAuthenticationHandlerException() {

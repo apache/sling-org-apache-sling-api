@@ -190,6 +190,7 @@ public class LazyBindings extends HashMap<String, Object> implements Bindings {
     /**
      * This marker interface should be used for suppliers which should be unwrapped when used as values stored in a {@link LazyBindings} map.
      */
+    @SuppressWarnings("rawtypes")
     @ConsumerType
     @FunctionalInterface
     public interface Supplier extends java.util.function.Supplier {}

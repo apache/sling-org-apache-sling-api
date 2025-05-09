@@ -45,6 +45,7 @@ public class BuildersTest {
     }
 
     @Test
+    @Deprecated
     public void createRequestBuilder() {
         final ResourceResolver resolver = Mockito.mock(ResourceResolver.class);
         final Resource resource = Mockito.mock(Resource.class);
@@ -69,6 +70,7 @@ public class BuildersTest {
     }
 
     @Test
+    @Deprecated
     public void createResponseBuilder() {
         final SlingHttpServletResponseBuilder builder = Builders.newResponseBuilder();
         final SlingHttpServletResponseResult result = builder.build();

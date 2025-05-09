@@ -345,7 +345,6 @@ public class ResourceResolverWrapperTest {
     public void testCreate() throws Exception {
         final Resource parent = mock(Resource.class);
         final String name = "aName";
-        @SuppressWarnings("serial")
         final Map<String, Object> properties = new HashMap<String, Object>() {
             {
                 put("jcr:primaryType", "nt:unstructured");

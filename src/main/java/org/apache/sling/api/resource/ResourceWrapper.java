@@ -176,7 +176,6 @@ public class ResourceWrapper implements Resource {
      * {@link #getResource() wrapped resource}.
      */
     @Override
-    @SuppressWarnings("null")
     public <AdapterType> AdapterType adaptTo(@NotNull Class<AdapterType> type) {
         return getResource().adaptTo(type);
     }

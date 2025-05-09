@@ -442,6 +442,7 @@ public class SlingConstants {
      *
      * @deprecated Use a service listener listening for service removed events for {@code org.apache.sling.adapter.Adaption}.
      */
+    @Deprecated
     public static final String PROPERTY_ADAPTABLE_CLASSES = "adaptables";
 
     /**
@@ -451,6 +452,7 @@ public class SlingConstants {
      *
      * @deprecated Use a service listener listening for service removed events for {@code org.apache.sling.adapter.Adaption}.
      */
+    @Deprecated
     public static final String PROPERTY_ADAPTER_CLASSES = "adapters";
 
     /**

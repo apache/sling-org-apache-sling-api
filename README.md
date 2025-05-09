@@ -22,7 +22,7 @@ Sling API 3 adds support for Jakarta Servlet API. Updating to the latest API ver
 
 As the API references the Jakarta Servlet API in several signatures, it is very likely that you need to add the Jakarta Servlet API to the dependency list of your project. And that is in addition to the already existing dependency to the Javax Servlet API.
 
-Add a dependency like `jakarta.servlet:jakarta.servlet-api:6.0.0` to your project.
+Add a dependency like `jakarta.servlet:jakarta.servlet-api:6.1.0` to your project.
 
 At runtime, you need a container implementing the Jakarta Servlet API. For example, you can use Apache Felix Http Jetty 12.
 

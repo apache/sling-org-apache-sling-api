@@ -79,14 +79,15 @@ public class SlingAdaptableTest {
     }
 
     public class SuperTypeCallingAdaptable extends SlingAdaptable {
+        @SuppressWarnings("unchecked")
         @Override
         public <AdapterType> @Nullable AdapterType adaptTo(@NotNull Class<AdapterType> type) {
             // always fallback to the supertype implementation
             if (type == TestAdapterType.class) {
-                return (@Nullable AdapterType) super.adaptTo(TestAdapterType.class);
+                return (AdapterType) super.adaptTo(TestAdapterType.class);
             }
             if (type == String.class) {
-                return (@Nullable AdapterType) super.adaptTo(String.class);
+                return (AdapterType) super.adaptTo(String.class);
             }
             return null;
         }
