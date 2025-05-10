@@ -61,4 +61,11 @@ public class NonExistingResourceTest {
         Assert.assertEquals("/existingParent", parentResource.getPath());
         Assert.assertFalse(ResourceUtil.isNonExistingResource(parentResource));
     }
+
+    @Test
+    public void testGetNameNotThrowingException() {
+        final NonExistingResource nonExistingResource = new NonExistingResource(resolver, "/../nonExistingResource");
+
+        Assert.assertEquals("<INVALID>", nonExistingResource.getName());
+    }
 }
