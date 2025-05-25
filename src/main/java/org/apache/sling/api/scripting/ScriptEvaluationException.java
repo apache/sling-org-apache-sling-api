@@ -22,7 +22,7 @@ import org.apache.sling.api.SlingException;
 
 /**
  * The <code>ScriptEvaluationException</code> is thrown by the
- * {@link SlingJakartaScript#eval(SlingJakartaBindings)} method if an error occurrs evaluating
+ * {@link SlingScript#eval(SlingBindings)} method if an error occurrs evaluating
  * the script.
  */
 public class ScriptEvaluationException extends SlingException {

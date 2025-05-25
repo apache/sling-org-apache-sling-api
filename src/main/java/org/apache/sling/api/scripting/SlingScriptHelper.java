@@ -20,6 +20,8 @@ package org.apache.sling.api.scripting;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
+import org.apache.sling.api.SlingJakartaHttpServletRequest;
+import org.apache.sling.api.SlingJakartaHttpServletResponse;
 import org.apache.sling.api.request.RequestDispatcherOptions;
 import org.apache.sling.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
@@ -30,17 +32,35 @@ import org.osgi.annotation.versioning.ProviderType;
  * The <code>SlingScriptHelper</code> interface defines the API of a helper
  * class which is provided to the scripts called from sling through the global
  * <code>{@link SlingBindings#SLING sling}</code> variable.
- * @deprecated Use {@link SlingJakartaScriptHelper} instead.
  */
-@Deprecated
 @ProviderType
 public interface SlingScriptHelper {
+
+    /**
+     * Returns the {@link SlingJakartaHttpServletRequest} representing the input of the
+     * request.
+     * @return The request
+     * @since 2.6.0
+     */
+    @NotNull
+    SlingJakartaHttpServletRequest getJakartaRequest();
+
+    /**
+     * Returns the {@link SlingJakartaHttpServletResponse} representing the output of
+     * the request.
+     * @return The response
+     * @since 2.6.0
+     */
+    @NotNull
+    SlingJakartaHttpServletResponse getJakartaResponse();
 
     /**
      * Returns the {@link SlingHttpServletRequest} representing the input of the
      * request.
      * @return The request
+     * @deprecated Use {@link #getJakartaRequest()} instead.
      */
+    @Deprecated
     @NotNull
     SlingHttpServletRequest getRequest();
 
@@ -48,7 +68,9 @@ public interface SlingScriptHelper {
      * Returns the {@link SlingHttpServletResponse} representing the output of
      * the request.
      * @return The response
+     * @deprecated Use {@link #getJakartaResponse()} instead.
      */
+    @Deprecated
     @NotNull
     SlingHttpServletResponse getResponse();
 

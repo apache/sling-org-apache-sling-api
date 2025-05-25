@@ -23,8 +23,14 @@ import java.io.Reader;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
+import org.apache.sling.api.SlingJakartaHttpServletRequest;
+import org.apache.sling.api.SlingJakartaHttpServletResponse;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.wrappers.JakartaToJavaxRequestWrapper;
+import org.apache.sling.api.wrappers.JakartaToJavaxResponseWrapper;
+import org.apache.sling.api.wrappers.JavaxToJakartaRequestWrapper;
+import org.apache.sling.api.wrappers.JavaxToJakartaResponseWrapper;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
@@ -33,12 +39,36 @@ import org.slf4j.Logger;
  * for script execution. The constants in this class define names of variables
  * which <em>MUST</em> or <em>MAY</em> be provided for the script execution.
  * Other variables may be define as callers see fit.
- * @deprecated Use {@link SlingJakartaBindings} instead.
  */
-@Deprecated
 public class SlingBindings extends LazyBindings {
 
     private static final long serialVersionUID = 209505693646323450L;
+
+    /**
+     * The name of the global scripting variable providing the
+     * {@link org.apache.sling.api.SlingJakartaHttpServletRequest} object (value is
+     * "request"). The value of the scripting variable is the same as that
+     * returned by the
+     * {@link org.apache.sling.api.scripting.SlingScriptHelper#getJakartaRequest()}
+     * method.
+     * <p>
+     * This bound variable is required in the bindings given the script.
+     * @since 2.6.0
+     */
+    public static final String JAKARTA_REQUEST = "jakartaRequest";
+
+    /**
+     * The name of the global scripting variable providing the
+     * {@link org.apache.sling.api.SlingJakartaHttpServletResponse} object (value is
+     * "response"). The value of the scripting variable is the same as that
+     * returned by the
+     * {@link org.apache.sling.api.scripting.SlingScriptHelper#getJakartaResponse()}
+     * method.
+     * <p>
+     * This bound variable is required in the bindings given the script.
+     * @since 2.6.0
+     */
+    public static final String JAKARTA_RESPONSE = "jakartaResponse";
 
     /**
      * The name of the global scripting variable providing the
@@ -49,7 +79,9 @@ public class SlingBindings extends LazyBindings {
      * method.
      * <p>
      * This bound variable is required in the bindings given the script.
+     * @deprecated Use {@link #JAKARTA_REQUEST} instead.
      */
+    @Deprecated
     public static final String REQUEST = "request";
 
     /**
@@ -61,7 +93,9 @@ public class SlingBindings extends LazyBindings {
      * method.
      * <p>
      * This bound variable is required in the bindings given the script.
+     * @deprecated Use {@link #JAKARTA_RESPONSE} instead.
      */
+    @Deprecated
     public static final String RESPONSE = "response";
 
     /**
@@ -177,6 +211,44 @@ public class SlingBindings extends LazyBindings {
         return null;
     }
 
+    @SuppressWarnings("deprecation")
+    @Override
+    public Object put(final String key, final Object value) {
+        final Object result = super.put(key, value);
+        if (REQUEST.equals(key)) {
+            if (value instanceof SlingHttpServletRequest) {
+                super.put(JAKARTA_REQUEST, JavaxToJakartaRequestWrapper.toJakartaRequest(getRequest()));
+            }
+        } else if (JAKARTA_REQUEST.equals(key)) {
+            if (value instanceof SlingJakartaHttpServletRequest) {
+                super.put(REQUEST, JakartaToJavaxRequestWrapper.toJavaxRequest(getJakartaRequest()));
+            }
+        } else if (RESPONSE.equals(key)) {
+            if (value instanceof SlingHttpServletResponse) {
+                super.put(JAKARTA_RESPONSE, JavaxToJakartaResponseWrapper.toJakartaResponse(getResponse()));
+            }
+        } else if (JAKARTA_RESPONSE.equals(key)) {
+            if (value instanceof SlingJakartaHttpServletResponse) {
+                super.put(RESPONSE, JakartaToJavaxResponseWrapper.toJavaxResponse(getJakartaResponse()));
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public Object remove(final Object key) {
+        if (REQUEST.equals(key)) {
+            super.remove(JAKARTA_REQUEST);
+        } else if (JAKARTA_REQUEST.equals(key)) {
+            super.remove(REQUEST);
+        } else if (RESPONSE.equals(key)) {
+            super.remove(JAKARTA_RESPONSE);
+        } else if (JAKARTA_RESPONSE.equals(key)) {
+            super.remove(RESPONSE);
+        }
+        return super.remove(key);
+    }
+
     /**
      * Helper method which invokes {@link #put(Object, Object)} only if the value is not null.
      * @param key The key of the object
@@ -249,10 +321,33 @@ public class SlingBindings extends LazyBindings {
     }
 
     /**
+     * Sets the {@link #JAKARTA_REQUEST} property to <code>request</code> if not
+     * <code>null</code>.
+     * @param request The request object.
+     * @since 2.6.0
+     */
+    public void setJakartaRequest(SlingJakartaHttpServletRequest request) {
+        this.safePut(JAKARTA_REQUEST, request);
+    }
+
+    /**
+     * Returns the {@link #JAKARTA_REQUEST} property if not <code>null</code> and a
+     * <code>SlingJakartaHttpServletRequest</code> instance. Otherwise
+     * <code>null</code> is returned.
+     * @return The request object or {@code null}
+     * @since 2.6.0
+     */
+    public @Nullable SlingJakartaHttpServletRequest getJakartaRequest() {
+        return this.get(JAKARTA_REQUEST, SlingJakartaHttpServletRequest.class);
+    }
+
+    /**
      * Sets the {@link #REQUEST} property to <code>request</code> if not
      * <code>null</code>.
      * @param request The request object.
+     * @deprecated Use {@link #setJakartaRequest(SlingJakartaHttpServletRequest)} instead.
      */
+    @Deprecated
     public void setRequest(SlingHttpServletRequest request) {
         this.safePut(REQUEST, request);
     }
@@ -262,7 +357,9 @@ public class SlingBindings extends LazyBindings {
      * <code>SlingHttpServletRequest</code> instance. Otherwise
      * <code>null</code> is returned.
      * @return The request object or {@code null}
+     * @deprecated Use {@link #getJakartaRequest()} instead.
      */
+    @Deprecated
     public @Nullable SlingHttpServletRequest getRequest() {
         return this.get(REQUEST, SlingHttpServletRequest.class);
     }
@@ -324,10 +421,33 @@ public class SlingBindings extends LazyBindings {
     }
 
     /**
+     * Sets the {@link #JAKARTA_RESPONSE} property to <code>response</code> if not
+     * <code>null</code>.
+     * @param response The response
+     * @since 2.6.0
+     */
+    public void setJakartaResponse(SlingJakartaHttpServletResponse response) {
+        this.safePut(JAKARTA_RESPONSE, response);
+    }
+
+    /**
+     * Returns the {@link #JAKARTA_RESPONSE} property if not <code>null</code> and a
+     * <code>SlingJakartaHttpServletResponse</code> instance. Otherwise
+     * <code>null</code> is returned.
+     * @return The response or {@code null}.
+     * @since 2.6.0
+     */
+    public @Nullable SlingJakartaHttpServletResponse getJakartaResponse() {
+        return this.get(JAKARTA_RESPONSE, SlingJakartaHttpServletResponse.class);
+    }
+
+    /**
      * Sets the {@link #RESPONSE} property to <code>response</code> if not
      * <code>null</code>.
      * @param response The response
+     * @deprecated Use {@link #setJakartaResponse(SlingJakartaHttpServletResponse)} instead.
      */
+    @Deprecated
     public void setResponse(SlingHttpServletResponse response) {
         this.safePut(RESPONSE, response);
     }
@@ -337,7 +457,9 @@ public class SlingBindings extends LazyBindings {
      * <code>SlingHttpServletResponse</code> instance. Otherwise
      * <code>null</code> is returned.
      * @return The response or {@code null}.
+     * @deprecated Use {@link #getJakartaResponse()} instead.
      */
+    @Deprecated
     public @Nullable SlingHttpServletResponse getResponse() {
         return this.get(RESPONSE, SlingHttpServletResponse.class);
     }

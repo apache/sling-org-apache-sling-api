@@ -55,9 +55,8 @@ The following table lists the replacements:
 | Builders | SlingHttpServletResponseBuilder.build() | SlingHttpServletResponseBuilder.buildJakartaResponse() |
 | Builders | SlingHttpServletResponseResult | SlingJakartaHttpServletResponseResult |
 | Media Range | MediaRangeList | JakartaMediaRangeList |
-| Scripting | SlingBindings | SlingJakartaBindings |
-| Scripting | SlingScript | SlingJakartaScript |
-| Scripting | SlingScriptHelper | SlingJakartaScriptHelper |
+| Scripting | SlingBindings | New methods for request and response |
+| Scripting | SlingScriptHelper | New mthods for request and response |
 | Error Handling | ErrorHandler | JakartaErrorHandler |
 | Scripting | OptingServlet | JakartaOptinServlet |
 | Scripting | SlingAllMethodsServlet | SlingJakartaAllMethodsServlet |
