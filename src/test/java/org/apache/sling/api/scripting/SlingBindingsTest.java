@@ -18,13 +18,6 @@
  */
 package org.apache.sling.api.scripting;
 
-import org.junit.Test;
-import org.mockito.Mockito;
-
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.SlingJakartaHttpServletRequest;
@@ -33,6 +26,12 @@ import org.apache.sling.api.wrappers.JakartaToJavaxRequestWrapper;
 import org.apache.sling.api.wrappers.JakartaToJavaxResponseWrapper;
 import org.apache.sling.api.wrappers.JavaxToJakartaRequestWrapper;
 import org.apache.sling.api.wrappers.JavaxToJakartaResponseWrapper;
+import org.junit.Test;
+import org.mockito.Mockito;
+
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 public class SlingBindingsTest {
 
