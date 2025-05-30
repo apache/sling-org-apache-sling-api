@@ -168,15 +168,22 @@ public interface ResourceResolver extends Adaptable, Closeable {
     String USER_IMPERSONATOR = "user.impersonator";
 
     /**
-     * This is the suggested property to be used for setting the resource type
+     * This is the property to be used for setting the resource type
      * of a resource during either creation ({@link #create(Resource, String, Map)})
-     * or modifying ({@link ModifiableValueMap}).
-     * However the exact way to set the resource type of a resource is defined
-     * by the underlying resource provider. It should value this property but
-     * is not required to do so.
+     * or modifying ({@link ModifiableValueMap}). This property is usually also exposed
+     * via {@link Resource#getValueMap()}.
      * @since 2.3 (Sling API Bundle 2.4.0)
      */
     String PROPERTY_RESOURCE_TYPE = "sling:resourceType";
+
+    /**
+     * This is property to be used for setting the resource super type
+     * of a resource during either creation ({@link #create(Resource, String, Map)})
+     * or modifying ({@link ModifiableValueMap}).This property is usually also exposed
+     * via {@link Resource#getValueMap()}.
+     * @since 2.15.0 (Sling API Bundle 3.0.0)
+     */
+    String PROPERTY_RESOURCE_SUPER_TYPE = "sling:resourceSuperType";
 
     /**
      * Resolves the resource from the given <code>absPath</code> optionally

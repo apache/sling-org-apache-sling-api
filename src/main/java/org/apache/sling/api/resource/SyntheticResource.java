@@ -18,12 +18,16 @@
  */
 package org.apache.sling.api.resource;
 
+import java.util.Map;
+
+import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * The <code>SyntheticResource</code> class is a simple implementation of the
  * <code>Resource</code> interface which may be used to provide a resource
- * object which has no actual resource data.
+ * object which has no actual resource data (except for the mandatory property
+ * {@value ResourceResolver#PROPERTY_RESOURCE_TYPE}).
  */
 public class SyntheticResource extends AbstractResource {
 
@@ -110,6 +114,17 @@ public class SyntheticResource extends AbstractResource {
     @Override
     public @NotNull ResourceResolver getResourceResolver() {
         return resourceResolver;
+    }
+
+    /**
+     * Exposes the value map containing the single property {@value ResourceResolver#PROPERTY_RESOURCE_TYPE}.
+     */
+    @Override
+    public <AdapterType> AdapterType adaptTo(Class<AdapterType> type) {
+        if (type == ValueMap.class) {
+            return (AdapterType) new ValueMapDecorator(Map.of(ResourceResolver.PROPERTY_RESOURCE_TYPE, resourceType));
+        }
+        return null;
     }
 
     @Override
