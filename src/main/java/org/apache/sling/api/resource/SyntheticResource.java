@@ -18,12 +18,17 @@
  */
 package org.apache.sling.api.resource;
 
+import java.util.Map;
+
+import org.apache.sling.api.wrappers.ValueMapDecorator;
+import org.apache.sling.api.wrappers.ValueMapUtil;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * The <code>SyntheticResource</code> class is a simple implementation of the
  * <code>Resource</code> interface which may be used to provide a resource
- * object which has no actual resource data.
+ * object which has no actual resource data (except for the mandatory property
+ * {@value ResourceResolver#PROPERTY_RESOURCE_TYPE}).
  */
 public class SyntheticResource extends AbstractResource {
 
@@ -110,6 +115,24 @@ public class SyntheticResource extends AbstractResource {
     @Override
     public @NotNull ResourceResolver getResourceResolver() {
         return resourceResolver;
+    }
+
+    /**
+     * Merges the original value map with one containing the single property {@value ResourceResolver#PROPERTY_RESOURCE_TYPE}.
+     */
+    @Override
+    public <AdapterType> AdapterType adaptTo(Class<AdapterType> type) {
+        if (type == ValueMap.class) {
+            ValueMap newValueMap = new ValueMapDecorator(Map.of(ResourceResolver.PROPERTY_RESOURCE_TYPE, resourceType));
+            ValueMap originalValueMap = super.adaptTo(ValueMap.class);
+            if (originalValueMap != null) {
+                // the one with the resource type takes precedence, i.e. a property with the same name in the original
+                // value map is hidden
+                return (AdapterType) ValueMapUtil.merge(newValueMap, originalValueMap);
+            }
+            return (AdapterType) newValueMap;
+        }
+        return super.adaptTo(type);
     }
 
     @Override
