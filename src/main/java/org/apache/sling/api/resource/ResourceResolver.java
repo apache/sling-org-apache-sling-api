@@ -771,17 +771,18 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * The changes are transient and require a call to {@link #commit()} for persisting.
      *
      * @param parent The parent resource
-     * @param name   The name of the child resource - this is a plain name, not a path!
+     * @param name   The name of the child resource - this is a plain name, not a path! The name must neither contain a slash and nor consist out of dots only. The underlying resource provider may impose further restrictions on the name.
      * @param properties Optional properties for the resource
      * @return The new resource
      *
      * @throws NullPointerException if the resource parameter or name parameter is null
-     * @throws IllegalArgumentException if the name contains a slash
+     * @throws IllegalArgumentException if the name contains a slash or consists out of dots only.
      * @throws UnsupportedOperationException If the underlying resource provider does not support write operations.
      * @throws PersistenceException If the operation fails in the underlying resource provider, e.g. in case a resource of that name does already exist.
      * @throws IllegalStateException if this resource resolver has already been
      *             {@link #close() closed}.
      * @since 2.2 (Sling API Bundle 2.2.0)
+     * @see ResourceUtil#escapeName(String)
      */
     @NotNull
     Resource create(@NotNull Resource parent, @NotNull String name, Map<String, Object> properties)

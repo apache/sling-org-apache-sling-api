@@ -433,4 +433,20 @@ public class ResourceUtilTest {
     public void testFindResourceSuperType() {
         assertNull(ResourceUtil.findResourceSuperType(null));
     }
+
+    @Test
+    public void testEscapeAndUnescapeNameWithSlash() {
+        String nameWithSpecialChars = "this/is/..//u1234test";
+        String escapedName = ResourceUtil.escapeName(nameWithSpecialChars);
+        assertEquals(nameWithSpecialChars, ResourceUtil.unescapeName(escapedName));
+        assertFalse(escapedName.contains("/"));
+    }
+
+    @Test
+    public void testEscapeAndUnescapeNameWithDots() {
+        String nameWithSpecialChars = "....";
+        String escapedName = ResourceUtil.escapeName(nameWithSpecialChars);
+        assertEquals(nameWithSpecialChars, ResourceUtil.unescapeName(escapedName));
+        assertFalse(escapedName.contains("."));
+    }
 }
