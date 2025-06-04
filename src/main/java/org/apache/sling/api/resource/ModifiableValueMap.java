@@ -59,11 +59,12 @@ import org.osgi.annotation.versioning.ConsumerType;
  * </ul>
  * <p>
  *
- * A modifiable value map should value {@link ResourceResolver#PROPERTY_RESOURCE_TYPE}
- * to set the resource type of a resource.
+ * A modifiable value map should consider property {@value ResourceResolver#PROPERTY_RESOURCE_TYPE}
+ * to set the resource type of a resource and {@value ResourceResolver#PROPERTY_RESOURCE_SUPER_TYPE}
+ * to set the optional super type.
  * <p>
  * A modifiable value map must not support deep writes. A call of a modification method
- * with a path should result in an IllegalArgumentException.
+ * with a path (i.e. a key containing a slash) should result in an {@link IllegalArgumentException}.
  *
  * @since 2.2  (Sling API Bundle 2.2.0)
  */
