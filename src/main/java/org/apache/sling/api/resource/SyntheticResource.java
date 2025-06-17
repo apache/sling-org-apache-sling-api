@@ -48,8 +48,9 @@ public class SyntheticResource extends AbstractResource {
      * Creates a synthetic resource with the given <code>path</code> and
      * <code>resourceType</code>.
      * @param resourceResolver The resource resolver
-     * @param path The resource path
+     * @param path The absolute resource path including the name. Make sure that each segment of the path only contains valid characters in Sling API resource names.
      * @param resourceType The type of the resource
+     * @see ResourceUtil#escapeName(String)
      */
     public SyntheticResource(
             @NotNull ResourceResolver resourceResolver, @NotNull String path, @NotNull String resourceType) {

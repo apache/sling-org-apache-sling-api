@@ -19,12 +19,17 @@
 package org.apache.sling.api.resource;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.jetbrains.annotations.NotNull;
@@ -39,6 +44,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ResourceUtil {
 
+    private static final Pattern UNICODE_ESCAPE_SEQUENCE_PATTERN = Pattern.compile("\\\\u[0-9a-fA-F]{4}");
     /**
      * Resolves relative path segments '.' and '..' in the path.
      * The path can either be relative or absolute. Relative paths are treated
@@ -289,6 +295,66 @@ public class ResourceUtil {
 
         // find the last slash
         return normalizedPath.substring(normalizedPath.lastIndexOf('/') + 1);
+    }
+
+    /**
+     * Escapes the given <code>name</code> for use in a resource name. It escapes all invalid characters according to Sling API, i.e.
+     * it escapes the slash and names only consisting of dots. It uses Java UTF-16 unicode escape sequences for those characters.
+     * @param name
+     * @return the escaped name
+     * @see ResourceResolver#create(Resource, String, Map)
+     * @see SyntheticResource#SyntheticResource(ResourceResolver, String, String)
+     * @see <a href="https://www.rfc-editor.org/rfc/rfc5137#section-6.3">RFC 5137, section 6.3</a>
+     * @since 2.14.0 (Sling API Bundle 3.0.0)
+     */
+    public static @NotNull String escapeName(@NotNull String name) {
+        if (name.chars().allMatch(c -> c == '.')) {
+            return escapeWithUnicode(name, '.');
+        }
+        return escapeWithUnicode(name, '/');
+    }
+
+    /**
+     * Unescapes the given <code>escapedName</code> previously escaped using {@link #escapeName(String)}.
+     * It replaces the unicode escape sequences with the original characters.
+     *
+     * @param escapedName The escaped name to unescape.
+     * @return The unescaped name.
+     * @see Resource#getName()
+     * @see <a href="https://www.rfc-editor.org/rfc/rfc5137#section-6.3">RFC 5137, section 6.3</a>
+     * @since 2.14.0 (Sling API Bundle 3.0.0)
+     */
+    public static @NotNull String unescapeName(@NotNull String escapedName) {
+        return unescapeWithUnicode(escapedName);
+    }
+
+    private static String escapeWithUnicode(String text, Character... additionalCharactersToEscape) {
+        List<Character> charactersToEscape = new LinkedList<>();
+        charactersToEscape.add('\\'); // always escape the backslash as it used for unicode escaping itself
+        charactersToEscape.addAll(Arrays.asList(additionalCharactersToEscape));
+        for (Character characterToEscape : charactersToEscape) {
+            String escapedChar = getUnicodeEscapeSequence(characterToEscape);
+            text = text.replace(characterToEscape.toString(), escapedChar);
+        }
+        return text;
+    }
+
+    private static String getUnicodeEscapeSequence(char c) {
+        return String.format("\\u%04X", (int) c);
+    }
+
+    private static String unescapeWithUnicode(String escapedText) {
+        Matcher matcher = UNICODE_ESCAPE_SEQUENCE_PATTERN.matcher(escapedText);
+
+        StringBuilder decodedString = new StringBuilder();
+
+        while (matcher.find()) {
+            String unicodeSequence = matcher.group();
+            char unicodeChar = (char) Integer.parseInt(unicodeSequence.substring(2), 16);
+            matcher.appendReplacement(decodedString, Character.toString(unicodeChar));
+        }
+        matcher.appendTail(decodedString);
+        return decodedString.toString();
     }
 
     /**
