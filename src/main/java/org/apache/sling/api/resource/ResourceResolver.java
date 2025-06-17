@@ -780,7 +780,7 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * The optional resource super type is determined by the property {@value ResourceResolver#PROPERTY_RESOURCE_SUPER_TYPE}.
      *
      * @param parent The parent resource
-     * @param name   The name of the child resource - this is a plain name, not a path! The name must neither contain a slash and nor consist out of dots only. The underlying resource provider may impose further restrictions on the name.
+     * @param name   The name of the child resource - this is a plain name, not a path! The name must neither contain a slash nor consist out of dots only. The underlying resource provider may impose further restrictions on the name.
      * @param properties Optional properties for the resource (may be <code>null</code>).
      * @return The new resource
      *
