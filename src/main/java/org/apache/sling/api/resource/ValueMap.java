@@ -40,8 +40,11 @@ import org.osgi.annotation.versioning.ConsumerType;
  * Only the following methods support deep reads: {@link #get(Object)},
  * {@link #get(String, Class)}, {@link #get(String, Object)} and
  * {@link #containsKey(Object)}.
- *
+ * <p>
  * A <code>ValueMap</code> should be immutable.
+ * <p>
+ * All methods may throw any {@link RuntimeException} if the underlying property
+ * cannot be read for some reason (e.g. if the underlying storage is corrupt).
  */
 @ConsumerType
 public interface ValueMap extends Map<String, Object> {
@@ -62,6 +65,7 @@ public interface ValueMap extends Map<String, Object> {
      * @param <T> The class of the type
      * @return Return named value converted to type T or <code>null</code> if
      *         non existing or can't be converted.
+     * @throws RuntimeException if the underlying property cannot be accessed
      */
     @SuppressWarnings("unchecked")
     @Nullable
@@ -95,6 +99,7 @@ public interface ValueMap extends Map<String, Object> {
      *            rather rely on {@link #get(String, Class)}.
      * @return Return named value converted to type T or the default value if
      *         non existing or can't be converted.
+     * @throws RuntimeException if the underlying property cannot be accessed
      */
     @SuppressWarnings("unchecked")
     @NotNull

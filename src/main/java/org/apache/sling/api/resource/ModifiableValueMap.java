@@ -65,7 +65,11 @@ import org.osgi.annotation.versioning.ConsumerType;
  * <p>
  * A modifiable value map must not support deep writes. A call of a modification method
  * with a path (i.e. a key containing a slash) should result in an {@link IllegalArgumentException}.
- *
+ * <p>
+ * All write methods may throw any {@link RuntimeException} if the underlying property
+ * cannot be written some reason (for example if its type is not supported in that location).
+ * All read methods may throw any {@link RuntimeException} if the underlying property
+ * cannot be read for some reason (e.g. if the underlying storage is corrupt).
  * @since 2.2  (Sling API Bundle 2.2.0)
  */
 @ConsumerType
