@@ -20,11 +20,13 @@ package org.apache.sling.api.resource.observation;
 
 import java.util.List;
 
+import org.apache.sling.api.resource.ResourceResolver;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
- * Listener for resource change events.
+ * Listener for resource change events. Event listeners are notified asynchronously, and see events after they occur and the transaction is committed
+ * (which means the changes may already be visible to {@link ResourceResolver} objects before they are being processed by listeners).
  *
  * <p>
  * {@code ResourceChangeListener} objects are registered with the Framework service
