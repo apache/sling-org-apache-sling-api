@@ -37,30 +37,40 @@ public class JavaxToJakartaResponseWrapper extends HttpServletResponseWrapper
 
     /**
      * Create a new wrapper
-     * @param response The response object
-     * @return The wrapped response object
+     * @param response The response object (may be null)
+     * @return null if the response parameter is null or the wrapped response object otherwise
      */
     public static @Nullable ServletResponse toJakartaResponse(@Nullable final javax.servlet.ServletResponse response) {
         if (response == null) {
             return null;
         }
-        if (response instanceof JakartaToJavaxResponseWrapper) {
-            return ((JakartaToJavaxResponseWrapper) response).getResponse();
+        if (response instanceof JakartaToJavaxResponseWrapper r) {
+            return r.getResponse();
         }
-        if (response instanceof SlingHttpServletResponse) {
-            return new JavaxToJakartaResponseWrapper((SlingHttpServletResponse) response);
+        if (response instanceof SlingHttpServletResponse r) {
+            return new JavaxToJakartaResponseWrapper(r);
         }
-        if (response instanceof javax.servlet.http.HttpServletResponse) {
-            return new HttpServletResponseWrapper((javax.servlet.http.HttpServletResponse) response);
+        if (response instanceof javax.servlet.http.HttpServletResponse r) {
+            return new HttpServletResponseWrapper(r);
         }
         return new ServletResponseWrapper(response);
     }
 
+    /**
+     * Create a new wrapper
+     * @param response The http response object (may be null)
+     * @return null if the response parameter is null or the wrapped response object otherwise
+     */
     public static @Nullable HttpServletResponse toJakartaResponse(
             @Nullable final javax.servlet.http.HttpServletResponse response) {
         return (HttpServletResponse) toJakartaResponse((javax.servlet.ServletResponse) response);
     }
 
+    /**
+     * Create a new wrapper
+     * @param response The sling http response object (may be null)
+     * @return null if the response parameter is null or the wrapped response object otherwise
+     */
     public static @Nullable SlingJakartaHttpServletResponse toJakartaResponse(
             @Nullable final SlingHttpServletResponse response) {
         return (SlingJakartaHttpServletResponse) toJakartaResponse((javax.servlet.ServletResponse) response);
