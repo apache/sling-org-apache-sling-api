@@ -40,7 +40,10 @@ public class JavaxToJakartaResponseWrapper extends HttpServletResponseWrapper
      * @param response The response object
      * @return The wrapped response object
      */
-    public static ServletResponse toJakartaResponse(final javax.servlet.ServletResponse response) {
+    public static @Nullable ServletResponse toJakartaResponse(@Nullable final javax.servlet.ServletResponse response) {
+        if (response == null) {
+            return null;
+        }
         if (response instanceof JakartaToJavaxResponseWrapper) {
             return ((JakartaToJavaxResponseWrapper) response).getResponse();
         }
@@ -53,11 +56,13 @@ public class JavaxToJakartaResponseWrapper extends HttpServletResponseWrapper
         return new ServletResponseWrapper(response);
     }
 
-    public static HttpServletResponse toJakartaResponse(final javax.servlet.http.HttpServletResponse response) {
+    public static @Nullable HttpServletResponse toJakartaResponse(
+            @Nullable final javax.servlet.http.HttpServletResponse response) {
         return (HttpServletResponse) toJakartaResponse((javax.servlet.ServletResponse) response);
     }
 
-    public static SlingJakartaHttpServletResponse toJakartaResponse(final SlingHttpServletResponse response) {
+    public static @Nullable SlingJakartaHttpServletResponse toJakartaResponse(
+            @Nullable final SlingHttpServletResponse response) {
         return (SlingJakartaHttpServletResponse) toJakartaResponse((javax.servlet.ServletResponse) response);
     }
 

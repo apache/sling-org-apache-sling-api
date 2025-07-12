@@ -56,7 +56,10 @@ public class JakartaToJavaxRequestWrapper extends HttpServletRequestWrapper impl
      * @param request Jakarta Servlet API based request object
      * @return The wrapped request
      */
-    public static javax.servlet.ServletRequest toJavaxRequest(final ServletRequest request) {
+    public static @Nullable javax.servlet.ServletRequest toJavaxRequest(@Nullable final ServletRequest request) {
+        if (request == null) {
+            return null;
+        }
         if (request instanceof JavaxToJakartaRequestWrapper) {
             return ((JavaxToJakartaRequestWrapper) request).getRequest();
         }
@@ -69,11 +72,13 @@ public class JakartaToJavaxRequestWrapper extends HttpServletRequestWrapper impl
         return new ServletRequestWrapper(request);
     }
 
-    public static javax.servlet.http.HttpServletRequest toJavaxRequest(final HttpServletRequest request) {
+    public static @Nullable javax.servlet.http.HttpServletRequest toJavaxRequest(
+            @Nullable final HttpServletRequest request) {
         return (javax.servlet.http.HttpServletRequest) toJavaxRequest((ServletRequest) request);
     }
 
-    public static SlingHttpServletRequest toJavaxRequest(final SlingJakartaHttpServletRequest request) {
+    public static @Nullable SlingHttpServletRequest toJavaxRequest(
+            @Nullable final SlingJakartaHttpServletRequest request) {
         return (SlingHttpServletRequest) toJavaxRequest((ServletRequest) request);
     }
 

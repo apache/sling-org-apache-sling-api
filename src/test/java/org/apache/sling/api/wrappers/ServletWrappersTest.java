@@ -16,8 +16,34 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-@Version("2.10.0")
 package org.apache.sling.api.wrappers;
 
-import org.osgi.annotation.versioning.Version;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+
+/**
+ * Test related to some of the servlet wrappers in the Sling API.
+ */
+public class ServletWrappersTest {
+
+    @Test
+    public void testJakartaRequestWrappingWithNull() {
+        assertEquals(null, JakartaToJavaxRequestWrapper.toJavaxRequest(null));
+    }
+
+    @Test
+    public void testJakartaResponseWrappingWithNull() {
+        assertEquals(null, JakartaToJavaxResponseWrapper.toJavaxResponse(null));
+    }
+
+    @Test
+    public void testJavaxRequestWrappingWithNull() {
+        assertEquals(null, JavaxToJakartaRequestWrapper.toJakartaRequest(null));
+    }
+
+    @Test
+    public void testJavaxResponseWrappingWithNull() {
+        assertEquals(null, JavaxToJakartaResponseWrapper.toJakartaResponse(null));
+    }
+}
