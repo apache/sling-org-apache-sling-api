@@ -53,30 +53,40 @@ public class JakartaToJavaxRequestWrapper extends HttpServletRequestWrapper impl
 
     /**
      * Create a new wrapper
-     * @param request Jakarta Servlet API based request object
-     * @return The wrapped request
+     * @param request Jakarta Servlet API based request object (may be null)
+     * @return null if the request parameter was null or the wrapped request otherwise
      */
     public static @Nullable javax.servlet.ServletRequest toJavaxRequest(@Nullable final ServletRequest request) {
         if (request == null) {
             return null;
         }
-        if (request instanceof JavaxToJakartaRequestWrapper) {
-            return ((JavaxToJakartaRequestWrapper) request).getRequest();
+        if (request instanceof JavaxToJakartaRequestWrapper r) {
+            return r.getRequest();
         }
-        if (request instanceof SlingJakartaHttpServletRequest) {
-            return new JakartaToJavaxRequestWrapper((SlingJakartaHttpServletRequest) request);
+        if (request instanceof SlingJakartaHttpServletRequest r) {
+            return new JakartaToJavaxRequestWrapper(r);
         }
-        if (request instanceof HttpServletRequest) {
-            return new HttpServletRequestWrapper((HttpServletRequest) request);
+        if (request instanceof HttpServletRequest r) {
+            return new HttpServletRequestWrapper(r);
         }
         return new ServletRequestWrapper(request);
     }
 
+    /**
+     * Create a new wrapper
+     * @param request Jakarta http Servlet API based request object (may be null)
+     * @return null if the request parameter was null or the wrapped request otherwise
+     */
     public static @Nullable javax.servlet.http.HttpServletRequest toJavaxRequest(
             @Nullable final HttpServletRequest request) {
         return (javax.servlet.http.HttpServletRequest) toJavaxRequest((ServletRequest) request);
     }
 
+    /**
+     * Create a new wrapper
+     * @param request sling Jakarta http Servlet API based request object (may be null)
+     * @return null if the request parameter was null or the wrapped request otherwise
+     */
     public static @Nullable SlingHttpServletRequest toJavaxRequest(
             @Nullable final SlingJakartaHttpServletRequest request) {
         return (SlingHttpServletRequest) toJavaxRequest((ServletRequest) request);
