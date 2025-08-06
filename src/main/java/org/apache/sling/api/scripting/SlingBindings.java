@@ -215,26 +215,50 @@ public class SlingBindings extends LazyBindings {
     @Override
     public Object put(final String key, final Object value) {
         final Object result = super.put(key, value);
+        // also put the alternate wrapper if it is not already wrapping the same value
         if (REQUEST.equals(key)) {
-            if (value instanceof SlingHttpServletRequest) {
+            if (shouldWrapJavaxRequest(value)) {
                 super.put(JAKARTA_REQUEST, JavaxToJakartaRequestWrapper.toJakartaRequest(getRequest()));
             }
         } else if (JAKARTA_REQUEST.equals(key)) {
-            if (value instanceof SlingJakartaHttpServletRequest) {
+            if (shouldWrapJakartaRequest(value)) {
                 super.put(REQUEST, JakartaToJavaxRequestWrapper.toJavaxRequest(getJakartaRequest()));
             }
         } else if (RESPONSE.equals(key)) {
-            if (value instanceof SlingHttpServletResponse) {
+            if (shouldWrapJavaxResponse(value)) {
                 super.put(JAKARTA_RESPONSE, JavaxToJakartaResponseWrapper.toJakartaResponse(getResponse()));
             }
-        } else if (JAKARTA_RESPONSE.equals(key)) {
-            if (value instanceof SlingJakartaHttpServletResponse) {
-                super.put(RESPONSE, JakartaToJavaxResponseWrapper.toJavaxResponse(getJakartaResponse()));
-            }
+        } else if (JAKARTA_RESPONSE.equals(key) && shouldWrapJakartaResponse(value)) {
+            super.put(RESPONSE, JakartaToJavaxResponseWrapper.toJavaxResponse(getJakartaResponse()));
         }
         return result;
     }
 
+    @SuppressWarnings("deprecation")
+    private boolean shouldWrapJavaxRequest(final Object value) {
+        return value instanceof SlingHttpServletRequest
+                && !(getJakartaRequest() instanceof JavaxToJakartaRequestWrapper rw && rw.getRequest() == value);
+    }
+
+    @SuppressWarnings("deprecation")
+    private boolean shouldWrapJakartaRequest(final Object value) {
+        return value instanceof SlingJakartaHttpServletRequest
+                && !(getRequest() instanceof JakartaToJavaxRequestWrapper rw && rw.getRequest() == value);
+    }
+
+    @SuppressWarnings("deprecation")
+    private boolean shouldWrapJavaxResponse(final Object value) {
+        return value instanceof SlingHttpServletResponse
+                && !(getJakartaResponse() instanceof JavaxToJakartaResponseWrapper rw && rw.getResponse() == value);
+    }
+
+    @SuppressWarnings("deprecation")
+    private boolean shouldWrapJakartaResponse(final Object value) {
+        return value instanceof SlingJakartaHttpServletResponse
+                && !(getResponse() instanceof JakartaToJavaxResponseWrapper rw && rw.getResponse() == value);
+    }
+
+    @SuppressWarnings("deprecation")
     @Override
     public Object remove(final Object key) {
         if (REQUEST.equals(key)) {
