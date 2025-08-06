@@ -87,6 +87,7 @@ public class SlingBindingsTest {
         assertNull(bindings.getJakartaRequest());
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testPutWithoutWrapping() {
         final SlingBindings bindings = new SlingBindings();
@@ -106,9 +107,13 @@ public class SlingBindingsTest {
         assertFalse(bindings.containsKey(SlingBindings.RESPONSE));
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testPutWithReWrapping() {
         final SlingBindings bindings = new SlingBindings();
+        // for code coverage to not match any of the cases
+        bindings.put("other", new Object());
+
         final SlingJakartaHttpServletRequest jakartaRequest = Mockito.mock(SlingJakartaHttpServletRequest.class);
         bindings.put(SlingBindings.JAKARTA_REQUEST, jakartaRequest);
         final SlingJakartaHttpServletResponse jakartaResponse = Mockito.mock(SlingJakartaHttpServletResponse.class);
@@ -120,11 +125,11 @@ public class SlingBindingsTest {
         SlingHttpServletRequest wrappedJavaxRequest2 = bindings.getRequest();
         assertNotSame(wrappedJavaxRequest2, wrappedJavaxRequest1);
 
-        SlingHttpServletResponse wrappedJavaxRespose1 = bindings.getResponse();
+        SlingHttpServletResponse wrappedJavaxResponse1 = bindings.getResponse();
         final SlingJakartaHttpServletResponse jakartaResponse2 = Mockito.mock(SlingJakartaHttpServletResponse.class);
         bindings.put(SlingBindings.JAKARTA_RESPONSE, jakartaResponse2);
         SlingHttpServletResponse wrappedJavaxResponse2 = bindings.getResponse();
-        assertNotSame(wrappedJavaxResponse2, wrappedJavaxRequest1);
+        assertNotSame(wrappedJavaxResponse2, wrappedJavaxResponse1);
 
         bindings.clear();
         final SlingHttpServletRequest javaxRequest = Mockito.mock(SlingHttpServletRequest.class);
@@ -138,11 +143,11 @@ public class SlingBindingsTest {
         SlingJakartaHttpServletRequest wrappedJakartaRequest2 = bindings.getJakartaRequest();
         assertNotSame(wrappedJakartaRequest2, wrappedJakartaRequest1);
 
-        SlingJakartaHttpServletResponse wrappedJakartaRespose1 = bindings.getJakartaResponse();
+        SlingJakartaHttpServletResponse wrappedJakartaResponse1 = bindings.getJakartaResponse();
         final SlingHttpServletResponse javaxResponse2 = Mockito.mock(SlingHttpServletResponse.class);
         bindings.put(SlingBindings.RESPONSE, javaxResponse2);
         SlingJakartaHttpServletResponse wrappedJakartaResponse2 = bindings.getJakartaResponse();
-        assertNotSame(wrappedJakartaResponse2, wrappedJakartaRequest1);
+        assertNotSame(wrappedJakartaResponse2, wrappedJakartaResponse1);
     }
 
     @SuppressWarnings("deprecation")
