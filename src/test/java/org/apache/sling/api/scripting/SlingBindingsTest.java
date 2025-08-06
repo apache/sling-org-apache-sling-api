@@ -63,10 +63,22 @@ public class SlingBindingsTest {
         assertTrue(bindings.getRequest() instanceof JakartaToJavaxRequestWrapper);
         assertSame(r, ((JakartaToJavaxRequestWrapper) bindings.getRequest()).getRequest());
 
+        // call the set again with the same param to make sure we are not creating
+        //  a new wrapper object
+        SlingHttpServletRequest original = bindings.getRequest();
+        bindings.setJakartaRequest(r);
+        assertSame(original, bindings.getRequest());
+
         bindings.setRequest(r2);
         assertSame(r2, bindings.getRequest());
         assertTrue(bindings.getJakartaRequest() instanceof JavaxToJakartaRequestWrapper);
         assertSame(r2, ((JavaxToJakartaRequestWrapper) bindings.getJakartaRequest()).getRequest());
+
+        // call the set again with the same param to make sure we are not creating
+        //  a new wrapper object
+        SlingJakartaHttpServletRequest original2 = bindings.getJakartaRequest();
+        bindings.setRequest(r2);
+        assertSame(original2, bindings.getJakartaRequest());
 
         bindings.remove(SlingBindings.JAKARTA_REQUEST);
         assertNull(bindings.getRequest());
@@ -101,10 +113,22 @@ public class SlingBindingsTest {
         assertTrue(bindings.getResponse() instanceof JakartaToJavaxResponseWrapper);
         assertSame(r, ((JakartaToJavaxResponseWrapper) bindings.getResponse()).getResponse());
 
+        // call the set again with the same param to make sure we are not creating
+        //  a new wrapper object
+        SlingHttpServletResponse original = bindings.getResponse();
+        bindings.setJakartaResponse(r);
+        assertSame(original, bindings.getResponse());
+
         bindings.setResponse(r2);
         assertSame(r2, bindings.getResponse());
         assertTrue(bindings.getJakartaResponse() instanceof JavaxToJakartaResponseWrapper);
         assertSame(r2, ((JavaxToJakartaResponseWrapper) bindings.getJakartaResponse()).getResponse());
+
+        // call the set again with the same param to make sure we are not creating
+        //  a new wrapper object
+        SlingJakartaHttpServletResponse original2 = bindings.getJakartaResponse();
+        bindings.setResponse(r2);
+        assertSame(original2, bindings.getJakartaResponse());
 
         bindings.remove(SlingBindings.JAKARTA_RESPONSE);
         assertNull(bindings.getResponse());

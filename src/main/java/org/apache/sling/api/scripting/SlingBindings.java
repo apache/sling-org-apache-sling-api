@@ -215,20 +215,26 @@ public class SlingBindings extends LazyBindings {
     @Override
     public Object put(final String key, final Object value) {
         final Object result = super.put(key, value);
+        // also put the alternate wrapper if it is not already wrapping the same value
         if (REQUEST.equals(key)) {
-            if (value instanceof SlingHttpServletRequest) {
+            if (value instanceof SlingHttpServletRequest
+                    && !(getJakartaRequest() instanceof JavaxToJakartaRequestWrapper rw && rw.getRequest() == value)) {
                 super.put(JAKARTA_REQUEST, JavaxToJakartaRequestWrapper.toJakartaRequest(getRequest()));
             }
         } else if (JAKARTA_REQUEST.equals(key)) {
-            if (value instanceof SlingJakartaHttpServletRequest) {
+            if (value instanceof SlingJakartaHttpServletRequest
+                    && !(getRequest() instanceof JakartaToJavaxRequestWrapper rw && rw.getRequest() == value)) {
                 super.put(REQUEST, JakartaToJavaxRequestWrapper.toJavaxRequest(getJakartaRequest()));
             }
         } else if (RESPONSE.equals(key)) {
-            if (value instanceof SlingHttpServletResponse) {
+            if (value instanceof SlingHttpServletResponse
+                    && !(getJakartaResponse() instanceof JavaxToJakartaResponseWrapper rw
+                            && rw.getResponse() == value)) {
                 super.put(JAKARTA_RESPONSE, JavaxToJakartaResponseWrapper.toJakartaResponse(getResponse()));
             }
         } else if (JAKARTA_RESPONSE.equals(key)) {
-            if (value instanceof SlingJakartaHttpServletResponse) {
+            if (value instanceof SlingJakartaHttpServletResponse
+                    && !(getResponse() instanceof JakartaToJavaxResponseWrapper rw && rw.getResponse() == value)) {
                 super.put(RESPONSE, JakartaToJavaxResponseWrapper.toJavaxResponse(getJakartaResponse()));
             }
         }
