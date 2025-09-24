@@ -222,7 +222,6 @@ public interface Resource extends Adaptable {
     /**
      * Returns a value map for this resource.
      * The value map allows to read the properties of the resource.
-     * Each map is containing at least the mandatory property {@value ResourceResolver#PROPERTY_RESOURCE_TYPE}.
      * @return A value map
      * @since 2.5 (Sling API Bundle 2.7.0)
      */
