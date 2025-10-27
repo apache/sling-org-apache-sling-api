@@ -30,11 +30,13 @@ import org.osgi.annotation.versioning.ProviderType;
  * <p id="decomp">
  * <b>Decomposition of a Request URL</b>
  * <ol>
- * <li>{@link #getResourcePath() content path} - The longest substring of the request
+ * <li>{@link #getResourcePath() resource path} - The longest substring of the request
  * URI resolving to a {@link org.apache.sling.api.resource.Resource} object such
- * that the content path is either the complete request URI or the next
- * character in the request URI after the content path is either a dot (<code>.</code>)
+ * that the resource path is either the complete request URI or the next
+ * character in the request URI after the resource path is either a dot (<code>.</code>)
  * or a slash (<code>/</code>).
+ * In case the request URI does not resolve a Sling resource this contains the
+ * <strong>full request URI</strong> (including extensions, selectors and suffix if existing).
  * <li>{@link #getSelectors() selectors} - If the first character in the
  * request URI after the content path is a dot, the string after the dot upto
  * but not including the last dot before the next slash character or the end of
@@ -60,7 +62,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * <caption>URI decomposition</caption>
  * <tr>
  * <th>URI</th>
- * <th>Content Path</th>
+ * <th>Resource Path</th>
  * <th>Selectors</th>
  * <th>Extension</th>
  * <th>Suffix</th>
@@ -157,7 +159,8 @@ public interface RequestPathInfo {
     /**
      * Return the "resource path" part of the URL, what comes before selectors,
      * extension and suffix. This string is part of the request URL and need not
-     * be equal to the {@link org.apache.sling.api.resource.Resource#getPath()}.
+     * be equal to the {@link org.apache.sling.api.resource.Resource#getPath()} of the
+     * request bound resource (returned via {@link org.apache.sling.api.SlingJakartaHttpServletRequest#getResource()}).
      * Rather it is equal to the
      * {@link org.apache.sling.api.resource.ResourceMetadata#RESOLUTION_PATH resolution path metadata property}
      * of the resource.
@@ -167,8 +170,8 @@ public interface RequestPathInfo {
     String getResourcePath();
 
     /**
-     * Returns the extension from the URL or <code>null</code> if the request
-     * URL does not contain an extension.
+     * Returns the extension without the leading dot from the URL or <code>null</code> if the request
+     * URL does not contain an extension (i.e. doesn't contain a dot that is not associated with a resource name).
      * <p>
      * Decomposition of the request URL is defined in the <a
      * href="#decomp">Decomposition of a Request URL</a> above.
@@ -180,7 +183,8 @@ public interface RequestPathInfo {
 
     /**
      * Returns the selectors decoded from the request URL as string. Returns
-     * <code>null</code> if the request has no selectors.
+     * <code>null</code> if the request has no selectors. Never starts or ends
+     * with dots.
      * <p>
      * Decomposition of the request URL is defined in the <a
      * href="#decomp">Decomposition of a Request URL</a> above.
