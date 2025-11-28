@@ -53,6 +53,7 @@ public class ResourceMetadata extends HashMap<String, Object> {
      * The name of the required property providing the part of the request URI
      * which was used to the resolve the resource to which the meta data
      * instance belongs (value is "sling.resolutionPath").
+     * For non-existing resources this is the full request URI.
      */
     public static final String RESOLUTION_PATH = "sling.resolutionPath";
 
@@ -62,7 +63,9 @@ public class ResourceMetadata extends HashMap<String, Object> {
      * instance belongs (value is "sling.resolutionPathInfo"). The value of this
      * property concatenated to the value of the
      * {@link #RESOLUTION_PATH sling.resolutionPath} property returns the
-     * original request URI leading to the resource.
+     * original request URI leading to the resource (but only for <strong>existing resources</strong>).
+     * For <strong>non-existing resources</strong> this is the part after the first dot of the full request URI
+     * which is also the part after the first dot of {@link #RESOLUTION_PATH}.
      * <p>
      * This property is optional. If missing, it should be assumed equal to an
      * empty string.
