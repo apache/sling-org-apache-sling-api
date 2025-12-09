@@ -333,7 +333,9 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * (with charset UTF-8). Due to this calling this method multiple times in a nested
      * fashion might lead to an invalid (request) path which can subsequently not
      * be resolved via {@link #resolve(String)}.
-     *
+     * <p>
+     * Whenever possible prefer using {@link #map(HttpServletRequest, String)} or {@link #map(javax.servlet.http.HttpServletRequest, String)}
+     * as that way you get a shorter URI (not necessarily containing schema, host and protocol).
      * @param resourcePath The path for which to return a mapped path.
      * @return The mapped path or {@code resourcePath} in case no mapping is found.
      * @throws IllegalStateException if this resource resolver has already been
@@ -363,7 +365,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * This method is intended as the reverse operation of the
      * {@link #resolve(HttpServletRequest, String)} method. As such the URL
      * returned is expected to be an absolute URL including scheme, host, any
-     * servlet context path and the actual path used to resolve the resource.
+     * servlet context path and the actual path used to resolve the resource except if the given request
+     * context is having the same server name, port and protocol as the one given in the mapping.
      * <p>
      * This method also does percent-encoding before returning the URL
      * (with charset UTF-8). Due to this calling this method multiple times in a nested
@@ -402,7 +405,8 @@ public interface ResourceResolver extends Adaptable, Closeable {
      * This method is intended as the reverse operation of the
      * {@link #resolve(HttpServletRequest, String)} method. As such the URL
      * returned is expected to be an absolute URL including scheme, host, any
-     * servlet context path and the actual path used to resolve the resource.
+     * servlet context path and the actual path used to resolve the resource except if the given request
+     * context is having the same server name, port and protocol as the one given in the mapping.
      * <p>
      * This method also does percent-encoding before returning the URL
      * (with charset UTF-8). Due to this calling this method multiple times in a nested

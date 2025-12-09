@@ -83,7 +83,8 @@ public interface ResourceMapper {
      * This method is intended as the reverse operation of the
      * {@link ResourceResolver#resolve(HttpServletRequest, String)} method. As such the URL
      * returned is expected to be an absolute URL including scheme, host, any
-     * servlet context path and the actual path used to resolve the resource.
+     * servlet context path and the actual path used to resolve the resource except if the given request
+     * context is having the same server name, port and protocol as the one given in the mapping.
      *
      * @param resourcePath The path for which to return a mapped path.
      * @param request The http servlet request object which may be used to apply
@@ -113,7 +114,8 @@ public interface ResourceMapper {
      * This method is intended as the reverse operation of the
      * {@link ResourceResolver#resolve(HttpServletRequest, String)} method. As such the URL
      * returned is expected to be an absolute URL including scheme, host, any
-     * servlet context path and the actual path used to resolve the resource.
+     * servlet context path and the actual path used to resolve the resource except if the given request
+     * context is having the same server name, port and protocol as the one given in the mapping.
      *
      * @param resourcePath The path for which to return a mapped path.
      * @param request The http servlet request object which may be used to apply
