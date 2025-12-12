@@ -414,4 +414,12 @@ public class SlingUriBuilderTest {
         assertArrayEquals(new String[] {"a", "b", "c"}, u1.getSelectors());
         assertEquals("a.b.c", u1.getSelectorString());
     }
+
+    @Test
+    public void testWithSchemeAndHostWithoutQueryAndPath() {
+        String testUriWithoutQueryAndPath = "https://sling.apache.org";
+        SlingUri testUri =
+                SlingUriBuilder.parse(testUriWithoutQueryAndPath, null).build();
+        assertEquals("https://sling.apache.org", testUri.toUri().toASCIIString());
+    }
 }
