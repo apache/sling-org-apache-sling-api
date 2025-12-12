@@ -227,7 +227,6 @@ public class SlingUriBuilder {
         String path = uri.getRawPath();
         boolean pathExists = isNotBlank(path);
         String uriQuery = uri.getRawQuery();
-        boolean schemeSpecificRelevant = !pathExists && uriQuery == null;
         String uriHost = uri.getHost();
         if (FILE_SCHEME.equals(uri.getScheme()) && uriHost == null) {
             uriHost = ""; // ensure three slashes in file URIs without host
@@ -240,7 +239,7 @@ public class SlingUriBuilder {
                 .setPath(pathExists ? path : null)
                 .setQuery(uriQuery)
                 .setFragment(uri.getRawFragment())
-                .setSchemeSpecificPart(schemeSpecificRelevant ? uri.getRawSchemeSpecificPart() : null);
+                .setSchemeSpecificPart(uri.isOpaque() ? uri.getRawSchemeSpecificPart() : null);
     }
 
     /**

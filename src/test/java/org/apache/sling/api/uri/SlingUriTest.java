@@ -1009,6 +1009,21 @@ public class SlingUriTest {
         assertNull("Suffix resource is null if suffix is null", slingUriNoSuffix.getSuffixResource());
     }
 
+    @Test
+    public void testWithSchemeAndHostWithoutQueryAndPath() {
+        SlingUri testUri =
+                SlingUriBuilder.parse("https://sling.apache.org", null).build();
+        assertEquals("https://sling.apache.org", testUri.toUri().toASCIIString());
+    }
+
+    @Test
+    public void testHostWithoutSchemeAndQueryAndPath() {
+        SlingUri testUri = SlingUriBuilder.parse("sling.apache.org", null).build();
+        assertEquals("sling.apache.org", testUri.toUri().toASCIIString());
+        testUri = SlingUriBuilder.parse("//sling.apache.org", null).build();
+        assertEquals("//sling.apache.org", testUri.toUri().toASCIIString());
+    }
+
     // -- helper methods
     public static void testUri(
             String testUri,
