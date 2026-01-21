@@ -19,6 +19,7 @@
 package org.apache.sling.api.uri;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -1022,6 +1023,20 @@ public class SlingUriTest {
         assertEquals("sling.apache.org", testUri.toUri().toASCIIString());
         testUri = SlingUriBuilder.parse("//sling.apache.org", null).build();
         assertEquals("//sling.apache.org", testUri.toUri().toASCIIString());
+    }
+
+    @Test
+    public void testWithSchemeAndMappedPathWithSlashAsLastCharacter() {
+        SlingUri testUri = SlingUriBuilder.parse("https://sling.apache.org/apidocs/sling12/", resolver)
+                .build();
+        assertEquals("https://sling.apache.org/apidocs/sling12", testUri.toUri().toASCIIString());
+    }
+
+    @Test
+    public void testWithSchemeAndMappedPathWithSlashAsLastCharacterCreateFromUri() throws URISyntaxException {
+        URI input = new URI("https://sling.apache.org/apidocs/sling12/");
+        SlingUri testUri = SlingUriBuilder.createFrom(input, resolver).build();
+        assertEquals("https://sling.apache.org/apidocs/sling12", testUri.toUri().toASCIIString());
     }
 
     // -- helper methods
