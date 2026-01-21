@@ -445,7 +445,7 @@ public class SlingUriBuilder {
         selectors.clear();
         extension = null;
         suffix = null;
-        if (availableResourcePath.length() == path.length()) {
+        if (availableResourcePath.length() == path.length() || !path.contains(CHAR_DOT)) {
             resourcePath = availableResourcePath;
         } else {
             setPathWithDefinedResourcePosition(path, availableResourcePath.length());
