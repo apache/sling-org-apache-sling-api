@@ -100,6 +100,15 @@ public class JavaxToJakartaServletWrapper implements Servlet {
         return servlet.getServletInfo();
     }
 
+    /**
+     * Get the wrapped {@link javax.servlet.Servlet} object.
+     * @return The wrapped servlet
+     * @since 2.11.0
+     */
+    public javax.servlet.Servlet getWrappedObject() {
+        return this.servlet;
+    }
+
     public static class JavaxToJakartaOptingServletWrapper extends JavaxToJakartaServletWrapper
             implements JakartaOptingServlet {
 

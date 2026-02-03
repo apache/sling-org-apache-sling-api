@@ -84,6 +84,15 @@ public class JakartaToJavaxFilterWrapper implements Filter {
         this.filter.destroy();
     }
 
+    /**
+     * Get the wrapped {@link jakarta.servlet.Filter} object.
+     * @return The wrapped filter
+     * @since 2.11.0
+     */
+    public jakarta.servlet.Filter getWrappedObject() {
+        return this.filter;
+    }
+
     public static class FilterChainWrapper implements jakarta.servlet.FilterChain {
 
         private final FilterChain filterChain;

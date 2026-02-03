@@ -83,6 +83,14 @@ public class JavaxToJakartaFilterWrapper implements Filter {
         this.filter.destroy();
     }
 
+    /**
+     * Get the wrapped {@link javax.servlet.Filter} object.
+     * @return The wrapped filter
+     */
+    public javax.servlet.Filter getWrappedObject() {
+        return this.filter;
+    }
+
     public static class FilterChainWrapper implements javax.servlet.FilterChain {
 
         private final FilterChain filterChain;

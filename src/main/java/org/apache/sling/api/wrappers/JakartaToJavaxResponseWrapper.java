@@ -86,4 +86,13 @@ public class JakartaToJavaxResponseWrapper extends HttpServletResponseWrapper im
     public <AdapterType> @Nullable AdapterType adaptTo(@NotNull Class<AdapterType> type) {
         return this.wrappedResponse.adaptTo(type);
     }
+
+    /**
+     * Get the wrapped {@link SlingJakartaHttpServletResponse} object.
+     * @return The wrapped response
+     * @since 2.11.0
+     */
+    public SlingJakartaHttpServletResponse getWrappedObject() {
+        return this.wrappedResponse;
+    }
 }
