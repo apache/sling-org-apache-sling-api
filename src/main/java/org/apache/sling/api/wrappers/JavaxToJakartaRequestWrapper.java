@@ -200,4 +200,13 @@ public class JavaxToJakartaRequestWrapper extends HttpServletRequestWrapper impl
     public <AdapterType> @Nullable AdapterType adaptTo(@NotNull final Class<AdapterType> type) {
         return this.wrappedRequest.adaptTo(type);
     }
+
+    /**
+     * Get the wrapped {@link SlingHttpServletRequest} object
+     * @return The wrapped request
+     * @since 2.11.0
+     */
+    public SlingHttpServletRequest getWrappedObject() {
+        return this.wrappedRequest;
+    }
 }
