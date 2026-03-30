@@ -493,7 +493,7 @@ public class HtmlResponse {
         while ((read = in.read()) >= 0) {
             char c = (char) read;
             switch (state) {
-                    // initial
+                // initial
                 case 0:
                     if (c == '$') {
                         state = 1;
@@ -501,7 +501,7 @@ public class HtmlResponse {
                         out.write(c);
                     }
                     break;
-                    // $ read
+                // $ read
                 case 1:
                     if (c == '{') {
                         state = 2;
@@ -511,7 +511,7 @@ public class HtmlResponse {
                         out.write(c);
                     }
                     break;
-                    // { read
+                // { read
                 case 2:
                     if (c == '}') {
                         state = 0;
