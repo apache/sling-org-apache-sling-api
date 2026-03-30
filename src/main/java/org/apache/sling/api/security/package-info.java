@@ -21,4 +21,3 @@
 package org.apache.sling.api.security;
 
 import org.osgi.annotation.versioning.Version;
-

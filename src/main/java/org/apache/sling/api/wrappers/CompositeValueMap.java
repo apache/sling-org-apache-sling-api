@@ -36,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
  * In case you would like to avoid duplicating properties on multiple resources,
  * you can use a <code>CompositeValueMap</code> to get a concatenated map of
  * properties.
- * 
+ *
  * @since 2.3 (Sling API Bundle 2.5.0)
  *
  * @deprecated Use {@link ValueMapUtil#merge(ValueMap...)} instead. Note that it
@@ -102,9 +102,9 @@ public class CompositeValueMap implements ValueMap {
             return null;
         }
         if (type.isAssignableFrom(value.getClass())) {
-            return (T)value;
+            return (T) value;
         }
-        return ObjectConverter.convert(value,type);
+        return ObjectConverter.convert(value, type);
     }
 
     /**
@@ -116,7 +116,7 @@ public class CompositeValueMap implements ValueMap {
         if (defaultValue == null) {
             return (T) get(name);
         }
-        T value = (T)get(name, defaultValue.getClass());
+        T value = (T) get(name, defaultValue.getClass());
         if (value == null) {
             return defaultValue;
         }
@@ -135,7 +135,7 @@ public class CompositeValueMap implements ValueMap {
      * {@inheritDoc}
      */
     public boolean isEmpty() {
-        if ( defaults.size() > 0 || (merge && properties.size() > 0) ) {
+        if (defaults.size() > 0 || (merge && properties.size() > 0)) {
             return false;
         }
         return size() == 0;
@@ -236,7 +236,7 @@ public class CompositeValueMap implements ValueMap {
 
         // Add missing defaults
         for (final Entry<String, Object> entry : defaults.entrySet()) {
-            if ( ! entries.containsKey(entry.getKey()) ) {
+            if (!entries.containsKey(entry.getKey())) {
                 entries.put(entry.getKey(), entry.getValue());
             }
         }

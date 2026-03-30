@@ -70,8 +70,7 @@ public class RequestDispatcherOptions extends HashMap<String, String> {
     /**
      * Creates an instance with no options set.
      */
-    public RequestDispatcherOptions() {
-    }
+    public RequestDispatcherOptions() {}
 
     /**
      * Creates a new instances setting options by parsing the given
@@ -102,8 +101,9 @@ public class RequestDispatcherOptions extends HashMap<String, String> {
                     String entry = tk.nextToken();
                     int equals = entry.indexOf('=');
                     if (equals > 0 && equals < entry.length() - 1) {
-                        put(entry.substring(0, equals).trim(), entry.substring(
-                            equals + 1).trim());
+                        put(
+                                entry.substring(0, equals).trim(),
+                                entry.substring(equals + 1).trim());
                     }
                 }
             }

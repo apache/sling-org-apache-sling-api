@@ -121,11 +121,10 @@ public class ResourceUtil {
     // don't use if followed by neither . nor /
     // keep checking till a non-dot is found
     private static boolean useDot(char[] buf, int bufIdx) {
-        while(bufIdx < buf.length -1) {
-            if(buf[bufIdx] == '/') {
+        while (bufIdx < buf.length - 1) {
+            if (buf[bufIdx] == '/') {
                 return true;
-            }
-            else if(buf[bufIdx] != '.') {
+            } else if (buf[bufIdx] != '.') {
                 return false;
             }
             bufIdx++;
@@ -207,13 +206,13 @@ public class ResourceUtil {
      * @since 2.2 (Sling API Bundle 2.2.0)
      */
     public static String getParent(final String path, final int level) {
-        if ( level < 0 ) {
+        if (level < 0) {
             throw new IllegalArgumentException("level must be non-negative");
         }
         String result = path;
-        for(int i=0; i<level; i++) {
+        for (int i = 0; i < level; i++) {
             result = getParent(result);
-            if ( result == null ) {
+            if (result == null) {
                 break;
             }
         }
@@ -388,7 +387,7 @@ public class ResourceUtil {
      * @return A value map.
      */
     public static @NotNull ValueMap getValueMap(final Resource res) {
-        if ( res == null ) {
+        if (res == null) {
             // use empty map
             return new ValueMapDecorator(new HashMap<String, Object>());
         }
@@ -454,7 +453,7 @@ public class ResourceUtil {
      */
     @Deprecated
     public static @Nullable String findResourceSuperType(@NotNull final Resource resource) {
-        if ( resource == null ) {
+        if (resource == null) {
             return null;
         }
         return resource.getResourceResolver().getParentResourceType(resource);
@@ -482,7 +481,7 @@ public class ResourceUtil {
      */
     @Deprecated
     public static boolean isA(@NotNull final Resource resource, final String resourceType) {
-        if ( resource == null ) {
+        if (resource == null) {
             return false;
         }
         return resource.getResourceResolver().isResourceType(resource, resourceType);
@@ -502,8 +501,7 @@ public class ResourceUtil {
      * @return An iterator of the adapted objects
      * @since 2.0.6 (Sling API Bundle 2.0.6)
      */
-    public static @NotNull <T> Iterator<T> adaptTo(final @NotNull Iterator<Resource> iterator,
-            final Class<T> type) {
+    public static @NotNull <T> Iterator<T> adaptTo(final @NotNull Iterator<Resource> iterator, final Class<T> type) {
         return new Iterator<T>() {
 
             private T nextObject = seek();
@@ -556,17 +554,17 @@ public class ResourceUtil {
      * @since 2.3.0  (Sling API Bundle 2.4.0)
      */
     public static @NotNull Resource getOrCreateResource(
-                            final @NotNull ResourceResolver resolver,
-                            final @NotNull String path,
-                            final String resourceType,
-                            final String intermediateResourceType,
-                            final boolean autoCommit)
-    throws PersistenceException {
+            final @NotNull ResourceResolver resolver,
+            final @NotNull String path,
+            final String resourceType,
+            final String intermediateResourceType,
+            final boolean autoCommit)
+            throws PersistenceException {
         final Map<String, Object> props;
-        if ( resourceType == null ) {
+        if (resourceType == null) {
             props = null;
         } else {
-            props = Collections.singletonMap(ResourceResolver.PROPERTY_RESOURCE_TYPE, (Object)resourceType);
+            props = Collections.singletonMap(ResourceResolver.PROPERTY_RESOURCE_TYPE, (Object) resourceType);
         }
         return getOrCreateResource(resolver, path, props, intermediateResourceType, autoCommit);
     }
@@ -596,17 +594,14 @@ public class ResourceUtil {
             final Map<String, Object> resourceProperties,
             final String intermediateResourceType,
             final boolean autoCommit)
-    throws PersistenceException {
+            throws PersistenceException {
         PersistenceException mostRecentPE = null;
-        for(int i=0;i<5;i++) {
+        for (int i = 0; i < 5; i++) {
             try {
-                return ResourceUtil.getOrCreateResourceInternal(resolver,
-                        path,
-                        resourceProperties,
-                        intermediateResourceType,
-                        autoCommit);
-            } catch ( final PersistenceException pe ) {
-                if ( autoCommit ) {
+                return ResourceUtil.getOrCreateResourceInternal(
+                        resolver, path, resourceProperties, intermediateResourceType, autoCommit);
+            } catch (final PersistenceException pe) {
+                if (autoCommit) {
                     // in case of exception, revert to last clean state and retry
                     resolver.revert();
                     resolver.refresh();
@@ -640,62 +635,59 @@ public class ResourceUtil {
             final Map<String, Object> resourceProperties,
             final String intermediateResourceType,
             final boolean autoCommit)
-    throws PersistenceException {
+            throws PersistenceException {
         Resource rsrc = resolver.getResource(path);
-        if ( rsrc == null ) {
+        if (rsrc == null) {
             final int lastPos = path.lastIndexOf('/');
             final String name = path.substring(lastPos + 1);
 
             final Resource parentResource;
-            if ( lastPos == 0 ) {
+            if (lastPos == 0) {
                 parentResource = resolver.getResource("/");
             } else {
                 final String parentPath = path.substring(0, lastPos);
-                parentResource = getOrCreateResource(resolver,
-                        parentPath,
-                        intermediateResourceType,
-                        intermediateResourceType,
-                        autoCommit);
+                parentResource = getOrCreateResource(
+                        resolver, parentPath, intermediateResourceType, intermediateResourceType, autoCommit);
             }
-            if ( autoCommit ) {
+            if (autoCommit) {
                 resolver.refresh();
             }
             try {
                 int retry = 5;
-                while ( retry > 0 && rsrc == null ) {
+                while (retry > 0 && rsrc == null) {
                     rsrc = resolver.create(parentResource, name, resourceProperties);
                     // check for SNS
-                    if ( !name.equals(rsrc.getName()) ) {
+                    if (!name.equals(rsrc.getName())) {
                         resolver.refresh();
                         resolver.delete(rsrc);
                         rsrc = resolver.getResource(parentResource, name);
                     }
                     retry--;
                 }
-                if ( rsrc == null ) {
+                if (rsrc == null) {
                     throw new PersistenceException("Unable to create resource.");
                 }
-            } catch ( final PersistenceException pe ) {
+            } catch (final PersistenceException pe) {
                 // this could be thrown because someone else tried to create this
                 // node concurrently
                 resolver.refresh();
                 rsrc = resolver.getResource(parentResource, name);
-                if ( rsrc == null ) {
+                if (rsrc == null) {
                     throw pe;
                 }
             }
-            if ( autoCommit ) {
+            if (autoCommit) {
                 try {
                     resolver.commit();
                     resolver.refresh();
                     rsrc = resolver.getResource(parentResource, name);
-                } catch ( final PersistenceException pe ) {
+                } catch (final PersistenceException pe) {
                     // try again - maybe someone else did create the resource in the meantime
                     // or we ran into Jackrabbit's stale item exception in a clustered environment
                     resolver.revert();
                     resolver.refresh();
                     rsrc = resolver.getResource(parentResource, name);
-                    if ( rsrc == null ) {
+                    if (rsrc == null) {
                         rsrc = resolver.create(parentResource, name, resourceProperties);
                         resolver.commit();
                     }
@@ -720,18 +712,18 @@ public class ResourceUtil {
      *             closed}.
      * @since 2.5 (Sling API Bundle 2.7.0)
      */
-    public static String createUniqueChildName(final Resource parent, final String name)
-    throws PersistenceException {
+    public static String createUniqueChildName(final Resource parent, final String name) throws PersistenceException {
         if (parent.getChild(name) != null) {
             // leaf node already exists, create new unique name
             String childNodeName = null;
             int i = 0;
             do {
                 childNodeName = name + String.valueOf(i);
-                //just so that it does not run into an infinite loop
+                // just so that it does not run into an infinite loop
                 // this should not happen though :)
                 if (i == Integer.MAX_VALUE) {
-                    String message = MessageFormat.format("can not find a unique name {0} for {1}", name, parent.getPath());
+                    String message =
+                            MessageFormat.format("can not find a unique name {0} for {1}", name, parent.getPath());
                     throw new PersistenceException(message);
                 }
                 i++;
@@ -750,8 +742,8 @@ public class ResourceUtil {
      */
     public static @NotNull Resource unwrap(final @NotNull Resource rsrc) {
         Resource result = rsrc;
-        while ( result instanceof ResourceWrapper ) {
-            result = ((ResourceWrapper)result).getResource();
+        while (result instanceof ResourceWrapper) {
+            result = ((ResourceWrapper) result).getResource();
         }
         return result;
     }
@@ -774,15 +766,14 @@ public class ResourceUtil {
             this.max = (batchSize < 1 ? 50 : batchSize);
         }
 
-        public void delete(@NotNull final Resource rsrc)
-        throws PersistenceException {
+        public void delete(@NotNull final Resource rsrc) throws PersistenceException {
             final ResourceResolver resolver = rsrc.getResourceResolver();
-            for(final Resource child : rsrc.getChildren()) {
+            for (final Resource child : rsrc.getChildren()) {
                 delete(child);
             }
             resolver.delete(rsrc);
             count++;
-            if ( count >= max ) {
+            if (count >= max) {
                 resolver.commit();
                 count = 0;
             }

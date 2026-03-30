@@ -18,9 +18,8 @@
  */
 package org.apache.sling.spi.resource.provider;
 
-import org.jetbrains.annotations.NotNull;
-
 import org.apache.sling.api.resource.path.PathSet;
+import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -35,7 +34,7 @@ public interface ProviderContext {
     long OBSERVATION_LISTENER_CHANGED = 1;
 
     /** This bit is set in {@link ResourceProvider#update(long)} if exclude paths changed. */
-    long EXCLUDED_PATHS_CHANGED       = 2;
+    long EXCLUDED_PATHS_CHANGED = 2;
 
     /**
      * Get the observation reporter for this instance.
@@ -47,7 +46,8 @@ public interface ProviderContext {
      *
      * @return The observation reporter.
      */
-    @NotNull ObservationReporter getObservationReporter();
+    @NotNull
+    ObservationReporter getObservationReporter();
 
     /**
      * Set of paths which are "hidden" by other resource providers.

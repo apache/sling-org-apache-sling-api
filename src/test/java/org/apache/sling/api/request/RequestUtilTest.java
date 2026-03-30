@@ -18,29 +18,29 @@
  */
 package org.apache.sling.api.request;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.Locale;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-
+import junit.framework.TestCase;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.commons.testing.sling.MockResource;
 import org.apache.sling.commons.testing.sling.MockSlingHttpServletRequest;
 
-import junit.framework.TestCase;
-
 public class RequestUtilTest extends TestCase {
 
+    public void testHandleIfModifiedSince() {
+        assertTrue(
+                RequestUtil.handleIfModifiedSince(getMockRequest(1309268989938L, 1309269042730L), getMockResponse()));
 
-    public void testHandleIfModifiedSince(){
-        assertTrue(RequestUtil.handleIfModifiedSince(getMockRequest(1309268989938L,1309269042730L),getMockResponse()));
-
-        assertFalse(RequestUtil.handleIfModifiedSince(getMockRequest(1309269042730L,1309268989938L),getMockResponse()));
-        assertFalse(RequestUtil.handleIfModifiedSince(getMockRequest(-1,1309268989938L),getMockResponse()));
+        assertFalse(
+                RequestUtil.handleIfModifiedSince(getMockRequest(1309269042730L, 1309268989938L), getMockResponse()));
+        assertFalse(RequestUtil.handleIfModifiedSince(getMockRequest(-1, 1309268989938L), getMockResponse()));
     }
 
     protected SlingHttpServletRequest getMockRequest(final long modificationTime, final long ifModifiedSince) {
@@ -50,7 +50,6 @@ public class RequestUtilTest extends TestCase {
             public long getDateHeader(String name) {
                 return ifModifiedSince;
             }
-
         };
         final String path = "/foo/node";
         final MockResource mr = new MockResource(null, path, null) {};
@@ -59,15 +58,16 @@ public class RequestUtilTest extends TestCase {
         return r;
     }
 
-    public void testParserAcceptHeader(){
-        assertEquals(RequestUtil.parserAcceptHeader("compress;q=0.5, gzip;q=1.0").get("compress"), 0.5);
-        assertEquals(RequestUtil.parserAcceptHeader("compress,gzip").get("compress"),1.0);
-        assertEquals(RequestUtil.parserAcceptHeader("compress").get("compress"),1.0);
-        assertEquals(RequestUtil.parserAcceptHeader("compress;q=string,gzip;q=1.0").get("compress"), 1.0);
+    public void testParserAcceptHeader() {
+        assertEquals(
+                RequestUtil.parserAcceptHeader("compress;q=0.5, gzip;q=1.0").get("compress"), 0.5);
+        assertEquals(RequestUtil.parserAcceptHeader("compress,gzip").get("compress"), 1.0);
+        assertEquals(RequestUtil.parserAcceptHeader("compress").get("compress"), 1.0);
+        assertEquals(
+                RequestUtil.parserAcceptHeader("compress;q=string,gzip;q=1.0").get("compress"), 1.0);
 
         assertNull(RequestUtil.parserAcceptHeader("compress;q=0.5, gzip;q=1.0").get("compres"));
     }
-
 
     protected HttpServletResponse getMockResponse() {
 
@@ -216,8 +216,5 @@ public class RequestUtilTest extends TestCase {
                 return null;
             }
         };
-
     }
-
-
 }

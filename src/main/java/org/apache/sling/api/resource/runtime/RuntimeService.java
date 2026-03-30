@@ -19,7 +19,6 @@
 package org.apache.sling.api.resource.runtime;
 
 import org.apache.sling.api.resource.runtime.dto.RuntimeDTO;
-
 import org.osgi.annotation.versioning.ProviderType;
 
 /**

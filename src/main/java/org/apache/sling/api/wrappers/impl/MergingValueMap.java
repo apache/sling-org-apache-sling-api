@@ -18,10 +18,6 @@
  */
 package org.apache.sling.api.wrappers.impl;
 
-import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.api.wrappers.ValueMapUtil;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,6 +28,10 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.api.wrappers.ValueMapUtil;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Merge provided {@code ValueMaps} into a single view {@code ValueMap} that aggregates
@@ -136,10 +136,7 @@ public class MergingValueMap implements ValueMap {
 
     @NotNull
     private Stream<String> keyStream() {
-        return valueMaps.stream()
-                .map(Map::keySet)
-                .flatMap(Collection::stream)
-                .distinct();
+        return valueMaps.stream().map(Map::keySet).flatMap(Collection::stream).distinct();
     }
 
     @NotNull

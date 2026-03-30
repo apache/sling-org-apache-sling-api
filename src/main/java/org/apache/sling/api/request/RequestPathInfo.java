@@ -1,26 +1,26 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 package org.apache.sling.api.request;
 
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
-
 import org.apache.sling.api.resource.Resource;
-
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -163,7 +163,8 @@ public interface RequestPathInfo {
      * of the resource.
      * @return The resource path
      */
-    @NotNull String getResourcePath();
+    @NotNull
+    String getResourcePath();
 
     /**
      * Returns the extension from the URL or <code>null</code> if the request
@@ -174,7 +175,8 @@ public interface RequestPathInfo {
      *
      * @return The extension from the request URL.
      */
-    @Nullable String getExtension();
+    @Nullable
+    String getExtension();
 
     /**
      * Returns the selectors decoded from the request URL as string. Returns
@@ -186,7 +188,8 @@ public interface RequestPathInfo {
      * @return The selector string or {@code null}
      * @see #getSelectors()
      */
-    @Nullable String getSelectorString();
+    @Nullable
+    String getSelectorString();
 
     /**
      * Returns the selectors decoded from the request URL as an array of
@@ -200,7 +203,8 @@ public interface RequestPathInfo {
      * @return An array of selectors
      * @see #getSelectorString()
      */
-    @NotNull String[] getSelectors();
+    @NotNull
+    String[] getSelectors();
 
     /**
      * Returns the suffix part of the URL or <code>null</code> if the request
@@ -211,7 +215,8 @@ public interface RequestPathInfo {
      *
      * @return The suffix part of the request URL.
      */
-    @Nullable String getSuffix();
+    @Nullable
+    String getSuffix();
 
     /**
      * Returns the resource addressed by the suffix or null if the request does
@@ -225,5 +230,6 @@ public interface RequestPathInfo {
      *
      * @since 2.3 (Sling API Bundle 2.3.2)
      */
-    @Nullable Resource getSuffixResource();
+    @Nullable
+    Resource getSuffixResource();
 }

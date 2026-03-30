@@ -63,8 +63,7 @@ public interface ModifyingResourceProvider extends ResourceProvider {
      *
      * @throws PersistenceException If anything fails
      */
-    Resource create(ResourceResolver resolver, String path, Map<String, Object> properties)
-    throws PersistenceException;
+    Resource create(ResourceResolver resolver, String path, Map<String, Object> properties) throws PersistenceException;
 
     /**
      * Delete the resource at the given path.
@@ -76,8 +75,7 @@ public interface ModifyingResourceProvider extends ResourceProvider {
      *
      * @throws PersistenceException If anything fails
      */
-    void delete(ResourceResolver resolver, String path)
-    throws PersistenceException;
+    void delete(ResourceResolver resolver, String path) throws PersistenceException;
 
     /**
      * Revert all transient changes: create, delete and updates.
@@ -93,8 +91,7 @@ public interface ModifyingResourceProvider extends ResourceProvider {
      *
      * @throws PersistenceException If anything fails
      */
-    void commit(ResourceResolver resolver)
-    throws PersistenceException;
+    void commit(ResourceResolver resolver) throws PersistenceException;
 
     /**
      * Are there any transient changes?

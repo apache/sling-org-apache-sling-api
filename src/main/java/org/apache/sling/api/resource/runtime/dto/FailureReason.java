@@ -24,9 +24,7 @@ package org.apache.sling.api.resource.runtime.dto;
  * @since 1.0.0 (Sling API Bundle 2.11.0)
  */
 public enum FailureReason {
-
-    invalid,             // invalid configuration
-    shadowed,            // shadowed by another provider
+    invalid, // invalid configuration
+    shadowed, // shadowed by another provider
     service_not_gettable // service not gettable from service registry
-
 }

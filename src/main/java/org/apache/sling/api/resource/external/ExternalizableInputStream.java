@@ -16,7 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 package org.apache.sling.api.resource.external;
 
 import java.net.URI;
@@ -38,5 +37,4 @@ public interface ExternalizableInputStream {
      * @return a URI intended for any network context.
      */
     URI getURI();
-
 }

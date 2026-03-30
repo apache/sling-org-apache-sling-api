@@ -169,8 +169,8 @@ public class SlingBindings extends LazyBindings {
     @SuppressWarnings("unchecked")
     protected <ObjectType> ObjectType get(final String key, final Class<ObjectType> type) {
         final Object o = this.get(key);
-        if ( type.isInstance(o) ) {
-            return (ObjectType)o;
+        if (type.isInstance(o)) {
+            return (ObjectType) o;
         }
         return null;
     }
@@ -181,7 +181,7 @@ public class SlingBindings extends LazyBindings {
      * @param value The value
      */
     protected void safePut(final String key, final Object value) {
-        if ( value != null ) {
+        if (value != null) {
             this.put(key, value);
         }
     }
@@ -201,7 +201,7 @@ public class SlingBindings extends LazyBindings {
      */
     public boolean getFlush() {
         Boolean value = this.get(FLUSH, Boolean.class);
-        if (value != null ) {
+        if (value != null) {
             return value;
         }
 

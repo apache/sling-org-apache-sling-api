@@ -38,9 +38,7 @@ import org.apache.sling.api.wrappers.ValueMapDecorator;
  *
  * @since 2.1.0 (Sling API Bundle 2.1.0)
  */
-public abstract class AbstractResource
-    extends SlingAdaptable
-    implements Resource {
+public abstract class AbstractResource extends SlingAdaptable implements Resource {
 
     /**
      * Returns the name of this resource.
@@ -130,7 +128,7 @@ public abstract class AbstractResource
      * the adaptions are not successful an empty value map is returned.
      * @see org.apache.sling.api.resource.Resource#getValueMap()
      */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public ValueMap getValueMap() {
         // adapt to ValueMap if resource is not null
         ValueMap valueMap = this.adaptTo(ValueMap.class);

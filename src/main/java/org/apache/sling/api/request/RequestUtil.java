@@ -18,18 +18,18 @@
  */
 package org.apache.sling.api.request;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
 import javax.servlet.Servlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.servlets.HttpConstants;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Request related utility methods.
@@ -164,8 +164,8 @@ public class RequestUtil {
      * @return The previous value of the named request attribute or
      *         <code>null</code> if it was not set.
      */
-    public static @Nullable Object setRequestAttribute(@NotNull HttpServletRequest request,
-            @NotNull String name, Object value) {
+    public static @Nullable Object setRequestAttribute(
+            @NotNull HttpServletRequest request, @NotNull String name, Object value) {
         Object oldValue = request.getAttribute(name);
         if (value == null) {
             request.removeAttribute(name);
@@ -177,25 +177,25 @@ public class RequestUtil {
 
     /**
      * Checks if the request contains a if-last-modified-since header and if the the
-	 * request's underlying resource has a jcr:lastModified property. if the properties were modified
+     * request's underlying resource has a jcr:lastModified property. if the properties were modified
      * before the header a 304 is sent otherwise the response last modified header is set.
      * @param req the request
      * @param resp the response
      * @return <code>true</code> if the response was set
      */
-    public static boolean handleIfModifiedSince(@NotNull SlingHttpServletRequest req, @NotNull HttpServletResponse resp){
-        boolean responseSet=false;
-        long lastModified=req.getResource().getResourceMetadata().getModificationTime();
-        if (lastModified!=-1){
-            long modifiedTime = lastModified/1000; //seconds
-            long ims = req.getDateHeader(HttpConstants.HEADER_IF_MODIFIED_SINCE)/1000; //seconds
+    public static boolean handleIfModifiedSince(
+            @NotNull SlingHttpServletRequest req, @NotNull HttpServletResponse resp) {
+        boolean responseSet = false;
+        long lastModified = req.getResource().getResourceMetadata().getModificationTime();
+        if (lastModified != -1) {
+            long modifiedTime = lastModified / 1000; // seconds
+            long ims = req.getDateHeader(HttpConstants.HEADER_IF_MODIFIED_SINCE) / 1000; // seconds
             if (modifiedTime <= ims) {
                 resp.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
-                responseSet=true;
+                responseSet = true;
             }
             resp.setDateHeader(HttpConstants.HEADER_LAST_MODIFIED, lastModified);
         }
         return responseSet;
     }
-
 }

@@ -18,15 +18,6 @@
  */
 package org.apache.sling.api.resource;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -39,10 +30,20 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 @RunWith(MockitoJUnitRunner.Silent.class)
 public class ResourceUtilTest {
 
-    @Test public void testResolveRelativeSegments() {
+    @Test
+    public void testResolveRelativeSegments() {
 
         assertEquals("/", ResourceUtil.normalize("/"));
         assertEquals("/", ResourceUtil.normalize("///"));
@@ -114,10 +115,12 @@ public class ResourceUtilTest {
         assertEquals("/az/...", ResourceUtil.normalize("/az/..."));
         assertEquals("/az/bz/...", ResourceUtil.normalize("/az/bz/..."));
 
-        assertEquals("/content/dam/jpg_folder/.jpg/jcr:content/metadata/dc:title",
+        assertEquals(
+                "/content/dam/jpg_folder/.jpg/jcr:content/metadata/dc:title",
                 ResourceUtil.normalize("/content/dam/./jpg_folder/.jpg/jcr:content/metadata/dc:title"));
 
-        assertEquals("/content/dam/jpg_folder/....jpg/jcr:content/metadata/dc:title",
+        assertEquals(
+                "/content/dam/jpg_folder/....jpg/jcr:content/metadata/dc:title",
                 ResourceUtil.normalize("/content/dam/./jpg_folder/....jpg/jcr:content/metadata/dc:title"));
 
         try {
@@ -128,7 +131,8 @@ public class ResourceUtilTest {
         }
     }
 
-    @Test public void testResolveRelativeSegmentsRelative() {
+    @Test
+    public void testResolveRelativeSegmentsRelative() {
         assertEquals("a/b", ResourceUtil.normalize("a/b"));
         assertEquals("a", ResourceUtil.normalize("a/b/.."));
 
@@ -144,7 +148,8 @@ public class ResourceUtilTest {
         assertEquals("", ResourceUtil.normalize(""));
     }
 
-    @Test public void testGetParent() {
+    @Test
+    public void testGetParent() {
         assertNull(ResourceUtil.getParent("/"));
         assertNull(ResourceUtil.getParent("/.."));
 
@@ -160,7 +165,8 @@ public class ResourceUtilTest {
         assertEquals("security:/b/c", ResourceUtil.getParent("security:/b/c/d"));
     }
 
-    @Test public void testGetName() {
+    @Test
+    public void testGetName() {
         assertEquals("", ResourceUtil.getName("/"));
         assertEquals("", ResourceUtil.getName("/a/.."));
 
@@ -178,7 +184,8 @@ public class ResourceUtilTest {
         assertEquals("", ResourceUtil.getName("/b/c/../.."));
     }
 
-    @Test public void test_getValueMap_null_resource() {
+    @Test
+    public void test_getValueMap_null_resource() {
         final ValueMap valueMap = ResourceUtil.getValueMap(null);
         assertNotNull(valueMap);
         assertEquals(0, valueMap.size());
@@ -192,7 +199,8 @@ public class ResourceUtilTest {
         assertEquals("1", valueMap.get("sample", String.class));
     }
 
-    @Test public void test_getValueMap_direct() {
+    @Test
+    public void test_getValueMap_direct() {
         final ValueMap valueMap = new ValueMapDecorator(new HashMap<String, Object>());
         valueMap.put("sample", true);
         final Resource resource = new SyntheticResource(null, "/", "sample") {
@@ -217,7 +225,8 @@ public class ResourceUtilTest {
         assertEquals(Boolean.TRUE.toString(), adapted.get("sample", String.class));
     }
 
-    @Test public void test_getValueMap_decorated_map() {
+    @Test
+    public void test_getValueMap_decorated_map() {
         final Map<String, Object> map = new HashMap<String, Object>();
         map.put("sample", true);
         final Resource resource = new SyntheticResource(null, "/", "sample") {
@@ -243,7 +252,8 @@ public class ResourceUtilTest {
         assertEquals(Boolean.TRUE.toString(), adapted.get("sample", String.class));
     }
 
-    @Test public void test_getValueMap_no_adapter() {
+    @Test
+    public void test_getValueMap_no_adapter() {
         final ValueMap valueMap = ResourceUtil.getValueMap(null);
         assertNotNull(valueMap);
         assertEquals(0, valueMap.size());
@@ -257,11 +267,13 @@ public class ResourceUtilTest {
         assertEquals("1", valueMap.get("sample", String.class));
     }
 
-    @Test public void test_resourceTypeToPath() {
+    @Test
+    public void test_resourceTypeToPath() {
         assertEquals("a/b", ResourceUtil.resourceTypeToPath("a:b"));
     }
 
-    @Test public void test_adaptTo() {
+    @Test
+    public void test_adaptTo() {
         // we define three resources
         // a and b are adaptable to List
         // a, b, and c are adaptable to Map
@@ -272,8 +284,10 @@ public class ResourceUtilTest {
         final Resource b = mock(Resource.class, "b");
         final Resource c = mock(Resource.class, "c");
         final List<Resource> l = new ArrayList<Resource>();
-        l.add(a); l.add(b); l.add(c);
-        
+        l.add(a);
+        l.add(b);
+        l.add(c);
+
         when(a.adaptTo(List.class)).thenReturn(new ArrayList<Object>());
         when(b.adaptTo(List.class)).thenReturn(new ArrayList<Object>());
         when(c.adaptTo(List.class)).thenReturn(null);
@@ -303,7 +317,7 @@ public class ResourceUtilTest {
         i.hasNext();
         i.hasNext();
         int count = 0;
-        while ( i.hasNext() ) {
+        while (i.hasNext()) {
             final T object = i.next();
             assertNotNull(object);
             count++;
@@ -319,7 +333,8 @@ public class ResourceUtilTest {
         return count;
     }
 
-    @Test public void testIsStarResource() {
+    @Test
+    public void testIsStarResource() {
         final Resource nonStar = mock(Resource.class, "nonStarResource");
         final String starPath = "/foo/*";
         final Resource star = mock(Resource.class, "starResource");
@@ -328,12 +343,12 @@ public class ResourceUtilTest {
         when(star.getPath()).thenReturn(starPath);
         when(nonStar.getPath()).thenReturn(nonStarPath);
 
-        assertTrue("expecting star==true for path" + starPath,
-                ResourceUtil.isStarResource(star));
-        assertTrue("expecting star==false for path" + starPath,
-                ResourceUtil.isStarResource(nonStar));
+        assertTrue("expecting star==true for path" + starPath, ResourceUtil.isStarResource(star));
+        assertTrue("expecting star==false for path" + starPath, ResourceUtil.isStarResource(nonStar));
     }
-    @Test public void testIsSyntheticResource() {
+
+    @Test
+    public void testIsSyntheticResource() {
         final Resource synth = new SyntheticResource(null, "foo", "bar");
         final Resource star = mock(Resource.class);
 
@@ -341,15 +356,13 @@ public class ResourceUtilTest {
 
         final Resource wrapped = new ResourceWrapper(synth);
 
-        assertTrue("expecting synthetic==true for SyntheticResource",
-                ResourceUtil.isSyntheticResource(synth));
-        assertFalse("expecting synthetic==false for star resource",
-                ResourceUtil.isSyntheticResource(star));
-        assertTrue("expecting synthetic==true for wrapped Resource",
-                ResourceUtil.isSyntheticResource(wrapped));
+        assertTrue("expecting synthetic==true for SyntheticResource", ResourceUtil.isSyntheticResource(synth));
+        assertFalse("expecting synthetic==false for star resource", ResourceUtil.isSyntheticResource(star));
+        assertTrue("expecting synthetic==true for wrapped Resource", ResourceUtil.isSyntheticResource(wrapped));
     }
 
-    @Test public void testGetParentLevel() throws Exception {
+    @Test
+    public void testGetParentLevel() throws Exception {
         boolean caughtNullPointerException = false;
         try {
             ResourceUtil.getParent(null, 4);
@@ -357,8 +370,7 @@ public class ResourceUtilTest {
             // Expected exception
             caughtNullPointerException = true;
         } catch (Exception e) {
-            fail("Expected NullPointerException, but caught " +
-                    e.getClass().getName() + " instead.");
+            fail("Expected NullPointerException, but caught " + e.getClass().getName() + " instead.");
         }
         if (!caughtNullPointerException) {
             fail("Expected NullPointerException, but no exception was thrown.");
@@ -371,8 +383,7 @@ public class ResourceUtilTest {
             // Expected exception
             caughtIllegalArgumentException = true;
         } catch (Exception e) {
-            fail("Expected IllegalArgumentException, but caught " +
-                    e.getClass().getName() + " instead.");
+            fail("Expected IllegalArgumentException, but caught " + e.getClass().getName() + " instead.");
         }
         if (!caughtIllegalArgumentException) {
             fail("Expected IllegalArgumentException, but no exception was thrown.");
@@ -409,12 +420,14 @@ public class ResourceUtilTest {
     }
 
     @SuppressWarnings("deprecation")
-    @Test public void testIsA() {
+    @Test
+    public void testIsA() {
         assertFalse(ResourceUtil.isA(null, "something"));
     }
 
     @SuppressWarnings("deprecation")
-    @Test public void testFindResourceSuperType() {
+    @Test
+    public void testFindResourceSuperType() {
         assertNull(ResourceUtil.findResourceSuperType(null));
     }
 }

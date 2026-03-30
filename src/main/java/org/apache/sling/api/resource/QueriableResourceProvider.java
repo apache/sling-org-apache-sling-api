@@ -22,7 +22,6 @@ import java.util.Iterator;
 
 import org.osgi.annotation.versioning.ConsumerType;
 
-
 /**
  * A queriable resource provider is an extension of a resource provider.
  *

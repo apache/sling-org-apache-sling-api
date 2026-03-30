@@ -18,35 +18,36 @@
  */
 package org.apache.sling.api.resource.path;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.junit.Test;
-
 public class PathSetTest {
 
-    private void assertEqualSets(final PathSet set, final String...paths) {
+    private void assertEqualSets(final PathSet set, final String... paths) {
         final Set<String> stringSet = new HashSet<String>();
-        for(final String p : paths) {
+        for (final String p : paths) {
             stringSet.add(p);
         }
         final Set<Path> pathSet = new HashSet<Path>();
-        for(final Path p : set) {
+        for (final Path p : set) {
             pathSet.add(p);
         }
         assertEquals(stringSet.size(), pathSet.size());
-        for(final Path p : pathSet) {
+        for (final Path p : pathSet) {
             assertTrue(stringSet.contains(p.getPath()));
         }
     }
 
-    @Test public void testStringSet() {
+    @Test
+    public void testStringSet() {
         final Set<String> strings = new HashSet<String>();
         strings.add("/a");
         strings.add("/x/y");
@@ -56,13 +57,15 @@ public class PathSetTest {
         assertEqualSets(set, "/a", "/x/y", "/z");
     }
 
-    @Test public void testStrings() {
+    @Test
+    public void testStrings() {
         final PathSet set = PathSet.fromStrings("/z", "/x/y", "/a");
         assertNotNull(set);
         assertEqualSets(set, "/a", "/x/y", "/z");
     }
 
-    @Test public void testPathSet() {
+    @Test
+    public void testPathSet() {
         final Set<Path> paths = new HashSet<Path>();
         paths.add(new Path("/a"));
         paths.add(new Path("/x/y"));
@@ -72,13 +75,15 @@ public class PathSetTest {
         assertEqualSets(set, "/a", "/x/y", "/z");
     }
 
-    @Test public void testPaths() {
+    @Test
+    public void testPaths() {
         final PathSet set = PathSet.fromPaths(new Path("/z"), new Path("/x/y"), new Path("/a"));
         assertNotNull(set);
         assertEqualSets(set, "/a", "/x/y", "/z");
     }
 
-    @Test public void testOptimize() {
+    @Test
+    public void testOptimize() {
         final PathSet set1 = PathSet.fromStrings("/", "/a", "/z", "/x/y");
         assertEqualSets(set1, "/");
 
@@ -86,7 +91,8 @@ public class PathSetTest {
         assertEqualSets(set2, "/a", "/z", "/a2", "/x/y");
     }
 
-    @Test public void testMatching() {
+    @Test
+    public void testMatching() {
         final PathSet set = PathSet.fromStrings("/a", "/x/y");
         assertNull(set.matches("/"));
 
@@ -107,7 +113,8 @@ public class PathSetTest {
         assertEquals(new Path("/x/y"), set.matches("/x/y/g/e"));
     }
 
-    @Test public void testToStringSet() {
+    @Test
+    public void testToStringSet() {
         final PathSet set = PathSet.fromStrings("/a", "/x/y");
 
         final Set<String> stringSet = set.toStringSet();
@@ -118,12 +125,13 @@ public class PathSetTest {
         try {
             stringSet.add("foo");
             fail();
-        } catch ( final UnsupportedOperationException uoe) {
+        } catch (final UnsupportedOperationException uoe) {
             // expected
         }
     }
 
-    @Test public void testSubsetByPathSet() {
+    @Test
+    public void testSubsetByPathSet() {
         final PathSet set = PathSet.fromStrings("/libs/foo/bar", "/apps/foo/bar", "/content");
         final PathSet filter = PathSet.fromStrings("/libs", "/apps");
 

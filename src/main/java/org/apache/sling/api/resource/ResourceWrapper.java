@@ -155,10 +155,10 @@ public class ResourceWrapper implements Resource {
      *
      * @since 2.4.4  (Sling API Bundle 2.5.0)
      */
-	@Override
+    @Override
     public boolean hasChildren() {
-		return getResource().hasChildren();
-	}
+        return getResource().hasChildren();
+    }
 
     /**
      * Returns the value of calling <code>isResourceType</code> on the
@@ -198,9 +198,8 @@ public class ResourceWrapper implements Resource {
     @Override
     public String toString() {
         final String simpleName = getClass().getSimpleName();
-        final String className = (simpleName.length() > 0) ? simpleName : getClass().getName();
-        return className + ", type=" + getResourceType()
-            + ", path=" + getPath() + ", resource=[" + getResource() + "]";
+        final String className =
+                (simpleName.length() > 0) ? simpleName : getClass().getName();
+        return className + ", type=" + getResourceType() + ", path=" + getPath() + ", resource=[" + getResource() + "]";
     }
-
 }

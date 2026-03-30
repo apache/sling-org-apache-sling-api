@@ -21,4 +21,3 @@
 package org.apache.sling.spi.resource.provider;
 
 import org.osgi.annotation.versioning.Version;
-

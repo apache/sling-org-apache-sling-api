@@ -26,10 +26,10 @@ package org.apache.sling.api.resource.runtime.dto;
 public class ResourceProviderDTO {
 
     /**
-	 * The name of the resource provider.
-	 * Optional might be {@code null}.
-	 */
-	public String name;
+     * The name of the resource provider.
+     * Optional might be {@code null}.
+     */
+    public String name;
 
     /**
      * The path of the resource provider.

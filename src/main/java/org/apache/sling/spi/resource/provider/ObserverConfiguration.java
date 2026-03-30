@@ -20,10 +20,9 @@ package org.apache.sling.spi.resource.provider;
 
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-
 import org.apache.sling.api.resource.observation.ResourceChange;
 import org.apache.sling.api.resource.path.PathSet;
+import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -55,20 +54,23 @@ public interface ObserverConfiguration {
      * The set of paths this listener is interested in. Each entry is absolute.
      * @return Non empty set of paths
      */
-    @NotNull PathSet getPaths();
+    @NotNull
+    PathSet getPaths();
 
     /**
      * The set of excluded paths.
      * All the paths are sub paths from one entry of {@link #getPaths()}
      * @return A set of excluded paths, might be empty.
      */
-    @NotNull PathSet getExcludedPaths();
+    @NotNull
+    PathSet getExcludedPaths();
 
     /**
      * The set of types listeners are interested in.
      * @return Non empty set of types
      */
-    @NotNull Set<ResourceChange.ChangeType> getChangeTypes();
+    @NotNull
+    Set<ResourceChange.ChangeType> getChangeTypes();
 
     /**
      * Set containing the set of property names which
@@ -77,7 +79,8 @@ public interface ObserverConfiguration {
      * underlying might ignore this.
      * @return Set containing the set of property names or {@code null}
      */
-    @NotNull Set<String> getPropertyNamesHint();
+    @NotNull
+    Set<String> getPropertyNamesHint();
 
     /**
      * Checks whether a path matches one of the paths of this configuration

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
     Licensed to the Apache Software Foundation (ASF) under one
     or more contributor license agreements.  See the NOTICE file
@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.sling</groupId>
         <artifactId>sling-bundle-parent</artifactId>
-        <version>35</version>
+        <version>66</version>
         <relativePath />
     </parent>
 
@@ -31,23 +31,21 @@
     <version>2.23.0-SNAPSHOT</version>
 
     <name>Apache Sling API</name>
-    <description>
-        The Apache Sling API defines an extension to the Servlet
+    <description>The Apache Sling API defines an extension to the Servlet
         API 2.4 to provide access to content and unified access
         to request parameters hiding the differences between the
         different methods of transferring parameters from client
         to server. Note that the Apache Sling API bundle does not
         include the Servlet API but instead requires the API to
         be provided by the Servlet container in which the Apache
-        Sling framework is running or by another bundle.
-    </description>
+        Sling framework is running or by another bundle.</description>
 
     <scm>
         <connection>scm:git:https://gitbox.apache.org/repos/asf/sling-org-apache-sling-api.git</connection>
         <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/sling-org-apache-sling-api.git</developerConnection>
+        <tag>HEAD</tag>
         <url>https://gitbox.apache.org/repos/asf?p=sling-org-apache-sling-api.git</url>
-      <tag>HEAD</tag>
-  </scm>
+    </scm>
 
     <properties>
         <site.jira.version.id>12314252</site.jira.version.id>
@@ -58,23 +56,26 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <!-- OSGi -->
         <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>org.osgi.annotation.versioning</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>16.0.2</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
 
         <!-- This will be an optional import, needed for applying conversion rules in the ObjectConverter -->
@@ -89,6 +90,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.sling</groupId>
@@ -124,10 +126,11 @@
             <groupId>org.apache.sling</groupId>
             <artifactId>org.apache.sling.resource.filter</artifactId>
             <version>1.0.0</version>
-            <scope>provided</scope> <!-- just used for javadoc link -->
+            <scope>provided</scope>
+            <!-- just used for javadoc link -->
         </dependency>
     </dependencies>
-    
+
     <build>
         <plugins>
             <plugin>
@@ -169,9 +172,7 @@
                                 <configuration>
                                     <rules>
                                         <requireJavaVersion>
-                                            <message>
-                                                You must use JDK 9 or newer due to issues with javadoc in older JDKs, for details check https://bugs.java.com/bugdatabase/view_bug.do?bug_id=8206092. Use -Dignore.javadocjdk to ignore this requirement (if not building javadoc)!
-                                            </message>
+                                            <message>You must use JDK 9 or newer due to issues with javadoc in older JDKs, for details check https://bugs.java.com/bugdatabase/view_bug.do?bug_id=8206092. Use -Dignore.javadocjdk to ignore this requirement (if not building javadoc)!</message>
                                             <version>9</version>
                                         </requireJavaVersion>
                                     </rules>

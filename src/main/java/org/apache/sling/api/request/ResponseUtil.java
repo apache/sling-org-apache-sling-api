@@ -52,7 +52,7 @@ public class ResponseUtil {
 
         @Override
         public void write(char[] buffer, int offset, int length) throws IOException {
-            for(int i = offset; i < offset + length; i++) {
+            for (int i = offset; i < offset + length; i++) {
                 write(buffer[i]);
             }
         }
@@ -64,15 +64,15 @@ public class ResponseUtil {
 
         @Override
         public void write(int c) throws IOException {
-            if(c == '&') {
+            if (c == '&') {
                 target.write("&amp;");
-            } else if(c == '<') {
+            } else if (c == '<') {
                 target.write("&lt;");
-            } else if(c == '>') {
+            } else if (c == '>') {
                 target.write("&gt;");
-            } else if(c == '"') {
+            } else if (c == '"') {
                 target.write("&quot;");
-            } else if(c == '\'') {
+            } else if (c == '\'') {
                 target.write("&apos;");
             } else {
                 target.write(c);
@@ -101,17 +101,17 @@ public class ResponseUtil {
         }
 
         final StringBuilder b = new StringBuilder(input.length());
-        for(int i = 0;i  < input.length(); i++) {
+        for (int i = 0; i < input.length(); i++) {
             final char c = input.charAt(i);
-            if(c == '&') {
+            if (c == '&') {
                 b.append("&amp;");
-            } else if(c == '<') {
+            } else if (c == '<') {
                 b.append("&lt;");
-            } else if(c == '>') {
+            } else if (c == '>') {
                 b.append("&gt;");
-            } else if(c == '"') {
+            } else if (c == '"') {
                 b.append("&quot;");
-            } else if(c == '\'') {
+            } else if (c == '\'') {
                 b.append("&apos;");
             } else {
                 b.append(c);

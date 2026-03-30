@@ -21,4 +21,3 @@
 package org.apache.sling.api.adapter;
 
 import org.osgi.annotation.versioning.Version;
-

@@ -26,29 +26,29 @@ import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /** SPI interface that contributes to resource mapping and resolving of the resource resolver's map() and resolve() methods.
- * 
+ *
  * All registered services are sorted by service ranking and put in a list that forms a pipeline. The resource link is passed through the
  * pipeline while any ResourceMapping pipeline member may or may not make adjustments to the resource link.
- * 
+ *
  * rr.resolve() passes through the pipeline starting at the ResourceMapping with the <strong>highest</strong> service ranking rr.map()
  * passes through the pipeline starting at the ResourceMapping with the <strong>lowest</strong> service ranking */
 @ConsumerType
 public interface ResourceMapping {
-    
+
     /** Contributes to the resolve process, may or may not make adjustments to the resource link
-     * 
+     *
      * @param resourceURI the URI to be resolved
      * @param request the servlet request
      * @param pipelineContext can be used for sharing state between instances of ResourceMapping
      * @return true if no other ResourceMapping services should be considered after this, false if the pipeline should continue */
-    boolean resolve(@NotNull ResourceURI resourceURI, SlingHttpServletRequest request, Map<String, Object> pipelineContext);
+    boolean resolve(
+            @NotNull ResourceURI resourceURI, SlingHttpServletRequest request, Map<String, Object> pipelineContext);
 
     /** Contributes to the map process, may or may not make adjustments to the resource link.
-     * 
+     *
      * @param resourceURI the URI to be mapped
      * @param request the servlet request
      * @param pipelineContext can be used for sharing state between instances of ResourceMapping
      * @return true if no other ResourceMapping services should be considered after this, false if the pipeline should continue */
     boolean map(@NotNull ResourceURI resourceURI, SlingHttpServletRequest request, Map<String, Object> pipelineContext);
-
 }

@@ -37,8 +37,7 @@ public final class NonExistingResource extends SyntheticResource {
      * @param resourceResolver The resource resolver.
      * @param resourceURI The path of the resource.
      */
-    public NonExistingResource(final ResourceResolver resourceResolver,
-            final String resourceURI) {
+    public NonExistingResource(final ResourceResolver resourceResolver, final String resourceURI) {
         super(resourceResolver, resourceURI, RESOURCE_TYPE_NON_EXISTING);
     }
 
@@ -58,7 +57,7 @@ public final class NonExistingResource extends SyntheticResource {
     }
 
     /**
-     * 
+     *
      * @return the parent resource (might be a {@link NonExistingResource} in case the parent does not exist either).
      */
     public Resource getParent() {
@@ -69,5 +68,4 @@ public final class NonExistingResource extends SyntheticResource {
             return parent;
         }
     }
-
 }

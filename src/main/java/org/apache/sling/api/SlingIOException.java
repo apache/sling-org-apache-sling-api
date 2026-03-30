@@ -33,5 +33,4 @@ public class SlingIOException extends SlingException {
     public SlingIOException(IOException cause) {
         super(cause);
     }
-
 }

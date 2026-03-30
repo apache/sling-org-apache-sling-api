@@ -49,8 +49,7 @@ public interface ValueMap extends Map<String, Object> {
     /**
      * Empty immutable value map.
      */
-    ValueMap EMPTY = new ValueMapDecorator(
-        Collections.emptyMap());
+    ValueMap EMPTY = new ValueMapDecorator(Collections.emptyMap());
 
     /**
      * Get a named property and convert it into the given type.
@@ -72,9 +71,9 @@ public interface ValueMap extends Map<String, Object> {
             return null;
         }
         if (type.isAssignableFrom(value.getClass())) {
-            return (T)value;
+            return (T) value;
         }
-        return ObjectConverter.convert(value,type);
+        return ObjectConverter.convert(value, type);
     }
 
     /**
@@ -83,7 +82,7 @@ public interface ValueMap extends Map<String, Object> {
      * array of a primitive type. It should return the default value in this
      * case.
      * <br><br>
-     * <b>Implementation hint</b>: In the past it was allowed to call this with a 2nd parameter being {@code null}. 
+     * <b>Implementation hint</b>: In the past it was allowed to call this with a 2nd parameter being {@code null}.
      * Therefore all implementations should internally call {@link #get(Object)} when the 2nd parameter
      * has value {@code null}.
      *
@@ -103,10 +102,10 @@ public interface ValueMap extends Map<String, Object> {
         if (defaultValue == null) {
             return (T) get(name);
         }
-        T value = (T)get(name, defaultValue.getClass());
+        T value = (T) get(name, defaultValue.getClass());
         if (value == null) {
             return defaultValue;
         }
         return value;
     }
- }
+}

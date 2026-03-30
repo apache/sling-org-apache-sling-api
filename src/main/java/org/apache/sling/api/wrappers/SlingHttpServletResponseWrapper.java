@@ -31,8 +31,7 @@ import org.apache.sling.api.SlingHttpServletResponse;
  * interface is empty.
  * So this exists only for symmetry with {@link SlingHttpServletRequestWrapper}
  */
-public class SlingHttpServletResponseWrapper extends HttpServletResponseWrapper
-        implements SlingHttpServletResponse {
+public class SlingHttpServletResponseWrapper extends HttpServletResponseWrapper implements SlingHttpServletResponse {
 
     /**
      * Create a wrapper for the supplied wrappedRequest

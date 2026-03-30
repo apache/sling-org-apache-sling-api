@@ -27,9 +27,7 @@ import org.apache.sling.api.resource.ValueMap;
  * based on the resource tree and also supports {@link ModifiableValueMap}.
  * @since 2.5 (Sling API Bundle 2.7.0)
  */
-public class DeepReadModifiableValueMapDecorator
-    extends DeepReadValueMapDecorator
-    implements ModifiableValueMap {
+public class DeepReadModifiableValueMapDecorator extends DeepReadValueMapDecorator implements ModifiableValueMap {
 
     public DeepReadModifiableValueMapDecorator(final Resource resource, final ValueMap base) {
         super(resource, base);

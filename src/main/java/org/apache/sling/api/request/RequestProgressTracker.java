@@ -21,9 +21,8 @@ package org.apache.sling.api.request;
 import java.io.PrintWriter;
 import java.util.Iterator;
 
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
-
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -129,7 +128,8 @@ public interface RequestProgressTracker {
      * If there are no messages <code>null</code> is returned.
      * @return An iterator with the messages or {@code null}
      */
-    @Nullable Iterator<String> getMessages();
+    @Nullable
+    Iterator<String> getMessages();
 
     /**
      * Dumps the process timer entries to the given writer, one entry per line.

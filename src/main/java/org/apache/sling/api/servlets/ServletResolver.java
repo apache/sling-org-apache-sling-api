@@ -18,14 +18,13 @@
  */
 package org.apache.sling.api.servlets;
 
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
 import javax.servlet.Servlet;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -63,7 +62,8 @@ public interface ServletResolver {
      *             request.
      * @throws NullPointerException If {@code request} is null.
      */
-    @Nullable Servlet resolveServlet(@NotNull SlingHttpServletRequest request);
+    @Nullable
+    Servlet resolveServlet(@NotNull SlingHttpServletRequest request);
 
     /**
      * Resolves a <code>javax.servlet.Servlet</code> whose
@@ -93,7 +93,8 @@ public interface ServletResolver {
      * @throws IllegalArgumentException If {@code resource} is null.
      * @since 2.1 (Sling API Bundle 2.1.0)
      */
-    @Nullable Servlet resolveServlet(@NotNull Resource resource, @NotNull String scriptName);
+    @Nullable
+    Servlet resolveServlet(@NotNull Resource resource, @NotNull String scriptName);
 
     /**
      * Resolves a <code>javax.servlet.Servlet</code> whose
@@ -120,6 +121,6 @@ public interface ServletResolver {
      * @throws IllegalArgumentException If {@code resolver} is null.
      * @since 2.1 (Sling API Bundle 2.1.0)
      */
-    @Nullable Servlet resolveServlet(@NotNull ResourceResolver resolver, @NotNull String scriptName);
-
+    @Nullable
+    Servlet resolveServlet(@NotNull ResourceResolver resolver, @NotNull String scriptName);
 }

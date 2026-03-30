@@ -16,13 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 package org.apache.sling.api.resource.external;
+
+import java.net.URI;
 
 import org.apache.sling.api.resource.Resource;
 import org.osgi.annotation.versioning.ProviderType;
-
-import java.net.URI;
 
 /**
  * Provides a URI in exchange for a Resource.

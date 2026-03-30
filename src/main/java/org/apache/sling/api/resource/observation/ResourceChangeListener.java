@@ -21,7 +21,6 @@ package org.apache.sling.api.resource.observation;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
-
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**

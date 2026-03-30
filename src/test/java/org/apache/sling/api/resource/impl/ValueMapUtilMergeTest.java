@@ -16,21 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 package org.apache.sling.api.resource.impl;
-
-import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.api.wrappers.ValueMapUtil;
-import org.apache.sling.api.wrappers.ValueMapDecorator;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
+
+import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.api.wrappers.ValueMapDecorator;
+import org.apache.sling.api.wrappers.ValueMapUtil;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -48,9 +47,8 @@ public class ValueMapUtilMergeTest {
     @Parameterized.Parameters(name = "using ValueMapUtil#{0}")
     public static Iterable<Object[]> testedMergeMethod() {
         return asList(
-                new Object[] { "mergeAndCache", (Function<List<ValueMap>, ValueMap>)ValueMapUtil::mergeAndCache},
-                new Object[] { "merge", (Function<List<ValueMap>, ValueMap>)ValueMapUtil::merge}
-        );
+                new Object[] {"mergeAndCache", (Function<List<ValueMap>, ValueMap>) ValueMapUtil::mergeAndCache},
+                new Object[] {"merge", (Function<List<ValueMap>, ValueMap>) ValueMapUtil::merge});
     }
 
     public ValueMapUtilMergeTest(String name, Function<Collection<ValueMap>, ValueMap> mergeFn) {
@@ -75,7 +73,10 @@ public class ValueMapUtilMergeTest {
 
     @Test
     public void valuesTest() {
-        assertThat("values should be the one expected", typicalVM().values(), containsInAnyOrder("11", "22", "13", "24", "35"));
+        assertThat(
+                "values should be the one expected",
+                typicalVM().values(),
+                containsInAnyOrder("11", "22", "13", "24", "35"));
     }
 
     @Test
@@ -127,7 +128,10 @@ public class ValueMapUtilMergeTest {
     public void testLong() {
         ValueMap vm = merge(createValueMap("k", 11L));
         assertEquals("result should be the same than a simple property fetching", "11", vm.get("k", String.class));
-        assertEquals("result should be the same than a simple property fetching", 11L, Objects.requireNonNull(vm.get("k", Long.class)).longValue());
+        assertEquals(
+                "result should be the same than a simple property fetching",
+                11L,
+                Objects.requireNonNull(vm.get("k", Long.class)).longValue());
     }
 
     @Test

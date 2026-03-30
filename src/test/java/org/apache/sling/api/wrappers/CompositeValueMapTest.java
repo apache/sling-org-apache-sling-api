@@ -18,14 +18,14 @@
  */
 package org.apache.sling.api.wrappers;
 
-import org.apache.sling.api.resource.ValueMap;
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import org.apache.sling.api.resource.ValueMap;
+import org.junit.Assert;
+import org.junit.Test;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
@@ -54,10 +54,7 @@ public class CompositeValueMapTest {
     @Test
     public void testMerge() throws Exception {
         // Get value map for extended node using default node as defaults
-        CompositeValueMap valueMap = new CompositeValueMap(
-                getExtendedProps(),
-                getDefaultProps()
-        );
+        CompositeValueMap valueMap = new CompositeValueMap(getExtendedProps(), getDefaultProps());
 
         Set<CompositeValueMapTestResult> expectations = new HashSet<CompositeValueMapTestResult>();
         expectations.add(new CompositeValueMapTestResult(PROP_NAME_UNCHANGED));
@@ -72,13 +69,11 @@ public class CompositeValueMapTest {
     @Test
     public void testMergeNoDefaults() throws Exception {
         // Get value map for extended node using an empty default
-        CompositeValueMap valueMap = new CompositeValueMap(
-                getExtendedProps(),
-                null
-        );
+        CompositeValueMap valueMap = new CompositeValueMap(getExtendedProps(), null);
 
         Set<CompositeValueMapTestResult> expectations = new HashSet<CompositeValueMapTestResult>();
-        expectations.add(new CompositeValueMapTestResult(PROP_NAME_UNCHANGED, true)); // Property won't exist as there is no default
+        expectations.add(new CompositeValueMapTestResult(
+                PROP_NAME_UNCHANGED, true)); // Property won't exist as there is no default
         expectations.add(new CompositeValueMapTestResult(PROP_NAME_OVERRIDDEN));
         expectations.add(new CompositeValueMapTestResult(PROP_NAME_NEW_TYPE, false, PROP_EXTENDED_NEW_TYPE.getClass()));
         expectations.add(new CompositeValueMapTestResult(PROP_NAME_ADDED));
@@ -91,17 +86,14 @@ public class CompositeValueMapTest {
     public void testOverride() throws Exception {
         // Get value map for extended node using default node as defaults
         // and override only mode
-        CompositeValueMap valueMap = new CompositeValueMap(
-                getExtendedProps(),
-                getDefaultProps(),
-                false
-        );
+        CompositeValueMap valueMap = new CompositeValueMap(getExtendedProps(), getDefaultProps(), false);
 
         Set<CompositeValueMapTestResult> expectations = new HashSet<CompositeValueMapTestResult>();
         expectations.add(new CompositeValueMapTestResult(PROP_NAME_UNCHANGED));
         expectations.add(new CompositeValueMapTestResult(PROP_NAME_OVERRIDDEN));
         expectations.add(new CompositeValueMapTestResult(PROP_NAME_NEW_TYPE, false, PROP_EXTENDED_NEW_TYPE.getClass()));
-        expectations.add(new CompositeValueMapTestResult(PROP_NAME_ADDED, true)); // Property won't exist as there is no default and it's an override
+        expectations.add(new CompositeValueMapTestResult(
+                PROP_NAME_ADDED, true)); // Property won't exist as there is no default and it's an override
         expectations.add(new CompositeValueMapTestResult(PROP_NAME_DOES_NOT_EXIST));
 
         verifyResults(valueMap, expectations);
@@ -111,11 +103,7 @@ public class CompositeValueMapTest {
     public void testOverrideNoDefaults() throws Exception {
         // Get value map for extended node using an empty default
         // and override only mode
-        CompositeValueMap valueMap = new CompositeValueMap(
-                getExtendedProps(),
-                null,
-                false
-        );
+        CompositeValueMap valueMap = new CompositeValueMap(getExtendedProps(), null, false);
 
         Assert.assertTrue("Final map should be empty", valueMap.isEmpty());
     }
@@ -151,39 +139,63 @@ public class CompositeValueMapTest {
                 Assert.assertFalse("Property '" + property + "' should NOT exist", valueMap.containsKey(property));
 
             } else if (testResult.shouldBeDeleted()) {
-                Assert.assertFalse("Property '" + property + "' should NOT be part of the final map", valueMap.containsKey(property));
+                Assert.assertFalse(
+                        "Property '" + property + "' should NOT be part of the final map",
+                        valueMap.containsKey(property));
                 Assert.assertNull("Property '" + property + "' should be null", valueMap.get(property));
 
             } else {
-                Assert.assertTrue("Property '" + property + "' should be part of the final map", valueMap.containsKey(property));
+                Assert.assertTrue(
+                        "Property '" + property + "' should be part of the final map", valueMap.containsKey(property));
                 expectedSize++;
 
                 if (testResult.shouldBeUnchanged()) {
-                    Assert.assertEquals("Property '" + property + "' should NOT have changed", testResult.defaultValue, valueMap.get(property));
+                    Assert.assertEquals(
+                            "Property '" + property + "' should NOT have changed",
+                            testResult.defaultValue,
+                            valueMap.get(property));
                     expectedMap.put(property, testResult.defaultValue);
                 }
 
                 if (testResult.shouldBeOverriden()) {
-                    Assert.assertEquals("Property '" + property + "' should have changed", testResult.extendedValue, valueMap.get(property));
+                    Assert.assertEquals(
+                            "Property '" + property + "' should have changed",
+                            testResult.extendedValue,
+                            valueMap.get(property));
                     expectedMap.put(property, testResult.extendedValue);
                 }
 
                 if (testResult.shouldHaveNewType()) {
-                    Assert.assertEquals("Type of property '" + property + "' should have changed",testResult.expectedNewType, valueMap.get(property).getClass());
+                    Assert.assertEquals(
+                            "Type of property '" + property + "' should have changed",
+                            testResult.expectedNewType,
+                            valueMap.get(property).getClass());
                     expectedMap.put(property, testResult.extendedValue);
                 }
 
                 if (testResult.shouldBeAdded()) {
-                    Assert.assertEquals("Property '" + property + "' should have been added", testResult.extendedValue, valueMap.get(property));
+                    Assert.assertEquals(
+                            "Property '" + property + "' should have been added",
+                            testResult.extendedValue,
+                            valueMap.get(property));
                     expectedMap.put(property, testResult.extendedValue);
                 }
             }
         }
 
         Assert.assertEquals("Final map size does NOT match", expectedSize, valueMap.size());
-        Assert.assertThat("Final map keys do NOT match", valueMap.keySet(), containsInAnyOrder(expectedMap.keySet().toArray()));
-        Assert.assertThat("Final map values do NOT match", valueMap.values(), containsInAnyOrder(expectedMap.values().toArray()));
-        Assert.assertThat("Final map entries do NOT match", valueMap.entrySet(), containsInAnyOrder(expectedMap.entrySet().toArray()));
+        Assert.assertThat(
+                "Final map keys do NOT match",
+                valueMap.keySet(),
+                containsInAnyOrder(expectedMap.keySet().toArray()));
+        Assert.assertThat(
+                "Final map values do NOT match",
+                valueMap.values(),
+                containsInAnyOrder(expectedMap.values().toArray()));
+        Assert.assertThat(
+                "Final map entries do NOT match",
+                valueMap.entrySet(),
+                containsInAnyOrder(expectedMap.entrySet().toArray()));
     }
 
     /**
@@ -261,7 +273,5 @@ public class CompositeValueMapTest {
         boolean doesNotExist() {
             return defaultValue == null && extendedValue == null;
         }
-
     }
-
 }

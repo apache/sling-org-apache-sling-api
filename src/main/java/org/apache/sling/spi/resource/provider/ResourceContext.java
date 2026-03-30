@@ -21,7 +21,6 @@ package org.apache.sling.spi.resource.provider;
 import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
-
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -38,7 +37,8 @@ public interface ResourceContext {
      * map could contain the path parameters of the url.
      * @return A non empty map with parameters or {@code null}.
      */
-    @Nullable Map<String, String> getResolveParameters();
+    @Nullable
+    Map<String, String> getResolveParameters();
 
     /**
      * "Empty" instance, not providing any additional information.

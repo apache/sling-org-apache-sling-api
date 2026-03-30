@@ -18,11 +18,10 @@
  */
 package org.apache.sling.api.servlets;
 
-import org.jetbrains.annotations.NotNull;
 import javax.servlet.Servlet;
 
 import org.apache.sling.api.SlingHttpServletRequest;
-
+import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
@@ -32,7 +31,7 @@ import org.osgi.annotation.versioning.ConsumerType;
  * properties.
  *
  * Note that servlets implementing this interface can have an impact
- * on system performance, as their resolution cannot be cached: the 
+ * on system performance, as their resolution cannot be cached: the
  * resolver has no insight into which parts of the request cause
  * {@link #accepts} to return true.
  */
@@ -50,5 +49,4 @@ public interface OptingServlet extends Servlet {
      *         <code>false</code> otherwise
      */
     boolean accepts(@NotNull SlingHttpServletRequest request);
-
 }

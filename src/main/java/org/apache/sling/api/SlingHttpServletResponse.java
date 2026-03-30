@@ -34,7 +34,4 @@ import org.osgi.annotation.versioning.ProviderType;
  * {@link Adaptable} interface.
  */
 @ProviderType
-public interface SlingHttpServletResponse extends HttpServletResponse,
-        Adaptable {
-
-}
+public interface SlingHttpServletResponse extends HttpServletResponse, Adaptable {}

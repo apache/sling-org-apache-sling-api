@@ -23,8 +23,7 @@ import junit.framework.TestCase;
 public class RequestDispatcherOptionsTest extends TestCase {
 
     public void testNullString() {
-        final RequestDispatcherOptions result = new RequestDispatcherOptions(
-            null);
+        final RequestDispatcherOptions result = new RequestDispatcherOptions(null);
         assertTrue(result.isEmpty());
     }
 
@@ -34,51 +33,50 @@ public class RequestDispatcherOptionsTest extends TestCase {
     }
 
     public void testSingleOption() {
-        final RequestDispatcherOptions result = new RequestDispatcherOptions(
-            "forceResourceType= widget");
+        final RequestDispatcherOptions result = new RequestDispatcherOptions("forceResourceType= widget");
         assertNotNull(result);
-        assertEquals("Expected option found (" + result + ")", "widget",
-            result.get(RequestDispatcherOptions.OPT_FORCE_RESOURCE_TYPE));
-        assertEquals("Expected option found (" + result + ")", "widget",
-            result.getForceResourceType());
+        assertEquals(
+                "Expected option found (" + result + ")",
+                "widget",
+                result.get(RequestDispatcherOptions.OPT_FORCE_RESOURCE_TYPE));
+        assertEquals("Expected option found (" + result + ")", "widget", result.getForceResourceType());
     }
 
     public void testResourceTypeSlashShortcut() {
         // a single option with no comma or colon means "forceResourceType"
-        final RequestDispatcherOptions result = new RequestDispatcherOptions(
-            "\t components/widget  ");
+        final RequestDispatcherOptions result = new RequestDispatcherOptions("\t components/widget  ");
         assertNotNull(result);
-        assertEquals("Expected option found (" + result + ")",
-            "components/widget",
-            result.get(RequestDispatcherOptions.OPT_FORCE_RESOURCE_TYPE));
-        assertEquals("Expected option found (" + result + ")",
-            "components/widget", result.getForceResourceType());
+        assertEquals(
+                "Expected option found (" + result + ")",
+                "components/widget",
+                result.get(RequestDispatcherOptions.OPT_FORCE_RESOURCE_TYPE));
+        assertEquals("Expected option found (" + result + ")", "components/widget", result.getForceResourceType());
     }
 
     public void testResourceTypeColonShortcut() {
         // a single option with no comma or colon means "forceResourceType"
-        final RequestDispatcherOptions result = new RequestDispatcherOptions(
-            "\t components:widget  ");
+        final RequestDispatcherOptions result = new RequestDispatcherOptions("\t components:widget  ");
         assertNotNull(result);
-        assertEquals("Expected option found (" + result + ")",
-            "components:widget",
-            result.get(RequestDispatcherOptions.OPT_FORCE_RESOURCE_TYPE));
-        assertEquals("Expected option found (" + result + ")",
-            "components:widget", result.getForceResourceType());
+        assertEquals(
+                "Expected option found (" + result + ")",
+                "components:widget",
+                result.get(RequestDispatcherOptions.OPT_FORCE_RESOURCE_TYPE));
+        assertEquals("Expected option found (" + result + ")", "components:widget", result.getForceResourceType());
     }
 
     public void testTwoOptions() {
-        final RequestDispatcherOptions result = new RequestDispatcherOptions(
-            "forceResourceType= components:widget, replaceSelectors = xyz  ,");
+        final RequestDispatcherOptions result =
+                new RequestDispatcherOptions("forceResourceType= components:widget, replaceSelectors = xyz  ,");
         assertNotNull(result);
-        assertEquals("Expected option found (" + result + ")",
-            "components:widget",
-            result.get(RequestDispatcherOptions.OPT_FORCE_RESOURCE_TYPE));
-        assertEquals("Expected option found (" + result + ")",
-            "components:widget", result.getForceResourceType());
-        assertEquals("Expected option found (" + result + ")", "xyz",
-            result.get(RequestDispatcherOptions.OPT_REPLACE_SELECTORS));
-        assertEquals("Expected option found (" + result + ")", "xyz",
-            result.getReplaceSelectors());
+        assertEquals(
+                "Expected option found (" + result + ")",
+                "components:widget",
+                result.get(RequestDispatcherOptions.OPT_FORCE_RESOURCE_TYPE));
+        assertEquals("Expected option found (" + result + ")", "components:widget", result.getForceResourceType());
+        assertEquals(
+                "Expected option found (" + result + ")",
+                "xyz",
+                result.get(RequestDispatcherOptions.OPT_REPLACE_SELECTORS));
+        assertEquals("Expected option found (" + result + ")", "xyz", result.getReplaceSelectors());
     }
 }

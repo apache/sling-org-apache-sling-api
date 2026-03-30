@@ -22,13 +22,12 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
-
 import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
@@ -321,8 +320,7 @@ public abstract class ResourceProvider<T> {
      *      href="http://sling.apache.org/documentation/the-sling-engine/service-authentication.html">Service
      *      Authentication</a>
      */
-    public @Nullable T authenticate(final @NotNull Map<String, Object> authenticationInfo)
-    throws LoginException {
+    public @Nullable T authenticate(final @NotNull Map<String, Object> authenticationInfo) throws LoginException {
         return null;
     }
 
@@ -414,7 +412,8 @@ public abstract class ResourceProvider<T> {
      * @throws org.apache.sling.api.SlingException
      *             may be thrown in case of any problem creating the {@code Resource} instance.
      */
-    public abstract @Nullable Resource getResource(@NotNull final ResolveContext<T> ctx,
+    public abstract @Nullable Resource getResource(
+            @NotNull final ResolveContext<T> ctx,
             @NotNull final String path,
             @NotNull final ResourceContext resourceContext,
             @Nullable final Resource parent);
@@ -449,7 +448,8 @@ public abstract class ResourceProvider<T> {
      * @throws org.apache.sling.api.SlingException
      *             If any error occurs acquiring the child resource iterator.
      */
-    public abstract @Nullable Iterator<Resource> listChildren(final @NotNull ResolveContext<T> ctx, final @NotNull Resource parent);
+    public abstract @Nullable Iterator<Resource> listChildren(
+            final @NotNull ResolveContext<T> ctx, final @NotNull Resource parent);
 
     /**
      * Returns a collection of attribute names whose value can be retrieved
@@ -504,8 +504,9 @@ public abstract class ResourceProvider<T> {
      *
      * @throws PersistenceException If anything fails
      */
-    public @NotNull Resource create(final @NotNull ResolveContext<T> ctx, final String path, final Map<String, Object> properties)
-    throws PersistenceException {
+    public @NotNull Resource create(
+            final @NotNull ResolveContext<T> ctx, final String path, final Map<String, Object> properties)
+            throws PersistenceException {
         throw new PersistenceException("create is not supported.");
     }
 
@@ -523,7 +524,7 @@ public abstract class ResourceProvider<T> {
      * @throws PersistenceException If anything fails
      */
     public void delete(final @NotNull ResolveContext<T> ctx, final @NotNull Resource resource)
-    throws PersistenceException {
+            throws PersistenceException {
         throw new PersistenceException("delete is not supported.");
     }
 
@@ -548,8 +549,7 @@ public abstract class ResourceProvider<T> {
      * @param ctx The {@link ResolveContext}.
      * @throws PersistenceException If anything fails
      */
-    public void commit(final @NotNull ResolveContext<T> ctx)
-    throws PersistenceException {
+    public void commit(final @NotNull ResolveContext<T> ctx) throws PersistenceException {
         // nothing to do here
     }
 
@@ -600,8 +600,8 @@ public abstract class ResourceProvider<T> {
      * @return The adapter target or {@code null} if the provider cannot
      *         be adapt to the requested type.
      */
-    public @Nullable <AdapterType> AdapterType adaptTo(final  @NotNull ResolveContext<T> ctx,
-            final @NotNull Class<AdapterType> type) {
+    public @Nullable <AdapterType> AdapterType adaptTo(
+            final @NotNull ResolveContext<T> ctx, final @NotNull Class<AdapterType> type) {
         return null;
     }
 
@@ -627,9 +627,9 @@ public abstract class ResourceProvider<T> {
      * @throws PersistenceException If an error occurs.
      * @return {@code true} if the provider can perform the copy
      */
-    public boolean copy(final  @NotNull ResolveContext<T> ctx,
-              final @NotNull String srcAbsPath,
-              final @NotNull String destAbsPath) throws PersistenceException {
+    public boolean copy(
+            final @NotNull ResolveContext<T> ctx, final @NotNull String srcAbsPath, final @NotNull String destAbsPath)
+            throws PersistenceException {
         return false;
     }
 
@@ -655,9 +655,9 @@ public abstract class ResourceProvider<T> {
      * @throws PersistenceException If an error occurs.
      * @return {@code true} if the provider can perform the move
      */
-    public boolean move(final  @NotNull ResolveContext<T> ctx,
-              final @NotNull String srcAbsPath,
-              final @NotNull String destAbsPath) throws PersistenceException {
+    public boolean move(
+            final @NotNull ResolveContext<T> ctx, final @NotNull String srcAbsPath, final @NotNull String destAbsPath)
+            throws PersistenceException {
         return false;
     }
 }

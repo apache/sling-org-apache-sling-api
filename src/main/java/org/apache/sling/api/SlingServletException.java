@@ -33,5 +33,4 @@ public class SlingServletException extends SlingException {
     public SlingServletException(ServletException cause) {
         super(cause);
     }
-
 }

@@ -33,8 +33,7 @@ public class InvalidServiceFilterSyntaxException extends SlingException {
         this.filter = filter;
     }
 
-    public InvalidServiceFilterSyntaxException(String filter, String reason,
-            Throwable cause) {
+    public InvalidServiceFilterSyntaxException(String filter, String reason, Throwable cause) {
         super(reason, cause);
 
         this.filter = filter;
