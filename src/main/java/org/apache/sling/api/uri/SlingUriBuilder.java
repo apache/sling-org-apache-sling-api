@@ -447,6 +447,13 @@ public class SlingUriBuilder {
         suffix = null;
         if (availableResourcePath.length() == path.length()) {
             resourcePath = availableResourcePath;
+        } else if (availableResourcePath.length() + 1 == path.length()
+                && path.charAt(availableResourcePath.length()) == '/') {
+            // The path has a trailing slash that is not part of the resource path (e.g.
+            // /apidocs/sling12/ with resource at /apidocs/sling12). setPathWithDefinedResourcePosition
+            // assumes a dot separator at the given position; a trailing slash must be handled here
+            // to avoid StringIndexOutOfBoundsException.
+            resourcePath = availableResourcePath;
         } else {
             setPathWithDefinedResourcePosition(path, availableResourcePath.length());
         }
