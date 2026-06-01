@@ -463,6 +463,28 @@ public class SlingUriTest {
     }
 
     @Test
+    public void testAbsolutePathWithInvalidPathParameterKeyCharacters() {
+        SlingUri uriWithBracketInKey = SlingUriBuilder.parse("/test/to/path;foo[='bar'.sel1.html", null)
+                .build();
+        assertTrue(uriWithBracketInKey.getPathParameters().isEmpty());
+
+        SlingUri uriWithBackslashInKey = SlingUriBuilder.parse("/test/to/path;foo\\='bar'.sel1.html", null)
+                .build();
+        assertTrue(uriWithBackslashInKey.getPathParameters().isEmpty());
+    }
+
+    @Test
+    public void testAbsolutePathWithPathParameterKeySpecialCharacters() {
+        SlingUri uri = SlingUriBuilder.parse("/test/to/path;foo.bar='bar';foo_bar='baz';foo-bar='qux'.sel1.html", null)
+                .build();
+
+        assertEquals(3, uri.getPathParameters().size());
+        assertEquals("bar", uri.getPathParameters().get("foo.bar"));
+        assertEquals("baz", uri.getPathParameters().get("foo_bar"));
+        assertEquals("qux", uri.getPathParameters().get("foo-bar"));
+    }
+
+    @Test
     public void testAbsolutePathWithPathParameterAfterExtension() {
         String testUriStr = "/test/to/path.sel1.html;v='1.0'/suffix/path?p1=2&p2=3#frag3939";
 
