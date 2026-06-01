@@ -18,6 +18,7 @@
  */
 package org.apache.sling.api.uri;
 
+import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.apache.sling.api.resource.Resource;
@@ -29,6 +30,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.apache.sling.api.uri.SlingUriTest.testUri;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.Silent.class)
@@ -309,5 +312,63 @@ public class SlingUriRebaseTest {
 
         String testPath = "/path/to/page.html";
         SlingUriBuilder.parse(testPath, null).rebaseResourcePath().build();
+    }
+
+    @Test
+    public void testRebaseResourcePathWithTrailingSlashResourceExists() {
+        // path with trailing slash, resource exists at path without trailing slash
+        when(resolver.getResource("/apidocs/sling12")).thenReturn(resource);
+        SlingUri slingUri = SlingUriBuilder.parse("/apidocs/sling12/", resolver).build();
+        assertNotNull(slingUri);
+        assertEquals("/apidocs/sling12", slingUri.getResourcePath());
+        assertNull(slingUri.getSelectorString());
+        assertNull(slingUri.getExtension());
+        assertNull(slingUri.getSuffix());
+    }
+
+    @Test
+    public void testRebaseResourcePathWithTrailingSlashNoResourceExists() {
+        // path with trailing slash, no resource exists: should not throw StringIndexOutOfBoundsException
+        when(resolver.getResource("/apidocs/sling12")).thenReturn(null);
+        SlingUri slingUri = SlingUriBuilder.parse("/apidocs/sling12/", resolver).build();
+        assertNotNull(slingUri);
+    }
+
+    @Test
+    public void testRebaseFullUriWithTrailingSlash() throws URISyntaxException {
+        // full external URI with trailing slash path - the original bug report scenario
+        // No StringIndexOutOfBoundsException should be thrown
+        SlingUri slingUri = SlingUriBuilder.parse("https://sling.apache.org/apidocs/sling12/", resolver)
+                .build();
+        assertNotNull(slingUri);
+        assertEquals("https", slingUri.getScheme());
+        assertEquals("sling.apache.org", slingUri.getHost());
+    }
+
+    @Test
+    public void testRebaseCreateFromUriWithTrailingSlash() throws URISyntaxException {
+        // createFrom(URI, resolver) with trailing slash path - the original bug report scenario
+        // No StringIndexOutOfBoundsException should be thrown
+        URI input = new URI("https://sling.apache.org/apidocs/sling12/");
+        SlingUri slingUri = SlingUriBuilder.createFrom(input, resolver).build();
+        assertNotNull(slingUri);
+        assertEquals("https", slingUri.getScheme());
+        assertEquals("sling.apache.org", slingUri.getHost());
+    }
+
+    @Test
+    public void testRebaseResourcePathWithSlashSuffix() {
+        // For /content/page.html/suffix, the iterator strips the suffix then the .html extension,
+        // landing at /content/page; then setPathWithDefinedResourcePosition splits at '.' giving
+        // extension=html, suffix=/suffix.
+        when(resolver.getResource("/content/page.html/suffix")).thenReturn(null);
+        when(resolver.getResource("/content/page")).thenReturn(resource);
+        SlingUri slingUri =
+                SlingUriBuilder.parse("/content/page.html/suffix", resolver).build();
+        assertNotNull(slingUri);
+        assertEquals("/content/page", slingUri.getResourcePath());
+        assertEquals(null, slingUri.getSelectorString());
+        assertEquals("html", slingUri.getExtension());
+        assertEquals("/suffix", slingUri.getSuffix());
     }
 }
