@@ -31,6 +31,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import static org.apache.sling.api.uri.SlingUriTest.testUri;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.Silent.class)
@@ -320,9 +321,9 @@ public class SlingUriRebaseTest {
         SlingUri slingUri = SlingUriBuilder.parse("/apidocs/sling12/", resolver).build();
         assertNotNull(slingUri);
         assertEquals("/apidocs/sling12", slingUri.getResourcePath());
-        assertEquals(null, slingUri.getSelectorString());
-        assertEquals(null, slingUri.getExtension());
-        assertEquals(null, slingUri.getSuffix());
+        assertNull(slingUri.getSelectorString());
+        assertNull(slingUri.getExtension());
+        assertNull(slingUri.getSuffix());
     }
 
     @Test
