@@ -82,7 +82,7 @@ public class SlingUriBuilder {
     static final String CHAR_DOT = ".";
     static final String CHAR_SLASH = "/";
     static final String SELECTOR_DOT_REGEX = "\\.(?!\\.?/)"; // (?!\\.?/) to avoid matching ./ and ../
-    static final String PATH_PARAMETERS_REGEX = ";([a-zA-z0-9]+)=(?:\\'([^']*)\\'|([^/]+))";
+    static final String PATH_PARAMETERS_REGEX = ";([a-zA-Z0-9]+)=(?:\\'([^']*)\\'|([^/]+))";
     static final String BEST_EFFORT_INVALID_URI_MATCHER =
             "^(?:([^:#@]+):)?(?://(?:([^@#]+)@)?([^/#:]+)(?::([0-9]+))?)?(?:([^?#]+))?(?:\\?([^#]*))?(?:#(.*))?$";
 
