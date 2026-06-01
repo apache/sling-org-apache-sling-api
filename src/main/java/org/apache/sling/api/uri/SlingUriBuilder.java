@@ -82,9 +82,12 @@ public class SlingUriBuilder {
     static final String CHAR_DOT = ".";
     static final String CHAR_SLASH = "/";
     static final String SELECTOR_DOT_REGEX = "\\.(?!\\.?/)"; // (?!\\.?/) to avoid matching ./ and ../
-    static final String PATH_PARAMETERS_REGEX = ";([a-zA-Z0-9]+)=(?:\\'([^']*)\\'|([^/]+))";
+    static final String PATH_PARAMETERS_REGEX = ";([a-zA-Z0-9._-]+)=(?:\\'([^']*)\\'|([^/]+))";
     static final String BEST_EFFORT_INVALID_URI_MATCHER =
             "^(?:([^:#@]+):)?(?://(?:([^@#]+)@)?([^/#:]+)(?::([0-9]+))?)?(?:([^?#]+))?(?:\\?([^#]*))?(?:#(.*))?$";
+    private static final Pattern SELECTOR_DOT_PATTERN = Pattern.compile(SELECTOR_DOT_REGEX);
+    private static final Pattern PATH_PARAMETERS_PATTERN = Pattern.compile(PATH_PARAMETERS_REGEX);
+    private static final Pattern BEST_EFFORT_INVALID_URI_PATTERN = Pattern.compile(BEST_EFFORT_INVALID_URI_MATCHER);
 
     /**
      * Creates a builder without any URI parameters set.
@@ -264,7 +267,7 @@ public class SlingUriBuilder {
     }
 
     private static SlingUriBuilder parseBestEffort(String uriStr, ResourceResolver resourceResolver) {
-        Matcher matcher = Pattern.compile(BEST_EFFORT_INVALID_URI_MATCHER).matcher(uriStr);
+        Matcher matcher = BEST_EFFORT_INVALID_URI_PATTERN.matcher(uriStr);
         matcher.find();
 
         String scheme = matcher.group(1);
@@ -392,8 +395,7 @@ public class SlingUriBuilder {
         if (path != null && path.startsWith(SlingUriBuilder.CHAR_SLASH) && resourceResolver != null) {
             setResourcePath(path);
             rebaseResourcePath();
-        } else if (path != null
-                && (dotMatcher = Pattern.compile(SELECTOR_DOT_REGEX).matcher(path)).find()) {
+        } else if (path != null && (dotMatcher = SELECTOR_DOT_PATTERN.matcher(path)).find()) {
             int firstDotPosition = dotMatcher.start();
             setPathWithDefinedResourcePosition(path, firstDotPosition);
         } else {
@@ -1018,10 +1020,8 @@ public class SlingUriBuilder {
         // we rebuild the parameters from scratch as given in path (if path is set to null we also reset)
         pathParameters.clear();
         if (path != null) {
-            Pattern pathParameterRegex = Pattern.compile(PATH_PARAMETERS_REGEX);
-
             StringBuffer resultString = null;
-            Matcher regexMatcher = pathParameterRegex.matcher(path);
+            Matcher regexMatcher = PATH_PARAMETERS_PATTERN.matcher(path);
             while (regexMatcher.find()) {
                 if (resultString == null) {
                     resultString = new StringBuffer();
