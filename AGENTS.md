@@ -76,3 +76,10 @@ target/                          Build output (ignored by version control)
 - The parent POM (`sling-bundle-parent`) controls most plugin versions and default configurations. Avoid overriding plugin versions locally unless strictly necessary.
 - `HtmlResponse.html` in `src/main/resources` is intentionally excluded from RAT license checking (see `pom.xml` exclusion list).
 - Spotless failures block the build. If CI fails with a formatting error, run `mvn spotless:apply` locally and commit the result.
+
+# Security
+
+<!-- sling-security-default:start -->
+The threat model for this project is https://github.com/apache/sling/blob/master/docs/threat-model.md .
+<!-- sling-security-default:end -->
+
