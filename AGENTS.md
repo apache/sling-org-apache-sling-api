@@ -1,6 +1,6 @@
 # Project Overview
 
-Apache Sling API (`org.apache.sling.api`) is an OSGi bundle that extends the Jakarta Servlet API 6.0 to define the core Sling programming model. It provides interfaces for resource resolution (`Resource`, `ResourceResolver`), Sling-specific HTTP request/response (`SlingHttpServletRequest`, `SlingJakartaHttpServletRequest`), adaptables, scripting, URI handling, and servlet registration. This is a pure API bundle — no runtime implementations are included. Java 17 is required. The bundle is built with Maven and packaged using bnd.
+Apache Sling API (`org.apache.sling.api`) is an OSGi bundle that extends the Jakarta Servlet API 6.0 to define the core Sling programming model. It provides interfaces and helper types for resource resolution (`Resource`, `ResourceResolver`), Sling-specific HTTP request/response (`SlingHttpServletRequest`, `SlingJakartaHttpServletRequest`), adaptables, scripting, URI handling, request/response builders, and servlet registration. Java 17 is required. The bundle is built with Maven and packaged using bnd.
 
 # Core Commands
 
@@ -22,17 +22,24 @@ pom.xml                          Maven build descriptor
 bnd.bnd                          OSGi bundle manifest overrides
 src/
   main/java/org/apache/sling/
-    api/                         Core Sling API interfaces and exceptions
+    api/                         Core Sling API contracts and helper types
       adapter/                   Adaptable / AdapterFactory contracts
       auth/                      Authentication info interfaces
-      request/                   Request parameter and dispatcher APIs
-      resource/                  Resource, ResourceResolver, ResourceFactory
+      request/                   Request parameter / dispatcher APIs
+        builder/                 Request/response builder APIs
+        header/                  HTTP header helper APIs
+      resource/                  Resource and resolver APIs
+        external/                Externalizer APIs
+        mapping/                 Mapping APIs
+        observation/             Observation-related contracts
+        path/                    Path utilities
+        runtime/dto/             Runtime DTO types
       scripting/                 ScriptHelper and scripting support
       security/                  PermissionInfo
       servlets/                  SlingSafeMethodsServlet, SlingAllMethodsServlet, helper types
       uri/                       SlingUri / SlingUriBuilder
       wrappers/                  Decorator wrappers for request, response, resource
-    spi/resource/                SPI interfaces for ResourceProvider implementations
+    spi/resource/provider/       SPI interfaces for ResourceProvider implementations
   main/resources/                Static resources (e.g., HtmlResponse.html)
   test/java/org/apache/sling/
     api/                         Unit tests mirroring main package structure
@@ -45,8 +52,9 @@ target/                          Build output (ignored by version control)
 - **Code style:** Enforced by Spotless (configured in parent POM). Run `mvn spotless:apply` before committing.
 - **API compatibility:** Every public/protected interface and class change must be backward-compatible or accompanied by a semantic version bump. The `bnd-baseline-maven-plugin` enforces this automatically during `mvn verify`.
 - **OSGi versioning:** Package versions are declared in `package-info.java` files using `@Version`. Increment according to OSGi semantic versioning rules (major = breaking, minor = new API, micro = bugfix/doc).
-- **No implementations:** This bundle defines contracts only. Do not add runtime logic beyond what is necessary to fulfill an interface default method or utility helper directly specified by the API.
+- **API-first bundle:** Keep this module focused on API contracts and lightweight API helpers; avoid runtime/service implementations.
 - **`javax.jcr` dependency is optional** — declared as `resolution:=optional` in `bnd.bnd`. Do not make JCR types mandatory.
+- **Servlet duality:** Both `javax.servlet` and `jakarta.servlet` APIs are provided-scope dependencies and both Sling request/response hierarchies are present.
 - **Nullability:** Use `@NotNull` / `@Nullable` from `org.jetbrains.annotations` on all public method signatures.
 - **License headers:** All `.java` files must carry the Apache 2.0 license header. Checked by `apache-rat-plugin`.
 
@@ -60,7 +68,7 @@ target/                          Build output (ignored by version control)
 
 # Testing Guidelines
 
-- **Framework:** JUnit 4 (`junit:junit`) + Mockito + Hamcrest.
+- **Framework:** JUnit 4 (`junit:junit`) + Mockito + Hamcrest (with `commons-lang3` used in tests).
 - **Test location:** `src/test/java/` mirroring the package of the class under test.
 - **Naming:** `<ClassName>Test.java`.
 - **Run all tests:** `mvn test`
@@ -72,7 +80,8 @@ target/                          Build output (ignored by version control)
 # Gotchas
 
 - Both `javax.servlet` and `jakarta.servlet` APIs are on the compile classpath. `SlingHttpServletRequest` wraps `javax.servlet`; `SlingJakartaHttpServletRequest` wraps `jakarta.servlet`. Do not conflate the two hierarchies.
-- The `bnd-baseline-maven-plugin` will fail the build if a public API change is made without a corresponding package version bump in `package-info.java`. Always update `@Version` when adding or changing public members.
+- The `bnd-baseline-maven-plugin` enforces API compatibility during `mvn verify`; package version bumps in `package-info.java` are required for public API changes.
+- The baseline configuration currently excludes `org.apache.sling.api` temporarily from strict diffing (see `pom.xml` comment around SLING-11974); do not assume this applies to other packages.
 - The parent POM (`sling-bundle-parent`) controls most plugin versions and default configurations. Avoid overriding plugin versions locally unless strictly necessary.
 - `HtmlResponse.html` in `src/main/resources` is intentionally excluded from RAT license checking (see `pom.xml` exclusion list).
 - Spotless failures block the build. If CI fails with a formatting error, run `mvn spotless:apply` locally and commit the result.
@@ -82,4 +91,3 @@ target/                          Build output (ignored by version control)
 <!-- sling-security-default:start -->
 The threat model for this project is https://github.com/apache/sling/blob/master/docs/threat-model.md .
 <!-- sling-security-default:end -->
-
