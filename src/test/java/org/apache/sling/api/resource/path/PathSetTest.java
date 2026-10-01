@@ -114,6 +114,29 @@ public class PathSetTest {
     }
 
     @Test
+    public void testMatchingNormalizesTraversalSegments() {
+        for (final String entry : new String[] {"/apps", "glob:/apps/**"}) {
+            final PathSet set = PathSet.fromStrings(entry);
+
+            assertNull(set.matches("/apps/../etc/secret"));
+            assertNull(set.matches("/apps/foo/../../etc"));
+            assertNull(set.matches("/../apps/foo"));
+            assertNull(set.matches("/apps/..."));
+            assertEquals(new Path(entry), set.matches("/apps/foo/../bar"));
+            assertEquals(new Path(entry), set.matches("/libs/../apps/foo"));
+            assertEquals(new Path(entry), set.matches("/apps//foo"));
+        }
+    }
+
+    @Test
+    public void testSubsetNormalizesTraversalSegments() {
+        final PathSet set = PathSet.fromStrings("/apps/../etc/secret", "/apps/foo");
+
+        assertEqualSets(set.getSubset("/apps"), "/apps/foo");
+        assertEqualSets(set.getSubset(PathSet.fromStrings("/apps")), "/apps/foo");
+    }
+
+    @Test
     public void testToStringSet() {
         final PathSet set = PathSet.fromStrings("/a", "/x/y");
 

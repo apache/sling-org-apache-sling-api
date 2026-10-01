@@ -64,6 +64,46 @@ public class PathTest {
     }
 
     @Test
+    public void testMatchesNormalizesTraversalSegments() {
+        final Path path = new Path("/apps");
+
+        assertNoMatch(path, "/apps/../etc/secret", "/apps/./../etc/secret", "/apps/foo/../../etc");
+        assertMatch(
+                path,
+                "/apps/foo/../bar",
+                "/libs/../apps/foo",
+                "/apps//foo",
+                "/apps/foo/.",
+                "/apps/foo/..",
+                "/apps/.hidden",
+                "/apps/foo..bar");
+        assertNoMatch(path, "/../apps/foo", "/apps/../../..", "/apps/...", "/apps/..../foo");
+    }
+
+    @Test
+    public void testPatternMatchNormalizesTraversalSegments() {
+        final Path glob = new Path("glob:/apps/**");
+
+        assertNoMatch(glob, "/apps/../etc/secret", "/apps/foo/../../etc", "/../apps/foo", "/apps/...");
+        assertMatch(glob, "/apps/foo/../bar", "/libs/../apps/foo", "/apps//foo");
+
+        final Path singleSegmentGlob = new Path("glob:/apps/*");
+        assertMatch(singleSegmentGlob, "/apps/foo/../bar", "/apps//bar");
+        assertNoMatch(singleSegmentGlob, "/apps/foo/bar", "/apps/../etc");
+    }
+
+    @Test
+    public void testRootMatchRejectsInvalidPaths() {
+        final Path root = new Path("/");
+        final Path glob = new Path("glob:/**");
+
+        assertNoMatch(root, "/../apps", "/apps/../../etc", "/apps/...");
+        assertNoMatch(glob, "/../apps", "/apps/../../etc", "/apps/...");
+        assertMatch(root, "/apps/..", "//apps//foo", "/apps/.");
+        assertMatch(glob, "/apps/..", "//apps//foo", "/apps/.");
+    }
+
+    @Test
     public void testPatternMatchingA() {
         final Path p = new Path("glob:/apps/**/*.html");
 

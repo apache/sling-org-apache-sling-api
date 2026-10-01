@@ -20,6 +20,7 @@ package org.apache.sling.api.resource.path;
 
 import java.util.regex.Pattern;
 
+import org.apache.sling.api.resource.ResourceUtil;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -102,8 +103,13 @@ public class Path implements Comparable<Path> {
      * provided path matches the pattern. If this path object holds a pattern
      * and a pattern is provided as the argument, it returns only {@code true}
      * if the pattern is the same.
-     * If the provided argument is not an absolute path (e.g. if it is a relative
-     * path or a pattern), this method returns {@code false}.
+     * If the provided argument is a concrete path, it is normalized using
+     * {@link ResourceUtil#normalize(String)} before matching, resolving {@code .}
+     * and {@code ..} segments and collapsing consecutive slashes.
+     * If normalization fails, this method returns {@code false}.
+     * Glob pattern arguments retain their pattern semantics.
+     * If the provided argument is not an absolute path or an absolute glob
+     * pattern, this method throws {@code IllegalArgumentException}.
      *
      * @param otherPath Absolute path to check.
      * @return {@code true} If other path is within the sub tree of this path
@@ -153,10 +159,14 @@ public class Path implements Comparable<Path> {
         if (!otherPath.startsWith("/")) {
             throw new IllegalArgumentException("Path must be absolute: " + otherPath);
         }
-        if (isPattern) {
-            return this.regexPattern.matcher(otherPath).matches();
+        final String normalizedOtherPath = ResourceUtil.normalize(otherPath);
+        if (normalizedOtherPath == null) {
+            return false;
         }
-        return this.path.equals(otherPath) || otherPath.startsWith(this.prefix);
+        if (isPattern) {
+            return this.regexPattern.matcher(normalizedOtherPath).matches();
+        }
+        return this.path.equals(normalizedOtherPath) || normalizedOtherPath.startsWith(this.prefix);
     }
 
     /**
