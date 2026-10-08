@@ -125,6 +125,9 @@ public class PathSet implements Iterable<Path> {
     /**
      * Check whether the provided path is in the sub tree of any
      * of the paths in this set.
+     * Concrete path arguments are normalized before matching; paths that
+     * cannot be normalized do not match. Glob pattern arguments retain their
+     * pattern semantics.
      * @param otherPath The path to match
      * @return The path which matches the provided path, {@code null} otherwise.
      * @see Path#matches(String)

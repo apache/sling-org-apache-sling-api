@@ -22,7 +22,9 @@ import java.util.UUID;
 
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -61,6 +63,89 @@ public class PathTest {
         assertNoMatch(p, "/", "/foo", "/foo/bar", "/content1");
 
         assertMatch(p, "/content", "/content/a", "/content/a/b");
+    }
+
+    @Test
+    public void testConstructorNormalizesConcretePaths() {
+        final Path canonical = new Path("/etc");
+        for (final String input : new String[] {"/apps/../etc", "/etc/.", "//etc//", "/etc/child/.."}) {
+            final Path path = new Path(input);
+
+            assertEquals("/etc", path.getPath());
+            assertMatch(path, input, path.getPath(), "/etc/secret");
+            assertNoMatch(path, "/apps", "/etc2/secret");
+            assertEquals(canonical, path);
+            assertEquals(canonical.hashCode(), path.hashCode());
+            assertEquals(0, canonical.compareTo(path));
+        }
+    }
+
+    @Test
+    public void testConstructorNormalizesRootPaths() {
+        for (final String input : new String[] {"/", "///", "/apps/..", "/."}) {
+            final Path path = new Path(input);
+
+            assertEquals("/", path.getPath());
+            assertMatch(path, input, "/", "/etc/secret");
+        }
+    }
+
+    @Test
+    public void testConstructorRejectsInvalidConcretePaths() {
+        for (final String input :
+                new String[] {"/../etc", "/apps/../../etc", "/apps/...", "/apps/..../etc", "", "etc"}) {
+            assertThrows(IllegalArgumentException.class, () -> new Path(input));
+        }
+    }
+
+    @Test
+    public void testConstructorPreservesGlobSegments() {
+        final String pattern = "glob:/apps/*/../**";
+        final Path path = new Path(pattern);
+
+        assertTrue(path.isPattern());
+        assertEquals(pattern, path.getPath());
+        assertMatch(path, pattern);
+    }
+
+    @Test
+    public void testMatchesNormalizesTraversalSegments() {
+        final Path path = new Path("/apps");
+
+        assertNoMatch(path, "/apps/../etc/secret", "/apps/./../etc/secret", "/apps/foo/../../etc");
+        assertMatch(
+                path,
+                "/apps/foo/../bar",
+                "/libs/../apps/foo",
+                "/apps//foo",
+                "/apps/foo/.",
+                "/apps/foo/..",
+                "/apps/.hidden",
+                "/apps/foo..bar");
+        assertNoMatch(path, "/../apps/foo", "/apps/../../..", "/apps/...", "/apps/..../foo");
+    }
+
+    @Test
+    public void testPatternMatchNormalizesTraversalSegments() {
+        final Path glob = new Path("glob:/apps/**");
+
+        assertNoMatch(glob, "/apps/../etc/secret", "/apps/foo/../../etc", "/../apps/foo", "/apps/...");
+        assertMatch(glob, "/apps/foo/../bar", "/libs/../apps/foo", "/apps//foo");
+
+        final Path singleSegmentGlob = new Path("glob:/apps/*");
+        assertMatch(singleSegmentGlob, "/apps/foo/../bar", "/apps//bar");
+        assertNoMatch(singleSegmentGlob, "/apps/foo/bar", "/apps/../etc");
+    }
+
+    @Test
+    public void testRootMatchRejectsInvalidPaths() {
+        final Path root = new Path("/");
+        final Path glob = new Path("glob:/**");
+
+        assertNoMatch(root, "/../apps", "/apps/../../etc", "/apps/...");
+        assertNoMatch(glob, "/../apps", "/apps/../../etc", "/apps/...");
+        assertMatch(root, "/apps/..", "//apps//foo", "/apps/.");
+        assertMatch(glob, "/apps/..", "//apps//foo", "/apps/.");
     }
 
     @Test
