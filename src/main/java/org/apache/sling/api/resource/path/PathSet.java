@@ -133,6 +133,14 @@ public class PathSet implements Iterable<Path> {
      * Concrete path arguments are normalized before matching; paths that
      * cannot be normalized do not match. Glob pattern arguments retain their
      * pattern semantics.
+     *
+     * <p><strong>Warning:</strong> Glob patterns supplied as {@code otherPath}
+     * can produce incorrect containment results. See {@link Path#matches(String)}
+     * for an example and the distinction between pattern overlap and containment.
+     * For concrete-path containment or authorization checks, callers must
+     * ensure that {@code otherPath} is a concrete absolute path, not a glob
+     * pattern. See <a href="https://issues.apache.org/jira/browse/SLING-13380">SLING-13380</a>.</p>
+     *
      * @param otherPath The path to match
      * @return The path which matches the provided path, {@code null} otherwise.
      * @see Path#matches(String)
