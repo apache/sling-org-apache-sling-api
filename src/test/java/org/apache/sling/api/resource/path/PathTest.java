@@ -22,7 +22,9 @@ import java.util.UUID;
 
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -61,6 +63,49 @@ public class PathTest {
         assertNoMatch(p, "/", "/foo", "/foo/bar", "/content1");
 
         assertMatch(p, "/content", "/content/a", "/content/a/b");
+    }
+
+    @Test
+    public void testConstructorNormalizesConcretePaths() {
+        final Path canonical = new Path("/etc");
+        for (final String input : new String[] {"/apps/../etc", "/etc/.", "//etc//", "/etc/child/.."}) {
+            final Path path = new Path(input);
+
+            assertEquals("/etc", path.getPath());
+            assertMatch(path, input, path.getPath(), "/etc/secret");
+            assertNoMatch(path, "/apps", "/etc2/secret");
+            assertEquals(canonical, path);
+            assertEquals(canonical.hashCode(), path.hashCode());
+            assertEquals(0, canonical.compareTo(path));
+        }
+    }
+
+    @Test
+    public void testConstructorNormalizesRootPaths() {
+        for (final String input : new String[] {"/", "///", "/apps/..", "/."}) {
+            final Path path = new Path(input);
+
+            assertEquals("/", path.getPath());
+            assertMatch(path, input, "/", "/etc/secret");
+        }
+    }
+
+    @Test
+    public void testConstructorRejectsInvalidConcretePaths() {
+        for (final String input :
+                new String[] {"/../etc", "/apps/../../etc", "/apps/...", "/apps/..../etc", "", "etc"}) {
+            assertThrows(IllegalArgumentException.class, () -> new Path(input));
+        }
+    }
+
+    @Test
+    public void testConstructorPreservesGlobSegments() {
+        final String pattern = "glob:/apps/*/../**";
+        final Path path = new Path(pattern);
+
+        assertTrue(path.isPattern());
+        assertEquals(pattern, path.getPath());
+        assertMatch(path, pattern);
     }
 
     @Test

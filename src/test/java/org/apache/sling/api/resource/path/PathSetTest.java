@@ -137,6 +137,37 @@ public class PathSetTest {
     }
 
     @Test
+    public void testNonNormalizedEntriesMatchTheirCanonicalSubtree() {
+        final PathSet set = PathSet.fromStrings("/apps/../etc", "//content//./site/");
+
+        assertEqualSets(set, "/etc", "/content/site");
+        assertEquals(new Path("/etc"), set.matches("/apps/../etc"));
+        assertEquals(new Path("/etc"), set.matches("/etc/secret"));
+        assertEquals(new Path("/content/site"), set.matches("/content/site/page"));
+        assertNull(set.matches("/apps"));
+        assertNull(set.matches("/etc2/secret"));
+    }
+
+    @Test
+    public void testSubsetsWithNonNormalizedEntriesAndFilters() {
+        final PathSet set = PathSet.fromStrings("/apps/../etc/secret", "/content");
+        final PathSet filter = PathSet.fromStrings("/apps/../etc");
+
+        assertEqualSets(set.getSubset(filter), "/etc/secret");
+        assertEqualSets(set.getSubset(new Path("//etc/./")), "/etc/secret");
+        assertEqualSets(set.getSubset("/apps/../etc"), "/etc/secret");
+        assertEqualSets(set.getSubset(set), "/etc/secret", "/content");
+    }
+
+    @Test
+    public void testOptimizeCanonicalizesAndDeduplicatesConcreteEntries() {
+        final PathSet set = PathSet.fromStrings("/apps/../etc", "/etc", "//etc/secret/.");
+
+        assertEqualSets(set, "/etc");
+        assertNotNull(set.matches("/etc/secret/value"));
+    }
+
+    @Test
     public void testToStringSet() {
         final PathSet set = PathSet.fromStrings("/a", "/x/y");
 

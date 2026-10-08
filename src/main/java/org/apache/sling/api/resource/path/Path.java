@@ -44,6 +44,11 @@ public class Path implements Comparable<Path> {
     /**
      * <p>Create a new path object either from a concrete path or from a glob pattern.</p>
      *
+     * <p>Concrete paths are normalized using {@link ResourceUtil#normalize(String)}
+     * before being stored, resolving {@code .} and {@code ..} segments and
+     * collapsing consecutive slashes. Paths that cannot be normalized are rejected.
+     * Glob pattern segments are not normalized.</p>
+     *
      * <p>A glob pattern must start with the {@code glob:} prefix (e.g. <code>glob:**&#47;*.html</code>). The following rules are used
      * to interpret glob patterns:</p>
      * <ul>
@@ -52,16 +57,22 @@ public class Path implements Comparable<Path> {
      * </ul>
      *
      * @param path The resource path or a glob pattern.
-     * @throws NullPointerException If {@code otherPath} is {@code null}
-     * @throws IllegalArgumentException If the provided path is not absolute, or if the glob pattern does not start with a slash.
+     * @throws NullPointerException If {@code path} is {@code null}
+     * @throws IllegalArgumentException If the provided path is not absolute or
+     *         cannot be normalized, or if the glob pattern does not start with a slash.
      */
     public Path(@NotNull final String path) {
-        if (path.equals("/")) {
-            this.path = "/";
-        } else if (path.endsWith("/")) {
-            this.path = path.substring(0, path.length() - 1);
+        if (path.startsWith(GLOB_PREFIX)) {
+            this.path = path.endsWith("/") ? path.substring(0, path.length() - 1) : path;
         } else {
-            this.path = path;
+            if (!path.startsWith("/")) {
+                throw new IllegalArgumentException("Path must be absolute: " + path);
+            }
+            final String normalizedPath = ResourceUtil.normalize(path);
+            if (normalizedPath == null) {
+                throw new IllegalArgumentException("Path cannot be normalized: " + path);
+            }
+            this.path = normalizedPath;
         }
         if (this.path.startsWith(GLOB_PREFIX)) {
             final String patternPath = path.substring(GLOB_PREFIX.length());
@@ -170,7 +181,7 @@ public class Path implements Comparable<Path> {
     }
 
     /**
-     * Return the path if this {@code Path} object holds a path,
+     * Return the normalized path if this {@code Path} object holds a path,
      * returns the pattern otherwise.
      * @return The path or pattern.
      * @see #isPattern()
