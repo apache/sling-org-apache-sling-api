@@ -211,6 +211,16 @@ public class PathSetTest {
     }
 
     @Test
+    public void testGlobArgumentProducesIncorrectContainmentResult() {
+        final PathSet set = PathSet.fromStrings("/apps");
+
+        // Document known incorrect containment behavior inherited from Path.matches().
+        assertEquals(new Path("/apps"), set.matches("glob:/**"));
+        assertEquals(new Path("/apps"), set.matches("glob:/apps/**"));
+        assertNull(set.matches("/etc/secret"));
+    }
+
+    @Test
     public void testToStringSet() {
         final PathSet set = PathSet.fromStrings("/a", "/x/y");
 

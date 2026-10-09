@@ -149,6 +149,16 @@ public class PathTest {
     }
 
     @Test
+    public void testGlobArgumentProducesIncorrectContainmentResult() {
+        final Path path = new Path("/apps");
+
+        // Document known incorrect containment behavior, not a desired membership result.
+        assertTrue(path.matches("glob:/**"));
+        assertTrue(path.matches("glob:/apps/**"));
+        assertFalse(path.matches("/etc/secret"));
+    }
+
+    @Test
     public void testPatternMatchingA() {
         final Path p = new Path("glob:/apps/**/*.html");
 

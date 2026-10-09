@@ -122,6 +122,16 @@ public class Path implements Comparable<Path> {
      * If the provided argument is not an absolute path or an absolute glob
      * pattern, this method throws {@code IllegalArgumentException}.
      *
+     * <p><strong>Warning:</strong> A glob pattern supplied as {@code otherPath}
+     * can produce an incorrect result if this method is used as a containment
+     * check. For example, {@code new Path("/apps").matches("glob:/**")} returns
+     * {@code true}, although {@code glob:/**} is not a concrete path inside
+     * {@code /apps} and also matches paths outside that subtree. Pattern
+     * arguments establish overlap, not containment of all matching paths.
+     * For concrete-path containment or authorization checks, callers must
+     * ensure that {@code otherPath} is a concrete absolute path, not a glob
+     * pattern. See <a href="https://issues.apache.org/jira/browse/SLING-13380">SLING-13380</a>.</p>
+     *
      * @param otherPath Absolute path to check.
      * @return {@code true} If other path is within the sub tree of this path
      *         or matches the pattern.
