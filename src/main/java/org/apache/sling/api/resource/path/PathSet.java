@@ -91,17 +91,22 @@ public class PathSet implements Iterable<Path> {
     }
 
     /**
-     * Optimize the set by filtering out paths which are a sub path
-     * of another path in the set.
+     * Optimize the set by filtering out concrete paths which are a sub path
+     * of another concrete path in the set. Entries involving glob patterns
+     * are retained: matching a subtree root does not imply covering its
+     * descendants, and matching a pattern argument only establishes overlap.
      * @param set The path set
      */
     private static void optimize(final Set<Path> set) {
         final Iterator<Path> i = set.iterator();
         while (i.hasNext()) {
             final Path next = i.next();
+            if (next.isPattern()) {
+                continue;
+            }
             boolean found = false;
             for (final Path p : set) {
-                if (p != next && p.matches(next.getPath())) {
+                if (p != next && !p.isPattern() && p.matches(next.getPath())) {
                     found = true;
                     break;
                 }

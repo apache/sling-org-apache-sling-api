@@ -18,6 +18,7 @@
  */
 package org.apache.sling.api.resource.path;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -89,6 +90,48 @@ public class PathSetTest {
 
         final PathSet set2 = PathSet.fromStrings("/a", "/a/x/y", "/z", "/x/y", "/a2");
         assertEqualSets(set2, "/a", "/z", "/a2", "/x/y");
+    }
+
+    private PathSet[] createPathSets(final String first, final String second) {
+        final Path firstPath = new Path(first);
+        final Path secondPath = new Path(second);
+        return new PathSet[] {
+            PathSet.fromStrings(first, second),
+            PathSet.fromStrings(second, first),
+            PathSet.fromStringCollection(Arrays.asList(first, second)),
+            PathSet.fromPaths(firstPath, secondPath),
+            PathSet.fromPathCollection(Arrays.asList(firstPath, secondPath))
+        };
+    }
+
+    @Test
+    public void testOptimizeDoesNotDropPathOverlappingWithGlob() {
+        for (final PathSet set : createPathSets("glob:/apps/*", "/apps/foo")) {
+            assertEqualSets(set, "glob:/apps/*", "/apps/foo");
+            assertNotNull(set.matches("/apps/foo/bar"));
+            assertNotNull(set.matches("/apps/foo/bar/baz"));
+            assertNotNull(set.matches("/apps/other"));
+            assertNull(set.matches("/apps/other/bar"));
+        }
+    }
+
+    @Test
+    public void testOptimizeDoesNotDropGlobOverlappingWithPath() {
+        for (final PathSet set : createPathSets("/apps/foo", "glob:/apps/**/hello.html")) {
+            assertEqualSets(set, "/apps/foo", "glob:/apps/**/hello.html");
+            assertNotNull(set.matches("/apps/foo/bar"));
+            assertNotNull(set.matches("/apps/bar/hello.html"));
+            assertNull(set.matches("/apps/bar/other.html"));
+        }
+    }
+
+    @Test
+    public void testOptimizeStillRemovesPlainSubPaths() {
+        for (final PathSet set : createPathSets("/a", "/a/b")) {
+            assertEqualSets(set, "/a");
+            assertNotNull(set.matches("/a/b/c"));
+            assertNull(set.matches("/a2"));
+        }
     }
 
     @Test
