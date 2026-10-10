@@ -196,6 +196,35 @@ public class ResourceUtil {
     }
 
     /**
+     * Utility method to check whether the given <code>path</code> represents
+     * the root path. The path is normalized by {@link #normalize(String)} before
+     * checking.
+     *
+     * @param path The path to check.
+     * @return <code>true</code> if the path represents the root path after
+     *         normalization, <code>false</code> otherwise.
+     * @throws IllegalArgumentException If the path cannot be normalized by the
+     *             {@link #normalize(String)} method.
+     * @throws NullPointerException If <code>path</code> is <code>null</code>.
+     * @since 2.15.0 (Sling API Bundle 3.1.0)
+     */
+    public static boolean isRoot(@NotNull String path) {
+        // quick check for obvious root
+        if ("/".equals(path)) {
+            return true;
+        }
+
+        // normalize path (remove . and ..)
+        String normalizedPath = normalize(path);
+        if (normalizedPath == null) {
+            throw new IllegalArgumentException(
+                    String.format("normalizing path '%s' resolves to a path higher than root", path));
+        }
+
+        return "/".equals(normalizedPath);
+    }
+
+    /**
      * Utility method returns the ancestor's path at the given <code>level</code>
      * relative to <code>path</code>, which is normalized by {@link #normalize(String)}
      * before resolving the ancestor.
