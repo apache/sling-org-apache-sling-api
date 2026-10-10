@@ -18,17 +18,37 @@
  */
 package org.apache.sling.api.wrappers;
 
+import java.util.Locale;
+
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ResourceUtil;
 import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.api.wrappers.impl.DeepReadValueMapConfiguration;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A value map wrapper which implements deep reading of properties
  * based on the resource tree.
+ * <p>Deep reads outside the starting resource's subtree, or whose resource paths
+ * cannot be normalized, log a WARN and continue the lookup by default.
+ * The OSGi configuration PID {@code org.apache.sling.api.wrappers.DeepReadValueMapDecorator}
+ * supports the boolean property {@code enforce} (default {@code false}).
+ * When enabled, these reads throw {@link IllegalArgumentException} before resource
+ * resolution instead. Configuration changes also apply to existing decorators.
+ * Diagnostics include the starting resource and requested resource path.
+ * This setting only controls this decorator, not other {@link ValueMap} implementations.
  * @since 2.5 (Sling API Bundle 2.7.0)
  */
 public class DeepReadValueMapDecorator extends ValueMapDecorator {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DeepReadValueMapDecorator.class);
+
+    private final String resourcePath;
+
+    private final String normalizedResourcePath;
 
     private final String pathPrefix;
 
@@ -36,9 +56,21 @@ public class DeepReadValueMapDecorator extends ValueMapDecorator {
 
     private final ValueMap base;
 
-    public DeepReadValueMapDecorator(final Resource resource, final ValueMap base) {
+    /**
+     * Creates a deep-reading view of the resource's properties.
+     * @param resource The starting resource.
+     * @param base The starting resource's properties.
+     * @throws IllegalArgumentException If the resource path cannot be normalized
+     *         to an absolute path.
+     */
+    public DeepReadValueMapDecorator(@NotNull final Resource resource, @NotNull final ValueMap base) {
         super(base);
-        this.pathPrefix = resource.getPath() + "/";
+        this.resourcePath = resource.getPath();
+        this.normalizedResourcePath = ResourceUtil.normalize(resourcePath);
+        if (normalizedResourcePath == null || !normalizedResourcePath.startsWith("/")) {
+            throw new IllegalArgumentException("Invalid resource path: " + sanitizeForMessage(resourcePath));
+        }
+        this.pathPrefix = resourcePath + "/";
         this.resolver = resource.getResourceResolver();
         this.base = base;
     }
@@ -48,7 +80,20 @@ public class DeepReadValueMapDecorator extends ValueMapDecorator {
         if (pos == -1) {
             return this.base;
         }
-        final Resource rsrc = this.resolver.getResource(pathPrefix + name.substring(0, pos));
+        final String requestedPath = pathPrefix + name.substring(0, pos);
+        final String normalizedPath = ResourceUtil.normalize(requestedPath);
+        if (normalizedPath == null
+                || !(normalizedResourcePath.equals("/")
+                        || normalizedPath.equals(normalizedResourcePath)
+                        || normalizedPath.startsWith(normalizedResourcePath + "/"))) {
+            final String message = "Deep read outside resource subtree: resource '" + sanitizeForMessage(resourcePath)
+                    + "', requested path '" + sanitizeForMessage(requestedPath) + "'";
+            if (DeepReadValueMapConfiguration.isEnforcementEnabled()) {
+                throw new IllegalArgumentException(message);
+            }
+            LOG.warn(message);
+        }
+        final Resource rsrc = this.resolver.getResource(requestedPath);
         if (rsrc != null) {
             final ValueMap vm = rsrc.adaptTo(ValueMap.class);
             if (vm != null) {
@@ -56,6 +101,19 @@ public class DeepReadValueMapDecorator extends ValueMapDecorator {
             }
         }
         return ValueMap.EMPTY; // fall back
+    }
+
+    private static String sanitizeForMessage(final String value) {
+        final StringBuilder result = new StringBuilder(value.length());
+        for (int i = 0; i < value.length(); i++) {
+            final char character = value.charAt(i);
+            if (Character.isISOControl(character) || character == '\u2028' || character == '\u2029') {
+                result.append(String.format(Locale.ROOT, "\\u%04x", (int) character));
+            } else {
+                result.append(character);
+            }
+        }
+        return result.toString();
     }
 
     private String getPropertyName(final String name) {
