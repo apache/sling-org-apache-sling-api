@@ -21,7 +21,7 @@
  * This package provides wrapper classes for the Javax based Servlet API and the Jakarta Servlet API to wrap entities from one API to the other API.
  * Most wrapper classes implement a method {@code getWrappedObject()} which returns the wrapped object.
  */
-@Version("2.11.0")
+@Version("2.11.1")
 package org.apache.sling.api.wrappers;
 
 import org.osgi.annotation.versioning.Version;
