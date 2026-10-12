@@ -88,7 +88,7 @@ public class DeepReadValueMapDecorator extends ValueMapDecorator {
                         || normalizedPath.startsWith(normalizedResourcePath + "/"))) {
             final String message = "Deep read outside resource subtree: resource '" + sanitizeForMessage(resourcePath)
                     + "', requested path '" + sanitizeForMessage(requestedPath) + "'";
-            if (DeepReadValueMapConfiguration.isEnforcementEnabled()) {
+            if (DeepReadValueMapConfiguration.isEnforceSubTreeContainmentEnabled()) {
                 throw new IllegalArgumentException(message);
             }
             LOG.warn(message);

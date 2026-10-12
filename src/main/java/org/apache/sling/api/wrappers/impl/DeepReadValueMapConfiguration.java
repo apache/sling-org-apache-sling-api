@@ -43,25 +43,25 @@ public class DeepReadValueMapConfiguration {
                 name = "Enforce subtree containment",
                 description = "Throw IllegalArgumentException for out-of-subtree or invalid deep reads. "
                         + "When disabled, log a WARN and allow the lookup.")
-        boolean enforce() default false;
+        boolean enforceSubTreeContainment() default false;
     }
 
-    private static volatile boolean enforcementEnabled;
+    private static volatile boolean enforceSubTreeContainmentEnabled;
 
     public DeepReadValueMapConfiguration() {}
 
     @Activate
     @Modified
     public void configure(@NotNull final Configuration configuration) {
-        enforcementEnabled = configuration.enforce();
+        enforceSubTreeContainmentEnabled = configuration.enforceSubTreeContainment();
     }
 
     @Deactivate
     public void deactivate() {
-        enforcementEnabled = false;
+        enforceSubTreeContainmentEnabled = false;
     }
 
-    public static boolean isEnforcementEnabled() {
-        return enforcementEnabled;
+    public static boolean isEnforceSubTreeContainmentEnabled() {
+        return enforceSubTreeContainmentEnabled;
     }
 }

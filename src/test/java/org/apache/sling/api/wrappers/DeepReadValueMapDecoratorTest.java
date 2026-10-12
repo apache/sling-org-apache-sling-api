@@ -107,7 +107,7 @@ public class DeepReadValueMapDecoratorTest {
     private void configure(final boolean enforce) {
         final DeepReadValueMapConfiguration.Configuration configuration =
                 mock(DeepReadValueMapConfiguration.Configuration.class);
-        when(configuration.enforce()).thenReturn(enforce);
+        when(configuration.enforceSubTreeContainment()).thenReturn(enforce);
         component.configure(configuration);
     }
 
