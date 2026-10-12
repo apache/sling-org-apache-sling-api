@@ -449,4 +449,33 @@ public class ResourceUtilTest {
         assertEquals(nameWithSpecialChars, ResourceUtil.unescapeName(escapedName));
         assertFalse(escapedName.contains("."));
     }
+
+    @Test
+    public void testIsRoot() {
+        // root path
+        assertTrue(ResourceUtil.isRoot("/"));
+
+        // paths that normalize to root
+        assertTrue(ResourceUtil.isRoot("///"));
+        assertTrue(ResourceUtil.isRoot("/a/.."));
+        assertTrue(ResourceUtil.isRoot("/a/b/../.."));
+        assertTrue(ResourceUtil.isRoot("/."));
+
+        // non-root paths
+        assertFalse(ResourceUtil.isRoot("/a"));
+        assertFalse(ResourceUtil.isRoot("/a/b"));
+        assertFalse(ResourceUtil.isRoot("/a/b/c"));
+        assertFalse(ResourceUtil.isRoot("/a/b/.."));
+
+        // relative paths (not root)
+        assertFalse(ResourceUtil.isRoot("a"));
+        assertFalse(ResourceUtil.isRoot("a/b"));
+
+        // null should throw NullPointerException
+        assertThrows(NullPointerException.class, () -> ResourceUtil.isRoot(null));
+
+        // paths that cannot be normalized should throw IllegalArgumentException
+        assertThrows(IllegalArgumentException.class, () -> ResourceUtil.isRoot("/.."));
+        assertThrows(IllegalArgumentException.class, () -> ResourceUtil.isRoot("/a/../.."));
+    }
 }
