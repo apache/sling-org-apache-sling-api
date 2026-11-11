@@ -18,6 +18,9 @@
  */
 package org.apache.sling.api.request.header;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import junit.framework.TestCase;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.mockito.Mockito;
@@ -45,6 +48,103 @@ public class MediaRangeListTest extends TestCase {
     public void testPreferJson() {
         MediaRangeList rangeList = new MediaRangeList("text/html;q=0.8, application/json");
         assertEquals("application/json", rangeList.prefer("text/html", "application/json"));
+    }
+
+    /**
+     * Matches wildcard ranges and treats missing or empty Accept headers as accepting all types.
+     */
+    public void testPreferWildcardsAndMissingHeader() {
+        for (String accept : new String[] {null, "", "*/*", "text/*"}) {
+            assertEquals(accept, "text/html", new MediaRangeList(accept).prefer("text/html", "application/json"));
+        }
+        assertEquals("application/json", new MediaRangeList("application/*").prefer("text/html", "application/json"));
+    }
+
+    /**
+     * Rejects unsupported types and q=0 ranges, including exclusions that override broader wildcards.
+     */
+    public void testPreferExcludesUnacceptableTypes() {
+        for (String accept : new String[] {
+            "text/plain",
+            "*/*;q=0",
+            "text/html;q=0",
+            "text/html;q=0,application/json;q=0,*/*",
+            "text/*;q=0,application/*;q=0,*/*"
+        }) {
+            assertNull(accept, new MediaRangeList(accept).prefer("text/html", "application/json"));
+        }
+        assertEquals(
+                "application/json", new MediaRangeList("text/html;q=0,*/*").prefer("text/html", "application/json"));
+    }
+
+    /**
+     * Uses the most specific matching range's quality rather than the quality of a broader wildcard.
+     */
+    public void testPreferUsesMostSpecificQuality() {
+        assertEquals(
+                "application/json",
+                new MediaRangeList("text/html;q=0.1,*/*;q=0.9").prefer("text/html", "application/json"));
+        assertEquals(
+                "text/html",
+                new MediaRangeList("text/html;q=0.2,text/*;q=0.1,application/json;q=0.15")
+                        .prefer("text/html", "application/json"));
+    }
+
+    /**
+     * Requires media parameters to match and gives parameter-specific ranges precedence.
+     */
+    public void testPreferMatchesMediaParameters() {
+        MediaRangeList ranges = new MediaRangeList("text/html;level=1;q=0,text/html;q=0.5,*/*");
+        assertNull(ranges.prefer("text/html;level=1"));
+        assertEquals("text/html;level=2", ranges.prefer("text/html;level=2"));
+        assertEquals("text/html", ranges.prefer("text/html"));
+        assertNull(new MediaRangeList("text/html;level=1").prefer("text/html;level=2"));
+    }
+
+    public void testParameterLookupIsCaseInsensitive() {
+        MediaRangeList.MediaRange range = rangeList.new MediaRange("text/html;Charset=UTF-8");
+        for (String name : new String[] {"Charset", "charset", "CHARSET"}) {
+            assertEquals(name, "UTF-8", range.getParameter(name));
+        }
+        assertNull(range.getParameter(null));
+    }
+
+    /**
+     * Ignores accept extensions after q when matching ranges and determining specificity.
+     */
+    public void testPreferIgnoresAcceptExtensions() {
+        assertEquals("text/html", new MediaRangeList("text/html;q=1;extension=value").prefer("text/html"));
+        assertNull(new MediaRangeList("text/html;q=0.5;extension=value,text/html;level=1;q=0")
+                .prefer("text/html;level=1", "application/json"));
+    }
+
+    /**
+     * Accepts whitespace around quality parameters and rejects invalid or non-finite quality values.
+     */
+    public void testPreferHandlesQualityWhitespaceAndInvalidValues() {
+        for (String accept :
+                new String[] {"text/html; q=0", "text/html;q=NaN", "text/html;q=Infinity", "text/html;q=invalid"}) {
+            assertNull(accept, new MediaRangeList(accept).prefer("text/html"));
+        }
+        assertEquals(
+                "application/json",
+                new MediaRangeList("Text/HTML; q=0.2, application/json; q=0.8")
+                        .prefer("text/html", "application/json"));
+    }
+
+    /**
+     * Preserves explicit-type tie-breaking and returns the first offered instance for a shared wildcard match.
+     */
+    public void testPreferPreservesExplicitTieAndOfferedInstance() {
+        assertEquals(
+                "application/json",
+                new MediaRangeList("text/html,application/json").prefer("text/html", "application/json"));
+        MediaRangeList ranges = new MediaRangeList("text/*");
+        MediaRangeList.MediaRange html = ranges.new MediaRange("text/html");
+        Set<MediaRangeList.MediaRange> offered = new LinkedHashSet<>();
+        offered.add(html);
+        offered.add(ranges.new MediaRange("text/plain"));
+        assertSame(html, ranges.prefer(offered));
     }
 
     public void testHttpEquivParam() {
