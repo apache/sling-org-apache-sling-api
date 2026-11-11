@@ -19,12 +19,17 @@
 package org.apache.sling.api.request.header;
 
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -123,20 +128,36 @@ public class JakartaMediaRangeList extends TreeSet<JakartaMediaRangeList.MediaRa
 
     /**
      * Given a list of media types, returns the one is preferred by this <code>MediaRangeList</code>.
+     * Wildcards are matched against the offered types. The most specific matching range,
+     * including media parameters before {@code q}, determines each type's quality.
+     * Types with quality zero are not acceptable. Accept extensions after {@code q} do not
+     * constrain matching. Equal-quality types follow the ordering of this list; when the
+     * same range matches multiple offered types, their iteration order breaks the tie.
      * @param mediaRanges An array of possible {@link JakartaMediaRangeList.MediaRange}s
      * @return One of the <code>mediaRanges</code> that this <code>MediaRangeList</code> prefers;
      * or <code>null</code> if this <code>MediaRangeList</code> does not contain any of the <code>mediaRanges</code>
      * @throws NullPointerException if <code>mediaRanges</code> is <code>null</code> or contains a <code>null</code> value
      */
-    public MediaRange prefer(Set<MediaRange> mediaRanges) {
-        for (MediaRange range : this) {
-            for (MediaRange mediaType : mediaRanges) {
-                if (range.equals(mediaType)) {
-                    return mediaType;
+    public @Nullable MediaRange prefer(@NotNull Set<MediaRange> mediaRanges) {
+        MediaRange preferred = null;
+        MediaRange preferredRange = null;
+        for (MediaRange mediaType : mediaRanges) {
+            Objects.requireNonNull(mediaType);
+            MediaRange matchingRange = null;
+            for (MediaRange range : this) {
+                if (range.matches(mediaType)
+                        && (matchingRange == null || range.compareSpecificity(matchingRange) > 0)) {
+                    matchingRange = range;
                 }
             }
+            if (matchingRange != null
+                    && matchingRange.getQ() > 0
+                    && (preferredRange == null || matchingRange.compareTo(preferredRange) < 0)) {
+                preferred = mediaType;
+                preferredRange = matchingRange;
+            }
         }
-        return null;
+        return preferred;
     }
 
     /**
@@ -144,11 +165,12 @@ public class JakartaMediaRangeList extends TreeSet<JakartaMediaRangeList.MediaRa
      * @param mediaRanges String representations of <code>MediaRange</code>s. The strings must be
      * on the form required by {@link MediaRange#MediaRange(String)}
      * @see #prefer(java.util.Set)
+     * @implNote Offered order breaks ties when multiple types match the same range.
      * @return the <code>toString()</code> representation of the preferred <code>MediaRange</code>, or <code>null</code>
      * if this <code>MediaRangeList</code> does not contain any of the <code>mediaRanges</code>
      */
-    public String prefer(String... mediaRanges) {
-        Set<MediaRange> ranges = new HashSet<MediaRange>();
+    public @Nullable String prefer(@NotNull String... mediaRanges) {
+        Set<MediaRange> ranges = new LinkedHashSet<MediaRange>();
         for (String mediaRange : mediaRanges) {
             ranges.add(new MediaRange(mediaRange));
         }
@@ -197,18 +219,24 @@ public class JakartaMediaRangeList extends TreeSet<JakartaMediaRangeList.MediaRa
             String[] parts = exp.split(";");
             this.setType(parts[0].trim());
             if (parts.length > 1) {
-                this.parameters = new HashMap<String, String>(parts.length - 1);
+                this.parameters = new LinkedHashMap<String, String>(parts.length - 1);
             }
             for (int i = 1, partsLength = parts.length; i < partsLength; i++) {
-                String parameter = parts[i];
-                String[] keyValue = parameter.split("=");
-                if (keyValue[0].equals("q")) {
-                    this.q = Double.parseDouble(keyValue[1]);
-                    if (this.q < 0 || this.q > 1) {
+                String[] keyValue = parts[i].split("=", 2);
+                if (keyValue.length != 2
+                        || keyValue[0].trim().isEmpty()
+                        || keyValue[1].trim().isEmpty()) {
+                    throw new IllegalArgumentException("Invalid media range parameter: " + exp);
+                }
+                String name = keyValue[0].trim().toLowerCase(Locale.ROOT);
+                String value = keyValue[1].trim();
+                if (name.equals("q")) {
+                    this.q = Double.parseDouble(value);
+                    if (!Double.isFinite(this.q) || this.q < 0 || this.q > 1) {
                         throw new IllegalArgumentException("Quality factor out of bounds: " + exp);
                     }
                 }
-                this.parameters.put(keyValue[0], keyValue[1]);
+                this.parameters.put(name, value);
             }
         }
 
@@ -253,9 +281,14 @@ public class JakartaMediaRangeList extends TreeSet<JakartaMediaRangeList.MediaRa
             this.q = q;
         }
 
-        public String getParameter(String key) {
+        /**
+         * Returns a parameter value using a case-insensitive name lookup.
+         * @param key The parameter name, or {@code null}
+         * @return The parameter value, or {@code null} if no parameter matches
+         */
+        public @Nullable String getParameter(@Nullable String key) {
             if (parameters != null) {
-                return parameters.get(key);
+                return parameters.get(key == null ? null : key.toLowerCase(Locale.ROOT));
             } else {
                 return null;
             }
@@ -277,8 +310,52 @@ public class JakartaMediaRangeList extends TreeSet<JakartaMediaRangeList.MediaRa
             return q;
         }
 
-        public Map<String, String> getParameters() {
+        /**
+         * Returns the parameters with parsed names normalized to lowercase.
+         * Parameter values retain their original casing.
+         * @return The parameter map, or an empty map if there are no parameters
+         */
+        public @NotNull Map<String, String> getParameters() {
             return parameters != null ? parameters : new HashMap<String, String>(0);
+        }
+
+        private boolean matches(MediaRange mediaType) {
+            if ((!WILDCARD.equals(supertype) && !supertype.equalsIgnoreCase(mediaType.supertype))
+                    || (!WILDCARD.equals(subtype) && !subtype.equalsIgnoreCase(mediaType.subtype))) {
+                return false;
+            }
+            if (parameters != null) {
+                for (Map.Entry<String, String> parameter : parameters.entrySet()) {
+                    if ("q".equals(parameter.getKey())) {
+                        break;
+                    }
+                    if (!parameter.getValue().equals(mediaType.getParameter(parameter.getKey()))) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        private int compareSpecificity(MediaRange other) {
+            int typeSpecificity = matchesAll() ? 0 : WILDCARD.equals(subtype) ? 1 : 2;
+            int otherTypeSpecificity = other.matchesAll() ? 0 : WILDCARD.equals(other.subtype) ? 1 : 2;
+            return typeSpecificity != otherTypeSpecificity
+                    ? Integer.compare(typeSpecificity, otherTypeSpecificity)
+                    : Integer.compare(mediaParameterCount(), other.mediaParameterCount());
+        }
+
+        private int mediaParameterCount() {
+            int count = 0;
+            if (parameters != null) {
+                for (String name : parameters.keySet()) {
+                    if ("q".equals(name)) {
+                        break;
+                    }
+                    count++;
+                }
+            }
+            return count;
         }
 
         /* -- Comparable implementation -- */
