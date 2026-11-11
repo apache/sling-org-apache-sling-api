@@ -281,9 +281,14 @@ public class JakartaMediaRangeList extends TreeSet<JakartaMediaRangeList.MediaRa
             this.q = q;
         }
 
-        public String getParameter(String key) {
+        /**
+         * Returns a parameter value using a case-insensitive name lookup.
+         * @param key The parameter name, or {@code null}
+         * @return The parameter value, or {@code null} if no parameter matches
+         */
+        public @Nullable String getParameter(@Nullable String key) {
             if (parameters != null) {
-                return parameters.get(key);
+                return parameters.get(key == null ? null : key.toLowerCase(Locale.ROOT));
             } else {
                 return null;
             }
@@ -305,7 +310,12 @@ public class JakartaMediaRangeList extends TreeSet<JakartaMediaRangeList.MediaRa
             return q;
         }
 
-        public Map<String, String> getParameters() {
+        /**
+         * Returns the parameters with parsed names normalized to lowercase.
+         * Parameter values retain their original casing.
+         * @return The parameter map, or an empty map if there are no parameters
+         */
+        public @NotNull Map<String, String> getParameters() {
             return parameters != null ? parameters : new HashMap<String, String>(0);
         }
 

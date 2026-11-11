@@ -103,6 +103,14 @@ public class JakartaMediaRangeListTest extends TestCase {
         assertNull(new JakartaMediaRangeList("text/html;level=1").prefer("text/html;level=2"));
     }
 
+    public void testParameterLookupIsCaseInsensitive() {
+        JakartaMediaRangeList.MediaRange range = rangeList.new MediaRange("text/html;Charset=UTF-8");
+        for (String name : new String[] {"Charset", "charset", "CHARSET"}) {
+            assertEquals(name, "UTF-8", range.getParameter(name));
+        }
+        assertNull(range.getParameter(null));
+    }
+
     /**
      * Ignores accept extensions after q when matching ranges and determining specificity.
      */
