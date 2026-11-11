@@ -201,10 +201,10 @@ public class JakartaMediaRangeList extends TreeSet<JakartaMediaRangeList.MediaRa
 
     /**
      * Determines which of the <code>mediaRanges</code> specifications is preferred by this <code>MediaRangeList</code>.
+     * Offered order breaks ties when multiple types match the same range.
      * @param mediaRanges String representations of <code>MediaRange</code>s. The strings must be
      * on the form required by {@link MediaRange#MediaRange(String)}
      * @see #prefer(java.util.Set)
-     * @implNote Offered order breaks ties when multiple types match the same range.
      * @return the <code>toString()</code> representation of the preferred <code>MediaRange</code>, or <code>null</code>
      * if this <code>MediaRangeList</code> does not contain any of the <code>mediaRanges</code>
      */
