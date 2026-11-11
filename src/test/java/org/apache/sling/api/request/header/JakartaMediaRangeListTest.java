@@ -25,6 +25,7 @@ import junit.framework.TestCase;
 import org.apache.sling.api.SlingJakartaHttpServletRequest;
 import org.mockito.Mockito;
 
+@SuppressWarnings("deprecation")
 public class JakartaMediaRangeListTest extends TestCase {
     protected JakartaMediaRangeList rangeList;
 
@@ -156,6 +157,36 @@ public class JakartaMediaRangeListTest extends TestCase {
         JakartaMediaRangeList rangeList = new JakartaMediaRangeList(req);
         assertTrue("Did not contain media type from query param", rangeList.contains("text/html"));
         assertFalse("Contained media type from overridden Accept header", rangeList.contains("text/plain"));
+    }
+
+    public void testFromRequestIgnoresHttpEquivParam() {
+        SlingJakartaHttpServletRequest req = Mockito.mock(SlingJakartaHttpServletRequest.class);
+        Mockito.when(req.getHeader(JakartaMediaRangeList.HEADER_ACCEPT))
+                .thenReturn("text/plain;q=0.8, application/json");
+        Mockito.when(req.getParameter(JakartaMediaRangeList.PARAM_ACCEPT)).thenReturn("text/html");
+
+        JakartaMediaRangeList rangeList = JakartaMediaRangeList.fromRequest(req);
+
+        assertEquals("text/plain", rangeList.prefer("text/plain"));
+        assertTrue(rangeList.contains("application/json"));
+        assertFalse(rangeList.contains("text/html"));
+        assertEquals("application/json", rangeList.prefer("text/plain", "application/json"));
+        Mockito.verify(req, Mockito.never()).getParameter(Mockito.anyString());
+    }
+
+    public void testFromRequestWithoutAcceptHeader() {
+        for (String header : new String[] {null, "", "  "}) {
+            SlingJakartaHttpServletRequest req = Mockito.mock(SlingJakartaHttpServletRequest.class);
+            Mockito.when(req.getHeader(JakartaMediaRangeList.HEADER_ACCEPT)).thenReturn(header);
+            Mockito.when(req.getParameter(JakartaMediaRangeList.PARAM_ACCEPT)).thenReturn("text/html");
+
+            JakartaMediaRangeList rangeList = JakartaMediaRangeList.fromRequest(req);
+
+            assertEquals(1, rangeList.size());
+            assertTrue(rangeList.contains("text/plain"));
+            assertTrue(rangeList.contains("application/json"));
+            Mockito.verify(req, Mockito.never()).getParameter(Mockito.anyString());
+        }
     }
 
     public void testInvalidJdkAcceptHeader() {

@@ -42,8 +42,21 @@ import org.slf4j.LoggerFactory;
 @ConsumerType
 public class JakartaMediaRangeList extends TreeSet<JakartaMediaRangeList.MediaRange> {
 
+    /**
+     * The HTTP header name for the Accept header.
+     */
     public static final String HEADER_ACCEPT = "Accept";
+
+    /**
+     * The request parameter name for the Accept header override.
+     * @deprecated Use {@link #HEADER_ACCEPT} instead.
+     */
+    @Deprecated
     public static final String PARAM_ACCEPT = ":http-equiv-accept";
+
+    /**
+     * The wildcard character for media ranges.
+     */
     public static final String WILDCARD = "*";
 
     /**
@@ -57,6 +70,19 @@ public class JakartaMediaRangeList extends TreeSet<JakartaMediaRangeList.MediaRa
     private static final Logger log = LoggerFactory.getLogger(JakartaMediaRangeList.class);
 
     /**
+     * Creates a <code>MediaRangeList</code> from the {@link #HEADER_ACCEPT} header of the supplied request.
+     * Request parameters, including {@link #PARAM_ACCEPT}, are ignored.
+     * If the header is missing or empty, the client is assumed to accept all media types.
+     *
+     * @param request The request to read the Accept header from
+     * @return The media ranges accepted by the client
+     * @since 1.2.0
+     */
+    public static @NotNull JakartaMediaRangeList fromRequest(@NotNull HttpServletRequest request) {
+        return new JakartaMediaRangeList(request.getHeader(HEADER_ACCEPT));
+    }
+
+    /**
      * Constructs a <code>MediaRangeList</code> using information from the supplied <code>HttpServletRequest</code>.
      * if the request contains a {@link #PARAM_ACCEPT} query parameter, the query parameter value overrides any
      * {@link #HEADER_ACCEPT} header value.
@@ -64,7 +90,10 @@ public class JakartaMediaRangeList extends TreeSet<JakartaMediaRangeList.MediaRa
      * {@link #HEADER_ACCEPT} is used. If both values are missing, it is assumed that the client accepts all media types,
      * as per the RFC. See also {@link #JakartaMediaRangeList(java.lang.String)}
      * @param request The <code>HttpServletRequest</code> to extract a <code>MediaRangeList</code> from
+     * @deprecated Use {@link #fromRequest(HttpServletRequest)} to read only the Accept header without
+     * allowing request parameters to override it.
      */
+    @Deprecated
     public JakartaMediaRangeList(HttpServletRequest request) {
         String queryParam = request.getParameter(PARAM_ACCEPT);
         if (queryParam != null && queryParam.trim().length() != 0) {
@@ -119,6 +148,15 @@ public class JakartaMediaRangeList extends TreeSet<JakartaMediaRangeList.MediaRa
     }
 
     /**
+     * Whether this <code>MediaRangeList</code> matches all media types.
+     * @return <code>true</code> if this <code>MediaRangeList</code> matches all media types, <code>false</code> otherwise
+     * @since 1.2.0
+     */
+    public boolean matchesAll() {
+        return this.matchesAll;
+    }
+
+    /**
      * Determines if this MediaRangeList contains a given media type.
      * @param mediaType A string on the form <code>type/subtype</code>. Neither <code>type</code>
      * or <code>subtype</code> should be wildcard (<code>*</code>).
@@ -169,10 +207,10 @@ public class JakartaMediaRangeList extends TreeSet<JakartaMediaRangeList.MediaRa
 
     /**
      * Determines which of the <code>mediaRanges</code> specifications is preferred by this <code>MediaRangeList</code>.
+     * Offered order breaks ties when multiple types match the same range.
      * @param mediaRanges String representations of <code>MediaRange</code>s. The strings must be
      * on the form required by {@link MediaRange#MediaRange(String)}
      * @see #prefer(java.util.Set)
-     * @implNote Offered order breaks ties when multiple types match the same range.
      * @return the <code>toString()</code> representation of the preferred <code>MediaRange</code>, or <code>null</code>
      * if this <code>MediaRangeList</code> does not contain any of the <code>mediaRanges</code>
      */
