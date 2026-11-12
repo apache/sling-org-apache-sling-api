@@ -351,7 +351,7 @@ public class ResourceUtil {
         while (matcher.find()) {
             String unicodeSequence = matcher.group();
             char unicodeChar = (char) Integer.parseInt(unicodeSequence.substring(2), 16);
-            matcher.appendReplacement(decodedString, Character.toString(unicodeChar));
+            matcher.appendReplacement(decodedString, Matcher.quoteReplacement(Character.toString(unicodeChar)));
         }
         matcher.appendTail(decodedString);
         return decodedString.toString();
