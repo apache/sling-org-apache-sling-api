@@ -55,6 +55,34 @@ public class PathBuilderTest {
         assertThat(new PathBuilder("/parent").append("child").toString(), Matchers.equalTo("/parent/child"));
     }
 
+    @Test
+    public void normalizeJoinedPath() {
+        assertThat(
+                new PathBuilder("/parent//").append("./child/../other/").toString(), Matchers.equalTo("/parent/other"));
+        assertThat(new PathBuilder("/parent").append("..").toString(), Matchers.equalTo("/"));
+    }
+
+    @Test
+    public void normalizeInitialPath() {
+        assertThat(new PathBuilder("/parent//child/../").toString(), Matchers.equalTo("/parent"));
+        assertThat(new PathBuilder("///").toString(), Matchers.equalTo("/"));
+    }
+
+    @Test
+    public void allowTraversalOutsideInitialSubtree() {
+        assertThat(new PathBuilder("/var/inbox").append("../../etc/keys").toString(), Matchers.equalTo("/etc/keys"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void rejectTraversalAboveRoot() {
+        new PathBuilder("/parent").append("../../secret").toString();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void rejectUnnormalizableDotSegment() {
+        new PathBuilder("/parent").append(".../child").toString();
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void relativeInitialPaths() {
         new PathBuilder("relative");
