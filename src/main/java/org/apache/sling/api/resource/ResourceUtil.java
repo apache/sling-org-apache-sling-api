@@ -474,6 +474,9 @@ public class ResourceUtil {
      * {@link org.apache.sling.api.resource.Resource#getResourceType()} as a
      * relative path.
      *
+     * If the {code type} is absolute (starts with a '/'), the result is also an
+     * absolute path.
+     * The result is not normalized and not checked against path restrictions.
      * @param type The resource type to be converted into a path
      * @return The resource type as a path.
      * @since 2.0.6 (Sling API Bundle 2.0.6)
