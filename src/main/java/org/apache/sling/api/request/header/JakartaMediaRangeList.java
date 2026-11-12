@@ -59,6 +59,12 @@ public class JakartaMediaRangeList extends TreeSet<JakartaMediaRangeList.MediaRa
      */
     public static final String WILDCARD = "*";
 
+    /**
+     * The media type for HTML content.
+     * @since 1.2.0
+     */
+    public static final String CONTENT_TYPE_HTML = "text/html";
+
     boolean matchesAll = false;
 
     private static final Logger log = LoggerFactory.getLogger(JakartaMediaRangeList.class);

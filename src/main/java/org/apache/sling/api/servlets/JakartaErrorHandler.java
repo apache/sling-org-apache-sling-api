@@ -34,6 +34,20 @@ import org.osgi.annotation.versioning.ConsumerType;
 public interface JakartaErrorHandler {
 
     /**
+     * The name of the service registration property for the error handler name.
+     * If the implementation supports named error handler instances, this property should
+     * be used to specify the name of the error handler instance.
+     * @since 2.6
+     */
+    String PROPERTY_NAME = "sling.error.handler";
+
+    /**
+     * The name of the error handler instance for non-HTML responses.
+     * @since 2.6
+     */
+    String NAME_NONHTML = "nonhtml";
+
+    /**
      * Called to render a response for a HTTP status code. This method should
      * set the response status and print the status code and optional message.
      * <p>
