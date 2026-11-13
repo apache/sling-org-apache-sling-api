@@ -60,42 +60,42 @@ public class PathBuilderTest {
     public void normalizeJoinedPath() {
         assertEquals(
                 "/parent/other",
-                new PathBuilder("/parent//").append("./child/../other/").toNormalizedPath());
-        assertEquals("/", new PathBuilder("/parent").append("..").toNormalizedPath());
+                new PathBuilder("/parent//").append("./child/../other/").build());
+        assertEquals("/", new PathBuilder("/parent").append("..").build());
     }
 
     @Test
     public void normalizeInitialPath() {
-        assertEquals("/parent", new PathBuilder("/parent//child/../").toNormalizedPath());
-        assertEquals("/", new PathBuilder("///").toNormalizedPath());
+        assertEquals("/parent", new PathBuilder("/parent//child/../").build());
+        assertEquals("/", new PathBuilder("///").build());
     }
 
     @Test
     public void allowTraversalOutsideInitialSubtree() {
         assertEquals(
                 "/etc/keys",
-                new PathBuilder("/var/inbox").append("../../etc/keys").toNormalizedPath());
+                new PathBuilder("/var/inbox").append("../../etc/keys").build());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void rejectTraversalAboveRoot() {
         final PathBuilder builder = new PathBuilder("/parent").append("../../secret");
         assertEquals("/parent/../../secret", builder.toString()); // passes
-        builder.toNormalizedPath(); // throws
+        builder.build(); // throws
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void rejectUnnormalizableDotSegment() {
         final PathBuilder builder = new PathBuilder("/parent").append(".../child");
         assertEquals("/parent/.../child", builder.toString()); // passes
-        builder.toNormalizedPath(); // throws
+        builder.build(); // throws
     }
 
     @Test
     public void toStringPreservesUnnormalizedPath() {
         final PathBuilder builder = new PathBuilder("/parent//").append("./child/../other/");
         assertEquals("/parent//./child/../other/", builder.toString());
-        assertEquals("/parent/other", builder.toNormalizedPath());
+        assertEquals("/parent/other", builder.build());
         assertEquals("/parent//./child/../other/", builder.toString());
     }
 

@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * The {@code PathBuilder} offers a convenient way of creating an absolute path from multiple fragments.
- * Use {@link #toNormalizedPath()} to obtain a normalized path.
+ * Use {@link #build()} to obtain a normalized path.
  * Normalization does not confine the result to the initial path's subtree.
  *
  * @since 1.0.0 (Sling API Bundle 2.11.0)
@@ -34,7 +34,7 @@ public final class PathBuilder {
 
     /**
      * Creates a new {@code PathBuilder} instance with an absolute initial path.
-     * Normalization is performed only when {@link #toNormalizedPath()} is called.
+     * Normalization is performed only when {@link #build()} is called.
      *
      * @param path the nonempty initial path, starting with {@code /}
      * @throws IllegalArgumentException if the path is null, empty, or relative
@@ -51,7 +51,7 @@ public final class PathBuilder {
     /**
      * Appends a path fragment to the accumulated path.
      * Fragments may be relative and contain {@code .} or {@code ..} segments,
-     * which are resolved when {@link #toNormalizedPath()} is called.
+     * which are resolved when {@link #build()} is called.
      * A leading {@code /} does not replace the accumulated path; the fragment
      * is joined to it with a slash at the boundary.
      *
@@ -81,7 +81,7 @@ public final class PathBuilder {
 
     /**
      * Returns the joined path without normalization.
-     * In most cases, {@link #toNormalizedPath()} is the better choice, as it
+     * In most cases, {@link #build()} is the better choice, as it
      * resolves dot segments and removes redundant slashes.
      *
      * @return the unnormalized absolute path
@@ -101,7 +101,7 @@ public final class PathBuilder {
      *         because it traverses above root
      * @since 1.3.0
      */
-    public @NotNull String toNormalizedPath() {
+    public @NotNull String build() {
         final String path = sb.toString();
         final String normalizedPath = ResourceUtil.normalize(path);
         if (normalizedPath == null) {
