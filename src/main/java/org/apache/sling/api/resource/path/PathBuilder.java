@@ -19,9 +19,11 @@
 package org.apache.sling.api.resource.path;
 
 import org.apache.sling.api.resource.ResourceUtil;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * The {@code PathBuilder} offers a convenient way of creating a normalized absolute path from multiple fragments.
+ * The {@code PathBuilder} offers a convenient way of creating an absolute path from multiple fragments.
+ * Use {@link #toNormalizedPath()} to obtain a normalized path.
  * Normalization does not confine the result to the initial path's subtree.
  *
  * @since 1.0.0 (Sling API Bundle 2.11.0)
@@ -32,7 +34,7 @@ public final class PathBuilder {
 
     /**
      * Creates a new {@code PathBuilder} instance with an absolute initial path.
-     * Normalization is deferred until {@link #toString()} is called.
+     * Normalization is performed only when {@link #toNormalizedPath()} is called.
      *
      * @param path the nonempty initial path, starting with {@code /}
      * @throws IllegalArgumentException if the path is null, empty, or relative
@@ -49,7 +51,7 @@ public final class PathBuilder {
     /**
      * Appends a path fragment to the accumulated path.
      * Fragments may be relative and contain {@code .} or {@code ..} segments,
-     * which are resolved when {@link #toString()} is called.
+     * which are resolved when {@link #toNormalizedPath()} is called.
      * A leading {@code /} does not replace the accumulated path; the fragment
      * is joined to it with a slash at the boundary.
      *
@@ -78,6 +80,18 @@ public final class PathBuilder {
     }
 
     /**
+     * Returns the joined path without normalization.
+     * In most cases, {@link #toNormalizedPath()} is the better choice, as it
+     * resolves dot segments and removes redundant slashes.
+     *
+     * @return the unnormalized absolute path
+     */
+    @Override
+    public String toString() {
+        return sb.toString();
+    }
+
+    /**
      * Returns the normalized path without changing the accumulated fragments.
      * Dot segments are resolved, duplicate slashes are collapsed, and trailing
      * slashes are removed except for the root path.
@@ -85,9 +99,9 @@ public final class PathBuilder {
      * @return the normalized absolute path
      * @throws IllegalArgumentException if the path cannot be normalized, for example
      *         because it traverses above root
+     * @since 1.3.0
      */
-    @Override
-    public String toString() {
+    public @NotNull String toNormalizedPath() {
         final String path = sb.toString();
         final String normalizedPath = ResourceUtil.normalize(path);
         if (normalizedPath == null) {
