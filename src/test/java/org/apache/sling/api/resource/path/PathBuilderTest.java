@@ -18,41 +18,95 @@
  */
 package org.apache.sling.api.resource.path;
 
-import org.hamcrest.Matchers;
 import org.junit.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
 
 public class PathBuilderTest {
 
     @Test
     public void noChangeNeeded_root() {
 
-        assertThat(new PathBuilder("/").append("path").toString(), Matchers.equalTo("/path"));
+        assertEquals("/path", new PathBuilder("/").append("path").toString());
     }
 
     @Test
     public void noChangeNeeded_intermediate() {
 
-        assertThat(new PathBuilder("/parent").append("/child").toString(), Matchers.equalTo("/parent/child"));
+        assertEquals(
+                "/parent/child", new PathBuilder("/parent").append("/child").toString());
     }
 
     @Test
     public void removeSlash_root() {
 
-        assertThat(new PathBuilder("/").append("/path").toString(), Matchers.equalTo("/path"));
+        assertEquals("/path", new PathBuilder("/").append("/path").toString());
     }
 
     @Test
     public void removeSlash_intermediate() {
 
-        assertThat(new PathBuilder("/parent/").append("/child").toString(), Matchers.equalTo("/parent/child"));
+        assertEquals(
+                "/parent/child", new PathBuilder("/parent/").append("/child").toString());
     }
 
     @Test
     public void addSlash() {
 
-        assertThat(new PathBuilder("/parent").append("child").toString(), Matchers.equalTo("/parent/child"));
+        assertEquals("/parent/child", new PathBuilder("/parent").append("child").toString());
+    }
+
+    @Test
+    public void normalizeJoinedPath() {
+        assertEquals(
+                "/parent/other",
+                new PathBuilder("/parent//").append("./child/../other/").build());
+        assertEquals("/", new PathBuilder("/parent").append("..").build());
+    }
+
+    @Test
+    public void normalizeInitialPath() {
+        assertEquals("/parent", new PathBuilder("/parent//child/../").build());
+        assertEquals("/", new PathBuilder("///").build());
+    }
+
+    @Test
+    public void allowTraversalOutsideInitialSubtree() {
+        assertEquals(
+                "/etc/keys",
+                new PathBuilder("/var/inbox").append("../../etc/keys").build());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void rejectTraversalAboveRoot() {
+        final PathBuilder builder = new PathBuilder("/parent").append("../../secret");
+        assertEquals("/parent/../../secret", builder.toString()); // passes
+        builder.build(); // throws
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void rejectUnnormalizableDotSegment() {
+        final PathBuilder builder = new PathBuilder("/parent").append(".../child");
+        assertEquals("/parent/.../child", builder.toString()); // passes
+        builder.build(); // throws
+    }
+
+    @Test
+    public void toStringPreservesUnnormalizedPath() {
+        final PathBuilder builder = new PathBuilder("/parent//").append("./child/../other/");
+        assertEquals("/parent//./child/../other/", builder.toString());
+        assertEquals("/parent/other", builder.build());
+        assertEquals("/parent//./child/../other/", builder.toString());
+    }
+
+    @Test
+    public void toStringAllowsUnnormalizablePaths() {
+        assertEquals(
+                "/parent/../../secret",
+                new PathBuilder("/parent").append("../../secret").toString());
+        assertEquals(
+                "/parent/.../child",
+                new PathBuilder("/parent").append(".../child").toString());
     }
 
     @Test(expected = IllegalArgumentException.class)
