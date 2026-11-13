@@ -449,4 +449,17 @@ public class ResourceUtilTest {
         assertEquals(nameWithSpecialChars, ResourceUtil.unescapeName(escapedName));
         assertFalse(escapedName.contains("."));
     }
+
+    @Test
+    public void testEscapeAndUnescapeNameWithBackslashes() {
+        for (String name : new String[] {"a\\b", "trailing\\", "two\\\\backslashes"}) {
+            assertEquals(name, ResourceUtil.unescapeName(ResourceUtil.escapeName(name)));
+        }
+    }
+
+    @Test
+    public void testUnescapeNameWithReplacementCharacters() {
+        assertEquals("\\", ResourceUtil.unescapeName("\\u005C"));
+        assertEquals("$x", ResourceUtil.unescapeName("\\u0024x"));
+    }
 }
