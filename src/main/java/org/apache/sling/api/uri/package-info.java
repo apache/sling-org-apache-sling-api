@@ -16,6 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+/**
+ * APIs for parsing, building, and manipulating Sling URIs.
+ */
 @Version("1.4.0")
 package org.apache.sling.api.uri;
 

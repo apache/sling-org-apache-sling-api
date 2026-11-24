@@ -17,6 +17,9 @@
  * under the License.
  */
 
+/**
+ * Request parameters, path information, dispatching, events, and HTTP utilities.
+ */
 @Version("2.8.0")
 package org.apache.sling.api.request;
 

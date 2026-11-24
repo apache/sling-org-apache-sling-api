@@ -17,6 +17,9 @@
  * under the License.
  */
 
+/**
+ * Script execution contracts, bindings, and scripting helpers.
+ */
 @Version("2.6.0")
 package org.apache.sling.api.scripting;
 

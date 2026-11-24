@@ -30,6 +30,11 @@ package org.apache.sling.api;
 public class SlingConstants {
 
     /**
+     * Creates an instance. Use the static constants directly instead.
+     */
+    public SlingConstants() {}
+
+    /**
      * The namespace prefix used throughout Sling (value is "sling").
      * <p>
      * The actual use depends on the environment. For example a

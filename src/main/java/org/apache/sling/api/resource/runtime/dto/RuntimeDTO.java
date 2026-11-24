@@ -26,6 +26,11 @@ package org.apache.sling.api.resource.runtime.dto;
 public class RuntimeDTO {
 
     /**
+     * Creates an empty runtime DTO.
+     */
+    public RuntimeDTO() {}
+
+    /**
      * DTOs for all active providers.
      * If there is none, the array is empty.
      */

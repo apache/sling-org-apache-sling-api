@@ -31,6 +31,7 @@ import org.osgi.annotation.versioning.ConsumerType;
 @ConsumerType
 public interface SlingJakartaRequestListener {
 
+    /** The service name used for Jakarta request listener registration. */
     String SERVICE_NAME = "org.apache.sling.api.request.event.SlingRequestListener";
 
     /**

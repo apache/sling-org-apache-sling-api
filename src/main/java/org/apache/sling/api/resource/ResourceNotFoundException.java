@@ -35,26 +35,51 @@ public class ResourceNotFoundException extends SlingException {
 
     private static final long serialVersionUID = -6684709279554347984L;
 
+    /** The resource that was not found, or {@code null} if unspecified. */
     private final String resource;
 
+    /**
+     * Creates an exception without a resource identifier.
+     * @param message The detail message
+     */
     public ResourceNotFoundException(String message) {
         this(null, message);
     }
 
+    /**
+     * Creates an exception for a missing resource.
+     * @param resource The resource identifier, or {@code null} if unspecified
+     * @param message The detail message
+     */
     public ResourceNotFoundException(String resource, String message) {
         super("Resource at '" + resource + "' not found: " + message);
         this.resource = resource;
     }
 
+    /**
+     * Creates an exception with a cause and without a resource identifier.
+     * @param message The detail message
+     * @param cause The underlying cause
+     */
     public ResourceNotFoundException(String message, Throwable cause) {
         this(null, message, cause);
     }
 
+    /**
+     * Creates an exception for a missing resource with a cause.
+     * @param resource The resource identifier, or {@code null} if unspecified
+     * @param message The detail message
+     * @param cause The underlying cause
+     */
     public ResourceNotFoundException(String resource, String message, Throwable cause) {
         super(message, cause);
         this.resource = resource;
     }
 
+    /**
+     * Returns the identifier of the missing resource.
+     * @return The resource identifier, or {@code null} if unspecified
+     */
     public String getResource() {
         return resource;
     }

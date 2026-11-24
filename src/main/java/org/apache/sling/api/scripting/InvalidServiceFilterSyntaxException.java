@@ -25,20 +25,36 @@ public class InvalidServiceFilterSyntaxException extends SlingException {
 
     private static final long serialVersionUID = 6557699360505403255L;
 
+    /** The invalid service filter. */
     private final String filter;
 
+    /**
+     * Creates an exception describing an invalid service filter.
+     * @param filter The invalid filter
+     * @param reason The reason the filter is invalid
+     */
     public InvalidServiceFilterSyntaxException(String filter, String reason) {
         super(reason);
 
         this.filter = filter;
     }
 
+    /**
+     * Creates an exception describing an invalid service filter and its cause.
+     * @param filter The invalid filter
+     * @param reason The reason the filter is invalid
+     * @param cause The underlying cause
+     */
     public InvalidServiceFilterSyntaxException(String filter, String reason, Throwable cause) {
         super(reason, cause);
 
         this.filter = filter;
     }
 
+    /**
+     * Returns the invalid service filter.
+     * @return The filter supplied to the constructor
+     */
     public String getFilter() {
         return filter;
     }

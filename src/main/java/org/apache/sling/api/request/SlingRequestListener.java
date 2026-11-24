@@ -32,6 +32,7 @@ import org.osgi.annotation.versioning.ConsumerType;
 @Deprecated
 public interface SlingRequestListener {
 
+    /** The OSGi service name for request listeners. */
     String SERVICE_NAME = "org.apache.sling.api.request.SlingRequestListener";
 
     /**

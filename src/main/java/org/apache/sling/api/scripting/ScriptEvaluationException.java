@@ -29,20 +29,36 @@ public class ScriptEvaluationException extends SlingException {
 
     private static final long serialVersionUID = -274759591325189020L;
 
+    /** The name of the script whose evaluation failed. */
     private final String scriptName;
 
+    /**
+     * Creates an exception describing a script evaluation failure.
+     * @param scriptName The script name
+     * @param message The detail message
+     */
     public ScriptEvaluationException(String scriptName, String message) {
         super(message);
 
         this.scriptName = scriptName;
     }
 
+    /**
+     * Creates an exception describing a script evaluation failure and its cause.
+     * @param scriptName The script name
+     * @param message The detail message
+     * @param cause The underlying cause
+     */
     public ScriptEvaluationException(String scriptName, String message, Throwable cause) {
         super(message, cause);
 
         this.scriptName = scriptName;
     }
 
+    /**
+     * Returns the name of the script whose evaluation failed.
+     * @return The script name supplied to the constructor
+     */
     public String getScriptName() {
         return scriptName;
     }

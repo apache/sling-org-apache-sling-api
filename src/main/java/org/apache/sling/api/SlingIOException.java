@@ -30,6 +30,10 @@ public class SlingIOException extends SlingException {
 
     private static final long serialVersionUID = 5278814329174799608L;
 
+    /**
+     * Wraps an I/O exception as a Sling runtime exception.
+     * @param cause The I/O exception to wrap
+     */
     public SlingIOException(IOException cause) {
         super(cause);
     }

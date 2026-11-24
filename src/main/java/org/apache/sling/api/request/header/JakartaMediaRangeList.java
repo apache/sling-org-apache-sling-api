@@ -65,6 +65,7 @@ public class JakartaMediaRangeList extends TreeSet<JakartaMediaRangeList.MediaRa
      */
     public static final String CONTENT_TYPE_HTML = "text/html";
 
+    /** Whether the list accepts all media types. */
     boolean matchesAll = false;
 
     private static final Logger log = LoggerFactory.getLogger(JakartaMediaRangeList.class);
@@ -339,10 +340,18 @@ public class JakartaMediaRangeList extends TreeSet<JakartaMediaRangeList.MediaRa
             }
         }
 
+        /**
+         * Returns the type component of this media range.
+         * @return The type, or {@link JakartaMediaRangeList#WILDCARD}
+         */
         public String getSupertype() {
             return supertype;
         }
 
+        /**
+         * Returns the subtype component of this media range.
+         * @return The subtype, or {@link JakartaMediaRangeList#WILDCARD}
+         */
         public String getSubtype() {
             return subtype;
         }
@@ -440,6 +449,11 @@ public class JakartaMediaRangeList extends TreeSet<JakartaMediaRangeList.MediaRa
             return super.equals(obj);
         }
 
+        /**
+         * Compares the type and subtype with a string, ignoring parameters.
+         * @param s The string in {@code type/subtype} form
+         * @return Whether the string exactly matches the type and subtype
+         */
         public boolean equals(String s) {
             return (this.supertype + "/" + this.subtype).equals(s);
         }

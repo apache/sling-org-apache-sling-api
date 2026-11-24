@@ -47,6 +47,11 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ResourceMetadata extends HashMap<String, Object> {
 
+    /**
+     * Creates empty, writable resource metadata.
+     */
+    public ResourceMetadata() {}
+
     private static final long serialVersionUID = 4692666752269523738L;
 
     /**
@@ -143,6 +148,7 @@ public class ResourceMetadata extends HashMap<String, Object> {
      */
     public static final String PARAMETER_MAP = "sling.parameterMap";
 
+    /** Whether modifications through the public map operations are disallowed. */
     private boolean isReadOnly = false;
 
     /**
@@ -397,6 +403,11 @@ public class ResourceMetadata extends HashMap<String, Object> {
         return super.remove(key);
     }
 
+    /**
+     * Stores metadata without checking whether this map is read-only.
+     * @param key The metadata key
+     * @param value The metadata value
+     */
     protected void internalPut(@NotNull String key, Object value) {
         super.put(key, value);
     }

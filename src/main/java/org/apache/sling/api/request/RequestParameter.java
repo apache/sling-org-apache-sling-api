@@ -41,6 +41,7 @@ import org.osgi.annotation.versioning.ProviderType;
 public interface RequestParameter {
 
     /**
+     * Returns the name of this request parameter.
      * @return the name of this {@code RequestParameter}
      * @since 2.4 (Sling API Bundle 2.6)
      */

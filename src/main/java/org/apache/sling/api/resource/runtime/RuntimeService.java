@@ -30,5 +30,9 @@ import org.osgi.annotation.versioning.ProviderType;
 @ProviderType
 public interface RuntimeService {
 
+    /**
+     * Returns a snapshot of the resource provider runtime.
+     * @return The runtime DTO describing active and failed providers
+     */
     RuntimeDTO getRuntimeDTO();
 }

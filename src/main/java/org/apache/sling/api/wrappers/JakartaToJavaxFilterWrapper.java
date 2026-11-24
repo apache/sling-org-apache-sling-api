@@ -53,6 +53,10 @@ public class JakartaToJavaxFilterWrapper implements Filter {
 
     private final jakarta.servlet.Filter filter;
 
+    /**
+     * Wraps a Jakarta filter as a Javax filter.
+     * @param filter The filter to wrap
+     */
     public JakartaToJavaxFilterWrapper(final jakarta.servlet.Filter filter) {
         this.filter = filter;
     }
@@ -93,10 +97,17 @@ public class JakartaToJavaxFilterWrapper implements Filter {
         return this.filter;
     }
 
+    /**
+     * Exposes a Javax filter chain through the Jakarta Servlet API.
+     */
     public static class FilterChainWrapper implements jakarta.servlet.FilterChain {
 
         private final FilterChain filterChain;
 
+        /**
+         * Creates a filter chain wrapper.
+         * @param chain The Javax filter chain to wrap
+         */
         public FilterChainWrapper(@NotNull final FilterChain chain) {
             this.filterChain = chain;
         }

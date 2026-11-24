@@ -35,6 +35,11 @@ import jakarta.servlet.http.HttpServletRequest;
 public class SlingRequestPaths {
 
     /**
+     * Creates an instance. Use the static utility methods directly instead.
+     */
+    public SlingRequestPaths() {}
+
+    /**
      * Return the context path for r, using the appropriate request attribute if
      * the request is an included one.
      * @param r The request

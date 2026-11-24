@@ -27,6 +27,11 @@ package org.apache.sling.api.servlets;
 public final class ServletResolverConstants {
 
     /**
+     * Creates an instance. Use the static constants directly instead.
+     */
+    public ServletResolverConstants() {}
+
+    /**
      * The name of the service registration property of a servlet registered as
      * a service providing the absolute paths under which the servlet is
      * accessible as a resource (value is "sling.servlet.paths").

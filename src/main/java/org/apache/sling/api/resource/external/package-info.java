@@ -17,6 +17,9 @@
  * under the License.
  */
 
+/**
+ * APIs for obtaining URIs that provide direct access to resource content.
+ */
 @Version("1.0.2")
 package org.apache.sling.api.resource.external;
 

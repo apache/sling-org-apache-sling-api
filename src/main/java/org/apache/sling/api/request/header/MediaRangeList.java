@@ -44,9 +44,13 @@ import org.slf4j.LoggerFactory;
 @ConsumerType
 public class MediaRangeList extends TreeSet<MediaRangeList.MediaRange> {
 
+    /** The Accept HTTP header name. */
     public static final String HEADER_ACCEPT = "Accept";
+    /** The request parameter that overrides the Accept header. */
     public static final String PARAM_ACCEPT = ":http-equiv-accept";
+    /** The wildcard character for media ranges. */
     public static final String WILDCARD = "*";
+    /** Whether the list accepts all media types. */
     boolean matchesAll = false;
 
     private static final Logger log = LoggerFactory.getLogger(MediaRangeList.class);
@@ -296,10 +300,18 @@ public class MediaRangeList extends TreeSet<MediaRangeList.MediaRange> {
             }
         }
 
+        /**
+         * Returns the type component of this media range.
+         * @return The type, or {@link MediaRangeList#WILDCARD}
+         */
         public String getSupertype() {
             return supertype;
         }
 
+        /**
+         * Returns the subtype component of this media range.
+         * @return The subtype, or {@link MediaRangeList#WILDCARD}
+         */
         public String getSubtype() {
             return subtype;
         }
@@ -397,6 +409,11 @@ public class MediaRangeList extends TreeSet<MediaRangeList.MediaRange> {
             return super.equals(obj);
         }
 
+        /**
+         * Compares the type and subtype with a string, ignoring parameters.
+         * @param s The string in {@code type/subtype} form
+         * @return Whether the string exactly matches the type and subtype
+         */
         public boolean equals(String s) {
             return (this.supertype + "/" + this.subtype).equals(s);
         }

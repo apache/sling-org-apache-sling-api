@@ -30,6 +30,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * If the provider requires authentication, the object returned by {@link ResourceProvider#authenticate(Map)}
  * is returned in {@link #getProviderState()}.
  *
+ * @param <T> The type of the resource provider's authentication state
  * @since 1.0.0 (Sling API Bundle 2.11.0)
  */
 @ProviderType

@@ -17,6 +17,9 @@
  * under the License.
  */
 
+/**
+ * Data transfer objects describing resource providers and runtime failures.
+ */
 @Version("1.0.1")
 package org.apache.sling.api.resource.runtime.dto;
 

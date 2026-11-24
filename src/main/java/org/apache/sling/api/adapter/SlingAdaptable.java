@@ -34,6 +34,11 @@ import java.util.Map;
  */
 public abstract class SlingAdaptable implements Adaptable {
 
+    /**
+     * Creates an adaptable object using the global adapter manager.
+     */
+    public SlingAdaptable() {}
+
     /** The adapter manager used for adapting the synthetic resource. */
     private static volatile AdapterManager ADAPTER_MANAGER;
 

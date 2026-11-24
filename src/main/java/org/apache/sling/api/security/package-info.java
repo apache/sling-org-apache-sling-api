@@ -17,6 +17,9 @@
  * under the License.
  */
 
+/**
+ * APIs for inspecting resource permissions.
+ */
 @Version("1.1.0")
 package org.apache.sling.api.security;
 

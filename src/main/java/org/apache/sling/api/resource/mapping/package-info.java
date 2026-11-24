@@ -17,6 +17,9 @@
  * under the License.
  */
 
+/**
+ * APIs for mapping resource paths to externally usable URLs.
+ */
 @Version("1.1.0")
 package org.apache.sling.api.resource.mapping;
 

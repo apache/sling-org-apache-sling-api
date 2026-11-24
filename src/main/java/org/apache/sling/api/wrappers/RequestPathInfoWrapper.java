@@ -32,6 +32,10 @@ public class RequestPathInfoWrapper implements RequestPathInfo {
 
     private final @NotNull RequestPathInfo delegate;
 
+    /**
+     * Creates a wrapper around the given request path information.
+     * @param delegate The request path information to wrap
+     */
     public RequestPathInfoWrapper(@NotNull RequestPathInfo delegate) {
         this.delegate = delegate;
     }

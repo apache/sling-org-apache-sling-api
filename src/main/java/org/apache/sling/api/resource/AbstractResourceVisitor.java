@@ -39,6 +39,11 @@ import org.jetbrains.annotations.NotNull;
 public abstract class AbstractResourceVisitor {
 
     /**
+     * Creates a resource visitor.
+     */
+    public AbstractResourceVisitor() {}
+
+    /**
      * Visit the given resource and all its descendants.
      * @param res The resource
      */

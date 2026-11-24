@@ -58,6 +58,10 @@ public class JavaxToJakartaServletWrapper implements Servlet {
 
     private final javax.servlet.Servlet servlet;
 
+    /**
+     * Wraps a Javax servlet as a Jakarta servlet.
+     * @param servlet The servlet to wrap
+     */
     public JavaxToJakartaServletWrapper(final javax.servlet.Servlet servlet) {
         this.servlet = servlet;
     }
@@ -109,11 +113,18 @@ public class JavaxToJakartaServletWrapper implements Servlet {
         return this.servlet;
     }
 
+    /**
+     * Wraps a Javax opting servlet while preserving its acceptance check.
+     */
     public static class JavaxToJakartaOptingServletWrapper extends JavaxToJakartaServletWrapper
             implements JakartaOptingServlet {
 
         private final OptingServlet servlet;
 
+        /**
+         * Creates an opting servlet wrapper.
+         * @param servlet The Javax opting servlet to wrap
+         */
         public JavaxToJakartaOptingServletWrapper(final OptingServlet servlet) {
             super(servlet);
             this.servlet = servlet;

@@ -16,6 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+/**
+ * Helpers for parsing and evaluating HTTP request headers.
+ */
 @Version("1.2.0")
 package org.apache.sling.api.request.header;
 

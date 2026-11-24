@@ -44,6 +44,11 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ResourceUtil {
 
+    /**
+     * Creates an instance. Use the static utility methods directly instead.
+     */
+    public ResourceUtil() {}
+
     private static final Pattern UNICODE_ESCAPE_SEQUENCE_PATTERN = Pattern.compile("\\\\u[0-9a-fA-F]{4}");
     /**
      * Resolves relative path segments '.' and '..' in the path.
@@ -300,7 +305,7 @@ public class ResourceUtil {
     /**
      * Escapes the given <code>name</code> for use in a resource name. It escapes all invalid characters according to Sling API, i.e.
      * it escapes the slash and names only consisting of dots. It uses Java UTF-16 unicode escape sequences for those characters.
-     * @param name
+     * @param name The resource name to escape
      * @return the escaped name
      * @see ResourceResolver#create(Resource, String, Map)
      * @see SyntheticResource#SyntheticResource(ResourceResolver, String, String)
@@ -840,10 +845,20 @@ public class ResourceUtil {
 
         private int count;
 
+        /**
+         * Creates a remover that commits after each batch of deleted resources.
+         * @param batchSize The batch size, or a value less than one to use the default of 50
+         */
         public BatchResourceRemover(final int batchSize) {
             this.max = (batchSize < 1 ? 50 : batchSize);
         }
 
+        /**
+         * Deletes a resource and its descendants, committing whenever the batch size is reached.
+         * Call {@link ResourceResolver#commit()} afterwards to persist any remaining deletions.
+         * @param rsrc The resource to delete
+         * @throws PersistenceException If deleting a resource or committing a batch fails
+         */
         public void delete(@NotNull final Resource rsrc) throws PersistenceException {
             final ResourceResolver resolver = rsrc.getResourceResolver();
             for (final Resource child : rsrc.getChildren()) {
