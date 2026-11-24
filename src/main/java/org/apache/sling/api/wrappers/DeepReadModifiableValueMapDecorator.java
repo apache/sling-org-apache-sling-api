@@ -29,6 +29,11 @@ import org.apache.sling.api.resource.ValueMap;
  */
 public class DeepReadModifiableValueMapDecorator extends DeepReadValueMapDecorator implements ModifiableValueMap {
 
+    /**
+     * Creates a modifiable decorator supporting deep reads.
+     * @param resource The resource used as the starting point for deep reads
+     * @param base The backing value map, which must support the desired modifications
+     */
     public DeepReadModifiableValueMapDecorator(final Resource resource, final ValueMap base) {
         super(resource, base);
     }

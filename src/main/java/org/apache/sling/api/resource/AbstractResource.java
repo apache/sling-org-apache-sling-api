@@ -41,6 +41,11 @@ import org.apache.sling.api.wrappers.ValueMapDecorator;
 public abstract class AbstractResource extends SlingAdaptable implements Resource {
 
     /**
+     * Creates a resource.
+     */
+    public AbstractResource() {}
+
+    /**
      * Returns the name of this resource.
      * <p>
      * This method is implemented as a pure string operation by calling the

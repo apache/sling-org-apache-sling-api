@@ -56,16 +56,29 @@ import org.osgi.annotation.versioning.ConsumerType;
 @ConsumerType
 public class LazyBindings extends HashMap<String, Object> implements Bindings {
 
+    /** Suppliers used to populate bindings on demand. */
     private final Map<String, LazyBindings.Supplier> suppliers;
 
+    /**
+     * Creates empty bindings with an empty supplier map.
+     */
     public LazyBindings() {
         this(new HashMap<>(), Collections.emptyMap());
     }
 
+    /**
+     * Creates empty bindings backed by the given supplier map.
+     * @param suppliers The supplier map, retained and modified by these bindings
+     */
     public LazyBindings(Map<String, LazyBindings.Supplier> suppliers) {
         this(suppliers, Collections.emptyMap());
     }
 
+    /**
+     * Creates bindings with a copy of the given values and the given supplier map.
+     * @param suppliers The supplier map, retained and modified by these bindings
+     * @param wrapped The initial values to copy
+     */
     public LazyBindings(Map<String, LazyBindings.Supplier> suppliers, Map<String, Object> wrapped) {
         super(wrapped);
         this.suppliers = suppliers;

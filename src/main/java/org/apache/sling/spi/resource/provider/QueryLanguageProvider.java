@@ -31,6 +31,7 @@ import org.osgi.annotation.versioning.ConsumerType;
  * {@link org.apache.sling.api.resource.ResourceResolver#queryResources(String, String)} are passed on
  * to this object.
  *
+ * @param <T> The type of the resource provider's authentication state
  * @since 1.0.0 (Sling API Bundle 2.11.0)
  */
 @ConsumerType

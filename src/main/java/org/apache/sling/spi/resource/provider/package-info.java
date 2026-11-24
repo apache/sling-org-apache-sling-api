@@ -17,6 +17,9 @@
  * under the License.
  */
 
+/**
+ * Service provider interfaces for supplying resources and query support.
+ */
 @Version("1.4.0")
 package org.apache.sling.spi.resource.provider;
 

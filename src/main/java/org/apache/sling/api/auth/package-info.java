@@ -17,6 +17,9 @@
  * under the License.
  */
 
+/**
+ * APIs for authenticating requests and logging users out.
+ */
 @Version("1.1.0")
 package org.apache.sling.api.auth;
 

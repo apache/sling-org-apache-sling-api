@@ -17,6 +17,9 @@
  * under the License.
  */
 
+/**
+ * Resource resolution, resource properties, and resource manipulation APIs.
+ */
 @Version("2.14.0")
 package org.apache.sling.api.resource;
 

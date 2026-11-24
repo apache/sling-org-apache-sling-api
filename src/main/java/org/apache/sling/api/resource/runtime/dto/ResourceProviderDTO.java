@@ -26,6 +26,11 @@ package org.apache.sling.api.resource.runtime.dto;
 public class ResourceProviderDTO {
 
     /**
+     * Creates an empty resource provider DTO.
+     */
+    public ResourceProviderDTO() {}
+
+    /**
      * The name of the resource provider.
      * Optional might be {@code null}.
      */

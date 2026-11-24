@@ -75,6 +75,11 @@ import org.jetbrains.annotations.NotNull;
 @Deprecated
 public class SlingSafeMethodsServlet extends GenericServlet {
 
+    /**
+     * Creates a servlet supporting safe HTTP methods.
+     */
+    public SlingSafeMethodsServlet() {}
+
     private static final long serialVersionUID = 3620512288346703072L;
 
     /**

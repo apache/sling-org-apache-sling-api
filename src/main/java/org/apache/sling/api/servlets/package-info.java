@@ -17,6 +17,9 @@
  * under the License.
  */
 
+/**
+ * Base servlets and constants for Sling servlet registration and HTTP handling.
+ */
 @Version("2.6")
 package org.apache.sling.api.servlets;
 

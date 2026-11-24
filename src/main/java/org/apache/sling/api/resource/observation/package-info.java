@@ -17,6 +17,9 @@
  * under the License.
  */
 
+/**
+ * Resource change events and listener contracts.
+ */
 @Version("1.2.2")
 package org.apache.sling.api.resource.observation;
 

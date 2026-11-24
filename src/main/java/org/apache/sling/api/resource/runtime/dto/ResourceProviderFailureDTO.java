@@ -29,6 +29,11 @@ package org.apache.sling.api.resource.runtime.dto;
 public class ResourceProviderFailureDTO extends ResourceProviderDTO {
 
     /**
+     * Creates an empty failed resource provider DTO.
+     */
+    public ResourceProviderFailureDTO() {}
+
+    /**
      * The reason for the failure.
      */
     public FailureReason reason; // NOSONAR

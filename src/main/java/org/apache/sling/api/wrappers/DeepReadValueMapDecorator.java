@@ -47,6 +47,11 @@ public class DeepReadValueMapDecorator extends ValueMapDecorator {
 
     private final ValueMap base;
 
+    /**
+     * Creates a decorator supporting deep reads relative to the given resource.
+     * @param resource The resource used as the starting point for deep reads
+     * @param base The value map used for properties without a path
+     */
     public DeepReadValueMapDecorator(final Resource resource, final ValueMap base) {
         super(base);
         this.pathPrefix = resource.getPath() + "/";

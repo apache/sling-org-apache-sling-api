@@ -40,10 +40,18 @@ public class SlingJakartaRequestEvent {
      * type of the event
      */
     public enum EventType {
+        /** Request processing is starting. */
         EVENT_INIT,
+        /** Request processing is ending. */
         EVENT_DESTROY
     };
 
+    /**
+     * Creates a request lifecycle event.
+     * @param sc The servlet context
+     * @param request The request being processed
+     * @param type The lifecycle event type
+     */
     public SlingJakartaRequestEvent(ServletContext sc, ServletRequest request, EventType type) {
         this.sc = sc;
         this.request = request;

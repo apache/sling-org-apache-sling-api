@@ -77,10 +77,16 @@ import org.osgi.annotation.versioning.ConsumerType;
  * Each method gets the {@link ResourceContext} which gives access to
  * further functionality.
  *
+ * @param <T> The type of the authentication state returned by {@link #authenticate(Map)}
  * @since 1.0.0 (Sling API Bundle 2.11.0)
  */
 @ConsumerType
 public abstract class ResourceProvider<T> {
+
+    /**
+     * Creates a resource provider.
+     */
+    public ResourceProvider() {}
 
     /**
      * The name of the service registration property containing the root path

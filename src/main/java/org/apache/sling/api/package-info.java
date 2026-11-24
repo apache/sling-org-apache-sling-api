@@ -17,6 +17,9 @@
  * under the License.
  */
 
+/**
+ * Core Sling request, response, and exception APIs.
+ */
 @Version("2.4.0")
 package org.apache.sling.api;
 

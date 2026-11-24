@@ -17,6 +17,9 @@
  * under the License.
  */
 
+/**
+ * Contracts and base classes for adapting objects to other types.
+ */
 @Version("2.2.4")
 package org.apache.sling.api.adapter;
 

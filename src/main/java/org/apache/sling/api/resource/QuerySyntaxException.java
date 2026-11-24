@@ -30,10 +30,18 @@ public class QuerySyntaxException extends SlingException {
 
     private static final long serialVersionUID = -6529624886228517646L;
 
+    /** The query that could not be executed. */
     private final String query;
 
+    /** The requested query language. */
     private final String language;
 
+    /**
+     * Creates an exception describing an invalid query or unsupported language.
+     * @param message The detail message
+     * @param query The query
+     * @param language The query language
+     */
     public QuerySyntaxException(String message, String query, String language) {
         super(message);
 
@@ -41,6 +49,13 @@ public class QuerySyntaxException extends SlingException {
         this.language = language;
     }
 
+    /**
+     * Creates an exception describing an invalid query or unsupported language and its cause.
+     * @param message The detail message
+     * @param query The query
+     * @param language The query language
+     * @param cause The underlying cause
+     */
     public QuerySyntaxException(String message, String query, String language, Throwable cause) {
         super(message, cause);
 
@@ -48,10 +63,18 @@ public class QuerySyntaxException extends SlingException {
         this.language = language;
     }
 
+    /**
+     * Returns the query that could not be executed.
+     * @return The query supplied to the constructor
+     */
     public String getQuery() {
         return query;
     }
 
+    /**
+     * Returns the requested query language.
+     * @return The language supplied to the constructor
+     */
     public String getLanguage() {
         return language;
     }

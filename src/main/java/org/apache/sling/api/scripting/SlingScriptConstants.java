@@ -29,6 +29,11 @@ package org.apache.sling.api.scripting;
 public class SlingScriptConstants {
 
     /**
+     * Creates an instance. Use the static constants directly instead.
+     */
+    public SlingScriptConstants() {}
+
+    /**
      * The name of the script context attribute holding the {@link org.apache.sling.api.resource.ResourceResolver} which
      * has been used to resolve the script. This resource resolver can be used by the
      * script engines to further locate scripts (for includes etc.).

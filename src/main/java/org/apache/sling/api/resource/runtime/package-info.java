@@ -17,6 +17,9 @@
  * under the License.
  */
 
+/**
+ * APIs for inspecting the resource provider runtime.
+ */
 @Version("1.0.2")
 package org.apache.sling.api.resource.runtime;
 

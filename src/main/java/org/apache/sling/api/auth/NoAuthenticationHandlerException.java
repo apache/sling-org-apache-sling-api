@@ -38,6 +38,9 @@ import org.apache.sling.api.SlingException;
  */
 public class NoAuthenticationHandlerException extends SlingException {
 
+    /**
+     * Creates an exception without a message.
+     */
     public NoAuthenticationHandlerException() {
         super();
     }

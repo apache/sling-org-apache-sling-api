@@ -42,6 +42,11 @@ import org.slf4j.Logger;
  */
 public class SlingBindings extends LazyBindings {
 
+    /**
+     * Creates empty bindings for script execution.
+     */
+    public SlingBindings() {}
+
     private static final long serialVersionUID = 209505693646323450L;
 
     /**

@@ -78,6 +78,10 @@ public class JavaxToJakartaResponseWrapper extends HttpServletResponseWrapper
 
     private final SlingHttpServletResponse wrappedResponse;
 
+    /**
+     * Wraps a Javax Sling response as a Jakarta Sling response.
+     * @param wrappedResponse The response to wrap
+     */
     public JavaxToJakartaResponseWrapper(final SlingHttpServletResponse wrappedResponse) {
         super(wrappedResponse);
         this.wrappedResponse = wrappedResponse;

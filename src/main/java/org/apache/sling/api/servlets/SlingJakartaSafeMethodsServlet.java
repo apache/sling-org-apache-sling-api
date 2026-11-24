@@ -73,6 +73,11 @@ import org.jetbrains.annotations.NotNull;
  */
 public class SlingJakartaSafeMethodsServlet extends GenericServlet {
 
+    /**
+     * Creates a servlet supporting safe HTTP methods.
+     */
+    public SlingJakartaSafeMethodsServlet() {}
+
     private static final long serialVersionUID = 3620512288346703072L;
 
     /**

@@ -52,11 +52,16 @@ public class ResourceChange {
      * The type of the change
      */
     public enum ChangeType {
-        ADDED, // the resource has been added
-        REMOVED, // the resource has been removed
-        CHANGED, // the resource has been changed
-        PROVIDER_ADDED, // a provider has been added
-        PROVIDER_REMOVED // a provider has been removed
+        /** A resource has been added. */
+        ADDED,
+        /** A resource has been removed. */
+        REMOVED,
+        /** A resource has been changed. */
+        CHANGED,
+        /** A resource provider has been added. */
+        PROVIDER_ADDED,
+        /** A resource provider has been removed. */
+        PROVIDER_REMOVED
     }
 
     /** The resource path. */

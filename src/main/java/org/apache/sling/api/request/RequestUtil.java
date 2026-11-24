@@ -41,6 +41,11 @@ import org.jetbrains.annotations.Nullable;
 public class RequestUtil {
 
     /**
+     * Creates an instance. Use the static utility methods directly instead.
+     */
+    public RequestUtil() {}
+
+    /**
      * Parses a header of the form:
      *
      * <pre>

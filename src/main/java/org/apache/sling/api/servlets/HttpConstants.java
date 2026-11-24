@@ -26,18 +26,36 @@ package org.apache.sling.api.servlets;
  */
 public class HttpConstants {
 
+    /**
+     * Creates an instance. Use the static constants directly instead.
+     */
+    public HttpConstants() {}
+
+    /** The HTTP OPTIONS method. */
     public static final String METHOD_OPTIONS = "OPTIONS";
+    /** The HTTP GET method. */
     public static final String METHOD_GET = "GET";
+    /** The HTTP HEAD method. */
     public static final String METHOD_HEAD = "HEAD";
+    /** The HTTP POST method. */
     public static final String METHOD_POST = "POST";
+    /** The HTTP PUT method. */
     public static final String METHOD_PUT = "PUT";
+    /** The HTTP DELETE method. */
     public static final String METHOD_DELETE = "DELETE";
+    /** The HTTP TRACE method. */
     public static final String METHOD_TRACE = "TRACE";
+    /** The HTTP CONNECT method. */
     public static final String METHOD_CONNECT = "CONNECT";
 
+    /** The Accept header name. */
     public static final String HEADER_ACCEPT = "Accept";
+    /** The ETag header name. */
     public static final String HEADER_ETAG = "ETag";
+    /** The If-Match header name. */
     public static final String HEADER_IF_MATCH = "If-Match";
+    /** The If-Modified-Since header name. */
     public static final String HEADER_IF_MODIFIED_SINCE = "If-Modified-Since";
+    /** The Last-Modified header name. */
     public static final String HEADER_LAST_MODIFIED = "Last-Modified";
 }

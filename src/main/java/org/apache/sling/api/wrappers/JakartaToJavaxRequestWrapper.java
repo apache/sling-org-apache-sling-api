@@ -94,6 +94,10 @@ public class JakartaToJavaxRequestWrapper extends HttpServletRequestWrapper impl
 
     private final SlingJakartaHttpServletRequest wrappedRequest;
 
+    /**
+     * Wraps a Jakarta Sling request as a Javax Sling request.
+     * @param wrappedRequest The request to wrap
+     */
     public JakartaToJavaxRequestWrapper(final SlingJakartaHttpServletRequest wrappedRequest) {
         super(wrappedRequest);
         this.wrappedRequest = wrappedRequest;

@@ -33,6 +33,11 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ResponseUtil {
 
+    /**
+     * Creates an instance. Use the static utility methods directly instead.
+     */
+    public ResponseUtil() {}
+
     private static class XmlEscapingWriter extends Writer {
         private final Writer target;
 

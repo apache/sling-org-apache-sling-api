@@ -24,7 +24,10 @@ package org.apache.sling.api.resource.runtime.dto;
  * @since 1.0.0 (Sling API Bundle 2.11.0)
  */
 public enum AuthType {
+    /** The provider does not require authentication. */
     no,
+    /** The provider authenticates on demand when its resources are accessed. */
     lazy,
+    /** The provider must authenticate when the resource resolver is created. */
     required
 }
